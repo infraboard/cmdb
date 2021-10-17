@@ -1,0 +1,18 @@
+[app]
+name = "demo"
+host = "0.0.0.0"
+port = "8050"
+key  = "this is your app key"
+
+[mysql]
+host = "127.0.0.1"
+port = "3306"
+username = "go_course"
+password = "xxxx"
+database = "go_course"
+
+[log]
+level = "debug"
+path = "logs"
+format = "text"
+to = "stdout"
