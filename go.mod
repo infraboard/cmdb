@@ -13,7 +13,6 @@ require (
 	github.com/rs/cors v1.8.0
 	github.com/rs/xid v1.3.0
 	github.com/spf13/cobra v1.2.1
-	github.com/stretchr/testify v1.7.0
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.270
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm v1.0.270
 )
