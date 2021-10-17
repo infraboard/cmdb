@@ -1,9 +1,11 @@
 package cvm_test
 
 import (
+	"fmt"
 	"os"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/regions"
 
 	"github.com/infraboard/cmdb/provider/txyun/connectivity"
@@ -15,7 +17,11 @@ var (
 )
 
 func TestQuery(t *testing.T) {
-	operater.Query()
+	resp, err := operater.Query()
+	should := assert.New(t)
+	if should.NoError(err) {
+		fmt.Println(resp.ToJsonString())
+	}
 }
 
 func init() {
