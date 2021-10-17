@@ -13,3 +13,11 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+
+# 二进制文件
+cmdb-api
+
+# 本地配置文件
+cmdb-api.toml
+cmdb-api.env
+

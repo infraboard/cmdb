@@ -1,6 +1,6 @@
-PROJECT_NAME=api
+PROJECT_NAME=cmdb-api
 MAIN_FILE=main.go
-PKG := "gitee.com/infraboard/go-course/day14/demo/$(PROJECT_NAME)"
+PKG := "github.com/infraboard/$(PROJECT_NAME)"
 MOD_DIR := $(shell go env GOMODCACHE)
 PKG_LIST := $(shell go list ${PKG}/... | grep -v /vendor/)
 GO_FILES := $(shell find . -name '*.go' | grep -v /vendor/ | grep -v _test.go)
@@ -26,13 +26,13 @@ test-coverage: ## Run tests with coverage
 	@cat cover.out >> coverage.txt
 
 build: dep ## Build the binary file
-	@go build -ldflags "-s -w" -o dist/demo-api $(MAIN_FILE)
+	@go build -ldflags "-s -w" -o dist/cmdb-api $(MAIN_FILE)
 
 linux: dep ## Build the binary file
-	@GOOS=linux GOARCH=amd64 go build -ldflags "-s -w" -o dist/demo-api $(MAIN_FILE)
+	@GOOS=linux GOARCH=amd64 go build -ldflags "-s -w" -o dist/cmdb-api $(MAIN_FILE)
 
 run: # Run Develop server
-	@go run $(MAIN_FILE) start -f etc/demo-api.toml
+	@go run $(MAIN_FILE) start -f etc/cmdb-api.toml
 
 clean: ## Remove previous build
 	@rm -f dist/*

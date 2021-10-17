@@ -1,5 +1,5 @@
 [app]
-name = "demo"
+name = "cmdb"
 host = "0.0.0.0"
 port = "8050"
 key  = "this is your app key"
@@ -7,9 +7,9 @@ key  = "this is your app key"
 [mysql]
 host = "127.0.0.1"
 port = "3306"
-username = "go_course"
+username = "cmdb"
 password = "xxxx"
-database = "go_course"
+database = "cmdb"
 
 [log]
 level = "debug"
