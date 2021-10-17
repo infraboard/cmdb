@@ -1,6 +1,7 @@
 package ecs_test
 
 import (
+	"fmt"
 	"os"
 	"testing"
 
@@ -14,7 +15,14 @@ var (
 )
 
 func TestQuery(t *testing.T) {
-	operater.Query()
+	pager := operater.Query()
+
+	hasNext := true
+	for hasNext {
+		p := pager.Next()
+		hasNext = p.HasNext
+		fmt.Println(p.Data)
+	}
 }
 
 func init() {

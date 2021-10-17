@@ -1,8 +1,6 @@
 package cvm
 
 import (
-	"strings"
-
 	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 
 	"github.com/infraboard/cmdb/pkg/host"
@@ -19,18 +17,18 @@ type CVMOperater struct {
 	client *cvm.Client
 }
 
-func (o *CVMOperater) transferSet(items []*cvm.Instance) *host.HostSet {
+func transferSet(items []*cvm.Instance, region string) *host.HostSet {
 	set := host.NewHostSet()
 	for i := range items {
-		set.Add(o.transferOne(items[i]))
+		set.Add(transferOne(items[i], region))
 	}
 	return set
 }
 
-func (o *CVMOperater) transferOne(ins *cvm.Instance) *host.Host {
+func transferOne(ins *cvm.Instance, region string) *host.Host {
 	h := host.NewDefaultHost()
 	h.Base.Vendor = host.Tencent
-	h.Base.Region = o.client.GetRegion()
+	h.Base.Region = region
 	h.Base.Zone = utils.PtrStrV(ins.Placement.Zone)
 	h.Base.CreateAt = utils.PtrStrV(ins.CreatedTime)
 	h.Base.InstanceId = utils.PtrStrV(ins.InstanceId)
@@ -39,9 +37,9 @@ func (o *CVMOperater) transferOne(ins *cvm.Instance) *host.Host {
 	h.Resource.Type = utils.PtrStrV(ins.InstanceType)
 	h.Resource.Name = utils.PtrStrV(ins.InstanceName)
 	h.Resource.Status = utils.PtrStrV(ins.InstanceState)
-	h.Resource.Tags = o.transferTags(ins.Tags)
-	h.Resource.PublicIP = strings.Join(utils.SlicePtrStrv(ins.PublicIpAddresses), ",")
-	h.Resource.PrivateIP = strings.Join(utils.SlicePtrStrv(ins.PrivateIpAddresses), ",")
+	h.Resource.Tags = transferTags(ins.Tags)
+	h.Resource.PublicIP = utils.SlicePtrStrv(ins.PublicIpAddresses)
+	h.Resource.PrivateIP = utils.SlicePtrStrv(ins.PrivateIpAddresses)
 	h.Resource.PayType = utils.PtrStrV(ins.InstanceChargeType)
 
 	h.Describe.CPU = utils.PtrInt64(ins.CPU)
@@ -57,6 +55,6 @@ func (o *CVMOperater) transferOne(ins *cvm.Instance) *host.Host {
 	return h
 }
 
-func (o *CVMOperater) transferTags(tags []*cvm.Tag) map[string]string {
+func transferTags(tags []*cvm.Tag) map[string]string {
 	return nil
 }

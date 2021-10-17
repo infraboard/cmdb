@@ -104,8 +104,8 @@ type Resource struct {
 	Tags        map[string]string `json:"tags"`        // 标签
 	UpdateAt    int64             `json:"update_at"`   // 更新时间
 	SyncAccount string            `json:"sync_accout"` // 同步的账号
-	PublicIP    string            `json:"public_ip"`   // 公网IP
-	PrivateIP   string            `json:"private_ip"`  // 内网IP
+	PublicIP    []string          `json:"public_ip"`   // 公网IP
+	PrivateIP   []string          `json:"private_ip"`  // 内网IP
 	PayType     string            `json:"pay_type"`    // 实例付费方式
 }
 
@@ -120,7 +120,7 @@ type Describe struct {
 	SerialNumber            string   `json:"serial_number"`              // 序列号
 	ImageID                 string   `json:"image_id"`                   // 镜像ID
 	InternetMaxBandwidthOut int64    `json:"internet_max_bandwidth_out"` // 公网出带宽最大值，单位为 Mbps
-	InternetMaxBandwidthIn  int      `json:"internet_max_bandwidth_in"`  // 公网入带宽最大值，单位为 Mbps
+	InternetMaxBandwidthIn  int64    `json:"internet_max_bandwidth_in"`  // 公网入带宽最大值，单位为 Mbps
 	KeyPairName             []string `json:"key_pair_name,omitempty"`    // 秘钥对名称
 	SecurityGroups          []string `json:"security_groups"`            // 安全组  采用逗号分隔
 }
@@ -133,7 +133,7 @@ func NewHostSet() *HostSet {
 
 type HostSet struct {
 	Items []*Host `json:"items"`
-	Total int     `json:"total"`
+	Total int64   `json:"total"`
 }
 
 func (s *HostSet) Add(item *Host) {

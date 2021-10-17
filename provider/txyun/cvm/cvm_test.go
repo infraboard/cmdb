@@ -5,7 +5,6 @@ import (
 	"os"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/regions"
 
 	"github.com/infraboard/cmdb/provider/txyun/connectivity"
@@ -17,10 +16,13 @@ var (
 )
 
 func TestQuery(t *testing.T) {
-	resp, err := operater.Query()
-	should := assert.New(t)
-	if should.NoError(err) {
-		fmt.Println(resp.ToJsonString())
+	pager := operater.Query()
+
+	hasNext := true
+	for hasNext {
+		p := pager.Next()
+		hasNext = p.HasNext
+		fmt.Println(p.Data)
 	}
 }
 
