@@ -20,15 +20,15 @@ type EcsOperater struct {
 	log    logger.Logger
 }
 
-func transferSet(items []ecs.Instance) *host.HostSet {
+func (o *EcsOperater) transferSet(items []ecs.Instance) *host.HostSet {
 	set := host.NewHostSet()
 	for i := range items {
-		set.Add(transferOne(items[i]))
+		set.Add(o.transferOne(items[i]))
 	}
 	return set
 }
 
-func transferOne(ins ecs.Instance) *host.Host {
+func (o *EcsOperater) transferOne(ins ecs.Instance) *host.Host {
 	h := host.NewDefaultHost()
 	h.Base.Vendor = host.AliYun
 	h.Base.Region = ins.RegionId
@@ -41,7 +41,7 @@ func transferOne(ins ecs.Instance) *host.Host {
 	h.Resource.Name = ins.InstanceName
 	h.Resource.Description = ins.Description
 	h.Resource.Status = ins.Status
-	h.Resource.Tags = transferTags(ins.Tags.Tag)
+	h.Resource.Tags = o.transferTags(ins.Tags.Tag)
 	h.Resource.PublicIP = ins.PublicIpAddress.IpAddress
 	h.Resource.PrivateIP = ins.InnerIpAddress.IpAddress
 	h.Resource.PayType = ins.InstanceChargeType
@@ -61,6 +61,6 @@ func transferOne(ins ecs.Instance) *host.Host {
 	return h
 }
 
-func transferTags(tags []ecs.Tag) map[string]string {
+func (o *EcsOperater) transferTags(tags []ecs.Tag) map[string]string {
 	return nil
 }

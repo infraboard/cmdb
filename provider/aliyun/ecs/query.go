@@ -1,9 +1,24 @@
 package ecs
 
 import (
+	"github.com/aliyun/alibaba-cloud-sdk-go/services/ecs"
+
 	"github.com/infraboard/cmdb/pkg/host"
 )
 
-func (o *EcsOperater) Query() host.Pager {
-	return newPagger(20, o.client)
+func (o *EcsOperater) Query(req *ecs.DescribeInstancesRequest) (*host.HostSet, error) {
+	set := host.NewHostSet()
+
+	resp, err := o.client.DescribeInstances(req)
+	if err != nil {
+		return nil, err
+	}
+	set.Total = int64(resp.TotalCount)
+	set.Items = o.transferSet(resp.Instances.Instance).Items
+
+	return set, nil
+}
+
+func (o *EcsOperater) PageQuery() host.Pager {
+	return newPager(20, o)
 }

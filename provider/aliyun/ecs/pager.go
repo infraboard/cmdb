@@ -9,40 +9,40 @@ import (
 	"github.com/infraboard/mcube/logger/zap"
 )
 
-func newPagger(pageSize int, client *ecs.Client) *pager {
+func newPager(pageSize int, operater *EcsOperater) *pager {
 	req := ecs.CreateDescribeInstancesRequest()
 	req.PageSize = requests.NewInteger(pageSize)
 
 	return &pager{
-		size:   pageSize,
-		number: 1,
-		client: client,
-		req:    req,
-		log:    zap.L().Named("Pagger"),
+		size:     pageSize,
+		number:   1,
+		operater: operater,
+		req:      req,
+		log:      zap.L().Named("Pagger"),
 	}
 }
 
 type pager struct {
-	size   int
-	number int
-	total  int64
-	client *ecs.Client
-	req    *ecs.DescribeInstancesRequest
-	log    logger.Logger
+	size     int
+	number   int
+	total    int64
+	operater *EcsOperater
+	req      *ecs.DescribeInstancesRequest
+	log      logger.Logger
 }
 
 func (p *pager) Next() *host.PagerResult {
 	result := host.NewPagerResult()
 
-	resp, err := p.client.DescribeInstances(p.nextReq())
+	resp, err := p.operater.Query(p.nextReq())
 	if err != nil {
 		result.Err = err
 		return result
 	}
-	p.total = int64(resp.TotalCount)
 
-	result.Data = transferSet(resp.Instances.Instance)
-	result.Data.Total = p.total
+	p.total = int64(resp.Total)
+
+	result.Data = resp
 	result.HasNext = p.hasNext()
 
 	p.number++

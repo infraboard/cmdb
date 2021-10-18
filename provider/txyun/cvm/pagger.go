@@ -5,45 +5,43 @@ import (
 	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 
 	"github.com/infraboard/cmdb/pkg/host"
-	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 )
 
-func newPagger(pageSize int, client *cvm.Client) *pager {
+func newPager(pageSize int, operater *CVMOperater) *pager {
 	req := cvm.NewDescribeInstancesRequest()
 	req.Limit = common.Int64Ptr(int64(pageSize))
 
 	return &pager{
-		size:   pageSize,
-		number: 1,
-		client: client,
-		req:    req,
-		log:    zap.L().Named("Pagger"),
+		size:     pageSize,
+		number:   1,
+		operater: operater,
+		req:      req,
+		log:      zap.L().Named("Pagger"),
 	}
 }
 
 type pager struct {
-	size   int
-	number int
-	total  int64
-	client *cvm.Client
-	req    *cvm.DescribeInstancesRequest
-	log    logger.Logger
+	size     int
+	number   int
+	total    int64
+	operater *CVMOperater
+	req      *cvm.DescribeInstancesRequest
+	log      logger.Logger
 }
 
 func (p *pager) Next() *host.PagerResult {
 	result := host.NewPagerResult()
 
-	resp, err := p.client.DescribeInstances(p.nextReq())
+	resp, err := p.operater.Query(p.nextReq())
 	if err != nil {
 		result.Err = err
 		return result
 	}
-	p.total = utils.PtrInt64(resp.Response.TotalCount)
+	p.total = resp.Total
 
-	result.Data = transferSet(resp.Response.InstanceSet, p.client.GetRegion())
-	result.Data.Total = p.total
+	result.Data = resp
 	result.HasNext = p.hasNext()
 
 	p.number++

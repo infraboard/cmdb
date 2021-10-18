@@ -17,18 +17,18 @@ type CVMOperater struct {
 	client *cvm.Client
 }
 
-func transferSet(items []*cvm.Instance, region string) *host.HostSet {
+func (o *CVMOperater) transferSet(items []*cvm.Instance) *host.HostSet {
 	set := host.NewHostSet()
 	for i := range items {
-		set.Add(transferOne(items[i], region))
+		set.Add(o.transferOne(items[i]))
 	}
 	return set
 }
 
-func transferOne(ins *cvm.Instance, region string) *host.Host {
+func (o *CVMOperater) transferOne(ins *cvm.Instance) *host.Host {
 	h := host.NewDefaultHost()
 	h.Base.Vendor = host.Tencent
-	h.Base.Region = region
+	h.Base.Region = o.client.GetRegion()
 	h.Base.Zone = utils.PtrStrV(ins.Placement.Zone)
 	h.Base.CreateAt = utils.PtrStrV(ins.CreatedTime)
 	h.Base.InstanceId = utils.PtrStrV(ins.InstanceId)
