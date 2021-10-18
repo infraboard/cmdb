@@ -1,7 +1,11 @@
 package pkg
 
-import "github.com/infraboard/cmdb/pkg/host"
+import (
+	"github.com/infraboard/cmdb/pkg/host"
+	"github.com/infraboard/cmdb/pkg/syncer"
+)
 
 var (
-	Host host.Service
+	Host   host.Service
+	Syncer syncer.Service
 )

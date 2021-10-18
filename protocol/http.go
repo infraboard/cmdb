@@ -13,6 +13,7 @@ import (
 
 	"github.com/infraboard/cmdb/conf"
 	hostAPI "github.com/infraboard/cmdb/pkg/host/http"
+	syncerAPI "github.com/infraboard/cmdb/pkg/syncer/http"
 )
 
 // NewHTTPService 构建函数
@@ -48,6 +49,7 @@ type HTTPService struct {
 func (s *HTTPService) Start() error {
 	// 装置子服务路由
 	hostAPI.RegistAPI(s.r)
+	syncerAPI.RegistAPI(s.r)
 
 	// 启动 HTTP服务
 	s.l.Infof("HTTP服务启动成功, 监听地址: %s", s.server.Addr)

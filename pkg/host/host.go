@@ -85,7 +85,7 @@ func (h *Host) GenHash() error {
 type Base struct {
 	Id           string `json:"id"`            // 全局唯一Id
 	SyncAt       int64  `json:"sync_at"`       // 同步时间
-	AccountId    string `json:"account_id"`    // 同步的账号ID
+	SecretID     string `json:"secret_id"`     // 用于同步的凭证ID
 	Vendor       Vendor `json:"vendor"`        // 厂商
 	Region       string `json:"region"`        // 地域
 	Zone         string `json:"zone"`          // 区域

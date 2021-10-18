@@ -16,6 +16,7 @@ import (
 	"github.com/infraboard/cmdb/conf"
 	"github.com/infraboard/cmdb/pkg"
 	"github.com/infraboard/cmdb/pkg/host/impl"
+	syncer "github.com/infraboard/cmdb/pkg/syncer/impl"
 	"github.com/infraboard/cmdb/protocol"
 )
 
@@ -40,6 +41,12 @@ var serviceCmd = &cobra.Command{
 			return err
 		}
 		pkg.Host = impl.Service
+
+		// Syncer Service
+		if err := syncer.Service.Config(); err != nil {
+			return err
+		}
+		pkg.Syncer = syncer.Service
 
 		// 启动服务
 		ch := make(chan os.Signal, 1)
