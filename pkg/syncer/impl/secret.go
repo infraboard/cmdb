@@ -2,6 +2,7 @@ package impl
 
 import (
 	"context"
+	"database/sql"
 
 	"github.com/infraboard/cmdb/pkg/syncer"
 	"github.com/infraboard/mcube/exception"
@@ -67,9 +68,37 @@ func (s *service) QuerySecret(ctx context.Context, req *syncer.QuerySecretReques
 			&ins.APIKey, &ins.APISecret,
 		)
 		if err != nil {
-			return nil, exception.NewInternalServerError("query host error, %s", err.Error())
+			return nil, exception.NewInternalServerError("query secret error, %s", err.Error())
 		}
 		set.Add(ins)
 	}
 	return set, nil
+}
+
+func (s *service) DescribeSecret(ctx context.Context, req *syncer.DescribeSecretRequest) (
+	*syncer.Secret, error) {
+	query := sqlbuilder.NewQuery(querySecretSQL)
+	querySQL, args := query.Where("id = ?", req.Id).BuildQuery()
+	s.log.Debugf("sql: %s", querySQL)
+
+	queryStmt, err := s.db.Prepare(querySQL)
+	if err != nil {
+		return nil, exception.NewInternalServerError("prepare query secret error, %s", err.Error())
+	}
+	defer queryStmt.Close()
+
+	ins := syncer.NewDefaultSecret()
+	err = queryStmt.QueryRow(args...).Scan(
+		&ins.Id, &ins.CreateAt, &ins.Description, &ins.Vendor, &ins.CrendentialType,
+		&ins.APIKey, &ins.APISecret,
+	)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, exception.NewNotFound("%#v not found", req)
+		}
+		return nil, exception.NewInternalServerError("describe secret error, %s", err.Error())
+	}
+
+	return ins, nil
 }

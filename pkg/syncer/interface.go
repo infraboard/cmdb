@@ -17,6 +17,7 @@ var (
 type Service interface {
 	CreateSecret(context.Context, *CreateSecretRequest) (*Secret, error)
 	QuerySecret(context.Context, *QuerySecretRequest) (*SecretSet, error)
+	DescribeSecret(context.Context, *DescribeSecretRequest) (*Secret, error)
 }
 
 func NewSecret(req *CreateSecretRequest) (*Secret, error) {
@@ -53,4 +54,14 @@ func NewQuerySecretRequest() *QuerySecretRequest {
 }
 
 type QuerySecretRequest struct {
+}
+
+func NewDescribeSecretRequest(id string) *DescribeSecretRequest {
+	return &DescribeSecretRequest{
+		Id: id,
+	}
+}
+
+type DescribeSecretRequest struct {
+	Id string
 }
