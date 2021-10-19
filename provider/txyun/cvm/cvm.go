@@ -4,6 +4,7 @@ import (
 	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 
 	"github.com/infraboard/cmdb/pkg/host"
+	"github.com/infraboard/cmdb/pkg/resource"
 	"github.com/infraboard/cmdb/utils"
 )
 
@@ -27,20 +28,20 @@ func (o *CVMOperater) transferSet(items []*cvm.Instance) *host.HostSet {
 
 func (o *CVMOperater) transferOne(ins *cvm.Instance) *host.Host {
 	h := host.NewDefaultHost()
-	h.Base.Vendor = host.Tencent
+	h.Base.Vendor = resource.VendorTencent
 	h.Base.Region = o.client.GetRegion()
 	h.Base.Zone = utils.PtrStrV(ins.Placement.Zone)
 	h.Base.CreateAt = utils.PtrStrV(ins.CreatedTime)
 	h.Base.InstanceId = utils.PtrStrV(ins.InstanceId)
 
-	h.Resource.ExpireAt = utils.PtrStrV(ins.ExpiredTime)
-	h.Resource.Type = utils.PtrStrV(ins.InstanceType)
-	h.Resource.Name = utils.PtrStrV(ins.InstanceName)
-	h.Resource.Status = utils.PtrStrV(ins.InstanceState)
-	h.Resource.Tags = transferTags(ins.Tags)
-	h.Resource.PublicIP = utils.SlicePtrStrv(ins.PublicIpAddresses)
-	h.Resource.PrivateIP = utils.SlicePtrStrv(ins.PrivateIpAddresses)
-	h.Resource.PayType = utils.PtrStrV(ins.InstanceChargeType)
+	h.Information.ExpireAt = utils.PtrStrV(ins.ExpiredTime)
+	h.Information.Type = utils.PtrStrV(ins.InstanceType)
+	h.Information.Name = utils.PtrStrV(ins.InstanceName)
+	h.Information.Status = utils.PtrStrV(ins.InstanceState)
+	h.Information.Tags = transferTags(ins.Tags)
+	h.Information.PublicIP = utils.SlicePtrStrv(ins.PublicIpAddresses)
+	h.Information.PrivateIP = utils.SlicePtrStrv(ins.PrivateIpAddresses)
+	h.Information.PayType = utils.PtrStrV(ins.InstanceChargeType)
 
 	h.Describe.CPU = utils.PtrInt64(ins.CPU)
 	h.Describe.Memory = utils.PtrInt64(ins.Memory)

@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/infraboard/cmdb/pkg/resource"
 )
 
 // use a single instance of Validate, it caches struct info
@@ -98,7 +99,7 @@ func (req *UpdateHostRequest) Validate() error {
 }
 
 type UpdateHostData struct {
-	*Resource
+	*resource.Information
 	*Describe
 }
 
