@@ -22,6 +22,8 @@ func (s *service) Sync(ctx context.Context, req *syncer.SyncRequest) (
 	switch req.ResourceType {
 	case resource.HostResource:
 		resp, err = s.syncHost(ctx, secret)
+	case resource.RdsResource:
+		resp, err = s.syncRds(ctx, secret)
 	}
 
 	if err != nil {

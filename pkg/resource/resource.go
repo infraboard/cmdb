@@ -4,6 +4,8 @@ func LoadTypeFromString(t string) Type {
 	switch t {
 	case "host":
 		return HostResource
+	case "rds":
+		return RdsResource
 	default:
 		return Unsuport
 	}
@@ -12,6 +14,7 @@ func LoadTypeFromString(t string) Type {
 const (
 	Unsuport Type = iota
 	HostResource
+	RdsResource
 )
 
 type Type int
