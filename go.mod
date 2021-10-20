@@ -8,6 +8,7 @@ require (
 	github.com/caarlos0/env/v6 v6.7.2
 	github.com/go-playground/validator/v10 v10.9.0
 	github.com/go-sql-driver/mysql v1.6.0
+	github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.0.66
 	github.com/infraboard/mcube v1.4.5
 	github.com/julienschmidt/httprouter v1.3.0
 	github.com/rs/cors v1.8.0
