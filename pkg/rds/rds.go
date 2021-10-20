@@ -4,6 +4,16 @@ import (
 	"github.com/infraboard/cmdb/pkg/resource"
 )
 
+func NewDefaultRds() *Rds {
+	return &Rds{
+		&resource.Base{
+			ResourceType: resource.RdsResource,
+		},
+		&resource.Information{},
+		&Describe{},
+	}
+}
+
 type Rds struct {
 	*resource.Base
 	*resource.Information

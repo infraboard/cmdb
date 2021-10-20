@@ -12,5 +12,12 @@ func (o *RdsOperater) Query(req *rds.DescribeDBInstancesRequest) (*cmdbRds.RdsSe
 		return nil, err
 	}
 
-	return o.transferSet(resp.Items.DBInstance), nil
+	set := o.transferSet(resp.Items.DBInstance)
+	set.Total = int64(resp.TotalRecordCount)
+
+	return set, nil
+}
+
+func (o *RdsOperater) PageQuery() cmdbRds.Pager {
+	return newPager(20, o)
 }

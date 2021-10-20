@@ -3,10 +3,10 @@ package ecs
 import (
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/ecs"
-
-	"github.com/infraboard/cmdb/pkg/host"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
+
+	"github.com/infraboard/cmdb/pkg/host"
 )
 
 func newPager(pageSize int, operater *EcsOperater) *pager {
