@@ -17,4 +17,5 @@ require (
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cdb v1.0.272
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.270
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm v1.0.270
+	github.com/vmware/govmomi v0.27.0
 )

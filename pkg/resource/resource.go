@@ -20,10 +20,10 @@ const (
 type Type int
 
 const (
-	VendorPrivateIDC Vendor = iota
+	VendorAliYun Vendor = iota
 	VendorTencent
-	VendorAliYun
 	VendorHuaWei
+	VendorVsphere
 )
 
 type Vendor int

@@ -36,6 +36,7 @@ type CreateSecretRequest struct {
 	Vendor          resource.Vendor `json:"vendor"`                                  // 厂商
 	Region          string          `json:"region" validate:"required,lte=100"`      // 区域
 	CrendentialType CrendentialType `json:"crendential_type"`                        // 凭证类型
+	Address         string          `json:"address"`                                 // 服务地址, 云商不用填写
 	APIKey          string          `json:"api_key" validate:"required,lte=100"`     // key
 	APISecret       string          `json:"api_secret" validate:"required,lte=100"`  // secrete
 }
