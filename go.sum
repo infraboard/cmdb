@@ -688,6 +688,8 @@ github.com/subosito/gotenv v1.2.0/go.mod h1:N0PQaV/YGNqwC0u51sEeR/aUtSLEXKX9iv69
 github.com/tchap/go-patricia v0.0.0-20160729071656-dd168db6051b/go.mod h1:bmLyhP68RS6kStMGxByiQ23RP/odRBOTVjwp2cDyi6I=
 github.com/tebeka/selenium v0.9.9/go.mod h1:5Fr8+pUvU6B1OiPfkdCKdXZyr5znvVkxuPd0NOdZCQc=
 github.com/tebeka/strftime v0.1.5/go.mod h1:29/OidkoWHdEKZqzyDLUyC+LmgDgdHo4WAFCDT7D/Ig=
+github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cdb v1.0.272 h1:+YeovOEC58qZ1kfLgcHJjOWh7GahqvwSaj7j9sC6fj8=
+github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cdb v1.0.272/go.mod h1:BMLd7J4LnIxw3fSl9vo3UCudJbH1wZutP8Uo3sQGQTk=
 github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.270 h1:t/jkGY/Ew34g+GZCKCOGUEp+brXpmVbcGHMCdPwv0EU=
 github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.270/go.mod h1:7sCQWVkxcsR38nffDW057DRGk8mUjK1Ing/EFOK8s8Y=
 github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm v1.0.270 h1:hCIYP2NxwInKN/EGSYxJhHut2JsHS3+4zI3ilfqVaMQ=
