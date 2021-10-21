@@ -78,11 +78,12 @@ func (s *service) syncHost(ctx context.Context, secret *syncer.Secret, region st
 
 	// 调用host服务保持数据
 	for i := range hs.Items {
-		ins, err := s.host.SaveHost(ctx, hs.Items[i])
+		target := hs.Items[i]
+		_, err := s.host.SaveHost(ctx, target)
 		if err != nil {
-			set.AddFailed(ins.Name, err.Error())
+			set.AddFailed(target.Name, err.Error())
 		} else {
-			set.AddSucceed(ins.Name, "")
+			set.AddSucceed(target.Name, "")
 		}
 	}
 

@@ -4,6 +4,7 @@ import (
 	"database/sql"
 
 	"github.com/infraboard/cmdb/conf"
+	"github.com/infraboard/cmdb/pkg"
 	"github.com/infraboard/cmdb/pkg/host"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
@@ -28,5 +29,6 @@ func (s *service) Config() error {
 
 	s.log = zap.L().Named("Syncer")
 	s.db = db
+	s.host = pkg.Host
 	return nil
 }

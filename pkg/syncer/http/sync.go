@@ -22,6 +22,7 @@ func (h *handler) Sync(w http.ResponseWriter, r *http.Request, ps httprouter.Par
 		return
 	}
 	req.ResourceType = t
+	req.Region = query.Get("region")
 
 	set, err := h.service.Sync(r.Context(), req)
 	if err != nil {

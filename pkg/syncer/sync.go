@@ -9,9 +9,13 @@ func NewSyncRequest(secretId string) *SyncRequest {
 }
 
 type SyncRequest struct {
-	SecretId     string
+	Region       string `validate:"required,lte=100"`
+	SecretId     string `validate:"required,lte=100"`
 	ResourceType resource.Type
-	Region       string
+}
+
+func (req *SyncRequest) Validate() error {
+	return validate.Struct(req)
 }
 
 func NewSyncReponse() *SyncReponse {

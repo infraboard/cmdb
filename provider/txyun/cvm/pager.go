@@ -49,7 +49,7 @@ func (p *pager) Next() *host.PagerResult {
 }
 
 func (p *pager) nextReq() *cvm.DescribeInstancesRequest {
-	p.log.Debug("请求第%d页数据", p.number)
+	p.log.Debugf("请求第%d页数据", p.number)
 	p.req.Offset = common.Int64Ptr(p.offset())
 	return p.req
 }

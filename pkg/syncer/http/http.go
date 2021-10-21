@@ -35,5 +35,5 @@ func RegistAPI(r *httprouter.Router) {
 	r.POST("/secrets", api.CreateSecret)
 	r.GET("/secrets", api.QuerySecret)
 	r.GET("/secrets/:id", api.DescribeSecret)
-	r.GET("/secrets/:id/sync", api.Sync)
+	r.POST("/secrets/:id/sync", api.Sync)
 }

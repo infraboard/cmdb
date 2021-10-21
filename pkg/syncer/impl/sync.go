@@ -15,12 +15,16 @@ func (s *service) Sync(ctx context.Context, req *syncer.SyncRequest) (
 		err  error
 	)
 
+	if err := req.Validate(); err != nil {
+		return nil, exception.NewBadRequest("validate sync request error, %s", err)
+	}
+
 	secret, err := s.DescribeSecret(ctx, syncer.NewDescribeSecretRequest(req.SecretId))
 	if err != nil {
 		return nil, err
 	}
 
-	if secret.IsAllowRegion(req.Region) {
+	if !secret.IsAllowRegion(req.Region) {
 		return nil, exception.NewBadRequest("this secret not allow sync region %s", req.Region)
 	}
 
