@@ -11,6 +11,7 @@ func NewSyncRequest(secretId string) *SyncRequest {
 type SyncRequest struct {
 	SecretId     string
 	ResourceType resource.Type
+	Region       string
 }
 
 func NewSyncReponse() *SyncReponse {

@@ -18,7 +18,7 @@ import (
 	vmOp "github.com/infraboard/cmdb/provider/vsphere/vm"
 )
 
-func (s *service) syncHost(ctx context.Context, secret *syncer.Secret) (
+func (s *service) syncHost(ctx context.Context, secret *syncer.Secret, region string) (
 	*syncer.SyncReponse, error) {
 	var (
 		pager host.Pager
@@ -27,7 +27,7 @@ func (s *service) syncHost(ctx context.Context, secret *syncer.Secret) (
 	hs := host.NewHostSet()
 	switch secret.Vendor {
 	case resource.VendorAliYun:
-		client := aliConn.NewAliCloudClient(secret.APIKey, secret.APISecret, secret.Region)
+		client := aliConn.NewAliCloudClient(secret.APIKey, secret.APISecret, region)
 		ec, err := client.EcsClient()
 		if err != nil {
 			return nil, err
@@ -35,11 +35,11 @@ func (s *service) syncHost(ctx context.Context, secret *syncer.Secret) (
 		operater := ecsOp.NewEcsOperater(ec)
 		pager = operater.PageQuery()
 	case resource.VendorTencent:
-		client := txConn.NewTencentCloudClient(secret.APIKey, secret.APISecret, secret.Region)
+		client := txConn.NewTencentCloudClient(secret.APIKey, secret.APISecret, region)
 		operater := cvmOp.NewCVMOperater(client.CvmClient())
 		pager = operater.PageQuery()
 	case resource.VendorHuaWei:
-		client := hwConn.NewHuaweiCloudClient(secret.APIKey, secret.APISecret, secret.Region)
+		client := hwConn.NewHuaweiCloudClient(secret.APIKey, secret.APISecret, region)
 		ec, err := client.EcsClient()
 		if err != nil {
 			return nil, err

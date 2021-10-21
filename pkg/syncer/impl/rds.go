@@ -6,7 +6,7 @@ import (
 	"github.com/infraboard/cmdb/pkg/syncer"
 )
 
-func (s *service) syncRds(ctx context.Context, secret *syncer.Secret) (
+func (s *service) syncRds(ctx context.Context, secret *syncer.Secret, region string) (
 	*syncer.SyncReponse, error) {
 	return nil, nil
 }

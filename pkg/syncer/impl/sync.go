@@ -5,6 +5,7 @@ import (
 
 	"github.com/infraboard/cmdb/pkg/resource"
 	"github.com/infraboard/cmdb/pkg/syncer"
+	"github.com/infraboard/mcube/exception"
 )
 
 func (s *service) Sync(ctx context.Context, req *syncer.SyncRequest) (
@@ -19,11 +20,15 @@ func (s *service) Sync(ctx context.Context, req *syncer.SyncRequest) (
 		return nil, err
 	}
 
+	if secret.IsAllowRegion(req.Region) {
+		return nil, exception.NewBadRequest("this secret not allow sync region %s", req.Region)
+	}
+
 	switch req.ResourceType {
 	case resource.HostResource:
-		resp, err = s.syncHost(ctx, secret)
+		resp, err = s.syncHost(ctx, secret, req.Region)
 	case resource.RdsResource:
-		resp, err = s.syncRds(ctx, secret)
+		resp, err = s.syncRds(ctx, secret, req.Region)
 	}
 
 	if err != nil {

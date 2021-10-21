@@ -11,8 +11,8 @@ import (
 
 const (
 	insertSecretSQL = `INSERT INTO secret (
-		id,create_at,description,vendor,crendential_type,api_key,api_secret
-	) VALUES (?,?,?,?,?,?,?);`
+		id,create_at,description,vendor,address,allow_regions,crendential_type,api_key,api_secret
+	) VALUES (?,?,?,?,?,?,?,?,?);`
 
 	querySecretSQL = `SELECT * FROM secret`
 )
@@ -31,8 +31,8 @@ func (s *service) CreateSecret(ctx context.Context, req *syncer.CreateSecretRequ
 	defer stmt.Close()
 
 	_, err = stmt.Exec(
-		ins.Id, ins.CreateAt, ins.Description, ins.Vendor,
-		ins.CrendentialType, ins.APIKey, ins.APISecret,
+		ins.Id, ins.CreateAt, ins.Description, ins.Vendor, ins.Address,
+		ins.AllowRegionString(), ins.CrendentialType, ins.APIKey, ins.APISecret,
 	)
 	if err != nil {
 		return nil, err
@@ -61,15 +61,17 @@ func (s *service) QuerySecret(ctx context.Context, req *syncer.QuerySecretReques
 	defer rows.Close()
 
 	set := syncer.NewSecretSet()
+	allowRegions := ""
 	for rows.Next() {
 		ins := syncer.NewDefaultSecret()
 		err := rows.Scan(
-			&ins.Id, &ins.CreateAt, &ins.Description, &ins.Vendor, &ins.CrendentialType,
-			&ins.APIKey, &ins.APISecret,
+			&ins.Id, &ins.CreateAt, &ins.Description, &ins.Vendor, &ins.Address,
+			&allowRegions, &ins.CrendentialType, &ins.APIKey, &ins.APISecret,
 		)
 		if err != nil {
 			return nil, exception.NewInternalServerError("query secret error, %s", err.Error())
 		}
+		ins.LoadAllowRegionFromString(allowRegions)
 		set.Add(ins)
 	}
 	return set, nil
@@ -88,9 +90,10 @@ func (s *service) DescribeSecret(ctx context.Context, req *syncer.DescribeSecret
 	defer queryStmt.Close()
 
 	ins := syncer.NewDefaultSecret()
+	allowRegions := ""
 	err = queryStmt.QueryRow(args...).Scan(
-		&ins.Id, &ins.CreateAt, &ins.Description, &ins.Vendor, &ins.CrendentialType,
-		&ins.APIKey, &ins.APISecret,
+		&ins.Id, &ins.CreateAt, &ins.Description, &ins.Vendor, &ins.Address,
+		&allowRegions, &ins.CrendentialType, &ins.APIKey, &ins.APISecret,
 	)
 
 	if err != nil {
@@ -100,5 +103,6 @@ func (s *service) DescribeSecret(ctx context.Context, req *syncer.DescribeSecret
 		return nil, exception.NewInternalServerError("describe secret error, %s", err.Error())
 	}
 
+	ins.LoadAllowRegionFromString(allowRegions)
 	return ins, nil
 }
