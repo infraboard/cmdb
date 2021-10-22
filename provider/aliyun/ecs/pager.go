@@ -12,7 +12,7 @@ import (
 	"github.com/infraboard/cmdb/pkg/host"
 )
 
-func newPager(pageSize int, operater *EcsOperater) *pager {
+func newPager(pageSize int, operater *EcsOperater, rate int) *pager {
 	req := ecs.CreateDescribeInstancesRequest()
 	req.PageSize = requests.NewInteger(pageSize)
 
@@ -22,7 +22,7 @@ func newPager(pageSize int, operater *EcsOperater) *pager {
 		operater: operater,
 		req:      req,
 		log:      zap.L().Named("Pagger"),
-		tb:       tokenbucket.NewBucket(time.Duration(1)*time.Second, 1),
+		tb:       tokenbucket.NewBucket(time.Duration(rate)*time.Second, 1),
 	}
 }
 

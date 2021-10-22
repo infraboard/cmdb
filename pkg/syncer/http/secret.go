@@ -38,11 +38,12 @@ func (h *handler) CreateSecret(w http.ResponseWriter, r *http.Request, _ httprou
 
 func (h *handler) DescribeSecret(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	req := syncer.NewDescribeSecretRequest(ps.ByName("id"))
-	set, err := h.service.DescribeSecret(r.Context(), req)
+	ins, err := h.service.DescribeSecret(r.Context(), req)
 	if err != nil {
 		response.Failed(w, err)
 		return
 	}
 
-	response.Success(w, set)
+	ins.Desense()
+	response.Success(w, ins)
 }

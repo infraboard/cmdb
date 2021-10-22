@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/infraboard/cmdb/conf"
 	"github.com/infraboard/cmdb/pkg/host"
 	"github.com/infraboard/cmdb/pkg/resource"
 	"github.com/infraboard/cmdb/pkg/syncer"
@@ -25,6 +26,12 @@ func (s *service) syncHost(ctx context.Context, secret *syncer.Secret, region st
 		pager host.Pager
 	)
 
+	// 解密secret
+	err := secret.DecryptAPISecret(conf.C().App.EncryptKey)
+	if err != nil {
+		s.log.Warnf("decrypt api secret error, %s", err)
+	}
+
 	hs := host.NewHostSet()
 	switch secret.Vendor {
 	case resource.VendorAliYun:
@@ -35,7 +42,9 @@ func (s *service) syncHost(ctx context.Context, secret *syncer.Secret, region st
 			return nil, err
 		}
 		operater := ecsOp.NewEcsOperater(ec)
-		pager = operater.PageQuery()
+		req := ecsOp.NewPageQueryRequest()
+		req.Rate = secret.RequestRate
+		pager = operater.PageQuery(req)
 	case resource.VendorTencent:
 		s.log.Debugf("sync txyun host ...")
 		client := txConn.NewTencentCloudClient(secret.APIKey, secret.APISecret, region)

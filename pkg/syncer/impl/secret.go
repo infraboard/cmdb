@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 
+	"github.com/infraboard/cmdb/conf"
 	"github.com/infraboard/cmdb/pkg/syncer"
 	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/sqlbuilder"
@@ -29,6 +30,11 @@ func (s *service) CreateSecret(ctx context.Context, req *syncer.CreateSecretRequ
 		return nil, err
 	}
 	defer stmt.Close()
+
+	// 入库之前先加密
+	if err := ins.EncryptAPISecret(conf.C().App.EncryptKey); err != nil {
+		s.log.Warnf("encrypt api key error, %s", err)
+	}
 
 	_, err = stmt.Exec(
 		ins.Id, ins.CreateAt, ins.Description, ins.Vendor, ins.Address,
@@ -74,6 +80,7 @@ func (s *service) QuerySecret(ctx context.Context, req *syncer.QuerySecretReques
 			return nil, exception.NewInternalServerError("query secret error, %s", err.Error())
 		}
 		ins.LoadAllowRegionFromString(allowRegions)
+		ins.Desense()
 		set.Add(ins)
 	}
 	return set, nil

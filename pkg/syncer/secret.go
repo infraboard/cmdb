@@ -1,11 +1,14 @@
 package syncer
 
 import (
+	"encoding/base64"
 	"fmt"
 	"strings"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/infraboard/cmdb/conf"
 	"github.com/infraboard/cmdb/pkg/resource"
+	"github.com/infraboard/mcube/crypto/cbc"
 	"github.com/infraboard/mcube/types/ftime"
 	"github.com/rs/xid"
 )
@@ -34,8 +37,56 @@ type Secret struct {
 	*CreateSecretRequest
 }
 
+func (s *Secret) EncryptAPISecret(key string) error {
+	// 判断文本是否已经加密
+	if strings.HasPrefix(s.APISecret, conf.CIPHER_TEXT_PREFIX) {
+		return fmt.Errorf("text has ciphered")
+	}
+
+	cipherText, err := cbc.Encrypt([]byte(s.APISecret), []byte(key))
+	if err != nil {
+		return err
+	}
+
+	base64Str := base64.StdEncoding.EncodeToString(cipherText)
+	s.APISecret = fmt.Sprintf("%s%s", conf.CIPHER_TEXT_PREFIX, base64Str)
+	return nil
+}
+
+func (s *Secret) DecryptAPISecret(key string) error {
+	// 判断文本是否已经是明文
+	if !strings.HasPrefix(s.APISecret, conf.CIPHER_TEXT_PREFIX) {
+		return fmt.Errorf("text is plan text")
+	}
+
+	base64CipherText := strings.TrimPrefix(s.APISecret, conf.CIPHER_TEXT_PREFIX)
+
+	cipherText, err := base64.StdEncoding.DecodeString(base64CipherText)
+	if err != nil {
+		return err
+	}
+
+	planText, err := cbc.Decrypt([]byte(cipherText), []byte(key))
+	if err != nil {
+		return err
+	}
+
+	s.APISecret = string(planText)
+	return nil
+}
+
+func (s *Secret) Desense() {
+	if s.APISecret != "" {
+		s.APISecret = "******"
+	}
+}
+
 func (s *Secret) IsAllowRegion(region string) bool {
 	for i := range s.AllowRegions {
+		if s.AllowRegions[i] == "*" {
+			return true
+		}
+
 		if s.AllowRegions[i] == region {
 			return true
 		}
