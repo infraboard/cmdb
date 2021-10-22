@@ -62,6 +62,7 @@ type CreateSecretRequest struct {
 	Address         string          `json:"address"`                                 // 服务地址, 云商不用填写
 	APIKey          string          `json:"api_key" validate:"required,lte=100"`     // key
 	APISecret       string          `json:"api_secret" validate:"required,lte=100"`  // secrete
+	RequestRate     int             `json:"request_rate"`                            // 请求速率限制, 默认1秒5个
 }
 
 func NewSecretSet() *SecretSet {
@@ -91,7 +92,9 @@ func NewSecret(req *CreateSecretRequest) (*Secret, error) {
 }
 
 func NewCreateSecretRequest() *CreateSecretRequest {
-	return &CreateSecretRequest{}
+	return &CreateSecretRequest{
+		RequestRate: 5,
+	}
 }
 
 func (req *CreateSecretRequest) Validate() error {

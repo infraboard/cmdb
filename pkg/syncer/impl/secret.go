@@ -11,8 +11,8 @@ import (
 
 const (
 	insertSecretSQL = `INSERT INTO secret (
-		id,create_at,description,vendor,address,allow_regions,crendential_type,api_key,api_secret
-	) VALUES (?,?,?,?,?,?,?,?,?);`
+		id,create_at,description,vendor,address,allow_regions,crendential_type,api_key,api_secret,request_rate
+	) VALUES (?,?,?,?,?,?,?,?,?,?);`
 
 	querySecretSQL = `SELECT * FROM secret`
 )
@@ -33,6 +33,7 @@ func (s *service) CreateSecret(ctx context.Context, req *syncer.CreateSecretRequ
 	_, err = stmt.Exec(
 		ins.Id, ins.CreateAt, ins.Description, ins.Vendor, ins.Address,
 		ins.AllowRegionString(), ins.CrendentialType, ins.APIKey, ins.APISecret,
+		ins.RequestRate,
 	)
 	if err != nil {
 		return nil, err
@@ -67,6 +68,7 @@ func (s *service) QuerySecret(ctx context.Context, req *syncer.QuerySecretReques
 		err := rows.Scan(
 			&ins.Id, &ins.CreateAt, &ins.Description, &ins.Vendor, &ins.Address,
 			&allowRegions, &ins.CrendentialType, &ins.APIKey, &ins.APISecret,
+			&ins.RequestRate,
 		)
 		if err != nil {
 			return nil, exception.NewInternalServerError("query secret error, %s", err.Error())
@@ -94,6 +96,7 @@ func (s *service) DescribeSecret(ctx context.Context, req *syncer.DescribeSecret
 	err = queryStmt.QueryRow(args...).Scan(
 		&ins.Id, &ins.CreateAt, &ins.Description, &ins.Vendor, &ins.Address,
 		&allowRegions, &ins.CrendentialType, &ins.APIKey, &ins.APISecret,
+		&ins.RequestRate,
 	)
 
 	if err != nil {

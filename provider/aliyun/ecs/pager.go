@@ -1,8 +1,11 @@
 package ecs
 
 import (
+	"time"
+
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/ecs"
+	"github.com/infraboard/mcube/flowcontrol/tokenbucket"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 
@@ -19,6 +22,7 @@ func newPager(pageSize int, operater *EcsOperater) *pager {
 		operater: operater,
 		req:      req,
 		log:      zap.L().Named("Pagger"),
+		tb:       tokenbucket.NewBucket(time.Duration(1)*time.Second, 1),
 	}
 }
 
@@ -29,6 +33,7 @@ type pager struct {
 	operater *EcsOperater
 	req      *ecs.DescribeInstancesRequest
 	log      logger.Logger
+	tb       *tokenbucket.Bucket
 }
 
 func (p *pager) Next() *host.PagerResult {
@@ -54,6 +59,9 @@ func (p *pager) WithLogger(log logger.Logger) {
 }
 
 func (p *pager) nextReq() *ecs.DescribeInstancesRequest {
+	// 等待一个可用token
+	p.tb.Wait(1)
+
 	p.log.Debugf("请求第%d页数据", p.number)
 	p.req.PageNumber = requests.NewInteger(p.number)
 	return p.req
