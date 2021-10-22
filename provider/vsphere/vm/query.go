@@ -33,7 +33,7 @@ func (o *VMOperater) Query() (*host.HostSet, error) {
 			o.log.Errorf("query dc %s error, %s", dc.Name())
 		}
 
-		fmt.Println(vms)
+		set = vms
 	}
 
 	return set, nil

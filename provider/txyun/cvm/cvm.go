@@ -1,21 +1,27 @@
 package cvm
 
 import (
+	"time"
+
 	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 
 	"github.com/infraboard/cmdb/pkg/host"
 	"github.com/infraboard/cmdb/pkg/resource"
 	"github.com/infraboard/cmdb/utils"
+	"github.com/infraboard/mcube/logger"
+	"github.com/infraboard/mcube/logger/zap"
 )
 
 func NewCVMOperater(client *cvm.Client) *CVMOperater {
 	return &CVMOperater{
 		client: client,
+		log:    zap.L().Named("Tx CVM"),
 	}
 }
 
 type CVMOperater struct {
 	client *cvm.Client
+	log    logger.Logger
 }
 
 func (o *CVMOperater) transferSet(items []*cvm.Instance) *host.HostSet {
@@ -31,10 +37,10 @@ func (o *CVMOperater) transferOne(ins *cvm.Instance) *host.Host {
 	h.Base.Vendor = resource.VendorTencent
 	h.Base.Region = o.client.GetRegion()
 	h.Base.Zone = utils.PtrStrV(ins.Placement.Zone)
-	h.Base.CreateAt = utils.PtrStrV(ins.CreatedTime)
+	h.Base.CreateAt = o.parseTime(utils.PtrStrV(ins.CreatedTime))
 	h.Base.InstanceId = utils.PtrStrV(ins.InstanceId)
 
-	h.Information.ExpireAt = utils.PtrStrV(ins.ExpiredTime)
+	h.Information.ExpireAt = o.parseTime(utils.PtrStrV(ins.ExpiredTime))
 	h.Information.Type = utils.PtrStrV(ins.InstanceType)
 	h.Information.Name = utils.PtrStrV(ins.InstanceName)
 	h.Information.Status = utils.PtrStrV(ins.InstanceState)
@@ -58,4 +64,14 @@ func (o *CVMOperater) transferOne(ins *cvm.Instance) *host.Host {
 
 func transferTags(tags []*cvm.Tag) map[string]string {
 	return nil
+}
+
+func (o *CVMOperater) parseTime(t string) int64 {
+	ts, err := time.Parse("2006-01-02T15:04:05Z", t)
+	if err != nil {
+		o.log.Errorf("parse time %s error, %s", t, err)
+		return 0
+	}
+
+	return ts.UnixNano() / 1000000
 }

@@ -24,8 +24,14 @@ func (s *service) Sync(ctx context.Context, req *syncer.SyncRequest) (
 		return nil, err
 	}
 
-	if !secret.IsAllowRegion(req.Region) {
-		return nil, exception.NewBadRequest("this secret not allow sync region %s", req.Region)
+	// 如果不是vsphere 需要检查region
+	if !secret.Vendor.Equal(resource.VendorVsphere) {
+		if req.Region == "" {
+			return nil, exception.NewBadRequest("region required")
+		}
+		if !secret.IsAllowRegion(req.Region) {
+			return nil, exception.NewBadRequest("this secret not allow sync region %s", req.Region)
+		}
 	}
 
 	switch req.ResourceType {

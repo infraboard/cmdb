@@ -4,6 +4,7 @@ import (
 	"crypto/sha1"
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/infraboard/cmdb/pkg/resource"
 	"github.com/infraboard/mcube/types/ftime"
@@ -90,6 +91,26 @@ type Describe struct {
 	InternetMaxBandwidthIn  int64    `json:"internet_max_bandwidth_in"`  // 公网入带宽最大值，单位为 Mbps
 	KeyPairName             []string `json:"key_pair_name,omitempty"`    // 秘钥对名称
 	SecurityGroups          []string `json:"security_groups"`            // 安全组  采用逗号分隔
+}
+
+func (d *Describe) KeyPairNameToString() string {
+	return strings.Join(d.KeyPairName, ",")
+}
+
+func (d *Describe) SecurityGroupsToString() string {
+	return strings.Join(d.SecurityGroups, ",")
+}
+
+func (d *Describe) LoadKeyPairNameString(s string) {
+	if s != "" {
+		d.KeyPairName = strings.Split(s, ",")
+	}
+}
+
+func (d *Describe) LoadSecurityGroupsString(s string) {
+	if s != "" {
+		d.SecurityGroups = strings.Split(s, ",")
+	}
 }
 
 func NewHostSet() *HostSet {

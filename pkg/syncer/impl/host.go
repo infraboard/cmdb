@@ -2,6 +2,7 @@ package impl
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/infraboard/cmdb/pkg/host"
 	"github.com/infraboard/cmdb/pkg/resource"
@@ -27,6 +28,7 @@ func (s *service) syncHost(ctx context.Context, secret *syncer.Secret, region st
 	hs := host.NewHostSet()
 	switch secret.Vendor {
 	case resource.VendorAliYun:
+		s.log.Debugf("sync aliyun host ...")
 		client := aliConn.NewAliCloudClient(secret.APIKey, secret.APISecret, region)
 		ec, err := client.EcsClient()
 		if err != nil {
@@ -35,10 +37,12 @@ func (s *service) syncHost(ctx context.Context, secret *syncer.Secret, region st
 		operater := ecsOp.NewEcsOperater(ec)
 		pager = operater.PageQuery()
 	case resource.VendorTencent:
+		s.log.Debugf("sync txyun host ...")
 		client := txConn.NewTencentCloudClient(secret.APIKey, secret.APISecret, region)
 		operater := cvmOp.NewCVMOperater(client.CvmClient())
 		pager = operater.PageQuery()
 	case resource.VendorHuaWei:
+		s.log.Debugf("sync hwyun host ...")
 		client := hwConn.NewHuaweiCloudClient(secret.APIKey, secret.APISecret, region)
 		ec, err := client.EcsClient()
 		if err != nil {
@@ -47,7 +51,8 @@ func (s *service) syncHost(ctx context.Context, secret *syncer.Secret, region st
 		operater := hwEcsOp.NewEcsOperater(ec)
 		pager = operater.PageQuery()
 	case resource.VendorVsphere:
-		client := vsConn.NewVsphereClient(secret.Address, secret.APISecret, secret.APISecret)
+		s.log.Debugf("sync vshpere host ...")
+		client := vsConn.NewVsphereClient(secret.Address, secret.APIKey, secret.APISecret)
 		ec, err := client.VimClient()
 		if err != nil {
 			return nil, err
@@ -68,6 +73,10 @@ func (s *service) syncHost(ctx context.Context, secret *syncer.Secret, region st
 		for hasNext {
 			p := pager.Next()
 			hasNext = p.HasNext
+
+			if p.Err != nil {
+				return nil, fmt.Errorf("sync error, %s", p.Err)
+			}
 
 			// 调用host服务保持数据
 			for i := range p.Data.Items {

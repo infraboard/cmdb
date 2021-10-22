@@ -50,7 +50,7 @@ func (p *pager) Next() *host.PagerResult {
 }
 
 func (p *pager) nextReq() *model.ListServersDetailsRequest {
-	p.log.Debug("请求第%d页数据", p.number)
+	p.log.Debugf("请求第%d页数据", p.number)
 
 	// 注意: 华为云的Offse表示的是页码
 	p.req.Offset = utils.Int32Ptr(int32(p.number))

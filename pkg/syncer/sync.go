@@ -9,7 +9,7 @@ func NewSyncRequest(secretId string) *SyncRequest {
 }
 
 type SyncRequest struct {
-	Region       string `validate:"required,lte=100"`
+	Region       string
 	SecretId     string `validate:"required,lte=100"`
 	ResourceType resource.Type
 }

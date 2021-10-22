@@ -1,6 +1,8 @@
 package ecs
 
 import (
+	"time"
+
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/ecs"
 
 	"github.com/infraboard/cmdb/pkg/host"
@@ -34,10 +36,11 @@ func (o *EcsOperater) transferOne(ins ecs.Instance) *host.Host {
 	h.Base.Vendor = resource.VendorAliYun
 	h.Base.Region = ins.RegionId
 	h.Base.Zone = ins.ZoneId
-	h.Base.CreateAt = ins.CreationTime
+
+	h.Base.CreateAt = o.parseTime(ins.CreationTime)
 	h.Base.InstanceId = ins.InstanceId
 
-	h.Information.ExpireAt = ins.ExpiredTime
+	h.Information.ExpireAt = o.parseTime(ins.ExpiredTime)
 	h.Information.Type = ins.InstanceType
 	h.Information.Name = ins.InstanceName
 	h.Information.Description = ins.Description
@@ -64,4 +67,14 @@ func (o *EcsOperater) transferOne(ins ecs.Instance) *host.Host {
 
 func (o *EcsOperater) transferTags(tags []ecs.Tag) map[string]string {
 	return nil
+}
+
+func (o *EcsOperater) parseTime(t string) int64 {
+	ts, err := time.Parse("2006-01-02T15:04Z", t)
+	if err != nil {
+		o.log.Errorf("parse time %s error, %s", t, err)
+		return 0
+	}
+
+	return ts.UnixNano() / 1000000
 }

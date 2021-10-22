@@ -54,7 +54,7 @@ func (p *pager) WithLogger(log logger.Logger) {
 }
 
 func (p *pager) nextReq() *ecs.DescribeInstancesRequest {
-	p.log.Debug("请求第%d页数据", p.number)
+	p.log.Debugf("请求第%d页数据", p.number)
 	p.req.PageNumber = requests.NewInteger(p.number)
 	return p.req
 }

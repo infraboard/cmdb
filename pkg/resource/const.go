@@ -72,16 +72,16 @@ func (t *Type) UnmarshalJSON(b []byte) error {
 // Enum value maps for Type.
 var (
 	Vendor_name = map[int32]string{
-		0: "Vendor_AliYun",
-		1: "Vendor_Tencent",
-		2: "Vendor_HuaWei",
-		3: "Vendor_Vsphere",
+		0: "VENDOR_ALIYUN",
+		1: "VENDOR_TENCENT",
+		2: "VENDOR_HUAWEI",
+		3: "VENDOR_VSPHERE",
 	}
 	Vendor_value = map[string]int32{
-		"Vendor_AliYun":  0,
-		"Vendor_Tencent": 1,
-		"Vendor_HuaWei":  2,
-		"Vendor_Vsphere": 3,
+		"VENDOR_ALIYUN":  0,
+		"VENDOR_TENCENT": 1,
+		"VENDOR_HUAWEI":  2,
+		"VENDOR_VSPHERE": 3,
 	}
 )
 
@@ -90,7 +90,7 @@ func ParseVendorFromString(str string) (Vendor, error) {
 	key := strings.Trim(string(str), `"`)
 	v, ok := Vendor_value[strings.ToUpper(key)]
 	if !ok {
-		return 0, fmt.Errorf("unknown Type: %s", str)
+		return 0, fmt.Errorf("unknown Vendor: %s", str)
 	}
 
 	return Vendor(v), nil

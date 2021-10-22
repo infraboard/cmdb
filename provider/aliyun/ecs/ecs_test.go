@@ -23,6 +23,7 @@ func TestQuery(t *testing.T) {
 		hasNext = p.HasNext
 		fmt.Println(p.Data)
 	}
+
 }
 
 func init() {

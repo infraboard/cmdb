@@ -9,12 +9,12 @@ import (
 // Enum value maps for Type.
 var (
 	CrendentialType_name = map[int32]string{
-		0: "Crendential_APIKey",
-		1: "Crendential_Password",
+		0: "CRENDENTIAL_API_KEY",
+		1: "CRENDENTIAL_PASSWORD",
 	}
 	CrendentialType_value = map[string]int32{
-		"Crendential_APIKey":   0,
-		"Crendential_Password": 1,
+		"CRENDENTIAL_API_KEY":  0,
+		"CRENDENTIAL_PASSWORD": 1,
 	}
 )
 
