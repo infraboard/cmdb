@@ -15,7 +15,8 @@ var (
 )
 
 func TestQuery(t *testing.T) {
-	pager := operater.PageQuery(op.NewPageQueryRequest())
+	req := op.NewPageQueryRequest()
+	pager := operater.PageQuery(req)
 
 	hasNext := true
 	for hasNext {
@@ -35,7 +36,7 @@ func init() {
 		panic("empty AL_CLOUD_ACCESS_SECRET")
 	}
 
-	client := connectivity.NewAliCloudClient(secretID, secretKey, "cn-hangzhou")
+	client := connectivity.NewAliCloudClient(secretID, secretKey, "cn-zhangjiakou")
 
 	ec, err := client.EcsClient()
 	if err != nil {

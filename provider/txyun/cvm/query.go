@@ -2,6 +2,7 @@ package cvm
 
 import (
 	"github.com/infraboard/cmdb/pkg/host"
+	"github.com/infraboard/cmdb/utils"
 	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 )
 
@@ -11,7 +12,10 @@ func (o *CVMOperater) Query(req *cvm.DescribeInstancesRequest) (*host.HostSet, e
 		return nil, err
 	}
 
-	return o.transferSet(resp.Response.InstanceSet), nil
+	set := o.transferSet(resp.Response.InstanceSet)
+	set.Total = utils.PtrInt64(resp.Response.TotalCount)
+
+	return set, nil
 }
 
 func (o *CVMOperater) PageQuery() host.Pager {

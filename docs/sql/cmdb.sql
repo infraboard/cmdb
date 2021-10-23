@@ -57,4 +57,4 @@ CREATE TABLE `host` (
   `request_rate` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_key` (`api_key`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;s
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;

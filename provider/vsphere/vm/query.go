@@ -3,7 +3,6 @@ package vm
 import (
 	"context"
 	"errors"
-	"fmt"
 
 	"github.com/infraboard/cmdb/pkg/host"
 	"github.com/vmware/govmomi/object"
@@ -16,7 +15,6 @@ func (o *VMOperater) Query() (*host.HostSet, error) {
 	// 查询DC
 	dcs, err := o.finder.DatacenterList(context.Background(), "*")
 	if err != nil {
-		fmt.Println("xxx")
 		return nil, err
 	}
 

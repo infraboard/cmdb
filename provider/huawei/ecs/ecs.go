@@ -9,6 +9,7 @@ import (
 
 	"github.com/infraboard/cmdb/pkg/host"
 	"github.com/infraboard/cmdb/pkg/resource"
+	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 )
@@ -44,7 +45,7 @@ func (o *EcsOperater) transferOne(ins model.ServerDetail) *host.Host {
 	h.Information.Category = ins.Flavor.Name
 	h.Information.ExpireAt = o.parseTime(ins.AutoTerminateTime)
 	h.Information.Name = ins.Name
-	h.Information.Description = *ins.Description
+	h.Information.Description = utils.PtrStrV(ins.Description)
 	h.Information.Status = ins.Status
 	h.Information.Tags = o.transferTags(ins.Tags)
 	h.Information.PrivateIP, h.Information.PublicIP = o.parseIp(ins.Addresses)
