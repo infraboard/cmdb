@@ -15,7 +15,7 @@ CREATE TABLE `host` (
   PRIMARY KEY (`resource_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
- CREATE TABLE `resource` (
+ resource | CREATE TABLE `resource` (
   `id` char(64) CHARACTER SET latin1 NOT NULL,
   `vendor` tinyint(1) NOT NULL,
   `region` varchar(64) CHARACTER SET latin1 NOT NULL,
@@ -37,12 +37,12 @@ CREATE TABLE `host` (
   `describe_hash` varchar(255) NOT NULL,
   `resource_hash` varchar(255) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `instance_id` (`vendor`,`instance_id`) USING BTREE,
   KEY `name` (`name`) USING BTREE,
   KEY `status` (`status`) USING BTREE,
   KEY `private_ip` (`public_ip`) USING BTREE,
-  KEY `public_ip` (`public_ip`) USING BTREE,
-  KEY `instance_id` (`instance_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  KEY `public_ip` (`public_ip`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 
  CREATE TABLE `secret` (
   `id` varchar(64) NOT NULL,

@@ -13,6 +13,7 @@ func (o *EcsOperater) Query(req *ecs.DescribeInstancesRequest) (*host.HostSet, e
 	if err != nil {
 		return nil, err
 	}
+
 	set.Total = int64(resp.TotalCount)
 	set.Items = o.transferSet(resp.Instances.Instance).Items
 
