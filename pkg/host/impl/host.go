@@ -58,7 +58,13 @@ func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 	query := sqlbuilder.NewQuery(queryHostSQL)
 
 	if req.Keywords != "" {
-		query.Where("r.name LIKE ?", "%"+req.Keywords+"%")
+		query.Where("r.name LIKE ? OR r.id = ? OR r.instance_id = ? OR r.private_ip LIKE ? OR r.public_ip LIKE ?",
+			"%"+req.Keywords+"%",
+			req.Keywords,
+			req.Keywords,
+			req.Keywords+"%",
+			req.Keywords+"%",
+		)
 	}
 
 	querySQL, args := query.Order("sync_at").Desc().Limit(req.OffSet(), uint(req.PageSize)).BuildQuery()
