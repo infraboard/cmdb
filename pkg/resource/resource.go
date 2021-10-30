@@ -30,6 +30,13 @@ const (
 
 type Vendor int
 
+func NewDefaultResource() *Resource {
+	return &Resource{
+		Base:        &Base{},
+		Information: &Information{},
+	}
+}
+
 type Resource struct {
 	*Base
 	*Information
@@ -85,11 +92,28 @@ func (i *Information) LoadPublicIPString(s string) {
 }
 
 type SearchRequest struct {
+	PageSize     uint64
+	PageNumber   uint64
 	Vendor       Vendor
 	ResourceType Type
+	Keywords     string
+}
+
+func (req *SearchRequest) OffSet() int64 {
+	return int64(req.PageSize) * int64(req.PageNumber-1)
+}
+
+func NewResourceSet() *ResourceSet {
+	return &ResourceSet{
+		Items: []*Resource{},
+	}
 }
 
 type ResourceSet struct {
 	Items []*Resource `json:"items"`
 	Total int64       `json:"total"`
+}
+
+func (r *ResourceSet) Add(item *Resource) {
+	r.Items = append(r.Items, item)
 }

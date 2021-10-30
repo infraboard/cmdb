@@ -224,14 +224,17 @@ func (s *service) DescribeHost(ctx context.Context, req *host.DescribeHostReques
 	defer queryStmt.Close()
 
 	ins := host.NewDefaultHost()
+	var (
+		publicIPList, privateIPList, keyPairNameList, securityGroupsList string
+	)
 	err = queryStmt.QueryRow(args...).Scan(
 		&ins.Id, &ins.Vendor, &ins.Region, &ins.Zone, &ins.CreateAt, &ins.ExpireAt,
 		&ins.Category, &ins.Type, &ins.InstanceId, &ins.Name, &ins.Description,
 		&ins.Status, &ins.UpdateAt, &ins.SyncAt, &ins.SyncAccount,
-		&ins.PublicIP, &ins.PrivateIP, &ins.PayType, &ins.DescribeHash, &ins.ResourceHash, &ins.ResourceId,
+		&publicIPList, &privateIPList, &ins.PayType, &ins.DescribeHash, &ins.ResourceHash, &ins.ResourceId,
 		&ins.CPU, &ins.Memory, &ins.GPUAmount, &ins.GPUSpec, &ins.OSType, &ins.OSName,
 		&ins.SerialNumber, &ins.ImageID, &ins.InternetMaxBandwidthOut, &ins.InternetMaxBandwidthIn,
-		&ins.KeyPairName, &ins.SecurityGroups,
+		&keyPairNameList, &securityGroupsList,
 	)
 
 	if err != nil {
@@ -240,6 +243,11 @@ func (s *service) DescribeHost(ctx context.Context, req *host.DescribeHostReques
 		}
 		return nil, exception.NewInternalServerError("describe host error, %s", err.Error())
 	}
+
+	ins.LoadPrivateIPString(privateIPList)
+	ins.LoadPublicIPString(publicIPList)
+	ins.LoadKeyPairNameString(keyPairNameList)
+	ins.LoadSecurityGroupsString(securityGroupsList)
 
 	return ins, nil
 }

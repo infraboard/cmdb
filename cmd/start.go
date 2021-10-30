@@ -16,6 +16,7 @@ import (
 	"github.com/infraboard/cmdb/conf"
 	"github.com/infraboard/cmdb/pkg"
 	"github.com/infraboard/cmdb/pkg/host/impl"
+	searcher "github.com/infraboard/cmdb/pkg/resource/impl"
 	syncer "github.com/infraboard/cmdb/pkg/syncer/impl"
 	"github.com/infraboard/cmdb/protocol"
 )
@@ -47,6 +48,12 @@ var serviceCmd = &cobra.Command{
 			return err
 		}
 		pkg.Syncer = syncer.Service
+
+		// resource Service
+		if err := searcher.Service.Config(); err != nil {
+			return err
+		}
+		pkg.Resource = searcher.Service
 
 		// 启动服务
 		ch := make(chan os.Signal, 1)
