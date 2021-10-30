@@ -17,7 +17,7 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 	query := sqlbuilder.NewQuery(queryResourceSQL)
 
 	if req.Keywords != "" {
-		query.Where("r.name LIKE ? OR r.id = ? OR r.instance_id = ? OR r.private_ip LIKE ? OR r.public_ip LIKE ?",
+		query.Where("name LIKE ? OR id = ? OR instance_id = ? OR private_ip LIKE ? OR public_ip LIKE ?",
 			"%"+req.Keywords+"%",
 			req.Keywords,
 			req.Keywords,
@@ -59,6 +59,19 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 		ins.LoadPrivateIPString(privateIPList)
 		ins.LoadPublicIPString(publicIPList)
 		set.Add(ins)
+	}
+
+	// 获取total SELECT COUNT(*) FROMT t Where ....
+	countSQL, args := query.BuildCount()
+	countStmt, err := s.db.Prepare(countSQL)
+	if err != nil {
+		return nil, exception.NewInternalServerError(err.Error())
+	}
+
+	defer countStmt.Close()
+	err = countStmt.QueryRow(args...).Scan(&set.Total)
+	if err != nil {
+		return nil, exception.NewInternalServerError(err.Error())
 	}
 
 	return set, nil

@@ -36,4 +36,5 @@ func RegistAPI(r *httprouter.Router) {
 	r.GET("/secrets", api.QuerySecret)
 	r.GET("/secrets/:id", api.DescribeSecret)
 	r.POST("/secrets/:id/sync", api.Sync)
+	r.GET("/crendential_types", api.ListCrendentialType)
 }

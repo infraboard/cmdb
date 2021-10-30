@@ -33,4 +33,5 @@ func (h *handler) Config() error {
 func RegistAPI(r *httprouter.Router) {
 	api.Config()
 	r.GET("/search", api.SearchResource)
+	r.GET("/vendors", api.ListVendor)
 }
