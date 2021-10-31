@@ -94,7 +94,7 @@ func (i *Information) LoadPublicIPString(s string) {
 type SearchRequest struct {
 	PageSize     uint64
 	PageNumber   uint64
-	Vendor       Vendor
+	Vendor       *Vendor
 	ResourceType Type
 	Keywords     string
 }

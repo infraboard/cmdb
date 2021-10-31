@@ -52,8 +52,15 @@ func (s *service) QuerySecret(ctx context.Context, req *syncer.QuerySecretReques
 	*syncer.SecretSet, error) {
 	query := sqlbuilder.NewQuery(querySecretSQL)
 
-	querySQL, args := query.Order("create_at").Desc().BuildQuery()
-	s.log.Debugf("sql: %s", querySQL)
+	if req.Keywords != "" {
+		query.Where("description LIKE ? OR api_key = ?",
+			"%"+req.Keywords+"%",
+			req.Keywords,
+		)
+	}
+
+	querySQL, args := query.Order("create_at").Desc().Limit(req.OffSet(), uint(req.PageSize)).BuildQuery()
+	s.log.Debugf("sql: %s, args: %v", querySQL, args)
 
 	queryStmt, err := s.db.Prepare(querySQL)
 	if err != nil {
@@ -83,6 +90,20 @@ func (s *service) QuerySecret(ctx context.Context, req *syncer.QuerySecretReques
 		ins.Desense()
 		set.Add(ins)
 	}
+
+	// 获取total SELECT COUNT(*) FROMT t Where ....
+	countSQL, args := query.BuildCount()
+	countStmt, err := s.db.Prepare(countSQL)
+	if err != nil {
+		return nil, exception.NewInternalServerError(err.Error())
+	}
+
+	defer countStmt.Close()
+	err = countStmt.QueryRow(args...).Scan(&set.Total)
+	if err != nil {
+		return nil, exception.NewInternalServerError(err.Error())
+	}
+
 	return set, nil
 }
 

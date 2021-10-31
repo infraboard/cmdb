@@ -26,6 +26,10 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 		)
 	}
 
+	if req.Vendor != nil {
+		query.Where("vendor = ?", req.Vendor)
+	}
+
 	querySQL, args := query.Order("sync_at").Desc().Limit(req.OffSet(), uint(req.PageSize)).BuildQuery()
 	s.log.Debugf("sql: %s", querySQL)
 

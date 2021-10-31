@@ -23,7 +23,7 @@ type handler struct {
 
 func (h *handler) Config() error {
 	h.log = zap.L().Named("Resource")
-	if pkg.Host == nil {
+	if pkg.Resource == nil {
 		return fmt.Errorf("dependence service resource not ready")
 	}
 	h.service = pkg.Resource

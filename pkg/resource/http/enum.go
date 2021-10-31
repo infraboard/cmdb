@@ -18,3 +18,7 @@ func (h *handler) ListVendor(w http.ResponseWriter, r *http.Request, _ httproute
 	}
 	response.Success(w, resp)
 }
+
+func (h *handler) ListVendorRegion(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+
+}
