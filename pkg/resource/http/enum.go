@@ -7,6 +7,10 @@ import (
 	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/http/response"
 	"github.com/julienschmidt/httprouter"
+
+	ali_region "github.com/infraboard/cmdb/provider/aliyun/region"
+	hw_region "github.com/infraboard/cmdb/provider/huawei/region"
+	tx_region "github.com/infraboard/cmdb/provider/txyun/region"
 )
 
 func (h *handler) ListVendor(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -20,5 +24,10 @@ func (h *handler) ListVendor(w http.ResponseWriter, r *http.Request, _ httproute
 }
 
 func (h *handler) ListVendorRegion(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-
+	resp := map[string][]utils.EnumDescribe{
+		resource.VendorAliYun.String():  ali_region.Regions,
+		resource.VendorTencent.String(): tx_region.Regions,
+		resource.VendorHuaWei.String():  hw_region.Regions,
+	}
+	response.Success(w, resp)
 }
