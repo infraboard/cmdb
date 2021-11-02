@@ -208,3 +208,13 @@ func NewDescribeSecretRequest(id string) *DescribeSecretRequest {
 type DescribeSecretRequest struct {
 	Id string
 }
+
+func NewDeleteSecretRequestWithID(id string) *DeleteSecretRequest {
+	return &DeleteSecretRequest{
+		Id: id,
+	}
+}
+
+type DeleteSecretRequest struct {
+	Id string
+}

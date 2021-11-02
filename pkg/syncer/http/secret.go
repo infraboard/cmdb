@@ -47,3 +47,13 @@ func (h *handler) DescribeSecret(w http.ResponseWriter, r *http.Request, ps http
 	ins.Desense()
 	response.Success(w, ins)
 }
+
+func (h *handler) DeleteSecret(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	req := syncer.NewDeleteSecretRequestWithID(ps.ByName("id"))
+	set, err := h.service.DeleteSecret(r.Context(), req)
+	if err != nil {
+		response.Failed(w, err)
+		return
+	}
+	response.Success(w, set)
+}

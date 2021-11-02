@@ -137,3 +137,17 @@ func (s *service) DescribeSecret(ctx context.Context, req *syncer.DescribeSecret
 	ins.LoadAllowRegionFromString(allowRegions)
 	return ins, nil
 }
+
+func (s *service) DeleteSecret(ctx context.Context, req *syncer.DeleteSecretRequest) (
+	*syncer.Secret, error) {
+	ins, err := s.DescribeSecret(ctx, syncer.NewDescribeSecretRequest(req.Id))
+	if err != nil {
+		return nil, err
+	}
+
+	if err := s.deleteSecret(ctx, ins); err != nil {
+		return nil, err
+	}
+
+	return ins, nil
+}
