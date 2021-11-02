@@ -9,7 +9,7 @@ import (
 	"github.com/infraboard/mcube/logger/zap"
 
 	"github.com/infraboard/cmdb/pkg"
-	"github.com/infraboard/cmdb/pkg/syncer"
+	"github.com/infraboard/cmdb/pkg/secret"
 )
 
 var (
@@ -17,16 +17,16 @@ var (
 )
 
 type handler struct {
-	service syncer.Service
+	service secret.Service
 	log     logger.Logger
 }
 
 func (h *handler) Config() error {
 	h.log = zap.L().Named("Syncer")
-	if pkg.Syncer == nil {
-		return fmt.Errorf("dependence service syncer not ready")
+	if pkg.Secret == nil {
+		return fmt.Errorf("dependence service secret not ready")
 	}
-	h.service = pkg.Syncer
+	h.service = pkg.Secret
 	return nil
 }
 
@@ -36,6 +36,5 @@ func RegistAPI(r *httprouter.Router) {
 	r.GET("/secrets", api.QuerySecret)
 	r.GET("/secrets/:id", api.DescribeSecret)
 	r.DELETE("/secrets/:id", api.DeleteSecret)
-	r.POST("/secrets/:id/sync", api.Sync)
 	r.GET("/crendential_types", api.ListCrendentialType)
 }

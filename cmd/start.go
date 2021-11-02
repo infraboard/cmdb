@@ -17,7 +17,8 @@ import (
 	"github.com/infraboard/cmdb/pkg"
 	"github.com/infraboard/cmdb/pkg/host/impl"
 	searcher "github.com/infraboard/cmdb/pkg/resource/impl"
-	syncer "github.com/infraboard/cmdb/pkg/syncer/impl"
+	secretImpl "github.com/infraboard/cmdb/pkg/secret/impl"
+	taskImpl "github.com/infraboard/cmdb/pkg/task/impl"
 	"github.com/infraboard/cmdb/protocol"
 )
 
@@ -43,11 +44,17 @@ var serviceCmd = &cobra.Command{
 		}
 		pkg.Host = impl.Service
 
-		// Syncer Service
-		if err := syncer.Service.Config(); err != nil {
+		// Secret Service
+		if err := secretImpl.Service.Config(); err != nil {
 			return err
 		}
-		pkg.Syncer = syncer.Service
+		pkg.Secret = secretImpl.Service
+
+		// Task Service
+		if err := taskImpl.Service.Config(); err != nil {
+			return err
+		}
+		pkg.Task = taskImpl.Service
 
 		// resource Service
 		if err := searcher.Service.Config(); err != nil {

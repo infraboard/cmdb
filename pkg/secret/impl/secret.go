@@ -5,7 +5,7 @@ import (
 	"database/sql"
 
 	"github.com/infraboard/cmdb/conf"
-	"github.com/infraboard/cmdb/pkg/syncer"
+	"github.com/infraboard/cmdb/pkg/secret"
 	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/sqlbuilder"
 )
@@ -18,9 +18,9 @@ const (
 	querySecretSQL = `SELECT * FROM secret`
 )
 
-func (s *service) CreateSecret(ctx context.Context, req *syncer.CreateSecretRequest) (
-	*syncer.Secret, error) {
-	ins, err := syncer.NewSecret(req)
+func (s *service) CreateSecret(ctx context.Context, req *secret.CreateSecretRequest) (
+	*secret.Secret, error) {
+	ins, err := secret.NewSecret(req)
 	if err != nil {
 		return nil, exception.NewBadRequest("validate create secret error, %s", err)
 	}
@@ -48,8 +48,8 @@ func (s *service) CreateSecret(ctx context.Context, req *syncer.CreateSecretRequ
 	return ins, nil
 }
 
-func (s *service) QuerySecret(ctx context.Context, req *syncer.QuerySecretRequest) (
-	*syncer.SecretSet, error) {
+func (s *service) QuerySecret(ctx context.Context, req *secret.QuerySecretRequest) (
+	*secret.SecretSet, error) {
 	query := sqlbuilder.NewQuery(querySecretSQL)
 
 	if req.Keywords != "" {
@@ -74,10 +74,10 @@ func (s *service) QuerySecret(ctx context.Context, req *syncer.QuerySecretReques
 	}
 	defer rows.Close()
 
-	set := syncer.NewSecretSet()
+	set := secret.NewSecretSet()
 	allowRegions := ""
 	for rows.Next() {
-		ins := syncer.NewDefaultSecret()
+		ins := secret.NewDefaultSecret()
 		err := rows.Scan(
 			&ins.Id, &ins.CreateAt, &ins.Description, &ins.Vendor, &ins.Address,
 			&allowRegions, &ins.CrendentialType, &ins.APIKey, &ins.APISecret,
@@ -107,8 +107,8 @@ func (s *service) QuerySecret(ctx context.Context, req *syncer.QuerySecretReques
 	return set, nil
 }
 
-func (s *service) DescribeSecret(ctx context.Context, req *syncer.DescribeSecretRequest) (
-	*syncer.Secret, error) {
+func (s *service) DescribeSecret(ctx context.Context, req *secret.DescribeSecretRequest) (
+	*secret.Secret, error) {
 	query := sqlbuilder.NewQuery(querySecretSQL)
 	querySQL, args := query.Where("id = ?", req.Id).BuildQuery()
 	s.log.Debugf("sql: %s", querySQL)
@@ -119,7 +119,7 @@ func (s *service) DescribeSecret(ctx context.Context, req *syncer.DescribeSecret
 	}
 	defer queryStmt.Close()
 
-	ins := syncer.NewDefaultSecret()
+	ins := secret.NewDefaultSecret()
 	allowRegions := ""
 	err = queryStmt.QueryRow(args...).Scan(
 		&ins.Id, &ins.CreateAt, &ins.Description, &ins.Vendor, &ins.Address,
@@ -138,9 +138,9 @@ func (s *service) DescribeSecret(ctx context.Context, req *syncer.DescribeSecret
 	return ins, nil
 }
 
-func (s *service) DeleteSecret(ctx context.Context, req *syncer.DeleteSecretRequest) (
-	*syncer.Secret, error) {
-	ins, err := s.DescribeSecret(ctx, syncer.NewDescribeSecretRequest(req.Id))
+func (s *service) DeleteSecret(ctx context.Context, req *secret.DeleteSecretRequest) (
+	*secret.Secret, error) {
+	ins, err := s.DescribeSecret(ctx, secret.NewDescribeSecretRequest(req.Id))
 	if err != nil {
 		return nil, err
 	}

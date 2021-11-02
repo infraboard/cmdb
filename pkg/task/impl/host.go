@@ -7,7 +7,8 @@ import (
 	"github.com/infraboard/cmdb/conf"
 	"github.com/infraboard/cmdb/pkg/host"
 	"github.com/infraboard/cmdb/pkg/resource"
-	"github.com/infraboard/cmdb/pkg/syncer"
+	"github.com/infraboard/cmdb/pkg/secret"
+	"github.com/infraboard/cmdb/pkg/task"
 	"github.com/infraboard/mcube/exception"
 
 	aliConn "github.com/infraboard/cmdb/provider/aliyun/connectivity"
@@ -20,8 +21,8 @@ import (
 	vmOp "github.com/infraboard/cmdb/provider/vsphere/vm"
 )
 
-func (s *service) syncHost(ctx context.Context, secret *syncer.Secret, region string) (
-	*syncer.SyncReponse, error) {
+func (s *service) syncHost(ctx context.Context, secret *secret.Secret, region string) (
+	*task.Task, error) {
 	var (
 		pager host.Pager
 	)
@@ -75,7 +76,7 @@ func (s *service) syncHost(ctx context.Context, secret *syncer.Secret, region st
 		return nil, exception.NewBadRequest("unsuport vendor %s", secret.Vendor)
 	}
 
-	set := syncer.NewSyncReponse()
+	set := task.NewTask()
 	// 分页查询数据
 	if pager != nil {
 		hasNext := true

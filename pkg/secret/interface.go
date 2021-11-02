@@ -1,21 +1,12 @@
-package syncer
+package secret
 
 import (
 	"context"
 )
 
 type Service interface {
-	SecretService
-	SyncService
-}
-
-type SecretService interface {
 	CreateSecret(context.Context, *CreateSecretRequest) (*Secret, error)
 	QuerySecret(context.Context, *QuerySecretRequest) (*SecretSet, error)
 	DescribeSecret(context.Context, *DescribeSecretRequest) (*Secret, error)
 	DeleteSecret(context.Context, *DeleteSecretRequest) (*Secret, error)
-}
-
-type SyncService interface {
-	Sync(context.Context, *SyncRequest) (*SyncReponse, error)
 }

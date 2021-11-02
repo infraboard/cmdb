@@ -7,11 +7,11 @@ import (
 	"github.com/infraboard/mcube/http/response"
 	"github.com/julienschmidt/httprouter"
 
-	"github.com/infraboard/cmdb/pkg/syncer"
+	"github.com/infraboard/cmdb/pkg/secret"
 )
 
 func (h *handler) QuerySecret(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	req := syncer.NewQuerySecretRequestFromHTTP(r)
+	req := secret.NewQuerySecretRequestFromHTTP(r)
 	set, err := h.service.QuerySecret(r.Context(), req)
 	if err != nil {
 		response.Failed(w, err)
@@ -21,7 +21,7 @@ func (h *handler) QuerySecret(w http.ResponseWriter, r *http.Request, _ httprout
 }
 
 func (h *handler) CreateSecret(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	req := syncer.NewCreateSecretRequest()
+	req := secret.NewCreateSecretRequest()
 	if err := request.GetDataFromRequest(r, req); err != nil {
 		response.Failed(w, err)
 		return
@@ -37,7 +37,7 @@ func (h *handler) CreateSecret(w http.ResponseWriter, r *http.Request, _ httprou
 }
 
 func (h *handler) DescribeSecret(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	req := syncer.NewDescribeSecretRequest(ps.ByName("id"))
+	req := secret.NewDescribeSecretRequest(ps.ByName("id"))
 	ins, err := h.service.DescribeSecret(r.Context(), req)
 	if err != nil {
 		response.Failed(w, err)
@@ -49,7 +49,7 @@ func (h *handler) DescribeSecret(w http.ResponseWriter, r *http.Request, ps http
 }
 
 func (h *handler) DeleteSecret(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	req := syncer.NewDeleteSecretRequestWithID(ps.ByName("id"))
+	req := secret.NewDeleteSecretRequestWithID(ps.ByName("id"))
 	set, err := h.service.DeleteSecret(r.Context(), req)
 	if err != nil {
 		response.Failed(w, err)

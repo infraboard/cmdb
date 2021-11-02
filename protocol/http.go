@@ -14,7 +14,8 @@ import (
 	"github.com/infraboard/cmdb/conf"
 	hostAPI "github.com/infraboard/cmdb/pkg/host/http"
 	searchAPI "github.com/infraboard/cmdb/pkg/resource/http"
-	syncerAPI "github.com/infraboard/cmdb/pkg/syncer/http"
+	secretAPI "github.com/infraboard/cmdb/pkg/secret/http"
+	taskAPI "github.com/infraboard/cmdb/pkg/task/http"
 )
 
 // NewHTTPService 构建函数
@@ -50,7 +51,8 @@ type HTTPService struct {
 func (s *HTTPService) Start() error {
 	// 装置子服务路由
 	hostAPI.RegistAPI(s.r)
-	syncerAPI.RegistAPI(s.r)
+	secretAPI.RegistAPI(s.r)
+	taskAPI.RegistAPI(s.r)
 	searchAPI.RegistAPI(s.r)
 
 	// 启动 HTTP服务

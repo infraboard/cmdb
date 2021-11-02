@@ -4,14 +4,14 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/infraboard/cmdb/pkg/syncer"
+	"github.com/infraboard/cmdb/pkg/secret"
 )
 
 const (
 	deleteSecretSQL = `DELETE FROM secret WHERE id = ?;`
 )
 
-func (s *service) deleteSecret(ctx context.Context, ins *syncer.Secret) error {
+func (s *service) deleteSecret(ctx context.Context, ins *secret.Secret) error {
 	if ins == nil {
 		return fmt.Errorf("secret is nil")
 	}
