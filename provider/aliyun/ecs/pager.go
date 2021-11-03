@@ -15,6 +15,7 @@ import (
 func newPager(pageSize int, operater *EcsOperater, rate int) *pager {
 	req := ecs.CreateDescribeInstancesRequest()
 	req.PageSize = requests.NewInteger(pageSize)
+	fillInterval := 1 / float64(rate)
 
 	return &pager{
 		size:     pageSize,
@@ -22,7 +23,7 @@ func newPager(pageSize int, operater *EcsOperater, rate int) *pager {
 		operater: operater,
 		req:      req,
 		log:      zap.L().Named("Pagger"),
-		tb:       tokenbucket.NewBucket(time.Duration(rate)*time.Second, 1),
+		tb:       tokenbucket.NewBucket(time.Duration(fillInterval)*time.Second, 1),
 	}
 }
 

@@ -9,14 +9,14 @@ import (
 // Enum value maps for Type.
 var (
 	Type_name = map[int32]string{
-		0: "Unsuport",
-		1: "Host_Resource",
-		2: "Rds_Resource",
+		0: "UNSUPORT",
+		1: "HOST",
+		2: "RDS",
 	}
 	Type_value = map[string]int32{
-		"Unsuport":      0,
-		"Host_Resource": 1,
-		"Rds_Resource":  2,
+		"UNSUPORT": 0,
+		"HOST":     1,
+		"RDS":      2,
 	}
 )
 

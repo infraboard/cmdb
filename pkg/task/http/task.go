@@ -25,3 +25,14 @@ func (h *handler) CreatTask(w http.ResponseWriter, r *http.Request, ps httproute
 
 	response.Success(w, set)
 }
+
+func (h *handler) QueryTask(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	query := task.NewQueryTaskRequestFromHTTP(r)
+	set, err := h.task.QueryTask(r.Context(), query)
+	if err != nil {
+		response.Failed(w, err)
+		return
+	}
+
+	response.Success(w, set)
+}

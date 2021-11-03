@@ -9,7 +9,6 @@ import (
 	"github.com/infraboard/cmdb/pkg/resource"
 	"github.com/infraboard/cmdb/pkg/secret"
 	"github.com/infraboard/cmdb/pkg/task"
-	"github.com/infraboard/mcube/exception"
 
 	aliConn "github.com/infraboard/cmdb/provider/aliyun/connectivity"
 	ecsOp "github.com/infraboard/cmdb/provider/aliyun/ecs"
@@ -21,11 +20,19 @@ import (
 	vmOp "github.com/infraboard/cmdb/provider/vsphere/vm"
 )
 
-func (s *service) syncHost(ctx context.Context, secret *secret.Secret, region string) (
-	*task.Task, error) {
+type SyncTaskCallback func(*task.Task)
+
+func (s *service) syncHost(ctx context.Context, secret *secret.Secret, t *task.Task, cb SyncTaskCallback) {
 	var (
 		pager host.Pager
 	)
+
+	// 处理任务状态
+	t.Run()
+	defer func() {
+		t.Completed()
+		cb(t)
+	}()
 
 	// 解密secret
 	err := secret.DecryptAPISecret(conf.C().App.EncryptKey)
@@ -37,10 +44,11 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, region st
 	switch secret.Vendor {
 	case resource.VendorAliYun:
 		s.log.Debugf("sync aliyun host ...")
-		client := aliConn.NewAliCloudClient(secret.APIKey, secret.APISecret, region)
+		client := aliConn.NewAliCloudClient(secret.APIKey, secret.APISecret, t.Region)
 		ec, err := client.EcsClient()
 		if err != nil {
-			return nil, err
+			t.Failed(err.Error())
+			return
 		}
 		operater := ecsOp.NewEcsOperater(ec)
 		req := ecsOp.NewPageQueryRequest()
@@ -48,15 +56,16 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, region st
 		pager = operater.PageQuery(req)
 	case resource.VendorTencent:
 		s.log.Debugf("sync txyun host ...")
-		client := txConn.NewTencentCloudClient(secret.APIKey, secret.APISecret, region)
+		client := txConn.NewTencentCloudClient(secret.APIKey, secret.APISecret, t.Region)
 		operater := cvmOp.NewCVMOperater(client.CvmClient())
 		pager = operater.PageQuery()
 	case resource.VendorHuaWei:
 		s.log.Debugf("sync hwyun host ...")
-		client := hwConn.NewHuaweiCloudClient(secret.APIKey, secret.APISecret, region)
+		client := hwConn.NewHuaweiCloudClient(secret.APIKey, secret.APISecret, t.Region)
 		ec, err := client.EcsClient()
 		if err != nil {
-			return nil, err
+			t.Failed(err.Error())
+			return
 		}
 		operater := hwEcsOp.NewEcsOperater(ec)
 		pager = operater.PageQuery()
@@ -65,18 +74,20 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, region st
 		client := vsConn.NewVsphereClient(secret.Address, secret.APIKey, secret.APISecret)
 		ec, err := client.VimClient()
 		if err != nil {
-			return nil, err
+			t.Failed(err.Error())
+			return
 		}
 		operater := vmOp.NewVmOperater(ec)
 		hs, err = operater.Query()
 		if err != nil {
-			return nil, err
+			t.Failed(err.Error())
+			return
 		}
 	default:
-		return nil, exception.NewBadRequest("unsuport vendor %s", secret.Vendor)
+		t.Failed(fmt.Sprintf("unsuport vendor %s", secret.Vendor))
+		return
 	}
 
-	set := task.NewTask()
 	// 分页查询数据
 	if pager != nil {
 		hasNext := true
@@ -85,7 +96,8 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, region st
 			hasNext = p.HasNext
 
 			if p.Err != nil {
-				return nil, fmt.Errorf("sync error, %s", p.Err)
+				t.Failed(fmt.Sprintf("sync error, %s", p.Err))
+				return
 			}
 
 			// 调用host服务保持数据
@@ -100,11 +112,9 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, region st
 		target := hs.Items[i]
 		_, err := s.host.SaveHost(ctx, target)
 		if err != nil {
-			set.AddFailed(target.Name, err.Error())
+			t.AddDetailFailed(target.Name, err.Error())
 		} else {
-			set.AddSucceed(target.Name, "")
+			t.AddDetailSucceed(target.Name, "")
 		}
 	}
-
-	return set, nil
 }
