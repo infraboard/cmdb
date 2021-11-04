@@ -12,9 +12,9 @@ import (
 
 // 通过回调更新任务状态
 func (s *service) SyncTaskCallback(t *task.Task) {
-	err := s.save(context.Background(), t)
+	err := s.update(context.Background(), t)
 	if err != nil {
-		s.log.Error("save task error, %s", err)
+		s.log.Error(err)
 	}
 }
 
@@ -45,6 +45,11 @@ func (s *service) CreatTask(ctx context.Context, req *task.CreateTaskRequst) (
 	switch req.ResourceType {
 	case resource.HostResource:
 		go s.syncHost(ctx, secret, t, s.SyncTaskCallback)
+	}
+
+	// 记录任务
+	if err := s.insert(ctx, t); err != nil {
+		return nil, err
 	}
 
 	if err != nil {

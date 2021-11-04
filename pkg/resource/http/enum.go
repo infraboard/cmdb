@@ -23,6 +23,27 @@ func (h *handler) ListVendor(w http.ResponseWriter, r *http.Request, _ httproute
 	response.Success(w, resp)
 }
 
+func (h *handler) ListResourceType(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	resp := map[string][]utils.EnumDescribe{
+		resource.VendorAliYun.String(): {
+			{Name: "主机", Value: resource.HostResource.String(), Describe: "阿里云ECS"},
+			{Name: "关系型数据库", Value: resource.RdsResource.String(), Describe: "阿里云RDS"},
+		},
+		resource.VendorTencent.String(): {
+			{Name: "主机", Value: resource.HostResource.String(), Describe: "腾讯云CVM"},
+			{Name: "关系型数据库", Value: resource.RdsResource.String(), Describe: "腾讯云CDB"},
+		},
+		resource.VendorHuaWei.String(): {
+			{Name: "主机", Value: resource.HostResource.String(), Describe: "华为云ECS"},
+			{Name: "关系型数据库", Value: resource.RdsResource.String(), Describe: "华为云RDS"},
+		},
+		resource.VendorVsphere.String(): {
+			{Name: "主机", Value: resource.HostResource.String(), Describe: "VMware vm"},
+		},
+	}
+	response.Success(w, resp)
+}
+
 func (h *handler) ListVendorRegion(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	resp := map[string][]utils.EnumDescribe{
 		resource.VendorAliYun.String():  ali_region.Regions,
