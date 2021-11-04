@@ -43,18 +43,19 @@ func NewTaskFromReq(req *CreateTaskRequst) (*Task, error) {
 
 // 同个区域的同一种资源一次只能有1个task run
 type Task struct {
-	Id           string        `json:"id"`            // 任务id
-	Region       string        `json:"region"`        // 同步的区域
-	ResourceType resource.Type `json:"resource_type"` // 同步的资源
-	SecretId     string        `json:"secret_id"`     // 关联secret
-	Timeout      int           `json:"timeout"`       // 任务超时时间
-	Status       Status        `json:"status"`        // 任务状态
-	Message      string        `json:"message"`       // 失败时的异常信息
-	StartAt      int64         `json:"start_at"`      // 开始同步的时间
-	EndAt        int64         `json:"end_at"`        // 同步结束时间
-	TotolSucceed int64         `json:"total_succeed"` // 成功的条数
-	TotalFailed  int64         `json:"total_failed"`  // 失败的条数
-	Details      []*Detail     `json:"details"`       // 同步详情
+	Id                string        `json:"id"`                 // 任务id
+	Region            string        `json:"region"`             // 同步的区域
+	ResourceType      resource.Type `json:"resource_type"`      // 同步的资源
+	SecretId          string        `json:"secret_id"`          // 关联secret
+	SecretDescription string        `json:"secret_description"` // secret描述
+	Timeout           int           `json:"timeout"`            // 任务超时时间
+	Status            Status        `json:"status"`             // 任务状态
+	Message           string        `json:"message"`            // 失败时的异常信息
+	StartAt           int64         `json:"start_at"`           // 开始同步的时间
+	EndAt             int64         `json:"end_at"`             // 同步结束时间
+	TotolSucceed      int64         `json:"total_succeed"`      // 成功的条数
+	TotalFailed       int64         `json:"total_failed"`       // 失败的条数
+	Details           []*Detail     `json:"details"`            // 同步详情
 }
 
 type Detail struct {
@@ -66,6 +67,10 @@ type Detail struct {
 func (s *Task) Run() {
 	s.StartAt = ftime.Now().Timestamp()
 	s.Status = StatusRunning
+}
+
+func (s *Task) UpdateSecretDesc(desc string) {
+	s.SecretDescription = desc
 }
 
 func (s *Task) Completed() {

@@ -29,6 +29,7 @@ func (s *service) CreatTask(ctx context.Context, req *task.CreateTaskRequst) (
 	if err != nil {
 		return nil, err
 	}
+	t.UpdateSecretDesc(secret.ShortDesc())
 
 	// 如果不是vsphere 需要检查region
 	if !secret.Vendor.Equal(resource.VendorVsphere) {
@@ -75,8 +76,8 @@ func (s *service) QueryTask(ctx context.Context, req *task.QueryTaskRequest) (*t
 	for rows.Next() {
 		ins := task.NewDefaultTask()
 		err := rows.Scan(
-			&ins.Id, &ins.Region, &ins.ResourceType, &ins.SecretId, &ins.Timeout, &ins.Status,
-			&ins.Message, &ins.StartAt, &ins.EndAt, &ins.TotolSucceed, &ins.TotalFailed,
+			&ins.Id, &ins.Region, &ins.ResourceType, &ins.SecretId, &ins.SecretDescription, &ins.Timeout,
+			&ins.Status, &ins.Message, &ins.StartAt, &ins.EndAt, &ins.TotolSucceed, &ins.TotalFailed,
 		)
 		if err != nil {
 			return nil, exception.NewInternalServerError("query task error, %s", err.Error())

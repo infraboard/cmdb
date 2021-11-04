@@ -97,6 +97,10 @@ func (s *Secret) IsAllowRegion(region string) bool {
 	return false
 }
 
+func (s *Secret) ShortDesc() string {
+	return fmt.Sprintf("%s[%s]", s.Description, s.APIKey)
+}
+
 func (s *Secret) AllowRegionString() string {
 	return strings.Join(s.AllowRegions, ",")
 }
