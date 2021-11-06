@@ -1,14 +1,9 @@
 package resource
 
 import (
-	"context"
 	"net/http"
 	"strconv"
 )
-
-type Service interface {
-	Search(context.Context, *SearchRequest) (*ResourceSet, error)
-}
 
 func NewSearchRequestFromHTTP(r *http.Request) *SearchRequest {
 	qs := r.URL.Query()

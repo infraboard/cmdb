@@ -33,7 +33,7 @@ func (o *RdsOperater) transferSet(items []rds.DBInstance) *cmdbRds.RdsSet {
 
 func (o *RdsOperater) transferOne(ins rds.DBInstance) *cmdbRds.Rds {
 	r := cmdbRds.NewDefaultRds()
-	r.Base.Vendor = resource.VendorAliYun
+	r.Base.Vendor = resource.Vendor_ALIYUN
 	r.Base.Region = ins.RegionId
 	r.Base.Zone = ins.ZoneId
 	r.Base.CreateAt = o.parseTime(ins.CreateTime)

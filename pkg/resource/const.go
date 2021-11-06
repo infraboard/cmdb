@@ -6,20 +6,6 @@ import (
 	"strings"
 )
 
-// Enum value maps for Type.
-var (
-	Type_name = map[int32]string{
-		0: "UNSUPORT",
-		1: "HOST",
-		2: "RDS",
-	}
-	Type_value = map[string]int32{
-		"UNSUPORT": 0,
-		"HOST":     1,
-		"RDS":      2,
-	}
-)
-
 // ParseTypeFromString Parse Type from string
 func ParseTypeFromString(str string) (Type, error) {
 	key := strings.Trim(string(str), `"`)
@@ -29,10 +15,6 @@ func ParseTypeFromString(str string) (Type, error) {
 	}
 
 	return Type(v), nil
-}
-
-func (t Type) String() string {
-	return Type_name[int32(t)]
 }
 
 // Equal type compare
@@ -69,22 +51,6 @@ func (t *Type) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Enum value maps for Type.
-var (
-	Vendor_name = map[int32]string{
-		0: "VENDOR_ALIYUN",
-		1: "VENDOR_TENCENT",
-		2: "VENDOR_HUAWEI",
-		3: "VENDOR_VSPHERE",
-	}
-	Vendor_value = map[string]int32{
-		"VENDOR_ALIYUN":  0,
-		"VENDOR_TENCENT": 1,
-		"VENDOR_HUAWEI":  2,
-		"VENDOR_VSPHERE": 3,
-	}
-)
-
 // ParseVendorFromString Parse Type from string
 func ParseVendorFromString(str string) (Vendor, error) {
 	key := strings.Trim(string(str), `"`)
@@ -94,10 +60,6 @@ func ParseVendorFromString(str string) (Vendor, error) {
 	}
 
 	return Vendor(v), nil
-}
-
-func (t Vendor) String() string {
-	return Vendor_name[int32(t)]
 }
 
 // Equal type compare

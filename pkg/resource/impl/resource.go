@@ -26,7 +26,7 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 		)
 	}
 
-	if req.Vendor != nil {
+	if req.Vendor != resource.Vendor_NULL {
 		query.Where("vendor = ?", req.Vendor)
 	}
 
@@ -51,17 +51,19 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 	set := resource.NewResourceSet()
 	for rows.Next() {
 		ins := resource.NewDefaultResource()
+		base := ins.Base
+		info := ins.Information
 		err := rows.Scan(
-			&ins.Id, &ins.Vendor, &ins.Region, &ins.Zone, &ins.CreateAt, &ins.ExpireAt,
-			&ins.Category, &ins.Type, &ins.InstanceId, &ins.Name, &ins.Description,
-			&ins.Status, &ins.UpdateAt, &ins.SyncAt, &ins.SyncAccount,
-			&publicIPList, &privateIPList, &ins.PayType, &ins.DescribeHash, &ins.ResourceHash,
+			&base.Id, &base.Vendor, &base.Region, &base.Zone, &base.CreateAt, &info.ExpireAt,
+			&info.Category, &info.Type, &base.InstanceId, &info.Name, &info.Description,
+			&info.Status, &info.UpdateAt, &base.SyncAt, &info.SyncAccount,
+			&publicIPList, &privateIPList, &info.PayType, &base.DescribeHash, &base.ResourceHash,
 		)
 		if err != nil {
 			return nil, exception.NewInternalServerError("query host error, %s", err.Error())
 		}
-		ins.LoadPrivateIPString(privateIPList)
-		ins.LoadPublicIPString(publicIPList)
+		info.LoadPrivateIPString(privateIPList)
+		info.LoadPublicIPString(publicIPList)
 		set.Add(ins)
 	}
 

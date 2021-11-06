@@ -31,7 +31,7 @@ type VMOperater struct {
 
 func (o *VMOperater) transferOne(ins *mo.VirtualMachine, dcName string) *host.Host {
 	h := host.NewDefaultHost()
-	h.Base.Vendor = resource.VendorVsphere
+	h.Base.Vendor = resource.Vendor_VSPHERE
 	h.Base.Region = o.client.URL().Host
 	h.Base.Zone = dcName
 	h.Base.CreateAt = ins.Config.CreateDate.UnixNano() / 1000000
@@ -39,7 +39,7 @@ func (o *VMOperater) transferOne(ins *mo.VirtualMachine, dcName string) *host.Ho
 
 	h.Information.Name = ins.Name
 	h.Information.Status = string(ins.Summary.Runtime.PowerState)
-	h.Information.PrivateIP = []string{ins.Guest.IpAddress}
+	h.Information.PrivateIp = []string{ins.Guest.IpAddress}
 
 	h.Describe.CPU = int64(ins.Config.Hardware.NumCPU)
 	h.Describe.Memory = int64(ins.Config.Hardware.MemoryMB)

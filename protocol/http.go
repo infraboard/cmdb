@@ -28,7 +28,7 @@ func NewHTTPService() *HTTPService {
 		WriteTimeout:      60 * time.Second,
 		IdleTimeout:       60 * time.Second,
 		MaxHeaderBytes:    1 << 20, // 1M
-		Addr:              conf.C().App.Addr(),
+		Addr:              conf.C().App.HTTPAddr(),
 		Handler:           cors.AllowAll().Handler(r),
 	}
 	return &HTTPService{

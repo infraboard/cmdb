@@ -34,7 +34,7 @@ func (o *CVMOperater) transferSet(items []*cvm.Instance) *host.HostSet {
 
 func (o *CVMOperater) transferOne(ins *cvm.Instance) *host.Host {
 	h := host.NewDefaultHost()
-	h.Base.Vendor = resource.VendorTencent
+	h.Base.Vendor = resource.Vendor_TENCENT
 	h.Base.Region = o.client.GetRegion()
 	h.Base.Zone = utils.PtrStrV(ins.Placement.Zone)
 	h.Base.CreateAt = o.parseTime(utils.PtrStrV(ins.CreatedTime))
@@ -45,8 +45,8 @@ func (o *CVMOperater) transferOne(ins *cvm.Instance) *host.Host {
 	h.Information.Name = utils.PtrStrV(ins.InstanceName)
 	h.Information.Status = utils.PtrStrV(ins.InstanceState)
 	h.Information.Tags = transferTags(ins.Tags)
-	h.Information.PublicIP = utils.SlicePtrStrv(ins.PublicIpAddresses)
-	h.Information.PrivateIP = utils.SlicePtrStrv(ins.PrivateIpAddresses)
+	h.Information.PublicIp = utils.SlicePtrStrv(ins.PublicIpAddresses)
+	h.Information.PrivateIp = utils.SlicePtrStrv(ins.PrivateIpAddresses)
 	h.Information.PayType = utils.PtrStrV(ins.InstanceChargeType)
 
 	h.Describe.CPU = utils.PtrInt64(ins.CPU)

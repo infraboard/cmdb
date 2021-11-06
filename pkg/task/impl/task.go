@@ -32,7 +32,7 @@ func (s *service) CreatTask(ctx context.Context, req *task.CreateTaskRequst) (
 	t.UpdateSecretDesc(secret.ShortDesc())
 
 	// 如果不是vsphere 需要检查region
-	if !secret.Vendor.Equal(resource.VendorVsphere) {
+	if !secret.Vendor.Equal(resource.Vendor_VSPHERE) {
 		if req.Region == "" {
 			return nil, exception.NewBadRequest("region required")
 		}
@@ -43,7 +43,7 @@ func (s *service) CreatTask(ctx context.Context, req *task.CreateTaskRequst) (
 
 	// 资源同步
 	switch req.ResourceType {
-	case resource.HostResource:
+	case resource.Type_HOST:
 		go s.syncHost(ctx, secret, t, s.SyncTaskCallback)
 	}
 

@@ -7,7 +7,7 @@ import (
 func NewDefaultRds() *Rds {
 	return &Rds{
 		&resource.Base{
-			ResourceType: resource.RdsResource,
+			ResourceType: resource.Type_RDS,
 		},
 		&resource.Information{},
 		&Describe{},

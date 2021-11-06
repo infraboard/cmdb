@@ -13,7 +13,7 @@ import (
 func NewDefaultHost() *Host {
 	return &Host{
 		&resource.Base{
-			ResourceType: resource.HostResource,
+			ResourceType: resource.Type_HOST,
 		},
 		&resource.Information{},
 		&Describe{},

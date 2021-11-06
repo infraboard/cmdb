@@ -42,7 +42,7 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, t *task.T
 
 	hs := host.NewHostSet()
 	switch secret.Vendor {
-	case resource.VendorAliYun:
+	case resource.Vendor_ALIYUN:
 		s.log.Debugf("sync aliyun host ...")
 		client := aliConn.NewAliCloudClient(secret.APIKey, secret.APISecret, t.Region)
 		ec, err := client.EcsClient()
@@ -54,12 +54,12 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, t *task.T
 		req := ecsOp.NewPageQueryRequest()
 		req.Rate = secret.RequestRate
 		pager = operater.PageQuery(req)
-	case resource.VendorTencent:
+	case resource.Vendor_TENCENT:
 		s.log.Debugf("sync txyun host ...")
 		client := txConn.NewTencentCloudClient(secret.APIKey, secret.APISecret, t.Region)
 		operater := cvmOp.NewCVMOperater(client.CvmClient())
 		pager = operater.PageQuery()
-	case resource.VendorHuaWei:
+	case resource.Vendor_HUAWEI:
 		s.log.Debugf("sync hwyun host ...")
 		client := hwConn.NewHuaweiCloudClient(secret.APIKey, secret.APISecret, t.Region)
 		ec, err := client.EcsClient()
@@ -69,7 +69,7 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, t *task.T
 		}
 		operater := hwEcsOp.NewEcsOperater(ec)
 		pager = operater.PageQuery()
-	case resource.VendorVsphere:
+	case resource.Vendor_VSPHERE:
 		s.log.Debugf("sync vshpere host ...")
 		client := vsConn.NewVsphereClient(secret.Address, secret.APIKey, secret.APISecret)
 		ec, err := client.VimClient()

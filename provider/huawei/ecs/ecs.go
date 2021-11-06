@@ -37,7 +37,7 @@ func (o *EcsOperater) transferSet(list *[]model.ServerDetail) *host.HostSet {
 
 func (o *EcsOperater) transferOne(ins model.ServerDetail) *host.Host {
 	h := host.NewDefaultHost()
-	h.Base.Vendor = resource.VendorHuaWei
+	h.Base.Vendor = resource.Vendor_HUAWEI
 	h.Base.Zone = ins.OSEXTAZavailabilityZone
 	h.Base.CreateAt = o.parseTime(ins.Created)
 	h.Base.InstanceId = ins.Id
@@ -48,7 +48,7 @@ func (o *EcsOperater) transferOne(ins model.ServerDetail) *host.Host {
 	h.Information.Description = utils.PtrStrV(ins.Description)
 	h.Information.Status = ins.Status
 	h.Information.Tags = o.transferTags(ins.Tags)
-	h.Information.PrivateIP, h.Information.PublicIP = o.parseIp(ins.Addresses)
+	h.Information.PrivateIp, h.Information.PublicIp = o.parseIp(ins.Addresses)
 	h.Information.PayType = ins.Metadata["charging_mode"]
 
 	h.Describe.SerialNumber = ins.Id

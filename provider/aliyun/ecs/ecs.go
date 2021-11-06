@@ -33,7 +33,7 @@ func (o *EcsOperater) transferSet(items []ecs.Instance) *host.HostSet {
 
 func (o *EcsOperater) transferOne(ins ecs.Instance) *host.Host {
 	h := host.NewDefaultHost()
-	h.Base.Vendor = resource.VendorAliYun
+	h.Base.Vendor = resource.Vendor_ALIYUN
 	h.Base.Region = ins.RegionId
 	h.Base.Zone = ins.ZoneId
 
@@ -46,8 +46,8 @@ func (o *EcsOperater) transferOne(ins ecs.Instance) *host.Host {
 	h.Information.Description = ins.Description
 	h.Information.Status = ins.Status
 	h.Information.Tags = o.transferTags(ins.Tags.Tag)
-	h.Information.PublicIP = ins.PublicIpAddress.IpAddress
-	h.Information.PrivateIP = ins.InnerIpAddress.IpAddress
+	h.Information.PublicIp = ins.PublicIpAddress.IpAddress
+	h.Information.PrivateIp = ins.InnerIpAddress.IpAddress
 	h.Information.PayType = ins.InstanceChargeType
 
 	h.Describe.CPU = int64(ins.CPU)

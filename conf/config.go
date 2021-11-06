@@ -30,20 +30,28 @@ type Config struct {
 
 type app struct {
 	Name       string `toml:"name" env:"APP_NAME"`
-	Host       string `toml:"host" env:"APP_HOST"`
-	Port       string `toml:"port" env:"APP_PORT"`
+	HttpHost   string `toml:"http_host" env:"APP_HTTP_HOST"`
+	HttpPort   string `toml:"http_port" env:"APP_HTTP_PORT"`
+	GRPCHost   string `toml:"grpc_host" env:"APP_GRPC_HOST"`
+	GRPCPort   string `toml:"grpc_port" env:"APP_GRPC_PORT"`
 	EncryptKey string `toml:"encrypt_key" env:"APP_ENCRYPT_KEY"`
 }
 
-func (a *app) Addr() string {
-	return fmt.Sprintf("%s:%s", a.Host, a.Port)
+func (a *app) HTTPAddr() string {
+	return fmt.Sprintf("%s:%s", a.HttpHost, a.HttpPort)
+}
+
+func (a *app) GRPCAddr() string {
+	return fmt.Sprintf("%s:%s", a.GRPCHost, a.GRPCPort)
 }
 
 func newDefaultAPP() *app {
 	return &app{
 		Name:       "demo",
-		Host:       "127.0.0.1",
-		Port:       "8050",
+		HttpHost:   "127.0.0.1",
+		HttpPort:   "8050",
+		GRPCHost:   "127.0.0.1",
+		GRPCPort:   "18050",
 		EncryptKey: "defualt app encrypt key",
 	}
 }

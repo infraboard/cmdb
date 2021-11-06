@@ -8,6 +8,7 @@ require (
 	github.com/caarlos0/env/v6 v6.7.2
 	github.com/go-playground/validator/v10 v10.9.0
 	github.com/go-sql-driver/mysql v1.6.0
+	github.com/grpc-ecosystem/go-grpc-middleware v1.2.0
 	github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.0.66
 	github.com/infraboard/mcube v1.4.5
 	github.com/julienschmidt/httprouter v1.3.0
@@ -18,4 +19,6 @@ require (
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.270
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm v1.0.270
 	github.com/vmware/govmomi v0.27.0
+	google.golang.org/grpc v1.38.0
+	google.golang.org/protobuf v1.27.1
 )

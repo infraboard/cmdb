@@ -173,7 +173,7 @@ func (s *service) UpdateHost(ctx context.Context, req *host.UpdateHostRequest) (
 		_, err = stmt.Exec(
 			ins.ExpireAt, ins.Category, ins.Type, ins.Name, ins.Description,
 			ins.Status, ins.UpdateAt, ins.SyncAt, ins.SyncAccount,
-			ins.PublicIP, ins.PrivateIP, ins.PayType, ins.DescribeHash, ins.ResourceHash,
+			ins.PublicIp, ins.PrivateIp, ins.PayType, ins.DescribeHash, ins.ResourceHash,
 			ins.ResourceId,
 		)
 		if err != nil {
