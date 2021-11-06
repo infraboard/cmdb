@@ -86,8 +86,10 @@ var serviceCmd = &cobra.Command{
 
 func newService(cnf *conf.Config) (*service, error) {
 	http := protocol.NewHTTPService()
+	grpc := protocol.NewGRPCService()
 	svr := &service{
 		http: http,
+		grpc: grpc,
 		log:  zap.L().Named("CLI"),
 	}
 
@@ -96,10 +98,12 @@ func newService(cnf *conf.Config) (*service, error) {
 
 type service struct {
 	http *protocol.HTTPService
+	grpc *protocol.GRPCService
 	log  logger.Logger
 }
 
 func (s *service) start() error {
+	go s.grpc.Start()
 	return s.http.Start()
 }
 

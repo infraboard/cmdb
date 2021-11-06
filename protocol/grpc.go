@@ -1,7 +1,6 @@
 package protocol
 
 import (
-	"fmt"
 	"net"
 
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
@@ -38,14 +37,15 @@ type GRPCService struct {
 }
 
 // Start 启动GRPC服务
-func (s *GRPCService) Start() error {
+func (s *GRPCService) Start() {
 	// 装载所有GRPC服务
 	pkg.InitV1GRPCAPI(s.svr)
 
 	// 启动HTTP服务
 	lis, err := net.Listen("tcp", s.c.App.GRPCAddr())
 	if err != nil {
-		return err
+		s.l.Errorf("listen grpc tcp conn error, %s", err)
+		return
 	}
 
 	s.l.Infof("GRPC 服务监听地址: %s", s.c.App.GRPCAddr())
@@ -54,8 +54,7 @@ func (s *GRPCService) Start() error {
 			s.l.Info("service is stopped")
 		}
 
-		return fmt.Errorf("start service error, %s", err.Error())
+		s.l.Error("start grpc service error, %s", err.Error())
+		return
 	}
-
-	return nil
 }

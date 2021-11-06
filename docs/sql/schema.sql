@@ -58,3 +58,19 @@ CREATE TABLE `host` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_key` (`api_key`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `task` (
+  `id` varchar(64) NOT NULL,
+  `region` varchar(64) NOT NULL,
+  `resource_type` tinyint(1) NOT NULL,
+  `secret_id` varchar(64) NOT NULL,
+  `secret_desc` text CHARACTER SET utf8mb4 NOT NULL,
+  `timeout` int(11) NOT NULL,
+  `status` tinyint(1) NOT NULL,
+  `message` text NOT NULL,
+  `start_at` bigint(20) NOT NULL,
+  `end_at` bigint(20) NOT NULL,
+  `total_succeed` int(11) NOT NULL,
+  `total_failed` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
