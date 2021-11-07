@@ -8,6 +8,7 @@ cmdb
 protobuf 环境准备
 ```sh
 # 1.安装protoc编译器
+# 下载预编译包安装: https://github.com/protocolbuffers/protobuf/releases
 
 # 2.protoc-gen-go 插件之前已经安装
 go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
