@@ -1,9 +1,9 @@
 package client
 
 // NewDefaultConfig todo
-func NewDefaultConfig() *Config {
+func NewConfig(address string) *Config {
 	return &Config{
-		address:        "localhost:18050",
+		address:        address,
 		Authentication: &Authentication{},
 	}
 }
