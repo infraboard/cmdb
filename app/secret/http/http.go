@@ -1,8 +1,7 @@
 package http
 
 import (
-	"github.com/julienschmidt/httprouter"
-
+	"github.com/infraboard/mcube/http/router"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 
@@ -11,7 +10,7 @@ import (
 )
 
 var (
-	api = &handler{}
+	h = &handler{}
 )
 
 type handler struct {
@@ -25,11 +24,18 @@ func (h *handler) Config() error {
 	return nil
 }
 
-func RegistAPI(r *httprouter.Router) {
-	api.Config()
-	r.POST("/secrets", api.CreateSecret)
-	r.GET("/secrets", api.QuerySecret)
-	r.GET("/secrets/:id", api.DescribeSecret)
-	r.DELETE("/secrets/:id", api.DeleteSecret)
-	r.GET("/crendential_types", api.ListCrendentialType)
+func (h *handler) Name() string {
+	return secret.AppName
+}
+
+func (h *handler) Registry(r router.SubRouter) {
+	r.Handle("POST", "/secrets", h.CreateSecret)
+	r.Handle("GET", "/secrets", h.QuerySecret)
+	r.Handle("GET", "/secrets/:id", h.DescribeSecret)
+	r.Handle("DELETE", "/secrets/:id", h.DeleteSecret)
+	r.Handle("GET", "/crendential_types", h.ListCrendentialType)
+}
+
+func init() {
+	app.RegistryHttpApp(h)
 }

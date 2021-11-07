@@ -1,8 +1,7 @@
 package http
 
 import (
-	"github.com/julienschmidt/httprouter"
-
+	"github.com/infraboard/mcube/http/router"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 
@@ -11,7 +10,7 @@ import (
 )
 
 var (
-	api = &handler{}
+	h = &handler{}
 )
 
 type handler struct {
@@ -25,10 +24,17 @@ func (h *handler) Config() error {
 	return nil
 }
 
-func RegistAPI(r *httprouter.Router) {
-	api.Config()
-	r.GET("/search", api.SearchResource)
-	r.GET("/vendors", api.ListVendor)
-	r.GET("/regions", api.ListVendorRegion)
-	r.GET("/resource_types", api.ListResourceType)
+func (h *handler) Name() string {
+	return resource.AppName
+}
+
+func (h *handler) Registry(r router.SubRouter) {
+	r.Handle("GET", "/search", h.SearchResource)
+	r.Handle("GET", "/vendors", h.ListVendor)
+	r.Handle("GET", "/regions", h.ListVendorRegion)
+	r.Handle("GET", "/resource_types", h.ListResourceType)
+}
+
+func init() {
+	app.RegistryHttpApp(h)
 }

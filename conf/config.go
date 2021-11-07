@@ -47,7 +47,7 @@ func (a *app) GRPCAddr() string {
 
 func newDefaultAPP() *app {
 	return &app{
-		Name:       "demo",
+		Name:       "cmdb",
 		HttpHost:   "127.0.0.1",
 		HttpPort:   "8050",
 		GRPCHost:   "127.0.0.1",

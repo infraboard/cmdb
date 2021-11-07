@@ -1,17 +1,16 @@
 package http
 
 import (
-	"github.com/julienschmidt/httprouter"
-
+	"github.com/infraboard/mcube/http/router"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 
-	pkg "github.com/infraboard/cmdb/app"
+	"github.com/infraboard/cmdb/app"
 	"github.com/infraboard/cmdb/app/task"
 )
 
 var (
-	api = &handler{}
+	h = &handler{}
 )
 
 type handler struct {
@@ -21,12 +20,19 @@ type handler struct {
 
 func (h *handler) Config() error {
 	h.log = zap.L().Named(task.AppName)
-	h.task = pkg.GetGrpcApp(task.AppName).(task.ServiceServer)
+	h.task = app.GetGrpcApp(task.AppName).(task.ServiceServer)
 	return nil
 }
 
-func RegistAPI(r *httprouter.Router) {
-	api.Config()
-	r.GET("/tasks", api.QueryTask)
-	r.POST("/tasks", api.CreatTask)
+func (h *handler) Name() string {
+	return task.AppName
+}
+
+func (h *handler) Registry(r router.SubRouter) {
+	r.Handle("GET", "/tasks", h.QueryTask)
+	r.Handle("POST", "/tasks", h.CreatTask)
+}
+
+func init() {
+	app.RegistryHttpApp(h)
 }

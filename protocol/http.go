@@ -8,19 +8,23 @@ import (
 
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
-	"github.com/julienschmidt/httprouter"
-	"github.com/rs/cors"
 
-	hostAPI "github.com/infraboard/cmdb/app/host/http"
-	searchAPI "github.com/infraboard/cmdb/app/resource/http"
-	secretAPI "github.com/infraboard/cmdb/app/secret/http"
-	taskAPI "github.com/infraboard/cmdb/app/task/http"
+	"github.com/infraboard/cmdb/app"
 	"github.com/infraboard/cmdb/conf"
+	"github.com/infraboard/mcube/http/middleware/accesslog"
+	"github.com/infraboard/mcube/http/middleware/cors"
+	"github.com/infraboard/mcube/http/middleware/recovery"
+	"github.com/infraboard/mcube/http/router"
+	"github.com/infraboard/mcube/http/router/httprouter"
 )
 
 // NewHTTPService 构建函数
 func NewHTTPService() *HTTPService {
 	r := httprouter.New()
+	r.Use(recovery.NewWithLogger(zap.L().Named("Recovery")))
+	r.Use(accesslog.NewWithLogger(zap.L().Named("AccessLog")))
+	r.Use(cors.AllowAll())
+	r.EnableAPIRoot()
 
 	server := &http.Server{
 		ReadHeaderTimeout: 60 * time.Second,
@@ -41,7 +45,7 @@ func NewHTTPService() *HTTPService {
 
 // HTTPService http服务
 type HTTPService struct {
-	r      *httprouter.Router
+	r      router.Router
 	l      logger.Logger
 	c      *conf.Config
 	server *http.Server
@@ -50,10 +54,9 @@ type HTTPService struct {
 // Start 启动服务
 func (s *HTTPService) Start() error {
 	// 装置子服务路由
-	hostAPI.RegistAPI(s.r)
-	secretAPI.RegistAPI(s.r)
-	taskAPI.RegistAPI(s.r)
-	searchAPI.RegistAPI(s.r)
+	if err := app.LoadHttpApp(s.c.App.Name, s.r); err != nil {
+		return err
+	}
 
 	// 启动 HTTP服务
 	s.l.Infof("HTTP服务启动成功, 监听地址: %s", s.server.Addr)

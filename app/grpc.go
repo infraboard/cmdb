@@ -6,6 +6,13 @@ import (
 	"google.golang.org/grpc"
 )
 
+// GRPCService GRPC服务的实例
+type GRPCApp interface {
+	Registry(*grpc.Server)
+	Config() error
+	Name() string
+}
+
 var (
 	grpcApps = map[string]GRPCApp{}
 )
@@ -43,10 +50,7 @@ func LoadGrpcApp(server *grpc.Server) error {
 			return fmt.Errorf("config grpc app %s error %s", name, err)
 		}
 
-		err = app.Registry(server)
-		if err != nil {
-			return fmt.Errorf("registry grpc app %s to server error, %s", name, err)
-		}
+		app.Registry(server)
 	}
 	return nil
 }

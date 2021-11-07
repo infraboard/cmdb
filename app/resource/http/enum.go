@@ -6,14 +6,13 @@ import (
 	"github.com/infraboard/cmdb/app/resource"
 	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/http/response"
-	"github.com/julienschmidt/httprouter"
 
 	ali_region "github.com/infraboard/cmdb/provider/aliyun/region"
 	hw_region "github.com/infraboard/cmdb/provider/huawei/region"
 	tx_region "github.com/infraboard/cmdb/provider/txyun/region"
 )
 
-func (h *handler) ListVendor(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func (h *handler) ListVendor(w http.ResponseWriter, r *http.Request) {
 	resp := []utils.EnumDescribe{
 		{Value: resource.Vendor_ALIYUN.String(), Describe: "阿里云"},
 		{Value: resource.Vendor_TENCENT.String(), Describe: "腾讯云"},
@@ -23,7 +22,7 @@ func (h *handler) ListVendor(w http.ResponseWriter, r *http.Request, _ httproute
 	response.Success(w, resp)
 }
 
-func (h *handler) ListResourceType(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func (h *handler) ListResourceType(w http.ResponseWriter, r *http.Request) {
 	resp := map[string][]utils.EnumDescribe{
 		resource.Vendor_ALIYUN.String(): {
 			{Name: "主机", Value: resource.Type_HOST.String(), Describe: "阿里云ECS"},
@@ -44,7 +43,7 @@ func (h *handler) ListResourceType(w http.ResponseWriter, r *http.Request, _ htt
 	response.Success(w, resp)
 }
 
-func (h *handler) ListVendorRegion(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func (h *handler) ListVendorRegion(w http.ResponseWriter, r *http.Request) {
 	resp := map[string][]utils.EnumDescribe{
 		resource.Vendor_ALIYUN.String():  ali_region.Regions,
 		resource.Vendor_TENCENT.String(): tx_region.Regions,
