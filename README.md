@@ -6,7 +6,6 @@
 + 华为云
 + VMware
 
-
 ## SDK使用
 
 ```go
@@ -42,7 +41,7 @@ func main() {
 
 ## 开发环境
 
-protobuf 环境准备
+grpc 环境准备
 ```sh
 # 1.安装protoc编译器,  项目使用版本: v3.19.1
 # 下载预编译包安装: https://github.com/protocolbuffers/protobuf/releases

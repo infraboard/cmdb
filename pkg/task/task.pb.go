@@ -76,6 +76,7 @@ func (Status) EnumDescriptor() ([]byte, []int) {
 	return file_pkg_task_pb_task_proto_rawDescGZIP(), []int{0}
 }
 
+// Task 同个区域的同一种资源一次只能有1个task run
 type Task struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

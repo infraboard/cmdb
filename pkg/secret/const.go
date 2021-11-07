@@ -7,23 +7,23 @@ import (
 )
 
 // ParseCrendentialTypeFromString Parse Type from string
-func ParseCrendentialTypeFromString(str string) (CrendentialType, error) {
+func ParseCrendentialTypeFromString(str string) (Type, error) {
 	key := strings.Trim(string(str), `"`)
-	v, ok := CrendentialType_value[strings.ToUpper(key)]
+	v, ok := Type_value[strings.ToUpper(key)]
 	if !ok {
 		return 0, fmt.Errorf("unknown Type: %s", str)
 	}
 
-	return CrendentialType(v), nil
+	return Type(v), nil
 }
 
 // Equal type compare
-func (t CrendentialType) Equal(target CrendentialType) bool {
+func (t Type) Equal(target Type) bool {
 	return t == target
 }
 
 // IsIn todo
-func (t CrendentialType) IsIn(targets ...CrendentialType) bool {
+func (t Type) IsIn(targets ...Type) bool {
 	for _, target := range targets {
 		if t.Equal(target) {
 			return true
@@ -34,7 +34,7 @@ func (t CrendentialType) IsIn(targets ...CrendentialType) bool {
 }
 
 // MarshalJSON todo
-func (t CrendentialType) MarshalJSON() ([]byte, error) {
+func (t Type) MarshalJSON() ([]byte, error) {
 	b := bytes.NewBufferString(`"`)
 	b.WriteString(strings.ToUpper(t.String()))
 	b.WriteString(`"`)
@@ -42,7 +42,7 @@ func (t CrendentialType) MarshalJSON() ([]byte, error) {
 }
 
 // UnmarshalJSON todo
-func (t *CrendentialType) UnmarshalJSON(b []byte) error {
+func (t *Type) UnmarshalJSON(b []byte) error {
 	ins, err := ParseCrendentialTypeFromString(string(b))
 	if err != nil {
 		return err
