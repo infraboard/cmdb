@@ -5,6 +5,13 @@ import (
 	"strconv"
 )
 
+func NewSearchRequest() *SearchRequest {
+	return &SearchRequest{
+		PageSize:   20,
+		PageNumber: 1,
+	}
+}
+
 func NewSearchRequestFromHTTP(r *http.Request) *SearchRequest {
 	qs := r.URL.Query()
 

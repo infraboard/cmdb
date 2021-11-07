@@ -1,7 +1,6 @@
 package host
 
 import (
-	"context"
 	"net/http"
 	"strconv"
 
@@ -12,14 +11,6 @@ import (
 var (
 	validate = validator.New()
 )
-
-type Service interface {
-	SaveHost(context.Context, *Host) (*Host, error)
-	QueryHost(context.Context, *QueryHostRequest) (*HostSet, error)
-	UpdateHost(context.Context, *UpdateHostRequest) (*Host, error)
-	DescribeHost(context.Context, *DescribeHostRequest) (*Host, error)
-	DeleteHost(context.Context, *DeleteHostRequest) (*Host, error)
-}
 
 func NewQueryHostRequestFromHTTP(r *http.Request) *QueryHostRequest {
 	qs := r.URL.Query()

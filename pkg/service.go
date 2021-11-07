@@ -9,13 +9,16 @@ import (
 )
 
 var (
-	Host     host.Service
-	Secret   secret.Service
+	Host     host.ServiceServer
+	Secret   secret.ServiceServer
 	Resource resource.ServiceServer
-	Task     task.Service
+	Task     task.ServiceServer
 )
 
 // InitV1GRPCAPI 初始化API服务
 func InitV1GRPCAPI(server *grpc.Server) {
 	resource.RegisterServiceServer(server, Resource)
+	host.RegisterServiceServer(server, Host)
+	secret.RegisterServiceServer(server, Secret)
+	task.RegisterServiceServer(server, Task)
 }

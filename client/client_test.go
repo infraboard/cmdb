@@ -1,9 +1,12 @@
 package client_test
 
 import (
+	"context"
+	"fmt"
 	"testing"
 
 	"github.com/infraboard/cmdb/client"
+	"github.com/infraboard/cmdb/pkg/resource"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -13,6 +16,8 @@ func TestClient(t *testing.T) {
 	conf.WithClientCredentials("VYizVq1fsK7olinqVHrBvFOl", "qS9FGBoFGRaVfbgeqFVDRcgH7nNJi9fp")
 	c, err := client.NewClient(conf)
 	if should.NoError(err) {
-		c.Resource().Search(nil, nil)
+		rs, err := c.Resource().Search(context.Background(), resource.NewSearchRequest())
+		should.NoError(err)
+		fmt.Println(rs)
 	}
 }

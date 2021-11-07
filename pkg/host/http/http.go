@@ -17,7 +17,7 @@ var (
 )
 
 type handler struct {
-	service host.Service
+	service host.ServiceServer
 	log     logger.Logger
 }
 
