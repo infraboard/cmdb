@@ -3,7 +3,9 @@ package client
 import (
 	"google.golang.org/grpc"
 
+	"github.com/infraboard/cmdb/pkg/host"
 	"github.com/infraboard/cmdb/pkg/resource"
+	"github.com/infraboard/cmdb/pkg/secret"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 )
@@ -38,4 +40,14 @@ type Client struct {
 // Resource todo
 func (c *Client) Resource() resource.ServiceClient {
 	return resource.NewServiceClient(c.conn)
+}
+
+// Host todos
+func (c *Client) Host() host.ServiceClient {
+	return host.NewServiceClient(c.conn)
+}
+
+// Host todos
+func (c *Client) Secret() secret.ServiceClient {
+	return secret.NewServiceClient(c.conn)
 }

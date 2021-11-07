@@ -6,7 +6,6 @@ import (
 	"strconv"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/infraboard/cmdb/pkg/resource"
 )
 
 // use a single instance of Validate, it caches struct info
@@ -45,12 +44,6 @@ func NewQueryHostRequestFromHTTP(r *http.Request) *QueryHostRequest {
 	}
 }
 
-type QueryHostRequest struct {
-	PageSize   uint64 `json:"page_size,omitempty"`
-	PageNumber uint64 `json:"page_number,omitempty"`
-	Keywords   string `json:"keywords"`
-}
-
 func (req *QueryHostRequest) OffSet() int64 {
 	return int64(req.PageSize) * int64(req.PageNumber-1)
 }
@@ -61,46 +54,20 @@ func NewDescribeHostRequestWithID(id string) *DescribeHostRequest {
 	}
 }
 
-type DescribeHostRequest struct {
-	Id string `json:"id" validate:"required"`
-}
-
 func NewDeleteHostRequestWithID(id string) *DeleteHostRequest {
 	return &DeleteHostRequest{Id: id}
 }
 
-type DeleteHostRequest struct {
-	Id string `json:"id" validate:"required"`
-}
-
-type UpdateMode int
-
-const (
-	PUT UpdateMode = iota
-	PATCH
-)
-
 func NewUpdateHostRequest(id string) *UpdateHostRequest {
 	return &UpdateHostRequest{
 		Id:             id,
-		UpdateMode:     PUT,
+		UpdateMode:     UpdateMode_PUT,
 		UpdateHostData: &UpdateHostData{},
 	}
 }
 
-type UpdateHostRequest struct {
-	Id             string          `json:"id" validate:"required"`
-	UpdateMode     UpdateMode      `json:"update_mode"`
-	UpdateHostData *UpdateHostData `json:"data" validate:"required"`
-}
-
 func (req *UpdateHostRequest) Validate() error {
 	return validate.Struct(req)
-}
-
-type UpdateHostData struct {
-	*resource.Information
-	*Describe
 }
 
 func NewPagerResult() *PagerResult {

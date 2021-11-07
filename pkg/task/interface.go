@@ -6,8 +6,6 @@ import (
 	"strconv"
 
 	"github.com/go-playground/validator/v10"
-
-	"github.com/infraboard/cmdb/pkg/resource"
 )
 
 var (
@@ -21,13 +19,6 @@ type Service interface {
 
 func NewCreateTaskRequst() *CreateTaskRequst {
 	return &CreateTaskRequst{}
-}
-
-type CreateTaskRequst struct {
-	SecretId     string        `json:"secret_id" validate:"required,lte=100"`
-	Region       string        `json:"region"`
-	ResourceType resource.Type `json:"resource_type"`
-	Timeout      int           `json:"timeout"`
 }
 
 func (req *CreateTaskRequst) Validate() error {
@@ -55,13 +46,6 @@ func NewQueryTaskRequestFromHTTP(r *http.Request) *QueryTaskRequest {
 		PageNumber: pnUint64,
 		Keywords:   kw,
 	}
-}
-
-type QueryTaskRequest struct {
-	PageSize     uint64
-	PageNumber   uint64
-	ResourceType resource.Type
-	Keywords     string
 }
 
 func (req *QueryTaskRequest) OffSet() int64 {

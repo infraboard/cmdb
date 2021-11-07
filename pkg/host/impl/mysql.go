@@ -4,6 +4,7 @@ import (
 	"database/sql"
 
 	"github.com/infraboard/cmdb/conf"
+	"github.com/infraboard/cmdb/pkg/host"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 )
@@ -16,6 +17,7 @@ var (
 type service struct {
 	db  *sql.DB
 	log logger.Logger
+	host.UnimplementedServiceServer
 }
 
 func (s *service) Config() error {

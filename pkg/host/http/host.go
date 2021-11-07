@@ -76,7 +76,7 @@ func (h *handler) PutHost(w http.ResponseWriter, r *http.Request, ps httprouter.
 
 func (h *handler) PatchHost(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	req := host.NewUpdateHostRequest(ps.ByName("id"))
-	req.UpdateMode = host.PATCH
+	req.UpdateMode = host.UpdateMode_PATCH
 
 	if err := request.GetDataFromRequest(r, req.UpdateHostData); err != nil {
 		response.Failed(w, err)

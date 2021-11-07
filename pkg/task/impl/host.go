@@ -44,7 +44,7 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, t *task.T
 	switch secret.Vendor {
 	case resource.Vendor_ALIYUN:
 		s.log.Debugf("sync aliyun host ...")
-		client := aliConn.NewAliCloudClient(secret.APIKey, secret.APISecret, t.Region)
+		client := aliConn.NewAliCloudClient(secret.ApiKey, secret.ApiSecret, t.Region)
 		ec, err := client.EcsClient()
 		if err != nil {
 			t.Failed(err.Error())
@@ -52,16 +52,16 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, t *task.T
 		}
 		operater := ecsOp.NewEcsOperater(ec)
 		req := ecsOp.NewPageQueryRequest()
-		req.Rate = secret.RequestRate
+		req.Rate = int(secret.RequestRate)
 		pager = operater.PageQuery(req)
 	case resource.Vendor_TENCENT:
 		s.log.Debugf("sync txyun host ...")
-		client := txConn.NewTencentCloudClient(secret.APIKey, secret.APISecret, t.Region)
+		client := txConn.NewTencentCloudClient(secret.ApiKey, secret.ApiSecret, t.Region)
 		operater := cvmOp.NewCVMOperater(client.CvmClient())
 		pager = operater.PageQuery()
 	case resource.Vendor_HUAWEI:
 		s.log.Debugf("sync hwyun host ...")
-		client := hwConn.NewHuaweiCloudClient(secret.APIKey, secret.APISecret, t.Region)
+		client := hwConn.NewHuaweiCloudClient(secret.ApiKey, secret.ApiSecret, t.Region)
 		ec, err := client.EcsClient()
 		if err != nil {
 			t.Failed(err.Error())
@@ -71,7 +71,7 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, t *task.T
 		pager = operater.PageQuery()
 	case resource.Vendor_VSPHERE:
 		s.log.Debugf("sync vshpere host ...")
-		client := vsConn.NewVsphereClient(secret.Address, secret.APIKey, secret.APISecret)
+		client := vsConn.NewVsphereClient(secret.Address, secret.ApiKey, secret.ApiSecret)
 		ec, err := client.VimClient()
 		if err != nil {
 			t.Failed(err.Error())
@@ -112,9 +112,9 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, t *task.T
 		target := hs.Items[i]
 		_, err := s.host.SaveHost(ctx, target)
 		if err != nil {
-			t.AddDetailFailed(target.Name, err.Error())
+			t.AddDetailFailed(target.Information.Name, err.Error())
 		} else {
-			t.AddDetailSucceed(target.Name, "")
+			t.AddDetailSucceed(target.Information.Name, "")
 		}
 	}
 }

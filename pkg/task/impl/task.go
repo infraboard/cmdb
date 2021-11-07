@@ -82,7 +82,7 @@ func (s *service) QueryTask(ctx context.Context, req *task.QueryTaskRequest) (*t
 		ins := task.NewDefaultTask()
 		err := rows.Scan(
 			&ins.Id, &ins.Region, &ins.ResourceType, &ins.SecretId, &ins.SecretDescription, &ins.Timeout,
-			&ins.Status, &ins.Message, &ins.StartAt, &ins.EndAt, &ins.TotolSucceed, &ins.TotalFailed,
+			&ins.Status, &ins.Message, &ins.StartAt, &ins.EndAt, &ins.TotalSucceed, &ins.TotalFailed,
 		)
 		if err != nil {
 			return nil, exception.NewInternalServerError("query task error, %s", err.Error())

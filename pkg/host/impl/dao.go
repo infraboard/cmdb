@@ -45,11 +45,12 @@ func (s *service) save(ctx context.Context, h *host.Host) error {
 		return err
 	}
 
-	// vendor  h.Version.String()
+	base := h.Base
+	info := h.Information
 	_, err = stmt.Exec(
-		h.Id, h.Vendor, h.Region, h.Zone, h.CreateAt, h.ExpireAt, h.Category, h.Type, h.InstanceId,
-		h.Name, h.Description, h.Status, h.UpdateAt, h.SyncAt, h.SyncAccount, h.PublicIPToString(),
-		h.PrivateIPToString(), h.PayType, h.DescribeHash, h.ResourceHash,
+		base.Id, base.Vendor, base.Region, base.Zone, base.CreateAt, info.ExpireAt, info.Category, info.Type, base.InstanceId,
+		info.Name, info.Description, info.Status, info.UpdateAt, base.SyncAt, info.SyncAccount, info.PublicIPToString(),
+		info.PrivateIPToString(), info.PayType, base.DescribeHash, base.ResourceHash,
 	)
 	if err != nil {
 		return fmt.Errorf("save host resource info error, %s", err)
@@ -62,10 +63,11 @@ func (s *service) save(ctx context.Context, h *host.Host) error {
 	}
 	defer stmt.Close()
 
+	desc := h.Describe
 	_, err = stmt.Exec(
-		h.ResourceId, h.CPU, h.Memory, h.GPUAmount, h.GPUSpec, h.OSType, h.OSName,
-		h.SerialNumber, h.ImageID, h.InternetMaxBandwidthOut,
-		h.InternetMaxBandwidthIn, h.KeyPairNameToString(), h.SecurityGroupsToString(),
+		desc.ResourceId, desc.Cpu, desc.Memory, desc.GpuAmount, desc.GpuSpec, desc.OsType, desc.OsName,
+		desc.SerialNumber, desc.ImageId, desc.InternetMaxBandwidthOut,
+		desc.InternetMaxBandwidthIn, desc.KeyPairNameToString(), desc.SecurityGroupsToString(),
 	)
 	if err != nil {
 		return fmt.Errorf("save host resource describe error, %s", err)

@@ -38,8 +38,11 @@ clean: ## Remove previous build
 	@rm -f dist/*
 
 gen: ## generate code
-	@protoc -I=. --go_out=. --go-grpc_out=. --go_opt=module="github.com/infraboard/cmdb" --go-grpc_opt=module="github.com/infraboard/cmdb"  pkg/*/pb/*
+	@protoc -I=. --go_out=. --go-grpc_out=. --go_opt=module="${PKG}" --go-grpc_opt=module="${PKG}"  pkg/*/pb/*
 	@protoc-go-inject-tag -input=pkg/resource/*.pb.go
+	@protoc-go-inject-tag -input=pkg/host/*.pb.go
+	@protoc-go-inject-tag -input=pkg/secret/*.pb.go
+	@protoc-go-inject-tag -input=pkg/task/*.pb.go
 
 push: # push git to multi repo
 	@git push -u gitee

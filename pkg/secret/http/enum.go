@@ -11,8 +11,8 @@ import (
 
 func (h *handler) ListCrendentialType(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	resp := []utils.EnumDescribe{
-		{Value: secret.CrendentialAPIKey.String(), Describe: "API凭证"},
-		{Value: secret.CrendentialPassword.String(), Describe: "用户名密码"},
+		{Value: secret.CrendentialType_CrendentialAPIKey.String(), Describe: "API凭证"},
+		{Value: secret.CrendentialType_CrendentialPassword.String(), Describe: "用户名密码"},
 	}
 	response.Success(w, resp)
 }

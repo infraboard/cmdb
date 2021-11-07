@@ -9,7 +9,6 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/infraboard/cmdb/conf"
-	"github.com/infraboard/cmdb/pkg/resource"
 	"github.com/infraboard/mcube/crypto/cbc"
 	"github.com/infraboard/mcube/types/ftime"
 	"github.com/rs/xid"
@@ -19,49 +18,35 @@ var (
 	validate = validator.New()
 )
 
-const (
-	CrendentialAPIKey CrendentialType = iota
-	CrendentialPassword
-)
-
-type CrendentialType int
-
 func NewDefaultSecret() *Secret {
 	return &Secret{
-		CreateSecretRequest: NewCreateSecretRequest(),
+		RequestRate: 5,
 	}
-}
-
-type Secret struct {
-	Id       string `json:"id"`        // 全局唯一Id
-	CreateAt int64  `json:"create_at"` // 创建时间
-
-	*CreateSecretRequest
 }
 
 func (s *Secret) EncryptAPISecret(key string) error {
 	// 判断文本是否已经加密
-	if strings.HasPrefix(s.APISecret, conf.CIPHER_TEXT_PREFIX) {
+	if strings.HasPrefix(s.ApiSecret, conf.CIPHER_TEXT_PREFIX) {
 		return fmt.Errorf("text has ciphered")
 	}
 
-	cipherText, err := cbc.Encrypt([]byte(s.APISecret), []byte(key))
+	cipherText, err := cbc.Encrypt([]byte(s.ApiSecret), []byte(key))
 	if err != nil {
 		return err
 	}
 
 	base64Str := base64.StdEncoding.EncodeToString(cipherText)
-	s.APISecret = fmt.Sprintf("%s%s", conf.CIPHER_TEXT_PREFIX, base64Str)
+	s.ApiSecret = fmt.Sprintf("%s%s", conf.CIPHER_TEXT_PREFIX, base64Str)
 	return nil
 }
 
 func (s *Secret) DecryptAPISecret(key string) error {
 	// 判断文本是否已经是明文
-	if !strings.HasPrefix(s.APISecret, conf.CIPHER_TEXT_PREFIX) {
+	if !strings.HasPrefix(s.ApiSecret, conf.CIPHER_TEXT_PREFIX) {
 		return fmt.Errorf("text is plan text")
 	}
 
-	base64CipherText := strings.TrimPrefix(s.APISecret, conf.CIPHER_TEXT_PREFIX)
+	base64CipherText := strings.TrimPrefix(s.ApiSecret, conf.CIPHER_TEXT_PREFIX)
 
 	cipherText, err := base64.StdEncoding.DecodeString(base64CipherText)
 	if err != nil {
@@ -73,13 +58,13 @@ func (s *Secret) DecryptAPISecret(key string) error {
 		return err
 	}
 
-	s.APISecret = string(planText)
+	s.ApiSecret = string(planText)
 	return nil
 }
 
 func (s *Secret) Desense() {
-	if s.APISecret != "" {
-		s.APISecret = "******"
+	if s.ApiSecret != "" {
+		s.ApiSecret = "******"
 	}
 }
 
@@ -98,7 +83,7 @@ func (s *Secret) IsAllowRegion(region string) bool {
 }
 
 func (s *Secret) ShortDesc() string {
-	return fmt.Sprintf("%s[%s]", s.Description, s.APIKey)
+	return fmt.Sprintf("%s[%s]", s.Description, s.ApiKey)
 }
 
 func (s *Secret) AllowRegionString() string {
@@ -111,26 +96,10 @@ func (s *Secret) LoadAllowRegionFromString(regions string) {
 	}
 }
 
-type CreateSecretRequest struct {
-	Description     string          `json:"description" validate:"required,lte=100"` // 描述
-	Vendor          resource.Vendor `json:"vendor"`                                  // 厂商
-	AllowRegions    []string        `json:"allow_regions"`                           // 允许同步的区域
-	CrendentialType CrendentialType `json:"crendential_type"`                        // 凭证类型
-	Address         string          `json:"address"`                                 // 服务地址, 云商不用填写
-	APIKey          string          `json:"api_key" validate:"required,lte=100"`     // key
-	APISecret       string          `json:"api_secret" validate:"required,lte=100"`  // secrete
-	RequestRate     int             `json:"request_rate"`                            // 请求速率限制, 默认1秒5个
-}
-
 func NewSecretSet() *SecretSet {
 	return &SecretSet{
 		Items: []*Secret{},
 	}
-}
-
-type SecretSet struct {
-	Items []*Secret `json:"items"`
-	Total int64     `json:"total"`
 }
 
 func (s *SecretSet) Add(item *Secret) {
@@ -143,9 +112,16 @@ func NewSecret(req *CreateSecretRequest) (*Secret, error) {
 	}
 
 	return &Secret{
-		Id:                  xid.New().String(),
-		CreateAt:            ftime.Now().Timestamp(),
-		CreateSecretRequest: req,
+		Id:              xid.New().String(),
+		CreateAt:        ftime.Now().Timestamp(),
+		Description:     req.Description,
+		Vendor:          req.Vendor,
+		AllowRegions:    req.AllowRegions,
+		CrendentialType: req.CrendentialType,
+		Address:         req.Address,
+		ApiKey:          req.ApiKey,
+		ApiSecret:       req.ApiSecret,
+		RequestRate:     req.RequestRate,
 	}, nil
 }
 
@@ -193,12 +169,6 @@ func NewQuerySecretRequest() *QuerySecretRequest {
 	}
 }
 
-type QuerySecretRequest struct {
-	PageSize   uint64 `json:"page_size,omitempty"`
-	PageNumber uint64 `json:"page_number,omitempty"`
-	Keywords   string `json:"keywords"`
-}
-
 func (req *QuerySecretRequest) OffSet() int64 {
 	return int64(req.PageSize) * int64(req.PageNumber-1)
 }
@@ -209,16 +179,8 @@ func NewDescribeSecretRequest(id string) *DescribeSecretRequest {
 	}
 }
 
-type DescribeSecretRequest struct {
-	Id string
-}
-
 func NewDeleteSecretRequestWithID(id string) *DeleteSecretRequest {
 	return &DeleteSecretRequest{
 		Id: id,
 	}
-}
-
-type DeleteSecretRequest struct {
-	Id string
 }

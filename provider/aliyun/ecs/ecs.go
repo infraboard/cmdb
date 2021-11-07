@@ -50,14 +50,14 @@ func (o *EcsOperater) transferOne(ins ecs.Instance) *host.Host {
 	h.Information.PrivateIp = ins.InnerIpAddress.IpAddress
 	h.Information.PayType = ins.InstanceChargeType
 
-	h.Describe.CPU = int64(ins.CPU)
+	h.Describe.Cpu = int64(ins.CPU)
 	h.Describe.Memory = int64(ins.Memory)
-	h.Describe.GPUAmount = ins.GPUAmount
-	h.Describe.GPUSpec = ins.GPUSpec
-	h.Describe.OSType = ins.OsType
-	h.Describe.OSName = ins.OSName
+	h.Describe.GpuAmount = int32(ins.GPUAmount)
+	h.Describe.GpuSpec = ins.GPUSpec
+	h.Describe.OsType = ins.OsType
+	h.Describe.OsName = ins.OSName
 	h.Describe.SerialNumber = ins.SerialNumber
-	h.Describe.ImageID = ins.ImageId
+	h.Describe.ImageId = ins.ImageId
 	h.Describe.InternetMaxBandwidthOut = int64(ins.InternetMaxBandwidthOut)
 	h.Describe.InternetMaxBandwidthIn = int64(ins.InternetMaxBandwidthIn)
 	h.Describe.KeyPairName = []string{ins.KeyPairName}

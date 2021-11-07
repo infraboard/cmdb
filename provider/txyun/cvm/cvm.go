@@ -49,11 +49,11 @@ func (o *CVMOperater) transferOne(ins *cvm.Instance) *host.Host {
 	h.Information.PrivateIp = utils.SlicePtrStrv(ins.PrivateIpAddresses)
 	h.Information.PayType = utils.PtrStrV(ins.InstanceChargeType)
 
-	h.Describe.CPU = utils.PtrInt64(ins.CPU)
+	h.Describe.Cpu = utils.PtrInt64(ins.CPU)
 	h.Describe.Memory = utils.PtrInt64(ins.Memory)
-	h.Describe.OSName = utils.PtrStrV(ins.OsName)
+	h.Describe.OsName = utils.PtrStrV(ins.OsName)
 	h.Describe.SerialNumber = utils.PtrStrV(ins.Uuid)
-	h.Describe.ImageID = utils.PtrStrV(ins.ImageId)
+	h.Describe.ImageId = utils.PtrStrV(ins.ImageId)
 	if ins.InternetAccessible != nil {
 		h.Describe.InternetMaxBandwidthOut = utils.PtrInt64(ins.InternetAccessible.InternetMaxBandwidthOut)
 	}

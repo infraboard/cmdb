@@ -6,18 +6,6 @@ import (
 	"strings"
 )
 
-// Enum value maps for Type.
-var (
-	CrendentialType_name = map[int32]string{
-		0: "CRENDENTIAL_API_KEY",
-		1: "CRENDENTIAL_PASSWORD",
-	}
-	CrendentialType_value = map[string]int32{
-		"CRENDENTIAL_API_KEY":  0,
-		"CRENDENTIAL_PASSWORD": 1,
-	}
-)
-
 // ParseCrendentialTypeFromString Parse Type from string
 func ParseCrendentialTypeFromString(str string) (CrendentialType, error) {
 	key := strings.Trim(string(str), `"`)
@@ -27,10 +15,6 @@ func ParseCrendentialTypeFromString(str string) (CrendentialType, error) {
 	}
 
 	return CrendentialType(v), nil
-}
-
-func (t CrendentialType) String() string {
-	return CrendentialType_name[int32(t)]
 }
 
 // Equal type compare

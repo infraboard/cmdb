@@ -42,9 +42,9 @@ const (
 
 func (s *service) SaveHost(ctx context.Context, h *host.Host) (
 	*host.Host, error) {
-	h.Id = xid.New().String()
-	h.ResourceId = h.Id
-	h.SyncAt = ftime.Now().Timestamp()
+	h.Base.Id = xid.New().String()
+	h.Describe.ResourceId = h.Base.Id
+	h.Base.SyncAt = ftime.Now().Timestamp()
 
 	if err := s.save(ctx, h); err != nil {
 		return nil, err
@@ -88,22 +88,25 @@ func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 	)
 	for rows.Next() {
 		ins := host.NewDefaultHost()
+		base := ins.Base
+		info := ins.Information
+		desc := ins.Describe
 		err := rows.Scan(
-			&ins.Id, &ins.Vendor, &ins.Region, &ins.Zone, &ins.CreateAt, &ins.ExpireAt,
-			&ins.Category, &ins.Type, &ins.InstanceId, &ins.Name, &ins.Description,
-			&ins.Status, &ins.UpdateAt, &ins.SyncAt, &ins.SyncAccount,
-			&publicIPList, &privateIPList, &ins.PayType, &ins.DescribeHash, &ins.ResourceHash, &ins.ResourceId,
-			&ins.CPU, &ins.Memory, &ins.GPUAmount, &ins.GPUSpec, &ins.OSType, &ins.OSName,
-			&ins.SerialNumber, &ins.ImageID, &ins.InternetMaxBandwidthOut, &ins.InternetMaxBandwidthIn,
+			&base.Id, &base.Vendor, &base.Region, &base.Zone, &base.CreateAt, &info.ExpireAt,
+			&info.Category, &info.Type, &base.InstanceId, &info.Name, &info.Description,
+			&info.Status, &info.UpdateAt, &base.SyncAt, &info.SyncAccount,
+			&publicIPList, &privateIPList, &info.PayType, &base.DescribeHash, &base.ResourceHash, &desc.ResourceId,
+			&desc.Cpu, &desc.Memory, &desc.GpuAmount, &desc.GpuSpec, &desc.OsType, &desc.OsName,
+			&desc.SerialNumber, &desc.ImageId, &desc.InternetMaxBandwidthOut, &desc.InternetMaxBandwidthIn,
 			&keyPairNameList, &securityGroupsList,
 		)
 		if err != nil {
 			return nil, exception.NewInternalServerError("query host error, %s", err.Error())
 		}
-		ins.LoadPrivateIPString(privateIPList)
-		ins.LoadPublicIPString(publicIPList)
-		ins.LoadKeyPairNameString(keyPairNameList)
-		ins.LoadSecurityGroupsString(securityGroupsList)
+		info.LoadPrivateIPString(privateIPList)
+		info.LoadPublicIPString(publicIPList)
+		desc.LoadKeyPairNameString(keyPairNameList)
+		desc.LoadSecurityGroupsString(securityGroupsList)
 		set.Add(ins)
 	}
 
@@ -146,10 +149,10 @@ func (s *service) UpdateHost(ctx context.Context, req *host.UpdateHostRequest) (
 		return nil, err
 	}
 
-	oldRH, oldDH := ins.ResourceHash, ins.DescribeHash
+	oldRH, oldDH := ins.Base.ResourceHash, ins.Base.DescribeHash
 
 	switch req.UpdateMode {
-	case host.PATCH:
+	case host.UpdateMode_PATCH:
 		ins.Patch(req.UpdateHostData)
 	default:
 		ins.Put(req.UpdateHostData)
@@ -162,7 +165,7 @@ func (s *service) UpdateHost(ctx context.Context, req *host.UpdateHostRequest) (
 		}
 	}()
 
-	if oldRH != ins.ResourceHash {
+	if oldRH != ins.Base.ResourceHash {
 		// 避免SQL注入, 请使用Prepare
 		stmt, err = tx.Prepare(updateResourceSQL)
 		if err != nil {
@@ -170,11 +173,13 @@ func (s *service) UpdateHost(ctx context.Context, req *host.UpdateHostRequest) (
 		}
 		defer stmt.Close()
 
+		base := ins.Base
+		info := ins.Information
 		_, err = stmt.Exec(
-			ins.ExpireAt, ins.Category, ins.Type, ins.Name, ins.Description,
-			ins.Status, ins.UpdateAt, ins.SyncAt, ins.SyncAccount,
-			ins.PublicIp, ins.PrivateIp, ins.PayType, ins.DescribeHash, ins.ResourceHash,
-			ins.ResourceId,
+			info.ExpireAt, info.Category, info.Type, info.Name, info.Description,
+			info.Status, info.UpdateAt, base.SyncAt, info.SyncAccount,
+			info.PublicIp, info.PrivateIp, info.PayType, base.DescribeHash, base.ResourceHash,
+			ins.Describe.ResourceId,
 		)
 		if err != nil {
 			return nil, err
@@ -183,7 +188,7 @@ func (s *service) UpdateHost(ctx context.Context, req *host.UpdateHostRequest) (
 		s.log.Debug("resource data hash not changed, needn't update")
 	}
 
-	if oldDH != ins.DescribeHash {
+	if oldDH != ins.Base.DescribeHash {
 		// 避免SQL注入, 请使用Prepare
 		stmt, err = tx.Prepare(updateHostSQL)
 		if err != nil {
@@ -191,11 +196,13 @@ func (s *service) UpdateHost(ctx context.Context, req *host.UpdateHostRequest) (
 		}
 		defer stmt.Close()
 
+		base := ins.Base
+		desc := ins.Describe
 		_, err = stmt.Exec(
-			ins.CPU, ins.Memory, ins.GPUAmount, ins.GPUSpec, ins.OSType, ins.OSName,
-			ins.ImageID, ins.InternetMaxBandwidthOut,
-			ins.InternetMaxBandwidthIn, ins.KeyPairName, ins.SecurityGroups,
-			ins.Id,
+			desc.Cpu, desc.Memory, desc.GpuAmount, desc.GpuSpec, desc.OsType, desc.OsName,
+			desc.ImageId, desc.InternetMaxBandwidthOut,
+			desc.InternetMaxBandwidthIn, desc.KeyPairNameToString(), desc.SecurityGroupsToString(),
+			base.Id,
 		)
 		if err != nil {
 			return nil, err
@@ -227,13 +234,16 @@ func (s *service) DescribeHost(ctx context.Context, req *host.DescribeHostReques
 	var (
 		publicIPList, privateIPList, keyPairNameList, securityGroupsList string
 	)
+	base := ins.Base
+	info := ins.Information
+	desc := ins.Describe
 	err = queryStmt.QueryRow(args...).Scan(
-		&ins.Id, &ins.Vendor, &ins.Region, &ins.Zone, &ins.CreateAt, &ins.ExpireAt,
-		&ins.Category, &ins.Type, &ins.InstanceId, &ins.Name, &ins.Description,
-		&ins.Status, &ins.UpdateAt, &ins.SyncAt, &ins.SyncAccount,
-		&publicIPList, &privateIPList, &ins.PayType, &ins.DescribeHash, &ins.ResourceHash, &ins.ResourceId,
-		&ins.CPU, &ins.Memory, &ins.GPUAmount, &ins.GPUSpec, &ins.OSType, &ins.OSName,
-		&ins.SerialNumber, &ins.ImageID, &ins.InternetMaxBandwidthOut, &ins.InternetMaxBandwidthIn,
+		&base.Id, &base.Vendor, &base.Region, &base.Zone, &base.CreateAt, &info.ExpireAt,
+		&info.Category, &info.Type, &base.InstanceId, &info.Name, &info.Description,
+		&info.Status, &info.UpdateAt, &base.SyncAt, &info.SyncAccount,
+		&publicIPList, &privateIPList, &info.PayType, &base.DescribeHash, &base.ResourceHash, &desc.ResourceId,
+		&desc.Cpu, &desc.Memory, &desc.GpuAmount, &desc.GpuSpec, &desc.OsType, &desc.OsName,
+		&desc.SerialNumber, &desc.ImageId, &desc.InternetMaxBandwidthOut, &desc.InternetMaxBandwidthIn,
 		&keyPairNameList, &securityGroupsList,
 	)
 
@@ -244,10 +254,10 @@ func (s *service) DescribeHost(ctx context.Context, req *host.DescribeHostReques
 		return nil, exception.NewInternalServerError("describe host error, %s", err.Error())
 	}
 
-	ins.LoadPrivateIPString(privateIPList)
-	ins.LoadPublicIPString(publicIPList)
-	ins.LoadKeyPairNameString(keyPairNameList)
-	ins.LoadSecurityGroupsString(securityGroupsList)
+	info.LoadPrivateIPString(privateIPList)
+	info.LoadPublicIPString(publicIPList)
+	desc.LoadKeyPairNameString(keyPairNameList)
+	desc.LoadSecurityGroupsString(securityGroupsList)
 
 	return ins, nil
 }

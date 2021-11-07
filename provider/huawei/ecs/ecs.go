@@ -52,11 +52,11 @@ func (o *EcsOperater) transferOne(ins model.ServerDetail) *host.Host {
 	h.Information.PayType = ins.Metadata["charging_mode"]
 
 	h.Describe.SerialNumber = ins.Id
-	h.Describe.CPU, _ = strconv.ParseInt(ins.Flavor.Vcpus, 10, 64)
+	h.Describe.Cpu, _ = strconv.ParseInt(ins.Flavor.Vcpus, 10, 64)
 	h.Describe.Memory, _ = strconv.ParseInt(ins.Flavor.Ram, 10, 64)
-	h.Describe.OSType = ins.Metadata["os_type"]
-	h.Describe.OSName = ins.Metadata["image_name"]
-	h.Describe.ImageID = ins.Image.Id
+	h.Describe.OsType = ins.Metadata["os_type"]
+	h.Describe.OsName = ins.Metadata["image_name"]
+	h.Describe.ImageId = ins.Image.Id
 	h.Describe.KeyPairName = []string{ins.KeyName}
 	return h
 }

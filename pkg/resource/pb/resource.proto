@@ -3,6 +3,7 @@ syntax = "proto3";
 package infraboard.cmdb.resource;
 option go_package="github.com/infraboard/cmdb/pkg/resource";
 
+
 service Service {
     rpc Search (SearchRequest) returns (ResourceSet);
 }
@@ -117,5 +118,5 @@ message SearchRequest {
     uint64 page_number = 2;
     Vendor vendor = 3;
     Type type = 4;
-    string Keywords = 5;
+    string keywords = 5;
 }

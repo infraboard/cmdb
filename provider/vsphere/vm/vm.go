@@ -41,10 +41,10 @@ func (o *VMOperater) transferOne(ins *mo.VirtualMachine, dcName string) *host.Ho
 	h.Information.Status = string(ins.Summary.Runtime.PowerState)
 	h.Information.PrivateIp = []string{ins.Guest.IpAddress}
 
-	h.Describe.CPU = int64(ins.Config.Hardware.NumCPU)
+	h.Describe.Cpu = int64(ins.Config.Hardware.NumCPU)
 	h.Describe.Memory = int64(ins.Config.Hardware.MemoryMB)
-	h.Describe.OSType = ins.Guest.GuestFamily
-	h.Describe.OSName = ins.Guest.GuestFullName
+	h.Describe.OsType = ins.Guest.GuestFamily
+	h.Describe.OsName = ins.Guest.GuestFullName
 	h.Describe.SerialNumber = ins.Config.Uuid
 	return h
 }

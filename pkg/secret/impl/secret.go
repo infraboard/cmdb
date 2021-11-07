@@ -38,7 +38,7 @@ func (s *service) CreateSecret(ctx context.Context, req *secret.CreateSecretRequ
 
 	_, err = stmt.Exec(
 		ins.Id, ins.CreateAt, ins.Description, ins.Vendor, ins.Address,
-		ins.AllowRegionString(), ins.CrendentialType, ins.APIKey, ins.APISecret,
+		ins.AllowRegionString(), ins.CrendentialType, ins.ApiKey, ins.ApiSecret,
 		ins.RequestRate,
 	)
 	if err != nil {
@@ -80,7 +80,7 @@ func (s *service) QuerySecret(ctx context.Context, req *secret.QuerySecretReques
 		ins := secret.NewDefaultSecret()
 		err := rows.Scan(
 			&ins.Id, &ins.CreateAt, &ins.Description, &ins.Vendor, &ins.Address,
-			&allowRegions, &ins.CrendentialType, &ins.APIKey, &ins.APISecret,
+			&allowRegions, &ins.CrendentialType, &ins.ApiKey, &ins.ApiSecret,
 			&ins.RequestRate,
 		)
 		if err != nil {
@@ -123,7 +123,7 @@ func (s *service) DescribeSecret(ctx context.Context, req *secret.DescribeSecret
 	allowRegions := ""
 	err = queryStmt.QueryRow(args...).Scan(
 		&ins.Id, &ins.CreateAt, &ins.Description, &ins.Vendor, &ins.Address,
-		&allowRegions, &ins.CrendentialType, &ins.APIKey, &ins.APISecret,
+		&allowRegions, &ins.CrendentialType, &ins.ApiKey, &ins.ApiSecret,
 		&ins.RequestRate,
 	)
 
