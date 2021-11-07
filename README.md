@@ -16,7 +16,7 @@ import (
 	"fmt"
 
 	"github.com/infraboard/cmdb/client"
-	"github.com/infraboard/cmdb/pkg/resource"
+	"github.com/infraboard/cmdb/app/resource"
 )
 
 func main() {

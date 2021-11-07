@@ -1,0 +1,103 @@
+syntax = "proto3";
+
+package infraboard.cmdb.task;
+option go_package="github.com/infraboard/cmdb/app/task";
+
+import "app/resource/pb/resource.proto";
+
+service Service {
+    rpc QueryTask (QueryTaskRequest) returns (TaskSet);
+    rpc CreatTask (CreateTaskRequst) returns (Task);
+}
+
+enum Status {
+    PENDDING = 0;
+    RUNNING = 1;
+    SUCCESS = 2;
+    FAILED = 3;
+    WARNING = 4;
+}
+
+// Task 同个区域的同一种资源一次只能有1个task run
+message Task {
+    // 任务id
+    // @gotags: json:"id"
+    string id = 1;
+    // 同步的区域
+    // @gotags: json:"region"
+    string region = 2;
+    // 同步的资源
+    // @gotags: json:"resource_type"
+    infraboard.cmdb.resource.Type resource_type = 3;
+    // 关联secret
+    // @gotags: json:"secret_id"
+    string secret_id = 4;
+    // secret描述
+    // @gotags: json:"secret_description"
+    string secret_description = 5;
+    // 任务超时时间
+    // @gotags: json:"timeout"
+    int32 timeout = 6;
+    // 任务状态
+    // @gotags: json:"status"
+    Status status = 7;
+    // 失败时的异常信息
+    // @gotags: json:"message"
+    string message = 8;
+    // 开始同步的时间
+    // @gotags: json:"start_at"
+    int64 start_at = 9;
+    // 同步结束时间
+    // @gotags: json:"end_at"
+    int64 end_at = 10;
+    // 成功的条数
+    // @gotags: json:"total_succeed"
+    int64 total_succeed = 11;
+    // 失败的条数
+    // @gotags: json:"total_failed"
+    int64 total_failed = 12;
+    // 同步详情
+    // @gotags: json:"details"
+    repeated Detail details = 13;
+}
+
+message Detail {
+    // 资源名称
+    // @gotags: json:"name"
+    string name = 1;
+    // 是否同步成功
+    // @gotags: json:"is_success"
+    bool is_success = 2;
+    // 同步失败原因
+    // @gotags: json:"message"
+    string message = 3;
+}
+
+message TaskSet {
+    // @gotags: json:"total"
+    int64 total = 1;
+    // @gotags: json:"items"
+    repeated Task items = 2;
+}
+
+message QueryTaskRequest {
+    // @gotags: json:"page_size"
+    uint64 page_size = 1;
+    // @gotags: json:"page_number"
+    uint64 page_number = 2;
+    // @gotags: json:"resource_type"
+    infraboard.cmdb.resource.Type resource_type = 3;
+    // @gotags: json:"keywords"
+    string keywords = 4;
+}
+
+message CreateTaskRequst {
+    // @gotags: json:"secret_id" validate:"required,lte=100"
+    string secret_id = 1;
+    // @gotags: json:"region"
+    string region = 2;
+    // @gotags: json:"resource_type"
+    infraboard.cmdb.resource.Type resource_type = 3;
+    // @gotags: json:"timeout"
+    int64 timeout = 4;
+}

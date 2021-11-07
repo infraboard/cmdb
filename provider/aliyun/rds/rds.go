@@ -5,8 +5,8 @@ import (
 
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/rds"
 
-	cmdbRds "github.com/infraboard/cmdb/pkg/rds"
-	"github.com/infraboard/cmdb/pkg/resource"
+	cmdbRds "github.com/infraboard/cmdb/app/rds"
+	"github.com/infraboard/cmdb/app/resource"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 )

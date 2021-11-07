@@ -5,8 +5,8 @@ import (
 
 	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 
-	"github.com/infraboard/cmdb/pkg/host"
-	"github.com/infraboard/cmdb/pkg/resource"
+	"github.com/infraboard/cmdb/app/host"
+	"github.com/infraboard/cmdb/app/resource"
 	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"

@@ -3,7 +3,7 @@ package ecs
 import (
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ecs/v2/model"
 
-	"github.com/infraboard/cmdb/pkg/host"
+	"github.com/infraboard/cmdb/app/host"
 )
 
 func (o *EcsOperater) Query(req *model.ListServersDetailsRequest) (*host.HostSet, error) {

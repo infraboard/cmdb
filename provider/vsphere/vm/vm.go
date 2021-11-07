@@ -6,8 +6,8 @@ import (
 	"github.com/vmware/govmomi/vim25"
 	"github.com/vmware/govmomi/vim25/mo"
 
-	"github.com/infraboard/cmdb/pkg/host"
-	"github.com/infraboard/cmdb/pkg/resource"
+	"github.com/infraboard/cmdb/app/host"
+	"github.com/infraboard/cmdb/app/resource"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 	"github.com/vmware/govmomi/find"

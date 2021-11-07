@@ -1,7 +1,7 @@
 package cvm
 
 import (
-	"github.com/infraboard/cmdb/pkg/host"
+	"github.com/infraboard/cmdb/app/host"
 	"github.com/infraboard/cmdb/utils"
 	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 )

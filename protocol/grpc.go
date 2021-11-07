@@ -6,8 +6,8 @@ import (
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	"google.golang.org/grpc"
 
+	"github.com/infraboard/cmdb/app"
 	"github.com/infraboard/cmdb/conf"
-	"github.com/infraboard/cmdb/pkg"
 	"github.com/infraboard/mcube/grpc/middleware/recovery"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
@@ -39,7 +39,7 @@ type GRPCService struct {
 // Start 启动GRPC服务
 func (s *GRPCService) Start() {
 	// 装载所有GRPC服务
-	pkg.InitV1GRPCAPI(s.svr)
+	app.LoadGrpcApp(s.svr)
 
 	// 启动HTTP服务
 	lis, err := net.Listen("tcp", s.c.App.GRPCAddr())

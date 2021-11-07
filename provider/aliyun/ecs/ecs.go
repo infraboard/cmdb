@@ -5,8 +5,8 @@ import (
 
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/ecs"
 
-	"github.com/infraboard/cmdb/pkg/host"
-	"github.com/infraboard/cmdb/pkg/resource"
+	"github.com/infraboard/cmdb/app/host"
+	"github.com/infraboard/cmdb/app/resource"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 )

@@ -6,7 +6,7 @@ import (
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 
-	"github.com/infraboard/cmdb/pkg/host"
+	"github.com/infraboard/cmdb/app/host"
 	"github.com/infraboard/cmdb/utils"
 )
 

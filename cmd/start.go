@@ -14,19 +14,17 @@ import (
 	"github.com/infraboard/mcube/logger/zap"
 
 	"github.com/infraboard/cmdb/conf"
-	"github.com/infraboard/cmdb/pkg"
-	"github.com/infraboard/cmdb/pkg/host/impl"
-	searcher "github.com/infraboard/cmdb/pkg/resource/impl"
-	secretImpl "github.com/infraboard/cmdb/pkg/secret/impl"
-	taskImpl "github.com/infraboard/cmdb/pkg/task/impl"
 	"github.com/infraboard/cmdb/protocol"
+
+	// 注册所有服务
+	_ "github.com/infraboard/cmdb/app/all"
 )
 
 // startCmd represents the start command
 var serviceCmd = &cobra.Command{
 	Use:   "start",
-	Short: "Demo后端API服务",
-	Long:  `Demo后端API服务`,
+	Short: "CMDB后端API服务",
+	Long:  `CMDB后端API服务`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// 初始化全局变量
 		if err := loadGlobalConfig(confType); err != nil {
@@ -37,30 +35,6 @@ var serviceCmd = &cobra.Command{
 		if err := loadGlobalLogger(); err != nil {
 			return err
 		}
-
-		// 初始化服务层 Ioc初始化
-		if err := impl.Service.Config(); err != nil {
-			return err
-		}
-		pkg.Host = impl.Service
-
-		// Secret Service
-		if err := secretImpl.Service.Config(); err != nil {
-			return err
-		}
-		pkg.Secret = secretImpl.Service
-
-		// Task Service
-		if err := taskImpl.Service.Config(); err != nil {
-			return err
-		}
-		pkg.Task = taskImpl.Service
-
-		// resource Service
-		if err := searcher.Service.Config(); err != nil {
-			return err
-		}
-		pkg.Resource = searcher.Service
 
 		// 启动服务
 		ch := make(chan os.Signal, 1)

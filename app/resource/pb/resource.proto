@@ -1,0 +1,122 @@
+syntax = "proto3";
+
+package infraboard.cmdb.resource;
+option go_package="github.com/infraboard/cmdb/app/resource";
+
+
+service Service {
+    rpc Search (SearchRequest) returns (ResourceSet);
+}
+
+enum Vendor {
+    NULL = 0;
+    ALIYUN = 1;
+    TENCENT = 2;
+    HUAWEI = 3;
+    VSPHERE = 4;
+}
+
+enum Type {
+    UNSUPORT = 0;
+    HOST = 1;
+    RDS = 2;
+}
+
+message Resource {
+    // 资源元数据信息
+    // @gotags: json:"base"
+    Base base = 1;
+    // 资源信息
+    // @gotags: json:"information"
+    Information information = 2;
+}
+
+message ResourceSet {
+    // @gotags: json:"items"
+    repeated Resource items = 1;
+    // @gotags: json:"total"
+    int64 total = 2;
+}
+
+message Base {
+    // 全局唯一Id
+    // @gotags: json:"id"
+    string id = 1; 
+    // 同步时间
+    // @gotags: json:"sync_at"
+    int64 sync_at = 2;  
+    // 用于同步的凭证ID
+    // @gotags: json:"secret_id"
+    string secret_id = 3; 
+    // 厂商
+    // @gotags: json:"vendor"
+    Vendor vendor = 4;
+    // 资源类型
+    // @gotags: json:"resource_type"
+    Type resource_type = 5;
+    // 地域
+    // @gotags: json:"region"
+    string region = 6; 
+    // 区域
+    // @gotags: json:"zone"
+    string zone = 7; 
+    // 创建时间
+    // @gotags: json:"create_at"
+    int64  create_at = 8;
+    // 实例ID
+    // @gotags: json:"instance_id"
+    string instance_id =9;
+    // 基础数据Hash
+    // @gotags: json:"resource_hash"
+    string resource_hash = 10;
+    // 描述数据Hash
+    // @gotags: json:"describe_hash"
+    string describe_hash = 11;
+}
+
+message Information {
+    // 过期时间
+    // @gotags: json:"expire_at"
+    int64 expire_at = 1;
+    // 种类
+    // @gotags: json:"category"
+    string category = 2;
+    // 规格
+    // @gotags: json:"type"
+    string type = 3;
+    // 名称
+    // @gotags: json:"name"
+    string name = 4;
+    // 描述
+    // @gotags: json:"description"
+    string description = 5;
+    // 服务商中的状态
+    // @gotags: json:"status"
+    string status = 6;
+    // 标签
+    // @gotags: json:"tags"
+    map<string,string> tags = 7;
+    // 更新时间
+    // @gotags: json:"update_at"
+    int64 update_at = 8;
+    // 同步的账号
+    // @gotags: json:"sync_account"
+    string sync_account = 9;
+    // 公网IP
+    // @gotags: json:"public_ip"
+    repeated string public_ip = 10;
+    // 内网IP
+    // @gotags: json:"private_ip"
+    repeated string private_ip = 11;
+    // 实例付费方式
+    // @gotags: json:"pay_type"
+    string pay_type = 12;
+}
+
+message SearchRequest {
+    uint64 page_size = 1;
+    uint64 page_number = 2;
+    Vendor vendor = 3;
+    Type type = 4;
+    string keywords = 5;
+}
