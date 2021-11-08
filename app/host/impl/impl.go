@@ -1,10 +1,10 @@
-package grpc
+package impl
 
 import (
 	"database/sql"
 
 	"github.com/infraboard/cmdb/app"
-	"github.com/infraboard/cmdb/app/resource"
+	"github.com/infraboard/cmdb/app/host"
 	"github.com/infraboard/cmdb/conf"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
@@ -13,14 +13,14 @@ import (
 
 var (
 	// Service 服务实例
+
 	svr = &service{}
 )
 
 type service struct {
 	db  *sql.DB
 	log logger.Logger
-
-	resource.UnimplementedServiceServer
+	host.UnimplementedServiceServer
 }
 
 func (s *service) Config() error {
@@ -35,11 +35,11 @@ func (s *service) Config() error {
 }
 
 func (s *service) Name() string {
-	return resource.AppName
+	return host.AppName
 }
 
 func (s *service) Registry(server *grpc.Server) {
-	resource.RegisterServiceServer(server, svr)
+	host.RegisterServiceServer(server, svr)
 }
 
 func init() {
