@@ -8,6 +8,8 @@ import (
 
 	"github.com/infraboard/cmdb/app"
 	"github.com/infraboard/cmdb/conf"
+
+	kc "github.com/infraboard/keyauth/client"
 	"github.com/infraboard/mcube/grpc/middleware/recovery"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
@@ -17,9 +19,15 @@ import (
 func NewGRPCService() *GRPCService {
 	log := zap.L().Named("GRPC Service")
 
+	c, err := conf.C().Keyauth.Client()
+	if err != nil {
+		panic(err)
+	}
+
 	rc := recovery.NewInterceptor(recovery.NewZapRecoveryHandler())
 	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
 		rc.UnaryServerInterceptor(),
+		kc.GrpcAuthUnaryServerInterceptor(c),
 	)))
 
 	return &GRPCService{
