@@ -9,8 +9,8 @@ import (
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 
-	"github.com/infraboard/cmdb/app"
 	"github.com/infraboard/cmdb/conf"
+	"github.com/infraboard/mcube/app"
 	"github.com/infraboard/mcube/http/middleware/accesslog"
 	"github.com/infraboard/mcube/http/middleware/cors"
 	"github.com/infraboard/mcube/http/middleware/recovery"
@@ -54,9 +54,7 @@ type HTTPService struct {
 // Start 启动服务
 func (s *HTTPService) Start() error {
 	// 装置子服务路由
-	if err := app.LoadHttpApp(s.c.App.Name, s.r); err != nil {
-		return err
-	}
+	app.LoadHttpApp(s.c.App.Name, s.r)
 
 	// 启动 HTTP服务
 	s.l.Infof("HTTP服务启动成功, 监听地址: %s", s.server.Addr)

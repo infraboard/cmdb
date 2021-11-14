@@ -10,6 +10,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/infraboard/mcube/app"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 
@@ -36,11 +37,15 @@ var serviceCmd = &cobra.Command{
 			return err
 		}
 
+		// 初始化全局app
+		if err := app.InitAllApp(); err != nil {
+			return err
+		}
+
 		// 启动服务
 		ch := make(chan os.Signal, 1)
 		signal.Notify(ch, syscall.SIGTERM, syscall.SIGINT, syscall.SIGHUP, syscall.SIGQUIT)
 
-		// 初始化服务
 		svr, err := newService(conf.C())
 		if err != nil {
 			return err
@@ -77,6 +82,10 @@ type service struct {
 }
 
 func (s *service) start() error {
+	s.log.Infof("loaded grpc app: %s", app.LoadedGrpcApp())
+	s.log.Infof("loaded http app: %s", app.LoadedHttpApp())
+	s.log.Infof("loaded internal app: %s", app.LoadedInternalApp())
+
 	go s.grpc.Start()
 	return s.http.Start()
 }

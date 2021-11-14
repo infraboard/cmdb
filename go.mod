@@ -10,7 +10,7 @@ require (
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.0
 	github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.0.66
-	github.com/infraboard/mcube v1.4.5
+	github.com/infraboard/mcube v1.5.3
 	github.com/rs/xid v1.3.0
 	github.com/spf13/cobra v1.2.1
 	github.com/stretchr/testify v1.7.0

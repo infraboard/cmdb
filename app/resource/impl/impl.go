@@ -3,9 +3,9 @@ package impl
 import (
 	"database/sql"
 
-	"github.com/infraboard/cmdb/app"
 	"github.com/infraboard/cmdb/app/resource"
 	"github.com/infraboard/cmdb/conf"
+	"github.com/infraboard/mcube/app"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 	"google.golang.org/grpc"

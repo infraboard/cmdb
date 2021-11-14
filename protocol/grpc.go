@@ -6,8 +6,8 @@ import (
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	"google.golang.org/grpc"
 
-	"github.com/infraboard/cmdb/app"
 	"github.com/infraboard/cmdb/conf"
+	"github.com/infraboard/mcube/app"
 	"github.com/infraboard/mcube/grpc/middleware/recovery"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
