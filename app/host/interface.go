@@ -7,9 +7,7 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-const (
-	AppName = "Host"
-)
+
 
 // use a single instance of Validate, it caches struct info
 var (

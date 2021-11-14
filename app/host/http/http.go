@@ -1,6 +1,7 @@
 package http
 
 import (
+	"github.com/infraboard/mcube/http/label"
 	"github.com/infraboard/mcube/http/router"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
@@ -29,12 +30,13 @@ func (h *handler) Name() string {
 }
 
 func (h *handler) Registry(r router.SubRouter) {
-	r.Handle("GET", "/hosts", h.QueryHost)
-	r.Handle("POST", "/hosts", h.CreateHost)
-	r.Handle("GET", "/hosts/:id", h.DescribeHost)
-	r.Handle("DELETE", "/hosts/:id", h.DeleteHost)
-	r.Handle("PUT", "/hosts/:id", h.PutHost)
-	r.Handle("PATCH", "/hosts/:id", h.PatchHost)
+	hr := r.ResourceRouter("host")
+	hr.Handle("GET", "/hosts", h.QueryHost).AddLabel(label.List)
+	hr.Handle("POST", "/hosts", h.CreateHost).AddLabel(label.Create)
+	hr.Handle("GET", "/hosts/:id", h.DescribeHost).AddLabel(label.Get)
+	hr.Handle("DELETE", "/hosts/:id", h.DeleteHost).AddLabel(label.Delete)
+	hr.Handle("PUT", "/hosts/:id", h.PutHost).AddLabel(label.Update)
+	hr.Handle("PATCH", "/hosts/:id", h.PatchHost).AddLabel(label.Update)
 }
 
 func init() {

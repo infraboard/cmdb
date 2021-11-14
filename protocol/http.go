@@ -10,6 +10,7 @@ import (
 	"github.com/infraboard/mcube/logger/zap"
 
 	"github.com/infraboard/cmdb/conf"
+	"github.com/infraboard/keyauth/client/interceptor"
 	"github.com/infraboard/mcube/app"
 	"github.com/infraboard/mcube/http/middleware/accesslog"
 	"github.com/infraboard/mcube/http/middleware/cors"
@@ -20,11 +21,19 @@ import (
 
 // NewHTTPService 构建函数
 func NewHTTPService() *HTTPService {
+	c, err := conf.C().Keyauth.Client()
+	if err != nil {
+		panic(err)
+	}
+	auther := interceptor.NewHTTPAuther(c)
+
 	r := httprouter.New()
 	r.Use(recovery.NewWithLogger(zap.L().Named("Recovery")))
 	r.Use(accesslog.NewWithLogger(zap.L().Named("AccessLog")))
 	r.Use(cors.AllowAll())
 	r.EnableAPIRoot()
+	r.SetAuther(auther)
+	r.Auth(true)
 
 	server := &http.Server{
 		ReadHeaderTimeout: 60 * time.Second,
