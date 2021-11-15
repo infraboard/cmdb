@@ -1,9 +1,9 @@
 [app]
 name = "cmdb"
 http_host = "0.0.0.0"
-http_port = "8050"
+http_port = "8060"
 grpc_host = "0.0.0.0"
-grpc_port = "18050"
+grpc_port = "18060"
 key  = "this is your app key"
 
 [mysql]
@@ -12,6 +12,12 @@ port = "3306"
 username = "cmdb"
 password = "xxxx"
 database = "cmdb"
+
+[keyauth]
+host = "127.0.0.1"
+port = "18050"
+client_id = "xx"
+client_secret = "xxx"
 
 [log]
 level = "debug"

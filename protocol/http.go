@@ -60,10 +60,14 @@ type HTTPService struct {
 	server *http.Server
 }
 
+func (s *HTTPService) Addr() string {
+	return fmt.Sprintf("%s/api/v1", s.c.App.Name)
+}
+
 // Start 启动服务
 func (s *HTTPService) Start() error {
 	// 装置子服务路由
-	app.LoadHttpApp(s.c.App.Name, s.r)
+	app.LoadHttpApp(s.Addr(), s.r)
 
 	// 启动 HTTP服务
 	s.l.Infof("HTTP服务启动成功, 监听地址: %s", s.server.Addr)

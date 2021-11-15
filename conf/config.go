@@ -10,6 +10,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 
 	kc "github.com/infraboard/keyauth/client"
+	"github.com/infraboard/mcube/logger/zap"
 )
 
 const (
@@ -110,6 +111,7 @@ func (m *mySQL) GetDB() (*sql.DB, error) {
 }
 
 func (m *mySQL) getDBConn() (*sql.DB, error) {
+	zap.L().Infof("connect to mysql: %s:%s", m.Host, m.Port)
 	var err error
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&multiStatements=true", m.UserName, m.Password, m.Host, m.Port, m.Database)
 	db, err := sql.Open("mysql", dsn)
@@ -131,7 +133,7 @@ func (m *mySQL) getDBConn() (*sql.DB, error) {
 // newDefaultMySQL todo
 func newDefaultMySQL() *mySQL {
 	return &mySQL{
-		Database:    "go_course",
+		Database:    "cmdb",
 		Host:        "127.0.0.1",
 		Port:        "3306",
 		MaxOpenConn: 200,
@@ -157,6 +159,7 @@ func (a *keyauth) Client() (*kc.Client, error) {
 	if kc.C() == nil {
 		conf := kc.NewDefaultConfig()
 		conf.SetAddress(a.Addr())
+		zap.L().Infof("connect to keyauth: %s", a.Addr())
 		conf.SetClientCredentials(a.ClientID, a.ClientSecret)
 		client, err := kc.NewClient(conf)
 		if err != nil {
