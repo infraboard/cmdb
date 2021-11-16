@@ -65,10 +65,14 @@ type HTTPService struct {
 	endpoint endpoint.ServiceClient
 }
 
+func (s *HTTPService) Addr() string {
+	return fmt.Sprintf("%s/api/v1", s.c.App.Name)
+}
+
 // Start 启动服务
 func (s *HTTPService) Start() error {
 	// 装置子服务路由
-	app.LoadHttpApp(s.c.App.Name, s.r)
+	app.LoadHttpApp(s.Addr(), s.r)
 
 	// 注册路由条目
 	s.RegistryEndpoint()

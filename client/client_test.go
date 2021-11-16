@@ -13,7 +13,7 @@ import (
 func TestClient(t *testing.T) {
 	should := assert.New(t)
 	conf := client.NewConfig("localhost:18060")
-	conf.WithClientCredentials("a8RY6GtNygBWScSypq7czpnF", "iHnyjApDwIGj9eWh4fjg5qrWuOFwTmDB")
+	conf.WithClientCredentials("pz3HiVQA3indzSHzFKtLHaJW", "vDvlAtqN3rS9CZcHugXp6QBuk28zRjud")
 	c, err := client.NewClient(conf)
 	if should.NoError(err) {
 		rs, err := c.Resource().Search(context.Background(), resource.NewSearchRequest())
