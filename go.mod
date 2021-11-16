@@ -11,8 +11,8 @@ require (
 	github.com/gopherjs/gopherjs v0.0.0-20181103185306-d547d1d9531e // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.2
 	github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.0.66
-	github.com/infraboard/keyauth v0.6.3
-	github.com/infraboard/mcube v1.5.3
+	github.com/infraboard/keyauth v0.6.4
+	github.com/infraboard/mcube v1.5.4
 	github.com/rs/xid v1.3.0
 	github.com/smartystreets/assertions v0.0.0-20190116191733-b6c0e53d7304 // indirect
 	github.com/spf13/cobra v1.2.1

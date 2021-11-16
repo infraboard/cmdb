@@ -10,7 +10,9 @@ import (
 	"github.com/infraboard/mcube/logger/zap"
 
 	"github.com/infraboard/cmdb/conf"
+	"github.com/infraboard/keyauth/app/endpoint"
 	"github.com/infraboard/keyauth/client/interceptor"
+	"github.com/infraboard/keyauth/version"
 	"github.com/infraboard/mcube/app"
 	"github.com/infraboard/mcube/http/middleware/accesslog"
 	"github.com/infraboard/mcube/http/middleware/cors"
@@ -45,10 +47,11 @@ func NewHTTPService() *HTTPService {
 		Handler:           cors.AllowAll().Handler(r),
 	}
 	return &HTTPService{
-		r:      r,
-		server: server,
-		l:      zap.L().Named("HTTP Service"),
-		c:      conf.C(),
+		r:        r,
+		server:   server,
+		l:        zap.L().Named("HTTP Service"),
+		c:        conf.C(),
+		endpoint: c.Endpoint(),
 	}
 }
 
@@ -58,12 +61,17 @@ type HTTPService struct {
 	l      logger.Logger
 	c      *conf.Config
 	server *http.Server
+
+	endpoint endpoint.ServiceClient
 }
 
 // Start 启动服务
 func (s *HTTPService) Start() error {
 	// 装置子服务路由
 	app.LoadHttpApp(s.c.App.Name, s.r)
+
+	// 注册路由条目
+	s.RegistryEndpoint()
 
 	// 启动 HTTP服务
 	s.l.Infof("HTTP服务启动成功, 监听地址: %s", s.server.Addr)
@@ -86,4 +94,17 @@ func (s *HTTPService) Stop() error {
 		s.l.Errorf("graceful shutdown timeout, force exit")
 	}
 	return nil
+}
+
+func (s *HTTPService) RegistryEndpoint() {
+	// 注册服务权限条目
+	s.l.Info("start registry endpoints ...")
+
+	req := endpoint.NewRegistryRequest(version.Short(), s.r.GetEndpoints().UniquePathEntry())
+	_, err := s.endpoint.RegistryEndpoint(context.Background(), req)
+	if err != nil {
+		s.l.Warnf("registry endpoints error, %s", err)
+	} else {
+		s.l.Debug("service endpoints registry success")
+	}
 }
