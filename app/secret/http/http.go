@@ -1,6 +1,7 @@
 package http
 
 import (
+	"github.com/infraboard/mcube/http/label"
 	"github.com/infraboard/mcube/http/router"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
@@ -29,11 +30,13 @@ func (h *handler) Name() string {
 }
 
 func (h *handler) Registry(r router.SubRouter) {
-	r.Handle("POST", "/secrets", h.CreateSecret)
-	r.Handle("GET", "/secrets", h.QuerySecret)
-	r.Handle("GET", "/secrets/:id", h.DescribeSecret)
-	r.Handle("DELETE", "/secrets/:id", h.DeleteSecret)
-	r.Handle("GET", "/crendential_types", h.ListCrendentialType)
+	sr := r.ResourceRouter("secret")
+	sr.Permission(true)
+	sr.Handle("POST", "/secrets", h.CreateSecret).AddLabel(label.Create)
+	sr.Handle("GET", "/secrets", h.QuerySecret).AddLabel(label.List)
+	sr.Handle("GET", "/secrets/:id", h.DescribeSecret).AddLabel(label.Get)
+	sr.Handle("DELETE", "/secrets/:id", h.DeleteSecret).AddLabel(label.Delete)
+	sr.Handle("GET", "/crendential_types", h.ListCrendentialType).DisablePermission()
 }
 
 func init() {

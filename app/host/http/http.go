@@ -31,6 +31,7 @@ func (h *handler) Name() string {
 
 func (h *handler) Registry(r router.SubRouter) {
 	hr := r.ResourceRouter("host")
+	hr.Permission(true)
 	hr.Handle("GET", "/hosts", h.QueryHost).AddLabel(label.List)
 	hr.Handle("POST", "/hosts", h.CreateHost).AddLabel(label.Create)
 	hr.Handle("GET", "/hosts/:id", h.DescribeHost).AddLabel(label.Get)

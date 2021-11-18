@@ -1,6 +1,7 @@
 package http
 
 import (
+	"github.com/infraboard/mcube/http/label"
 	"github.com/infraboard/mcube/http/router"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
@@ -29,8 +30,10 @@ func (h *handler) Name() string {
 }
 
 func (h *handler) Registry(r router.SubRouter) {
-	r.Handle("GET", "/tasks", h.QueryTask)
-	r.Handle("POST", "/tasks", h.CreatTask)
+	tr := r.ResourceRouter("task")
+	tr.Permission(true)
+	tr.Handle("GET", "/tasks", h.QueryTask).AddLabel(label.List)
+	tr.Handle("POST", "/tasks", h.CreatTask).AddLabel(label.Create)
 }
 
 func init() {
