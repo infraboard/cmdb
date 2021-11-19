@@ -16,6 +16,7 @@
 # vendor/
 
 # 二进制文件
+cmdb
 cmdb-api
 
 # 本地配置文件
