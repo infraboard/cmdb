@@ -13,7 +13,7 @@ import (
 	aliConn "github.com/infraboard/cmdb/provider/aliyun/connectivity"
 	ecsOp "github.com/infraboard/cmdb/provider/aliyun/ecs"
 	awsConn "github.com/infraboard/cmdb/provider/aws/connectivity"
-	"github.com/infraboard/cmdb/provider/aws/ec2"
+	ec2Op "github.com/infraboard/cmdb/provider/aws/ec2"
 	hwConn "github.com/infraboard/cmdb/provider/huawei/connectivity"
 	hwEcsOp "github.com/infraboard/cmdb/provider/huawei/ecs"
 	txConn "github.com/infraboard/cmdb/provider/txyun/connectivity"
@@ -79,8 +79,8 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, t *task.T
 			t.Failed(err.Error())
 			return
 		}
-		operater := ec2.NewEc2Operator(ec)
-		req := ec2.NewPageQueryRequest()
+		operater := ec2Op.NewEc2Operator(ec)
+		req := ec2Op.NewPageQueryRequest()
 		req.Rate = int(secret.RequestRate)
 		pager = operater.PageQuery(req)
 	case resource.Vendor_VSPHERE:
