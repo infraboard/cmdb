@@ -1,14 +1,14 @@
 package ec2
 
 import (
-	"time"
-
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
-	"github.com/infraboard/cmdb/app/host"
-	"github.com/infraboard/cmdb/app/resource"
+
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
+
+	"github.com/infraboard/cmdb/app/host"
+	"github.com/infraboard/cmdb/app/resource"
 )
 
 type Ec2Operater struct {
@@ -58,15 +58,6 @@ func (o *Ec2Operater) transferOne(ins types.Instance) *host.Host {
 	h.Describe.KeyPairName = []string{*ins.KeyName}
 	h.Describe.SecurityGroups = ParseGroup(ins.SecurityGroups)
 	return h
-}
-
-func (o *Ec2Operater) parseTime(t string) int64 {
-	ts, err := time.Parse("2006-01-02T15:04Z", t)
-	if err != nil {
-		o.log.Errorf("parse time %s error, %s", t, err)
-		return 0
-	}
-	return ts.UnixNano() / 1000000
 }
 
 func ParseTagName(items []types.Tag) string {

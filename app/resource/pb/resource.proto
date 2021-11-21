@@ -14,6 +14,7 @@ enum Vendor {
     TENCENT = 2;
     HUAWEI = 3;
     VSPHERE = 4;
+    AMAZON = 5;
 }
 
 enum Type {

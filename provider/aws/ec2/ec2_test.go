@@ -14,8 +14,15 @@ var (
 )
 
 func TestQuery(t *testing.T) {
-	res, _ := operater.Query()
-	fmt.Println(res)
+	req := op.NewPageQueryRequest()
+	pager := operater.PageQuery(req)
+
+	hasNext := true
+	for hasNext {
+		p := pager.Next()
+		hasNext = p.HasNext
+		fmt.Println(p.Data)
+	}
 }
 
 func init() {
