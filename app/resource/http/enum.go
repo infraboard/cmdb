@@ -52,8 +52,9 @@ func (h *handler) ListVendorRegion(w http.ResponseWriter, r *http.Request) {
 	resp := map[string][]utils.EnumDescribe{
 		resource.Vendor_ALIYUN.String():  ali_region.Regions,
 		resource.Vendor_TENCENT.String(): tx_region.Regions,
-		resource.Vendor_VSPHERE.String(): hw_region.Regions,
+		resource.Vendor_HUAWEI.String():  hw_region.Regions,
 		resource.Vendor_AMAZON.String():  aws_region.Regions,
+		resource.Vendor_VSPHERE.String(): hw_region.Regions,
 	}
 	response.Success(w, resp)
 }
