@@ -49,6 +49,7 @@ gen: ## generate code
 	@protoc-go-inject-tag -input=app/host/*.pb.go
 	@protoc-go-inject-tag -input=app/secret/*.pb.go
 	@protoc-go-inject-tag -input=app/task/*.pb.go
+	@protoc-go-inject-tag -input=app/bill/*.pb.go
 
 push: # push git to multi repo
 	@git push -u gitee

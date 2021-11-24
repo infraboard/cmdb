@@ -27,22 +27,25 @@ func (h *handler) ListVendor(w http.ResponseWriter, r *http.Request) {
 func (h *handler) ListResourceType(w http.ResponseWriter, r *http.Request) {
 	resp := map[string][]utils.EnumDescribe{
 		resource.Vendor_ALIYUN.String(): {
-			{Name: "主机", Value: resource.Type_HOST.String(), Describe: "阿里云ECS"},
-			{Name: "关系型数据库", Value: resource.Type_RDS.String(), Describe: "阿里云RDS"},
+			{Name: "主机", Value: resource.Type_HOST.String(), Describe: "ECS"},
+			{Name: "关系型数据库", Value: resource.Type_RDS.String(), Describe: "RDS"},
+			{Name: "月账单", Value: resource.Type_BILL.String(), Describe: "月账单"},
 		},
 		resource.Vendor_TENCENT.String(): {
-			{Name: "主机", Value: resource.Type_HOST.String(), Describe: "腾讯云CVM"},
-			{Name: "关系型数据库", Value: resource.Type_RDS.String(), Describe: "腾讯云CDB"},
+			{Name: "主机", Value: resource.Type_HOST.String(), Describe: "CVM"},
+			{Name: "关系型数据库", Value: resource.Type_RDS.String(), Describe: "CDB"},
+			{Name: "月账单", Value: resource.Type_BILL.String(), Describe: "月账单"},
 		},
 		resource.Vendor_HUAWEI.String(): {
-			{Name: "主机", Value: resource.Type_HOST.String(), Describe: "华为云ECS"},
-			{Name: "关系型数据库", Value: resource.Type_RDS.String(), Describe: "华为云RDS"},
+			{Name: "主机", Value: resource.Type_HOST.String(), Describe: "ECS"},
+			{Name: "关系型数据库", Value: resource.Type_RDS.String(), Describe: "RDS"},
+			{Name: "月账单", Value: resource.Type_BILL.String(), Describe: "月账单"},
 		},
 		resource.Vendor_AMAZON.String(): {
-			{Name: "主机", Value: resource.Type_HOST.String(), Describe: "AWS EC2"},
+			{Name: "主机", Value: resource.Type_HOST.String(), Describe: "EC2"},
 		},
 		resource.Vendor_VSPHERE.String(): {
-			{Name: "主机", Value: resource.Type_HOST.String(), Describe: "VMware vm"},
+			{Name: "主机", Value: resource.Type_HOST.String(), Describe: "VM"},
 		},
 	}
 	response.Success(w, resp)

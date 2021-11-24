@@ -21,6 +21,7 @@ enum Type {
     UNSUPORT = 0;
     HOST = 1;
     RDS = 2;
+    BILL = 99;
 }
 
 message Resource {
