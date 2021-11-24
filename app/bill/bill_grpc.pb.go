@@ -19,7 +19,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ServiceClient interface {
 	SaveBill(ctx context.Context, in *Bill, opts ...grpc.CallOption) (*Bill, error)
-	QueryHost(ctx context.Context, in *QueryBillRequest, opts ...grpc.CallOption) (*BillSet, error)
+	QueryBill(ctx context.Context, in *QueryBillRequest, opts ...grpc.CallOption) (*BillSet, error)
 }
 
 type serviceClient struct {
@@ -39,9 +39,9 @@ func (c *serviceClient) SaveBill(ctx context.Context, in *Bill, opts ...grpc.Cal
 	return out, nil
 }
 
-func (c *serviceClient) QueryHost(ctx context.Context, in *QueryBillRequest, opts ...grpc.CallOption) (*BillSet, error) {
+func (c *serviceClient) QueryBill(ctx context.Context, in *QueryBillRequest, opts ...grpc.CallOption) (*BillSet, error) {
 	out := new(BillSet)
-	err := c.cc.Invoke(ctx, "/infraboard.cmdb.bill.Service/QueryHost", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/infraboard.cmdb.bill.Service/QueryBill", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -53,7 +53,7 @@ func (c *serviceClient) QueryHost(ctx context.Context, in *QueryBillRequest, opt
 // for forward compatibility
 type ServiceServer interface {
 	SaveBill(context.Context, *Bill) (*Bill, error)
-	QueryHost(context.Context, *QueryBillRequest) (*BillSet, error)
+	QueryBill(context.Context, *QueryBillRequest) (*BillSet, error)
 	mustEmbedUnimplementedServiceServer()
 }
 
@@ -64,8 +64,8 @@ type UnimplementedServiceServer struct {
 func (UnimplementedServiceServer) SaveBill(context.Context, *Bill) (*Bill, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SaveBill not implemented")
 }
-func (UnimplementedServiceServer) QueryHost(context.Context, *QueryBillRequest) (*BillSet, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method QueryHost not implemented")
+func (UnimplementedServiceServer) QueryBill(context.Context, *QueryBillRequest) (*BillSet, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method QueryBill not implemented")
 }
 func (UnimplementedServiceServer) mustEmbedUnimplementedServiceServer() {}
 
@@ -98,20 +98,20 @@ func _Service_SaveBill_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Service_QueryHost_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Service_QueryBill_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(QueryBillRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ServiceServer).QueryHost(ctx, in)
+		return srv.(ServiceServer).QueryBill(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/infraboard.cmdb.bill.Service/QueryHost",
+		FullMethod: "/infraboard.cmdb.bill.Service/QueryBill",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).QueryHost(ctx, req.(*QueryBillRequest))
+		return srv.(ServiceServer).QueryBill(ctx, req.(*QueryBillRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -128,8 +128,8 @@ var Service_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Service_SaveBill_Handler,
 		},
 		{
-			MethodName: "QueryHost",
-			Handler:    _Service_QueryHost_Handler,
+			MethodName: "QueryBill",
+			Handler:    _Service_QueryBill_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

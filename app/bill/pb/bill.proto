@@ -8,7 +8,7 @@ import "app/resource/pb/resource.proto";
 
 service Service {
     rpc SaveBill(Bill) returns(Bill) {}
-    rpc QueryHost(QueryBillRequest) returns(BillSet) {}
+    rpc QueryBill(QueryBillRequest) returns(BillSet) {}
 }
 
 // 账单数据结构参数:
@@ -93,5 +93,25 @@ message BillSet {
 
 
 message QueryBillRequest {
+    // 分页
+    // @gotags: json:"page"
     infraboard.mcube.page.PageRequest page = 1;
+    // 厂商
+    // @gotags: json:"vendor"
+    infraboard.cmdb.resource.Vendor vendor = 2;
+    // 账单的月份
+    // @gotags: json:"month"
+    string month = 3;
+    // 账号Id
+    // @gotags: json:"account_id"
+    string account_id = 4;
+    // 地域Id
+    // @gotags: json:"region_code"
+    string region_code = 5;
+    // 产品编码
+    // @gotags: json:"product_code"
+    string product_code = 6;
+    // 实例ID
+    // @gotags: json:"instance_id"
+    string instance_id = 7;
 }
