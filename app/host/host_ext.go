@@ -27,6 +27,10 @@ func (h *Host) Put(req *UpdateHostData) {
 	h.GenHash()
 }
 
+func (h *Host) ShortDesc() string {
+	return fmt.Sprintf("%s %s", h.Information.Name, h.Information.PrivateIp)
+}
+
 func (h *Host) Patch(req *UpdateHostData) error {
 	err := ObjectPatch(h.Information, req.Information)
 	if err != nil {
@@ -104,4 +108,15 @@ func (s *HostSet) Add(item *Host) {
 func (s *HostSet) ToJsonString() string {
 	b, _ := json.Marshal(s)
 	return string(b)
+}
+
+func (req *DescribeHostRequest) Where() (string, interface{}) {
+	switch req.DescribeBy {
+	case DescribeBy_HOST_ID:
+		return "id = ?", req.Value
+	case DescribeBy_INSTANCE_ID:
+		return "instance_id = ?", req.Value
+	default:
+		return "", nil
+	}
 }

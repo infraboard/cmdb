@@ -5,6 +5,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/infraboard/cmdb/app/host"
 	"github.com/infraboard/cmdb/provider/vsphere/connectivity"
 	"github.com/infraboard/mcube/logger/zap"
 
@@ -16,13 +17,11 @@ var (
 )
 
 func TestQuery(t *testing.T) {
-	resp, err := operater.Query()
+	err := operater.Query(func(h *host.Host) {
+		fmt.Println(h)
+	})
 	if err != nil {
 		t.Fatal(err)
-	}
-
-	for i := range resp.Items {
-		fmt.Println(resp.Items[i])
 	}
 }
 

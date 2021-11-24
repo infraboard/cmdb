@@ -2,6 +2,7 @@ package impl
 
 import (
 	"context"
+	"time"
 
 	"github.com/infraboard/cmdb/app/resource"
 	"github.com/infraboard/cmdb/app/secret"
@@ -44,7 +45,8 @@ func (s *service) CreatTask(ctx context.Context, req *task.CreateTaskRequst) (
 	// 资源同步
 	switch req.ResourceType {
 	case resource.Type_HOST:
-		go s.syncHost(ctx, secret, t, s.SyncTaskCallback)
+		syncCtx, _ := context.WithTimeout(context.Background(), time.Minute*30)
+		go s.syncHost(syncCtx, secret, t, s.SyncTaskCallback)
 	}
 
 	// 记录任务

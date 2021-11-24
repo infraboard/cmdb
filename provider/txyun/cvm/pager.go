@@ -40,6 +40,7 @@ func (p *pager) Next() *host.PagerResult {
 		return result
 	}
 	p.total = resp.Total
+	p.log.Debugf("get %d hosts", len(resp.Items))
 
 	result.Data = resp
 	result.HasNext = p.hasNext()
