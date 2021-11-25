@@ -10,6 +10,7 @@ import (
 
 func newPager(pageSize int, operater *BssOperater) *pager {
 	req := &model.ListCustomerBillsMonthlyBreakDownRequest{}
+	req.SharedMonth = "2021-11"
 	req.Limit = utils.Int32Ptr(int32(pageSize))
 
 	return &pager{

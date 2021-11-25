@@ -2,6 +2,8 @@ package connectivity
 
 import (
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/auth/basic"
+	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/auth/global"
+	bss "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/bss/v2"
 	dcs "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/dcs/v2"
 	ecs "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ecs/v2"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ecs/v2/region"
@@ -25,10 +27,19 @@ type HuaweiCloudClient struct {
 	ecsConn      *ecs.EcsClient
 	rdsConn      *rds.RdsClient
 	dcsConn      *dcs.DcsClient
+	bssConn      *bss.BssClient
 }
 
 func (c *HuaweiCloudClient) Credentials() basic.Credentials {
 	auth := basic.NewCredentialsBuilder().
+		WithAk(c.AccessKey).
+		WithSk(c.AccessSecret).
+		Build()
+	return auth
+}
+
+func (c *HuaweiCloudClient) GlobalCredentials() global.Credentials {
+	auth := global.NewCredentialsBuilder().
 		WithAk(c.AccessKey).
 		WithSk(c.AccessSecret).
 		Build()
@@ -81,4 +92,18 @@ func (c *HuaweiCloudClient) DcsClient() (*dcs.DcsClient, error) {
 	c.dcsConn = dcs.NewDcsClient(client)
 
 	return c.dcsConn, nil
+}
+
+// DcsClient 客户端
+func (c *HuaweiCloudClient) BssClient() (*bss.BssClient, error) {
+	if c.bssConn != nil {
+		return c.bssConn, nil
+	}
+
+	client := bss.BssClientBuilder().
+		WithCredential(c.GlobalCredentials()).
+		Build()
+
+	c.bssConn = bss.NewBssClient(client)
+	return c.bssConn, nil
 }
