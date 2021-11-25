@@ -22,8 +22,6 @@ import (
 	vmOp "github.com/infraboard/cmdb/provider/vsphere/vm"
 )
 
-type SyncTaskCallback func(*task.Task)
-
 func (s *service) syncHost(ctx context.Context, secret *secret.Secret, t *task.Task, cb SyncTaskCallback) {
 	var (
 		pager host.Pager
