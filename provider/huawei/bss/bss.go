@@ -25,7 +25,7 @@ type BssOperater struct {
 	log    logger.Logger
 }
 
-func (o *BssOperater) transferSet(list *[]model.NvlCostAnalysedBillDetail) *bill.BillSet {
+func (o *BssOperater) transferSet(list *[]model.ResFeeRecordV2) *bill.BillSet {
 	set := bill.NewBillSet()
 	items := *list
 	for i := range items {
@@ -34,39 +34,30 @@ func (o *BssOperater) transferSet(list *[]model.NvlCostAnalysedBillDetail) *bill
 	return set
 }
 
-func (o *BssOperater) transferOne(ins model.NvlCostAnalysedBillDetail) *bill.Bill {
-	fmt.Println(ins)
+func (o *BssOperater) transferOne(ins model.ResFeeRecordV2) *bill.Bill {
 	b := bill.NewDefaultBill()
 	b.Vendor = resource.Vendor_HUAWEI
-	b.Month = utils.PtrStrV(ins.SharedMonth)
+	b.Month = utils.PtrStrV(ins.BillDate)
 	b.OwnerId = utils.PtrStrV(ins.CustomerId)
-	b.ProductType = utils.PtrStrV(ins.ServiceTypeCode)
-	b.ProductCode = utils.PtrStrV(ins.ResourceTypeCode)
+	b.ProductType = utils.PtrStrV(ins.CloudServiceType)
+	b.ProductCode = utils.PtrStrV(ins.ProductId)
 	b.ProductDetail = utils.PtrStrV(ins.ProductSpecDesc)
-	b.PayMode = fmt.Sprintf("%d", utils.PtrInt32(ins.ChargingMode))
+	b.PayMode = utils.PtrStrV(ins.ChargeMode)
 	b.PayModeDetail = fmt.Sprintf("%d", utils.PtrInt32(ins.BillType))
-	b.OrderId = utils.PtrStrV(ins.OrderId)
+	b.OrderId = utils.PtrStrV(ins.TradeId)
 	b.InstanceId = utils.PtrStrV(ins.ResourceId)
 	b.InstanceName = utils.PtrStrV(ins.ResourceName)
-	b.RegionCode = utils.PtrStrV(ins.RegionCode)
+	b.RegionCode = utils.PtrStrV(ins.Region)
 	b.RegionName = utils.PtrStrV(ins.RegionName)
 
-	// // |参数名称：消费金额（应付金额）| |参数的约束及描述：|
-	// ConsumeAmount *float64 `json:"consume_amount,omitempty"`
-
-	// // |参数名称：期初已分摊金额（包周期和预留实例预付时有效，计费类型为按需，预留实例按时计费时为0）| |参数的约束及描述：|
-	// PastMonthsAmortizedAmount *float64 `json:"past_months_amortized_amount,omitempty"`
-
-	// // |参数名称：当月分摊金额| |参数的约束及描述：|
-	// CurrentMonthAmortizedAmount *float64 `json:"current_month_amortized_amount,omitempty"`
-
-	// // |参数名称：期末未分摊金额（包周期和预留实例预付时有效，计费类型为按需，预留实例按时计费时为0）| |参数的约束及描述：|
-	// FutureMonthsAmortizedAmount *float64 `json:"future_months_amortized_amount,omitempty"`
-
-	b.SalePrice = utils.PtrFloat64(ins.ConsumeAmount)
-	b.RealCost = utils.PtrFloat64(ins.CurrentMonthAmortizedAmount)
-	b.VoucherPay = utils.PtrFloat64(ins.AmortizedCouponAmount)
-	b.CashPay = utils.PtrFloat64(ins.AmortizedCashAmount)
-	b.BankcardPay = utils.PtrFloat64(ins.AmortizedStoredValueCardAmount)
+	// 金额信息
+	b.SalePrice = utils.PtrFloat64(ins.OfficialAmount)
+	b.SalePrice = utils.PtrFloat64(ins.DiscountAmount)
+	b.RealCost = utils.PtrFloat64(ins.Amount)
+	b.CreditPay = utils.PtrFloat64(ins.CreditAmount)
+	b.VoucherPay = utils.PtrFloat64(ins.CouponAmount)
+	b.CashPay = utils.PtrFloat64(ins.CashAmount)
+	b.StoredcardPay = utils.PtrFloat64(ins.StoredCardAmount)
+	b.OutstandingAmount = utils.PtrFloat64(ins.DebtAmount)
 	return b
 }

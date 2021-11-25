@@ -101,6 +101,7 @@ func (c *HuaweiCloudClient) BssClient() (*bss.BssClient, error) {
 	}
 
 	client := bss.BssClientBuilder().
+		WithEndpoint("bss.myhuaweicloud.com").
 		WithCredential(c.GlobalCredentials()).
 		Build()
 

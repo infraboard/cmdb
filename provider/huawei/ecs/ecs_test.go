@@ -20,6 +20,9 @@ func TestQuery(t *testing.T) {
 	hasNext := true
 	for hasNext {
 		p := pager.Next()
+		if p.Err != nil {
+			panic(p.Err)
+		}
 		hasNext = p.HasNext
 		fmt.Println(p.Data)
 	}

@@ -1,6 +1,7 @@
 package connectivity_test
 
 import (
+	"fmt"
 	"os"
 	"testing"
 
@@ -17,6 +18,7 @@ func TestClient(t *testing.T) {
 		t.Fatal("empty HW_CLOUD_ACCESS_SECRET")
 	}
 
-	client := connectivity.NewHuaweiCloudClient(secretID, secretKey, "cn-hangzhou")
-	client.EcsClient()
+	client := connectivity.NewHuaweiCloudClient(secretID, secretKey, "cn-north-4")
+	ec, _ := client.BssClient()
+	fmt.Println(ec.HcClient)
 }

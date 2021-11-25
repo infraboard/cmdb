@@ -9,8 +9,8 @@ import (
 )
 
 func newPager(pageSize int, operater *BssOperater) *pager {
-	req := &model.ListCustomerBillsMonthlyBreakDownRequest{}
-	req.SharedMonth = "2021-11"
+	req := &model.ListCustomerselfResourceRecordsRequest{}
+	req.Cycle = "2021-10"
 	req.Limit = utils.Int32Ptr(int32(pageSize))
 
 	return &pager{
@@ -27,7 +27,7 @@ type pager struct {
 	number   int
 	total    int64
 	operater *BssOperater
-	req      *model.ListCustomerBillsMonthlyBreakDownRequest
+	req      *model.ListCustomerselfResourceRecordsRequest
 	log      logger.Logger
 }
 
@@ -48,7 +48,7 @@ func (p *pager) Next() *bill.PagerResult {
 	return result
 }
 
-func (p *pager) nextReq() *model.ListCustomerBillsMonthlyBreakDownRequest {
+func (p *pager) nextReq() *model.ListCustomerselfResourceRecordsRequest {
 	p.log.Debugf("请求第%d页数据", p.number)
 
 	// 注意: 华为云的Offse表示的是页码
