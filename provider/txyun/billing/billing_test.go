@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/infraboard/cmdb/provider/txyun/connectivity"
+	"github.com/infraboard/mcube/logger/zap"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/regions"
 
 	op "github.com/infraboard/cmdb/provider/txyun/billing"
@@ -32,6 +33,8 @@ func TestQuery(t *testing.T) {
 }
 
 func init() {
+	zap.DevelopmentSetup()
+
 	var secretID, secretKey string
 	if secretID = os.Getenv("TX_CLOUD_SECRET_ID"); secretID == "" {
 		panic("empty TX_CLOUD_SECRET_ID")

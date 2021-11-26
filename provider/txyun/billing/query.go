@@ -13,7 +13,7 @@ func (o *BillingOperater) Query(req *billing.DescribeBillResourceSummaryRequest)
 		return nil, err
 	}
 
-	set := o.transferSet(resp.Response.ResourceSummarySet)
+	set := o.transferSet(resp.Response.ResourceSummarySet, *req.Month)
 	set.Total = utils.PtrInt64(resp.Response.Total)
 
 	return set, nil

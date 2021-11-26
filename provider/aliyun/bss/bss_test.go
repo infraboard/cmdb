@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/infraboard/cmdb/provider/aliyun/connectivity"
+	"github.com/infraboard/mcube/logger/zap"
 
 	op "github.com/infraboard/cmdb/provider/aliyun/bss"
 )
@@ -31,6 +32,8 @@ func TestQuery(t *testing.T) {
 }
 
 func init() {
+	zap.DevelopmentSetup()
+
 	var secretID, secretKey string
 	if secretID = os.Getenv("AL_CLOUD_ACCESS_KEY"); secretID == "" {
 		panic("empty AL_CLOUD_ACCESS_KEY")
