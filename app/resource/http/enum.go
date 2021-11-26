@@ -27,25 +27,25 @@ func (h *handler) ListVendor(w http.ResponseWriter, r *http.Request) {
 func (h *handler) ListResourceType(w http.ResponseWriter, r *http.Request) {
 	resp := map[string][]utils.EnumDescribe{
 		resource.Vendor_ALIYUN.String(): {
-			{Name: "主机", Value: resource.Type_HOST.String(), Describe: "ECS"},
-			{Name: "关系型数据库", Value: resource.Type_RDS.String(), Describe: "RDS"},
-			{Name: "月账单", Value: resource.Type_BILL.String(), Describe: "月账单"},
+			{Name: "主机", Value: resource.Type_HOST.String(), Describe: "ECS", Meta: utils.SkipRegion(false)},
+			{Name: "关系型数据库", Value: resource.Type_RDS.String(), Describe: "RDS", Meta: utils.SkipRegion(false)},
+			{Name: "月账单", Value: resource.Type_BILL.String(), Describe: "月账单", Meta: utils.SkipRegion(true)},
 		},
 		resource.Vendor_TENCENT.String(): {
-			{Name: "主机", Value: resource.Type_HOST.String(), Describe: "CVM"},
-			{Name: "关系型数据库", Value: resource.Type_RDS.String(), Describe: "CDB"},
-			{Name: "月账单", Value: resource.Type_BILL.String(), Describe: "月账单"},
+			{Name: "主机", Value: resource.Type_HOST.String(), Describe: "CVM", Meta: utils.SkipRegion(false)},
+			{Name: "关系型数据库", Value: resource.Type_RDS.String(), Describe: "CDB", Meta: utils.SkipRegion(false)},
+			{Name: "月账单", Value: resource.Type_BILL.String(), Describe: "月账单", Meta: utils.SkipRegion(true)},
 		},
 		resource.Vendor_HUAWEI.String(): {
-			{Name: "主机", Value: resource.Type_HOST.String(), Describe: "ECS"},
-			{Name: "关系型数据库", Value: resource.Type_RDS.String(), Describe: "RDS"},
-			{Name: "月账单", Value: resource.Type_BILL.String(), Describe: "月账单"},
+			{Name: "主机", Value: resource.Type_HOST.String(), Describe: "ECS", Meta: utils.SkipRegion(false)},
+			{Name: "关系型数据库", Value: resource.Type_RDS.String(), Describe: "RDS", Meta: utils.SkipRegion(false)},
+			{Name: "月账单", Value: resource.Type_BILL.String(), Describe: "月账单", Meta: utils.SkipRegion(true)},
 		},
 		resource.Vendor_AMAZON.String(): {
-			{Name: "主机", Value: resource.Type_HOST.String(), Describe: "EC2"},
+			{Name: "主机", Value: resource.Type_HOST.String(), Describe: "EC2", Meta: utils.SkipRegion(false)},
 		},
 		resource.Vendor_VSPHERE.String(): {
-			{Name: "主机", Value: resource.Type_HOST.String(), Describe: "VM"},
+			{Name: "主机", Value: resource.Type_HOST.String(), Describe: "VM", Meta: utils.SkipRegion(true)},
 		},
 	}
 	response.Success(w, resp)

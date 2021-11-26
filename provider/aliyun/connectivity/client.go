@@ -3,6 +3,7 @@ package connectivity
 import (
 	"fmt"
 
+	"github.com/aliyun/alibaba-cloud-sdk-go/services/bssopenapi"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/ecs"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/rds"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/sts"
@@ -24,6 +25,7 @@ type AliCloudClient struct {
 	accountId    string
 	ecsConn      *ecs.Client
 	rdsConn      *rds.Client
+	bssConn      *bssopenapi.Client
 }
 
 // EcsClient 客户端
@@ -38,6 +40,21 @@ func (c *AliCloudClient) EcsClient() (*ecs.Client, error) {
 	}
 
 	c.ecsConn = client
+
+	return client, nil
+}
+
+func (c *AliCloudClient) BssClient() (*bssopenapi.Client, error) {
+	if c.bssConn != nil {
+		return c.bssConn, nil
+	}
+
+	client, err := bssopenapi.NewClientWithAccessKey(c.Region, c.AccessKey, c.AccessSecret)
+	if err != nil {
+		return nil, err
+	}
+
+	c.bssConn = client
 
 	return client, nil
 }

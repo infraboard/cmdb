@@ -4,14 +4,17 @@ import (
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/bss/v2/model"
 	"github.com/infraboard/cmdb/app/bill"
 	"github.com/infraboard/cmdb/utils"
+
+	"github.com/infraboard/mcube/flowcontrol/tokenbucket"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 )
 
-func newPager(pageSize int, operater *BssOperater) *pager {
+func newPager(pageSize int, operater *BssOperater, rate int, month string) *pager {
 	req := &model.ListCustomerselfResourceRecordsRequest{}
-	req.Cycle = "2021-10"
+	req.Cycle = month
 	req.Limit = utils.Int32Ptr(int32(pageSize))
+	rateFloat := 1 / float64(rate)
 
 	return &pager{
 		size:     pageSize,
@@ -19,6 +22,7 @@ func newPager(pageSize int, operater *BssOperater) *pager {
 		operater: operater,
 		req:      req,
 		log:      zap.L().Named("Pagger"),
+		tb:       tokenbucket.NewBucketWithRate(rateFloat, 1),
 	}
 }
 
@@ -29,6 +33,7 @@ type pager struct {
 	operater *BssOperater
 	req      *model.ListCustomerselfResourceRecordsRequest
 	log      logger.Logger
+	tb       *tokenbucket.Bucket
 }
 
 func (p *pager) Next() *bill.PagerResult {

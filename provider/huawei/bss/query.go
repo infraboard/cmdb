@@ -17,6 +17,17 @@ func (o *BssOperater) Query(req *model.ListCustomerselfResourceRecordsRequest) (
 	return set, nil
 }
 
-func (o *BssOperater) PageQuery() bill.Pager {
-	return newPager(20, o)
+func NewPageQueryRequest() *PageQueryRequest {
+	return &PageQueryRequest{
+		Rate: 1,
+	}
+}
+
+type PageQueryRequest struct {
+	Rate  int
+	Month string
+}
+
+func (o *BssOperater) PageQuery(req *PageQueryRequest) bill.Pager {
+	return newPager(20, o, req.Rate, req.Month)
 }
