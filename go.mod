@@ -20,6 +20,7 @@ require (
 	github.com/smartystreets/assertions v0.0.0-20190116191733-b6c0e53d7304 // indirect
 	github.com/spf13/cobra v1.2.1
 	github.com/stretchr/testify v1.7.0
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/billing v1.0.300
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cdb v1.0.272
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.272
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm v1.0.270
