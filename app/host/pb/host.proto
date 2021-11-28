@@ -78,9 +78,17 @@ message UpdateHostData {
     Describe describe = 2;
 }
 
+enum DescribeBy {
+    HOST_ID = 0;
+    INSTANCE_ID = 1;
+}
+
 message DescribeHostRequest {
-    // @gotags: json:"id" validate:"required"
-    string id = 1;
+    // @gotags: json:"describe_by"
+    DescribeBy describe_by = 1;
+    // @gotags: json:"value" validate:"required"
+    string value = 2;
+
 }
 
 message DeleteHostRequest {

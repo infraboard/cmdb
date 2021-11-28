@@ -33,6 +33,10 @@ func (t Type) IsIn(targets ...Type) bool {
 	return false
 }
 
+func (t Type) IsGlobal() bool {
+	return t.IsIn(t)
+}
+
 // MarshalJSON todo
 func (t Type) MarshalJSON() ([]byte, error) {
 	b := bytes.NewBufferString(`"`)

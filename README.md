@@ -4,6 +4,7 @@
 + 阿里云
 + 腾讯云
 + 华为云
++ AWS
 + VMware
 
 ## SDK使用
@@ -21,7 +22,7 @@ import (
 
 func main() {
     // 配置cmdb grpc服务调用地址和凭证
-	conf := client.NewConfig("localhost:18050")
+	conf := client.NewConfig("localhost:18060")
 	conf.WithClientCredentials("xx", "xx")
 
     // 创建CMDB客户端

@@ -87,7 +87,18 @@ func (s *Secret) IsAllowRegion(region string) bool {
 }
 
 func (s *Secret) ShortDesc() string {
-	return fmt.Sprintf("%s[%s]", s.Description, s.ApiKey)
+	return fmt.Sprintf("%s[%s]", s.Description, s.DensenseKey())
+}
+
+func (s *Secret) DensenseKey() string {
+	if s.ApiKey == "" {
+		return ""
+	}
+	total := len(s.ApiKey)
+	if total > 8 {
+		return fmt.Sprintf("%s****%s", s.ApiKey[:4], s.ApiKey[total-4:])
+	}
+	return s.ApiKey
 }
 
 func (s *Secret) AllowRegionString() string {

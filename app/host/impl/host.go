@@ -49,7 +49,6 @@ func (s *service) SaveHost(ctx context.Context, h *host.Host) (
 	if err := s.save(ctx, h); err != nil {
 		return nil, err
 	}
-
 	return h, nil
 }
 
@@ -221,7 +220,8 @@ func (s *service) UpdateHost(ctx context.Context, req *host.UpdateHostRequest) (
 func (s *service) DescribeHost(ctx context.Context, req *host.DescribeHostRequest) (
 	*host.Host, error) {
 	query := sqlbuilder.NewQuery(queryHostSQL)
-	querySQL, args := query.Where("id = ?", req.Id).BuildQuery()
+	cond, val := req.Where()
+	querySQL, args := query.Where(cond, val).BuildQuery()
 	s.log.Debugf("sql: %s", querySQL)
 
 	queryStmt, err := s.db.Prepare(querySQL)

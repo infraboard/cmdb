@@ -33,7 +33,6 @@ func (s *service) insert(ctx context.Context, t *task.Task) error {
 	if err != nil {
 		return fmt.Errorf("save task info error, %s", err)
 	}
-
 	return nil
 }
 

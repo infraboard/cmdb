@@ -12,6 +12,8 @@ import (
 
 	aliConn "github.com/infraboard/cmdb/provider/aliyun/connectivity"
 	ecsOp "github.com/infraboard/cmdb/provider/aliyun/ecs"
+	awsConn "github.com/infraboard/cmdb/provider/aws/connectivity"
+	ec2Op "github.com/infraboard/cmdb/provider/aws/ec2"
 	hwConn "github.com/infraboard/cmdb/provider/huawei/connectivity"
 	hwEcsOp "github.com/infraboard/cmdb/provider/huawei/ecs"
 	txConn "github.com/infraboard/cmdb/provider/txyun/connectivity"
@@ -19,8 +21,6 @@ import (
 	vsConn "github.com/infraboard/cmdb/provider/vsphere/connectivity"
 	vmOp "github.com/infraboard/cmdb/provider/vsphere/vm"
 )
-
-type SyncTaskCallback func(*task.Task)
 
 func (s *service) syncHost(ctx context.Context, secret *secret.Secret, t *task.Task, cb SyncTaskCallback) {
 	var (
@@ -40,10 +40,9 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, t *task.T
 		s.log.Warnf("decrypt api secret error, %s", err)
 	}
 
-	hs := host.NewHostSet()
 	switch secret.Vendor {
 	case resource.Vendor_ALIYUN:
-		s.log.Debugf("sync aliyun host ...")
+		s.log.Debugf("sync aliyun ecs ...")
 		client := aliConn.NewAliCloudClient(secret.ApiKey, secret.ApiSecret, t.Region)
 		ec, err := client.EcsClient()
 		if err != nil {
@@ -55,12 +54,12 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, t *task.T
 		req.Rate = int(secret.RequestRate)
 		pager = operater.PageQuery(req)
 	case resource.Vendor_TENCENT:
-		s.log.Debugf("sync txyun host ...")
+		s.log.Debugf("sync txyun cvm ...")
 		client := txConn.NewTencentCloudClient(secret.ApiKey, secret.ApiSecret, t.Region)
 		operater := cvmOp.NewCVMOperater(client.CvmClient())
 		pager = operater.PageQuery()
 	case resource.Vendor_HUAWEI:
-		s.log.Debugf("sync hwyun host ...")
+		s.log.Debugf("sync hwyun ecs ...")
 		client := hwConn.NewHuaweiCloudClient(secret.ApiKey, secret.ApiSecret, t.Region)
 		ec, err := client.EcsClient()
 		if err != nil {
@@ -69,8 +68,20 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, t *task.T
 		}
 		operater := hwEcsOp.NewEcsOperater(ec)
 		pager = operater.PageQuery()
+	case resource.Vendor_AMAZON:
+		s.log.Debugf("sync aws ec2 ...")
+		client := awsConn.NewAwsCloudClient(secret.ApiKey, secret.ApiSecret, t.Region)
+		ec, err := client.Ec2Client()
+		if err != nil {
+			t.Failed(err.Error())
+			return
+		}
+		operater := ec2Op.NewEc2Operator(ec)
+		req := ec2Op.NewPageQueryRequest()
+		req.Rate = int(secret.RequestRate)
+		pager = operater.PageQuery(req)
 	case resource.Vendor_VSPHERE:
-		s.log.Debugf("sync vshpere host ...")
+		s.log.Debugf("sync vshpere vm ...")
 		client := vsConn.NewVsphereClient(secret.Address, secret.ApiKey, secret.ApiSecret)
 		ec, err := client.VimClient()
 		if err != nil {
@@ -78,7 +89,15 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, t *task.T
 			return
 		}
 		operater := vmOp.NewVmOperater(ec)
-		hs, err = operater.Query()
+		// 通过回调直接保存
+		err = operater.Query(func(h *host.Host) {
+			_, err := s.host.SaveHost(ctx, h)
+			if err != nil {
+				t.AddDetailFailed(h.Information.Name, err.Error())
+			} else {
+				t.AddDetailSucceed(h.Information.Name, "")
+			}
+		})
 		if err != nil {
 			t.Failed(err.Error())
 			return
@@ -102,19 +121,16 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, t *task.T
 
 			// 调用host服务保持数据
 			for i := range p.Data.Items {
-				hs.Add(p.Data.Items[i])
+				target := p.Data.Items[i]
+				h, err := s.host.SaveHost(ctx, target)
+				if err != nil {
+					s.log.Warnf("save host error, %s", err)
+					t.AddDetailFailed(target.Information.Name, err.Error())
+				} else {
+					s.log.Debugf("save host %s to db", h.ShortDesc())
+					t.AddDetailSucceed(target.Information.Name, "")
+				}
 			}
-		}
-	}
-
-	// 调用host服务保持数据
-	for i := range hs.Items {
-		target := hs.Items[i]
-		_, err := s.host.SaveHost(ctx, target)
-		if err != nil {
-			t.AddDetailFailed(target.Information.Name, err.Error())
-		} else {
-			t.AddDetailSucceed(target.Information.Name, "")
 		}
 	}
 }

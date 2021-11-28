@@ -9,60 +9,56 @@ import (
 	"github.com/vmware/govmomi/vim25/mo"
 )
 
-func (o *VMOperater) Query() (*host.HostSet, error) {
-	set := host.NewHostSet()
+type QueryCallback func(*host.Host)
 
+func (o *VMOperater) Query(cb QueryCallback) error {
 	// 查询DC
 	dcs, err := o.finder.DatacenterList(context.Background(), "*")
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	if len(dcs) == 0 {
-		return nil, errors.New("not datacenter found")
+		return errors.New("not datacenter found")
 	}
 
 	for i := range dcs {
 		dc := dcs[i]
 		o.log.Debugf("query dc %s vms ...", dc.Name())
 
-		vms, err := o.queryVM(dc)
+		err := o.queryVM(dc, cb)
 		if err != nil {
 			o.log.Errorf("query dc %s error, %s", dc.Name())
 		}
-
-		set = vms
 	}
 
-	return set, nil
+	return nil
 }
 
-func (o *VMOperater) queryVM(dc *object.Datacenter) (*host.HostSet, error) {
+func (o *VMOperater) queryVM(dc *object.Datacenter, cb QueryCallback) error {
 	dcFinder := o.finder.SetDatacenter(dc)
 
 	ctx, cancel := context.WithTimeout(context.Background(), o.Timeout)
 	defer cancel()
 	items, err := dcFinder.VirtualMachineList(ctx, "*")
 	if err != nil {
-		return nil, err
+		return err
 	}
-
-	set := host.NewHostSet()
 
 	o.log.Debugf("total vms in dc %s, %d", dc.Name(), len(items))
 	for _, item := range items {
 		vmp, err := o.properties(item)
 		if err != nil {
-			return nil, err
+			return err
 		}
 
 		// 排除模板
 		if !vmp.Config.Template {
-			set.Add(o.transferOne(vmp, dc.Name()))
+			cb(o.transferOne(vmp, dc.Name()))
 		}
 	}
 
-	return set, nil
+	return nil
 }
 
 // Properties is a convenience method that wraps fetching the

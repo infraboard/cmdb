@@ -54,9 +54,9 @@ func newDefaultAPP() *app {
 	return &app{
 		Name:       "cmdb",
 		HttpHost:   "127.0.0.1",
-		HttpPort:   "8050",
+		HttpPort:   "8060",
 		GRPCHost:   "127.0.0.1",
-		GRPCPort:   "18050",
+		GRPCPort:   "18060",
 		EncryptKey: "defualt app encrypt key",
 	}
 }
