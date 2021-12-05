@@ -1,9 +1,7 @@
 package utils
 
-import "fmt"
-
-func SkipRegion(val bool) map[string]string {
-	return map[string]string{"skip_region": fmt.Sprintf("%t", val)}
+func ParamType(t string) map[string]string {
+	return map[string]string{"type": t}
 }
 
 type EnumDescribe struct {
