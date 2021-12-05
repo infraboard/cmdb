@@ -47,6 +47,7 @@ func (o *Ec2Operater) transferOne(ins types.Instance) *host.Host {
 	} else {
 		h.Information.Name = ParseTagName(ins.Tags)
 	}
+
 	h.Information.Status = string(ins.State.Name)
 	h.Information.Tags = ParseTag(ins.Tags)
 	h.Information.PublicIp = []string{*ins.PublicIpAddress}
