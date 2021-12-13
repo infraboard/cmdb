@@ -3,7 +3,6 @@ package protocol
 import (
 	"net"
 
-	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	"google.golang.org/grpc"
 
 	"github.com/infraboard/cmdb/conf"
@@ -25,10 +24,10 @@ func NewGRPCService() *GRPCService {
 	}
 
 	rc := recovery.NewInterceptor(recovery.NewZapRecoveryHandler())
-	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
+	grpcServer := grpc.NewServer(grpc.ChainUnaryInterceptor(
 		rc.UnaryServerInterceptor(),
 		interceptor.GrpcAuthUnaryServerInterceptor(c),
-	)))
+	))
 
 	return &GRPCService{
 		svr: grpcServer,
