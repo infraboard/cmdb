@@ -66,7 +66,7 @@ func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 		)
 	}
 
-	querySQL, args := query.Order("sync_at").Desc().Limit(req.OffSet(), uint(req.PageSize)).BuildQuery()
+	querySQL, args := query.Order("sync_at").Desc().Limit(req.OffSet(), uint(req.Page.PageSize)).BuildQuery()
 	s.log.Debugf("sql: %s", querySQL)
 
 	queryStmt, err := s.db.Prepare(querySQL)

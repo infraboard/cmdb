@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/infraboard/mcube/http/request"
 )
 
 // use a single instance of Validate, it caches struct info
@@ -14,6 +15,7 @@ var (
 
 func NewQueryHostRequestFromHTTP(r *http.Request) *QueryHostRequest {
 	qs := r.URL.Query()
+	page := request.NewPageRequestFromHTTP(r)
 
 	ps := qs.Get("page_size")
 	pn := qs.Get("page_number")
@@ -29,14 +31,13 @@ func NewQueryHostRequestFromHTTP(r *http.Request) *QueryHostRequest {
 		pnUint64 = 1
 	}
 	return &QueryHostRequest{
-		PageSize:   psUint64,
-		PageNumber: pnUint64,
-		Keywords:   kw,
+		Page:     &page.PageRequest,
+		Keywords: kw,
 	}
 }
 
 func (req *QueryHostRequest) OffSet() int64 {
-	return int64(req.PageSize) * int64(req.PageNumber-1)
+	return int64(req.Page.PageSize) * int64(req.Page.PageNumber-1)
 }
 
 func NewDescribeHostRequestWithID(id string) *DescribeHostRequest {

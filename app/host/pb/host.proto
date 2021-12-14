@@ -4,6 +4,7 @@ package infraboard.cmdb.host;
 option go_package="github.com/infraboard/cmdb/app/host";
 
 import "app/resource/pb/resource.proto";
+import "github.com/infraboard/mcube/pb/page/page.proto";
 
 service Service {
     rpc SaveHost(Host) returns(Host) {}
@@ -54,9 +55,12 @@ message Describe {
 }
 
 message QueryHostRequest {
-    uint64 page_size = 1;
-    uint64 page_number = 2;
-    string keywords = 3;
+    // 分页参数
+    // @gotags: json:"page"
+    infraboard.mcube.page.PageRequest page = 1;
+    // 关键字参数
+    // @gotags: json:"keywords"
+    string keywords = 2;
 }
 
 message HostSet {
