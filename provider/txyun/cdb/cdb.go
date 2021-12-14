@@ -16,14 +16,14 @@ type CDBOperater struct {
 	client *cdb.Client
 }
 
-func (o *CDBOperater) transferSet(items []*cdb.InstanceInfo) *rds.RdsSet {
-	set := rds.NewRdsSet()
+func (o *CDBOperater) transferSet(items []*cdb.InstanceInfo) *rds.Set {
+	set := rds.NewSet()
 	for i := range items {
 		set.Add(o.transferOne(items[i]))
 	}
 	return set
 }
 
-func (o *CDBOperater) transferOne(ins *cdb.InstanceInfo) *rds.Rds {
+func (o *CDBOperater) transferOne(ins *cdb.InstanceInfo) *rds.RDS {
 	return nil
 }

@@ -6,7 +6,7 @@ import (
 	cmdbRds "github.com/infraboard/cmdb/app/rds"
 )
 
-func (o *RdsOperater) Query(req *rds.DescribeDBInstancesRequest) (*cmdbRds.RdsSet, error) {
+func (o *RdsOperater) Query(req *rds.DescribeDBInstancesRequest) (*cmdbRds.Set, error) {
 	resp, err := o.client.DescribeDBInstances(req)
 	if err != nil {
 		return nil, err

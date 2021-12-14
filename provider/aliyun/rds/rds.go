@@ -23,16 +23,16 @@ type RdsOperater struct {
 	log    logger.Logger
 }
 
-func (o *RdsOperater) transferSet(items []rds.DBInstance) *cmdbRds.RdsSet {
-	set := cmdbRds.NewRdsSet()
+func (o *RdsOperater) transferSet(items []rds.DBInstance) *cmdbRds.Set {
+	set := cmdbRds.NewSet()
 	for i := range items {
 		set.Add(o.transferOne(items[i]))
 	}
 	return set
 }
 
-func (o *RdsOperater) transferOne(ins rds.DBInstance) *cmdbRds.Rds {
-	r := cmdbRds.NewDefaultRds()
+func (o *RdsOperater) transferOne(ins rds.DBInstance) *cmdbRds.RDS {
+	r := cmdbRds.NewDefaultRDS()
 	r.Base.Vendor = resource.Vendor_ALIYUN
 	r.Base.Region = ins.RegionId
 	r.Base.Zone = ins.ZoneId
