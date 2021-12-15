@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package infraboard.cmdb.eip;
+option go_package="github.com/infraboard/cmdb/app/eip";
+
+import "app/resource/pb/resource.proto";
+import "github.com/infraboard/mcube/pb/page/page.proto";
+
+service Service {
+    rpc SaveEIP(EIP) returns(EIP) {}
+    rpc QueryEIP(QueryEIPRequest) returns(Set) {}
+}
+
+message EIP {
+    infraboard.cmdb.resource.Base base = 1;
+    infraboard.cmdb.resource.Information information = 2;
+    Describe describe = 3;
+}
+
+message Describe {
+    // BGP
+    // @gotags: json:"isp"
+    string isp = 1;
+    // 带宽
+    // @gotags: json:"band_width"
+    string band_width = 2;
+    // 关联实例ID
+    // @gotags: json:"instance_id"
+    string instance_id = 3;
+    // 关联实例类型
+    // @gotags: json:"instance_type"
+    string instance_type = 4;
+    // 关联实例Region
+    // @gotags: json:"instance_region"
+    string instance_region = 5;
+    // 模式(NAT)
+    // @gotags: json:"mode"
+    string mode = 6;
+}
+
+message Set {
+    // 列表项
+    // @gotags: json:"items"
+    repeated EIP items = 1;
+    // 总数量
+    // @gotags: json:"total"
+    int64 total = 2;
+}
+
+message QueryEIPRequest {
+    // 分页参数
+    // @gotags: json:"page"
+    infraboard.mcube.page.PageRequest page = 1;
+}

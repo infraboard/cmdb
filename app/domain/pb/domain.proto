@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+package infraboard.cmdb.domain;
+option go_package="github.com/infraboard/cmdb/app/domain";
+
+import "app/resource/pb/resource.proto";
+import "github.com/infraboard/mcube/pb/page/page.proto";
+
+service Service {
+    rpc SaveDomain(Domain) returns(Domain) {}
+    rpc QueryDomain(QueryDomainRequest) returns(Set) {}
+}
+
+message Domain {
+    infraboard.cmdb.resource.Base base = 1;
+    infraboard.cmdb.resource.Information information = 2;
+    Describe describe = 3;
+    RecordSet records = 4;
+}
+
+message Describe {
+    // 域名的等级
+    // @gotags: json:"grade"
+    string grade = 1;
+    // 域名的 ID
+    // @gotags: json:"id"
+    string id = 2;
+    // 当前域名允许的最小的 TTL
+    // @gotags: json:"min_ttl"
+    int64 min_ttl = 3;
+    // 域名
+    // @gotags: json:"name"
+    string name = 4;
+    // 域名所有者的邮箱帐号
+    // @gotags: json:"owner"
+    string owner = 5;
+    // punycode编码后的域名
+    // @gotags: json:"punycode"
+    string punycode = 6;
+    // 域名下的解析记录默认的 TTL 值
+    // @gotags: json:"ttl"
+    int64 ttl = 7;
+}
+
+message Set {
+    // 列表项
+    // @gotags: json:"items"
+    repeated Domain items = 1;
+    // 总数量
+    // @gotags: json:"total"
+    int64 total = 2;
+}
+
+message QueryDomainRequest {
+    // 分页参数
+    // @gotags: json:"page"
+    infraboard.mcube.page.PageRequest page = 1;
+}
+
+message Record {
+    // 记录的暂停、启用状态，1和0分别代表启用和暂停
+    // @gotags: json:"enabled"
+    bool enabled = 1;
+    // 解析记录的ID
+    // @gotags: json:"id"
+    string id = 2;
+    // 解析记录的线路编号
+    // @gotags: json:"line"
+    string line = 3;
+    // 记录的优先级，非 MX 记录的话，该值为0
+    // @gotags: json:"mx"
+    int64 mx = 4;
+    // 子域名
+    // @gotags: json:"name"
+    string name = 5;
+    // 解析记录的备注信息
+    // @gotags: json:"remark"
+    string remark = 6;
+    // 记录的 TTL 值
+    // @gotags: json:"ttl"
+    int64 ttl = 7;
+    // 解析记录的类型
+    // @gotags: json:"type"
+    string type = 8;
+    // 解析记录的最后修改时间
+    // @gotags: json:"updated_on"
+    int64 updated_on = 9;
+    // 记录的值
+    // @gotags: json:"value"
+    string value = 10;
+}
+
+message RecordSet {
+    // 列表项
+    // @gotags: json:"items"
+    repeated Record items = 1;
+    // 总数量
+    // @gotags: json:"total"
+    int64 total = 2;
+}

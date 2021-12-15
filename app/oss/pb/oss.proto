@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package infraboard.cmdb.oss;
+option go_package="github.com/infraboard/cmdb/app/oss";
+
+import "app/resource/pb/resource.proto";
+import "github.com/infraboard/mcube/pb/page/page.proto";
+
+service Service {
+    rpc SaveOSS(OSS) returns(OSS) {}
+    rpc QueryOSS(QueryOSSRequest) returns(Set) {}
+}
+
+message OSS {
+    infraboard.cmdb.resource.Base base = 1;
+    infraboard.cmdb.resource.Information information = 2;
+    Describe describe = 3;
+}
+
+message Describe {
+}
+
+message Set {
+    // 列表项
+    // @gotags: json:"items"
+    repeated OSS items = 1;
+    // 总数量
+    // @gotags: json:"total"
+    int64 total = 2;
+}
+
+message QueryOSSRequest {
+    // 分页参数
+    // @gotags: json:"page"
+    infraboard.mcube.page.PageRequest page = 1;
+}

@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package infraboard.cmdb.redis;
+option go_package="github.com/infraboard/cmdb/app/redis";
+
+import "app/resource/pb/resource.proto";
+import "github.com/infraboard/mcube/pb/page/page.proto";
+
+service Service {
+    rpc SaveRedis(Redis) returns(Redis) {}
+    rpc QueryRedis(QueryRedisRequest) returns(Set) {}
+}
+
+message Redis {
+    infraboard.cmdb.resource.Base base = 1;
+    infraboard.cmdb.resource.Information information = 2;
+    Describe describe = 3;
+}
+
+message Describe {
+    // 存储容量，单位：MB
+    // @gotags: json:"memory"
+    int64 memory = 1;
+    // 链接地址
+    // @gotags: json:"connect_addr"
+    string connect_addr = 2;
+    // 链接端口
+    // @gotags: json:"connect_port"
+    int64 connect_port = 3;
+    // 指定架构类型返回实例列表：cluster（集群版）standard（标准版） SplitRW（读写分离版）NULL（所有类型，默认值）
+    // @gotags: json:"architecture_type"
+    string architecture_type = 4;
+    // 理论最大QPS值
+    // @gotags: json:"qps"
+    int64 qps = 5;
+    // 带宽，单位：MB/s。
+    // @gotags: json:"band_width"
+    int64 band_width = 6;
+    // 实例连接数限制，单位：个
+    // @gotags: json:"max_connection"
+    int64 max_connection = 7;
+    // 配置
+    // @gotags: json:"config"
+    string config = 8;
+    // 节点类型：double（双节点） single（单节点）
+    // @gotags: json:"node_type"
+    string node_type = 9;
+    // 网络类型：CLASSIC（经典网络）VPC（VPC网络）
+    // @gotags: json:"network_type"
+    string network_type = 10;
+    // 数据库类型。
+    // @gotags: json:"engine_type"
+    string engine_type = 11;
+    // 数据库版本：2.8 4.0 5.0
+    // @gotags: json:"engine_version"
+    string engine_version = 12;
+    // 副本架构：master-slave（包括主从版和单节点版）cluster（包括读写分离版与集群版）
+    // @gotags: json:"replication_mode"
+    string replication_mode = 13;
+    // 副本ID。
+    // @gotags: json:"replica_id"
+    string replica_id = 14;
+    // IP白名单
+    // @gotags: json:"security_ip_list"
+    string security_ip_list = 15;
+}
+
+message Set {
+    // 列表项
+    // @gotags: json:"items"
+    repeated Redis items = 1;
+    // 总数量
+    // @gotags: json:"total"
+    int64 total = 2;
+}
+
+message QueryRedisRequest {
+    // 分页参数
+    // @gotags: json:"page"
+    infraboard.mcube.page.PageRequest page = 1;
+}
