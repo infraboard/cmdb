@@ -20,22 +20,25 @@ func TestQuery(t *testing.T) {
 	hasNext := true
 	for hasNext {
 		p := pager.Next()
+		if p.Err != nil {
+			panic(p.Err)
+		}
 		hasNext = p.HasNext
 		fmt.Println(p.Data)
 	}
 }
 
 func init() {
-	var secretID, secretKey string
-	if secretID = os.Getenv("AL_CLOUD_ACCESS_KEY"); secretID == "" {
+	var ak, sk string
+	if ak = os.Getenv("AL_CLOUD_ACCESS_KEY"); ak == "" {
 		panic("empty AL_CLOUD_ACCESS_KEY")
 	}
 
-	if secretKey = os.Getenv("AL_CLOUD_ACCESS_SECRET"); secretKey == "" {
+	if sk = os.Getenv("AL_CLOUD_ACCESS_SECRET"); sk == "" {
 		panic("empty AL_CLOUD_ACCESS_SECRET")
 	}
 
-	client := connectivity.NewAliCloudClient(secretID, secretKey, "cn-hangzhou")
+	client := connectivity.NewAliCloudClient(ak, sk, "cn-hangzhou")
 
 	ec, err := client.RdsClient()
 	if err != nil {
