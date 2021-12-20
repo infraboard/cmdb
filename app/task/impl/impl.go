@@ -3,6 +3,7 @@ package impl
 import (
 	"database/sql"
 
+	"github.com/infraboard/cmdb/app/bill"
 	"github.com/infraboard/cmdb/app/host"
 	"github.com/infraboard/cmdb/app/secret"
 	"github.com/infraboard/cmdb/app/task"
@@ -19,11 +20,14 @@ var (
 )
 
 type service struct {
-	db     *sql.DB
-	log    logger.Logger
+	task.UnimplementedServiceServer
+
+	db  *sql.DB
+	log logger.Logger
+
 	host   host.ServiceServer
 	secret secret.ServiceServer
-	task.UnimplementedServiceServer
+	bill   bill.ServiceServer
 }
 
 func (s *service) Config() error {
@@ -36,6 +40,7 @@ func (s *service) Config() error {
 	s.db = db
 	s.host = app.GetGrpcApp(host.AppName).(host.ServiceServer)
 	s.secret = app.GetGrpcApp(secret.AppName).(secret.ServiceServer)
+	s.bill = app.GetGrpcApp(bill.AppName).(bill.ServiceServer)
 	return nil
 }
 

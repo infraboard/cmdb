@@ -1,5 +1,7 @@
 package rds
 
+import "github.com/infraboard/cmdb/app/resource"
+
 func NewPagerResult() *PagerResult {
 	return &PagerResult{
 		Data: NewSet(),
@@ -17,7 +19,11 @@ func (s *Set) Add(item *RDS) {
 }
 
 func NewDefaultRDS() *RDS {
-	return &RDS{}
+	return &RDS{
+		Base:        &resource.Base{},
+		Information: &resource.Information{},
+		Describe:    &Describe{},
+	}
 }
 
 type PagerResult struct {

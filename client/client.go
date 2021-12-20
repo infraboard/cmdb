@@ -3,6 +3,7 @@ package client
 import (
 	"google.golang.org/grpc"
 
+	"github.com/infraboard/cmdb/app/bill"
 	"github.com/infraboard/cmdb/app/host"
 	"github.com/infraboard/cmdb/app/resource"
 	"github.com/infraboard/cmdb/app/secret"
@@ -50,4 +51,9 @@ func (c *Client) Host() host.ServiceClient {
 // Host todos
 func (c *Client) Secret() secret.ServiceClient {
 	return secret.NewServiceClient(c.conn)
+}
+
+// Bill service
+func (c *Client) Bill() bill.ServiceClient {
+	return bill.NewServiceClient(c.conn)
 }
