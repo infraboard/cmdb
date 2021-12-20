@@ -48,6 +48,15 @@ func (o *RdsOperater) transferOne(ins rds.DBInstance) *cmdbRds.RDS {
 	info.Status = ins.DBInstanceStatus
 	info.PayType = ins.PayType
 
+	desc := r.Describe
+	desc.Category = ins.Category
+	desc.EngineType = ins.Engine
+	desc.EngineVersion = ins.EngineVersion
+	desc.InstanceClass = ins.DBInstanceClass
+	desc.ClassType = ins.DBInstanceClass
+	desc.ExportType = ins.DBInstanceNetType
+	desc.NetworkType = ins.InstanceNetworkType
+	desc.Type = ins.DBInstanceType
 	return r
 }
 

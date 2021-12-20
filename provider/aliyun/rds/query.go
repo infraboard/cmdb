@@ -12,6 +12,8 @@ func (o *RdsOperater) Query(req *rds.DescribeDBInstancesRequest) (*cmdbRds.Set, 
 		return nil, err
 	}
 
+	// o.client.DescribeDBInstanceAttribute()
+
 	set := o.transferSet(resp.Items.DBInstance)
 	set.Total = int64(resp.TotalRecordCount)
 
