@@ -3,15 +3,17 @@ package rds
 import (
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/rds"
+	"github.com/infraboard/mcube/flowcontrol/tokenbucket"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 
 	cmdbRds "github.com/infraboard/cmdb/app/rds"
 )
 
-func newPager(pageSize int, operater *RdsOperater) *pager {
+func newPager(pageSize int, operater *RdsOperater, rate int) *pager {
 	req := rds.CreateDescribeDBInstancesRequest()
 	req.PageSize = requests.NewInteger(pageSize)
+	rateFloat := 1 / float64(rate)
 
 	return &pager{
 		size:     pageSize,
@@ -19,6 +21,7 @@ func newPager(pageSize int, operater *RdsOperater) *pager {
 		operater: operater,
 		req:      req,
 		log:      zap.L().Named("Pagger"),
+		tb:       tokenbucket.NewBucketWithRate(rateFloat, 1),
 	}
 }
 
@@ -29,6 +32,7 @@ type pager struct {
 	operater *RdsOperater
 	req      *rds.DescribeDBInstancesRequest
 	log      logger.Logger
+	tb       *tokenbucket.Bucket
 }
 
 func (p *pager) Next() *cmdbRds.PagerResult {

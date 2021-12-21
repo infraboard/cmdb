@@ -1,6 +1,10 @@
 package rds
 
-import "github.com/infraboard/cmdb/app/resource"
+import (
+	"fmt"
+
+	"github.com/infraboard/cmdb/app/resource"
+)
 
 func NewPagerResult() *PagerResult {
 	return &PagerResult{
@@ -16,6 +20,10 @@ func NewSet() *Set {
 
 func (s *Set) Add(item *RDS) {
 	s.Items = append(s.Items, item)
+}
+
+func (s *Set) AddSet(set *Set) {
+	s.Items = append(s.Items, set.Items...)
 }
 
 func NewDefaultRDS() *RDS {
@@ -35,4 +43,8 @@ type PagerResult struct {
 // 分页迭代器
 type Pager interface {
 	Next() *PagerResult
+}
+
+func (r *RDS) ShortDesc() string {
+	return fmt.Sprintf("%s %s", r.Information.Name, r.Information.PrivateIp)
 }

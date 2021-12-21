@@ -12,8 +12,14 @@ service Service {
 }
 
 message OSS {
+    // 资源元数据
+    // @gotags: json:"base"
     infraboard.cmdb.resource.Base base = 1;
+    // 资源基础信息
+    // @gotags: json:"information"
     infraboard.cmdb.resource.Information information = 2;
+    // Oss详细信息
+    // @gotags: json:"describe"
     Describe describe = 3;
 }
 

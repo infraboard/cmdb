@@ -8,7 +8,6 @@ import (
 	"github.com/infraboard/cmdb/app/resource"
 	"github.com/infraboard/cmdb/app/secret"
 	"github.com/infraboard/cmdb/app/task"
-	"github.com/infraboard/cmdb/conf"
 
 	bssOp "github.com/infraboard/cmdb/provider/aliyun/bss"
 	aliConn "github.com/infraboard/cmdb/provider/aliyun/connectivity"
@@ -29,12 +28,6 @@ func (s *service) syncBill(ctx context.Context, secret *secret.Secret, t *task.T
 		t.Completed()
 		cb(t)
 	}()
-
-	// 解密secret
-	err := secret.DecryptAPISecret(conf.C().App.EncryptKey)
-	if err != nil {
-		s.log.Warnf("decrypt api secret error, %s", err)
-	}
 
 	switch secret.Vendor {
 	case resource.Vendor_ALIYUN:
@@ -100,5 +93,4 @@ func (s *service) syncBill(ctx context.Context, secret *secret.Secret, t *task.T
 			}
 		}
 	}
-
 }

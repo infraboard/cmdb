@@ -93,12 +93,9 @@ message Describe {
     // 部署模式(腾讯云独有)
     // @gotags: json:"deploy_mode"
     string deploy_mode = 25;
-    // 当前状态
-    // @gotags: json:"status"
-    string status = 26;
     // 端口
     // @gotags: json:"port"
-    int64 port = 27;
+    int64 port = 26;
 }
 
 message Set {

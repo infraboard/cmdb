@@ -1,6 +1,8 @@
 package rds
 
 import (
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/rds"
@@ -23,7 +25,7 @@ type RdsOperater struct {
 	log    logger.Logger
 }
 
-func (o *RdsOperater) transferSet(items []rds.DBInstance) *cmdbRds.Set {
+func (o *RdsOperater) transferSet(items []rds.DBInstanceAttribute) *cmdbRds.Set {
 	set := cmdbRds.NewSet()
 	for i := range items {
 		set.Add(o.transferOne(items[i]))
@@ -31,14 +33,14 @@ func (o *RdsOperater) transferSet(items []rds.DBInstance) *cmdbRds.Set {
 	return set
 }
 
-func (o *RdsOperater) transferOne(ins rds.DBInstance) *cmdbRds.RDS {
+func (o *RdsOperater) transferOne(ins rds.DBInstanceAttribute) *cmdbRds.RDS {
 	r := cmdbRds.NewDefaultRDS()
 
 	b := r.Base
 	b.Vendor = resource.Vendor_ALIYUN
 	b.Region = ins.RegionId
 	b.Zone = ins.ZoneId
-	b.CreateAt = o.parseTime(ins.CreateTime)
+	b.CreateAt = o.parseTime(ins.CreationTime)
 	b.InstanceId = ins.DBInstanceId
 
 	info := r.Information
@@ -57,6 +59,26 @@ func (o *RdsOperater) transferOne(ins rds.DBInstance) *cmdbRds.RDS {
 	desc.ExportType = ins.DBInstanceNetType
 	desc.NetworkType = ins.InstanceNetworkType
 	desc.Type = ins.DBInstanceType
+
+	cpu, _ := strconv.Atoi(ins.DBInstanceCPU)
+	desc.Cpu = int32(cpu)
+	desc.Memory = ins.DBInstanceMemory
+	desc.DbMaxQuantity = int64(ins.DBMaxQuantity)
+	desc.AccountMaxQuantity = int64(ins.AccountMaxQuantity)
+	desc.MaxConnections = int64(ins.MaxConnections)
+	desc.MaxIops = int64(ins.MaxIOPS)
+	desc.Collation = ins.Collation
+	desc.TimeZone = ins.TimeZone
+	desc.StorageCapacity = int64(ins.DBInstanceStorage)
+	desc.StorageType = ins.DBInstanceStorageType
+	desc.SecurityIpMode = ins.SecurityIPMode
+	desc.SecurityIpList = strings.Split(ins.SecurityIPList, ",")
+	desc.ConnectionMode = ins.ConnectionMode
+	desc.IpType = ins.IPType
+	desc.LockMode = ins.LockMode
+	desc.LockReason = ins.LockReason
+	port, _ := strconv.Atoi(ins.Port)
+	desc.Port = int64(port)
 	return r
 }
 

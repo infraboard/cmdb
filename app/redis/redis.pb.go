@@ -92,49 +92,49 @@ type Describe struct {
 
 	// 存储容量，单位：MB
 	// @gotags: json:"memory"
-	Memory int64 `protobuf:"varint,1,opt,name=memory,proto3" json:"memory,omitempty"`
+	Memory int64 `protobuf:"varint,1,opt,name=memory,proto3" json:"memory"`
 	// 链接地址
 	// @gotags: json:"connect_addr"
-	ConnectAddr string `protobuf:"bytes,2,opt,name=connect_addr,json=connectAddr,proto3" json:"connect_addr,omitempty"`
+	ConnectAddr string `protobuf:"bytes,2,opt,name=connect_addr,json=connectAddr,proto3" json:"connect_addr"`
 	// 链接端口
 	// @gotags: json:"connect_port"
-	ConnectPort int64 `protobuf:"varint,3,opt,name=connect_port,json=connectPort,proto3" json:"connect_port,omitempty"`
+	ConnectPort int64 `protobuf:"varint,3,opt,name=connect_port,json=connectPort,proto3" json:"connect_port"`
 	// 指定架构类型返回实例列表：cluster（集群版）standard（标准版） SplitRW（读写分离版）NULL（所有类型，默认值）
 	// @gotags: json:"architecture_type"
-	ArchitectureType string `protobuf:"bytes,4,opt,name=architecture_type,json=architectureType,proto3" json:"architecture_type,omitempty"`
+	ArchitectureType string `protobuf:"bytes,4,opt,name=architecture_type,json=architectureType,proto3" json:"architecture_type"`
 	// 理论最大QPS值
 	// @gotags: json:"qps"
-	Qps int64 `protobuf:"varint,5,opt,name=qps,proto3" json:"qps,omitempty"`
+	Qps int64 `protobuf:"varint,5,opt,name=qps,proto3" json:"qps"`
 	// 带宽，单位：MB/s。
 	// @gotags: json:"band_width"
-	BandWidth int64 `protobuf:"varint,6,opt,name=band_width,json=bandWidth,proto3" json:"band_width,omitempty"`
+	BandWidth int64 `protobuf:"varint,6,opt,name=band_width,json=bandWidth,proto3" json:"band_width"`
 	// 实例连接数限制，单位：个
 	// @gotags: json:"max_connection"
-	MaxConnection int64 `protobuf:"varint,7,opt,name=max_connection,json=maxConnection,proto3" json:"max_connection,omitempty"`
+	MaxConnection int64 `protobuf:"varint,7,opt,name=max_connection,json=maxConnection,proto3" json:"max_connection"`
 	// 配置
 	// @gotags: json:"config"
-	Config string `protobuf:"bytes,8,opt,name=config,proto3" json:"config,omitempty"`
+	Config string `protobuf:"bytes,8,opt,name=config,proto3" json:"config"`
 	// 节点类型：double（双节点） single（单节点）
 	// @gotags: json:"node_type"
-	NodeType string `protobuf:"bytes,9,opt,name=node_type,json=nodeType,proto3" json:"node_type,omitempty"`
+	NodeType string `protobuf:"bytes,9,opt,name=node_type,json=nodeType,proto3" json:"node_type"`
 	// 网络类型：CLASSIC（经典网络）VPC（VPC网络）
 	// @gotags: json:"network_type"
-	NetworkType string `protobuf:"bytes,10,opt,name=network_type,json=networkType,proto3" json:"network_type,omitempty"`
+	NetworkType string `protobuf:"bytes,10,opt,name=network_type,json=networkType,proto3" json:"network_type"`
 	// 数据库类型。
 	// @gotags: json:"engine_type"
-	EngineType string `protobuf:"bytes,11,opt,name=engine_type,json=engineType,proto3" json:"engine_type,omitempty"`
+	EngineType string `protobuf:"bytes,11,opt,name=engine_type,json=engineType,proto3" json:"engine_type"`
 	// 数据库版本：2.8 4.0 5.0
 	// @gotags: json:"engine_version"
-	EngineVersion string `protobuf:"bytes,12,opt,name=engine_version,json=engineVersion,proto3" json:"engine_version,omitempty"`
+	EngineVersion string `protobuf:"bytes,12,opt,name=engine_version,json=engineVersion,proto3" json:"engine_version"`
 	// 副本架构：master-slave（包括主从版和单节点版）cluster（包括读写分离版与集群版）
 	// @gotags: json:"replication_mode"
-	ReplicationMode string `protobuf:"bytes,13,opt,name=replication_mode,json=replicationMode,proto3" json:"replication_mode,omitempty"`
+	ReplicationMode string `protobuf:"bytes,13,opt,name=replication_mode,json=replicationMode,proto3" json:"replication_mode"`
 	// 副本ID。
 	// @gotags: json:"replica_id"
-	ReplicaId string `protobuf:"bytes,14,opt,name=replica_id,json=replicaId,proto3" json:"replica_id,omitempty"`
+	ReplicaId string `protobuf:"bytes,14,opt,name=replica_id,json=replicaId,proto3" json:"replica_id"`
 	// IP白名单
 	// @gotags: json:"security_ip_list"
-	SecurityIpList string `protobuf:"bytes,15,opt,name=security_ip_list,json=securityIpList,proto3" json:"security_ip_list,omitempty"`
+	SecurityIpList string `protobuf:"bytes,15,opt,name=security_ip_list,json=securityIpList,proto3" json:"security_ip_list"`
 }
 
 func (x *Describe) Reset() {
@@ -281,10 +281,10 @@ type Set struct {
 
 	// 列表项
 	// @gotags: json:"items"
-	Items []*Redis `protobuf:"bytes,1,rep,name=items,proto3" json:"items,omitempty"`
+	Items []*Redis `protobuf:"bytes,1,rep,name=items,proto3" json:"items"`
 	// 总数量
 	// @gotags: json:"total"
-	Total int64 `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
+	Total int64 `protobuf:"varint,2,opt,name=total,proto3" json:"total"`
 }
 
 func (x *Set) Reset() {
@@ -340,7 +340,7 @@ type QueryRedisRequest struct {
 
 	// 分页参数
 	// @gotags: json:"page"
-	Page *page.PageRequest `protobuf:"bytes,1,opt,name=page,proto3" json:"page,omitempty"`
+	Page *page.PageRequest `protobuf:"bytes,1,opt,name=page,proto3" json:"page"`
 }
 
 func (x *QueryRedisRequest) Reset() {

@@ -92,16 +92,16 @@ type Describe struct {
 
 	// 负载均衡实例的域名，仅公网传统型负载均衡实例才提供该字段
 	// @gotags: json:"domain"
-	Domain string `protobuf:"bytes,1,opt,name=domain,proto3" json:"domain,omitempty"`
+	Domain string `protobuf:"bytes,1,opt,name=domain,proto3" json:"domain"`
 	// 状态变化的时间
 	// @gotags: json:"status_at"
-	StatusAt int64 `protobuf:"varint,2,opt,name=status_at,json=statusAt,proto3" json:"status_at,omitempty"`
+	StatusAt int64 `protobuf:"varint,2,opt,name=status_at,json=statusAt,proto3" json:"status_at"`
 	// IP版本，可以设置为ipv4或者ipv6
 	// @gotags: json:"ip_version"
-	IpVersion string `protobuf:"bytes,3,opt,name=ip_version,json=ipVersion,proto3" json:"ip_version,omitempty"`
+	IpVersion string `protobuf:"bytes,3,opt,name=ip_version,json=ipVersion,proto3" json:"ip_version"`
 	// 私网负载均衡实例的网络类型 vpc：专有网络实例 classic：经典网络实例
 	// @gotags: json:"network_type"
-	NetworkType string `protobuf:"bytes,4,opt,name=network_type,json=networkType,proto3" json:"network_type,omitempty"`
+	NetworkType string `protobuf:"bytes,4,opt,name=network_type,json=networkType,proto3" json:"network_type"`
 }
 
 func (x *Describe) Reset() {
@@ -228,7 +228,7 @@ type QuerySLBRequest struct {
 
 	// 分页参数
 	// @gotags: json:"page"
-	Page *page.PageRequest `protobuf:"bytes,1,opt,name=page,proto3" json:"page,omitempty"`
+	Page *page.PageRequest `protobuf:"bytes,1,opt,name=page,proto3" json:"page"`
 }
 
 func (x *QuerySLBRequest) Reset() {

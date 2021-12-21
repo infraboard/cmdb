@@ -92,22 +92,22 @@ type Describe struct {
 
 	// BGP
 	// @gotags: json:"isp"
-	Isp string `protobuf:"bytes,1,opt,name=isp,proto3" json:"isp,omitempty"`
+	Isp string `protobuf:"bytes,1,opt,name=isp,proto3" json:"isp"`
 	// 带宽
 	// @gotags: json:"band_width"
-	BandWidth string `protobuf:"bytes,2,opt,name=band_width,json=bandWidth,proto3" json:"band_width,omitempty"`
+	BandWidth string `protobuf:"bytes,2,opt,name=band_width,json=bandWidth,proto3" json:"band_width"`
 	// 关联实例ID
 	// @gotags: json:"instance_id"
-	InstanceId string `protobuf:"bytes,3,opt,name=instance_id,json=instanceId,proto3" json:"instance_id,omitempty"`
+	InstanceId string `protobuf:"bytes,3,opt,name=instance_id,json=instanceId,proto3" json:"instance_id"`
 	// 关联实例类型
 	// @gotags: json:"instance_type"
-	InstanceType string `protobuf:"bytes,4,opt,name=instance_type,json=instanceType,proto3" json:"instance_type,omitempty"`
+	InstanceType string `protobuf:"bytes,4,opt,name=instance_type,json=instanceType,proto3" json:"instance_type"`
 	// 关联实例Region
 	// @gotags: json:"instance_region"
-	InstanceRegion string `protobuf:"bytes,5,opt,name=instance_region,json=instanceRegion,proto3" json:"instance_region,omitempty"`
+	InstanceRegion string `protobuf:"bytes,5,opt,name=instance_region,json=instanceRegion,proto3" json:"instance_region"`
 	// 模式(NAT)
 	// @gotags: json:"mode"
-	Mode string `protobuf:"bytes,6,opt,name=mode,proto3" json:"mode,omitempty"`
+	Mode string `protobuf:"bytes,6,opt,name=mode,proto3" json:"mode"`
 }
 
 func (x *Describe) Reset() {
@@ -191,10 +191,10 @@ type Set struct {
 
 	// 列表项
 	// @gotags: json:"items"
-	Items []*EIP `protobuf:"bytes,1,rep,name=items,proto3" json:"items,omitempty"`
+	Items []*EIP `protobuf:"bytes,1,rep,name=items,proto3" json:"items"`
 	// 总数量
 	// @gotags: json:"total"
-	Total int64 `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
+	Total int64 `protobuf:"varint,2,opt,name=total,proto3" json:"total"`
 }
 
 func (x *Set) Reset() {
@@ -250,7 +250,7 @@ type QueryEIPRequest struct {
 
 	// 分页参数
 	// @gotags: json:"page"
-	Page *page.PageRequest `protobuf:"bytes,1,opt,name=page,proto3" json:"page,omitempty"`
+	Page *page.PageRequest `protobuf:"bytes,1,opt,name=page,proto3" json:"page"`
 }
 
 func (x *QueryEIPRequest) Reset() {

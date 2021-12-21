@@ -5,6 +5,7 @@ import (
 
 	"github.com/infraboard/cmdb/app/bill"
 	"github.com/infraboard/cmdb/app/host"
+	"github.com/infraboard/cmdb/app/rds"
 	"github.com/infraboard/cmdb/app/secret"
 	"github.com/infraboard/cmdb/app/task"
 	"github.com/infraboard/cmdb/conf"
@@ -27,6 +28,7 @@ type service struct {
 	secret secret.ServiceServer
 	host   host.ServiceServer
 	bill   bill.ServiceServer
+	rds    rds.ServiceServer
 }
 
 func (s *service) Config() error {
@@ -41,6 +43,7 @@ func (s *service) Config() error {
 	s.secret = app.GetGrpcApp(secret.AppName).(secret.ServiceServer)
 	s.host = app.GetGrpcApp(host.AppName).(host.ServiceServer)
 	s.bill = app.GetGrpcApp(bill.AppName).(bill.ServiceServer)
+	s.rds = app.GetGrpcApp(rds.AppName).(rds.ServiceServer)
 	return nil
 }
 

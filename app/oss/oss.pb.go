@@ -27,9 +27,15 @@ type OSS struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Base        *resource.Base        `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
-	Information *resource.Information `protobuf:"bytes,2,opt,name=information,proto3" json:"information,omitempty"`
-	Describe    *Describe             `protobuf:"bytes,3,opt,name=describe,proto3" json:"describe,omitempty"`
+	// 资源元数据
+	// @gotags: json:"base"
+	Base *resource.Base `protobuf:"bytes,1,opt,name=base,proto3" json:"base"`
+	// 资源基础信息
+	// @gotags: json:"information"
+	Information *resource.Information `protobuf:"bytes,2,opt,name=information,proto3" json:"information"`
+	// Oss详细信息
+	// @gotags: json:"describe"
+	Describe *Describe `protobuf:"bytes,3,opt,name=describe,proto3" json:"describe"`
 }
 
 func (x *OSS) Reset() {
@@ -130,10 +136,10 @@ type Set struct {
 
 	// 列表项
 	// @gotags: json:"items"
-	Items []*OSS `protobuf:"bytes,1,rep,name=items,proto3" json:"items,omitempty"`
+	Items []*OSS `protobuf:"bytes,1,rep,name=items,proto3" json:"items"`
 	// 总数量
 	// @gotags: json:"total"
-	Total int64 `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
+	Total int64 `protobuf:"varint,2,opt,name=total,proto3" json:"total"`
 }
 
 func (x *Set) Reset() {
@@ -189,7 +195,7 @@ type QueryOSSRequest struct {
 
 	// 分页参数
 	// @gotags: json:"page"
-	Page *page.PageRequest `protobuf:"bytes,1,opt,name=page,proto3" json:"page,omitempty"`
+	Page *page.PageRequest `protobuf:"bytes,1,opt,name=page,proto3" json:"page"`
 }
 
 func (x *QueryOSSRequest) Reset() {

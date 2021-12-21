@@ -7,6 +7,7 @@ import (
 	"github.com/infraboard/cmdb/app/resource"
 	"github.com/infraboard/cmdb/app/secret"
 	"github.com/infraboard/cmdb/app/task"
+	"github.com/infraboard/cmdb/conf"
 	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/sqlbuilder"
 )
@@ -45,6 +46,12 @@ func (s *service) CreatTask(ctx context.Context, req *task.CreateTaskRequst) (
 		}
 	}
 
+	// 解密secret
+	err = secret.DecryptAPISecret(conf.C().App.EncryptKey)
+	if err != nil {
+		s.log.Warnf("decrypt api secret error, %s", err)
+	}
+
 	// 资源同步
 	syncCtx, _ := context.WithTimeout(context.Background(), time.Minute*30)
 	switch req.ResourceType {
@@ -52,6 +59,8 @@ func (s *service) CreatTask(ctx context.Context, req *task.CreateTaskRequst) (
 		go s.syncHost(syncCtx, secret, t, s.SyncTaskCallback)
 	case resource.Type_BILL:
 		go s.syncBill(syncCtx, secret, t, s.SyncTaskCallback)
+	case resource.Type_RDS:
+		go s.syncRds(syncCtx, secret, t, s.SyncTaskCallback)
 	}
 
 	// 记录任务

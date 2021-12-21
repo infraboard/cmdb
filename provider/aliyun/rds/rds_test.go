@@ -15,7 +15,8 @@ var (
 )
 
 func TestQuery(t *testing.T) {
-	pager := operater.PageQuery()
+	req := op.NewPageQueryRequest()
+	pager := operater.PageQuery(req)
 
 	hasNext := true
 	for hasNext {
