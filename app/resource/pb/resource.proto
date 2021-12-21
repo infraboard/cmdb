@@ -24,6 +24,13 @@ enum Type {
     BILL = 99;
 }
 
+message ResourceSet {
+    // @gotags: json:"items"
+    repeated Resource items = 1;
+    // @gotags: json:"total"
+    int64 total = 2;
+}
+
 message Resource {
     // 资源元数据信息
     // @gotags: json:"base"
@@ -31,13 +38,9 @@ message Resource {
     // 资源信息
     // @gotags: json:"information"
     Information information = 2;
-}
-
-message ResourceSet {
-    // @gotags: json:"items"
-    repeated Resource items = 1;
-    // @gotags: json:"total"
-    int64 total = 2;
+    // 管理信息
+    // @gotags: json:"management"
+    Management  management = 3;
 }
 
 message Base {
@@ -113,6 +116,12 @@ message Information {
     // 实例付费方式
     // @gotags: json:"pay_type"
     string pay_type = 12;
+}
+
+message Management {
+    // 管理凭证ID
+    // @gotags: json:"secret_id"
+    string secret_id = 1;
 }
 
 message SearchRequest {

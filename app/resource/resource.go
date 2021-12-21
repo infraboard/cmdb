@@ -6,6 +6,7 @@ func NewDefaultResource() *Resource {
 	return &Resource{
 		Base:        &Base{},
 		Information: &Information{},
+		Management:  &Management{},
 	}
 }
 

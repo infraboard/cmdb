@@ -22,7 +22,8 @@ enum UpdateMode {
 message Host {
     infraboard.cmdb.resource.Base base = 1;
     infraboard.cmdb.resource.Information information = 2;
-    Describe describe = 3;
+    infraboard.cmdb.resource.Management management = 3;
+    Describe describe = 4;
 }
 
 message Describe {

@@ -91,6 +91,7 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, t *task.T
 		operater := vmOp.NewVmOperater(ec)
 		// 通过回调直接保存
 		err = operater.Query(func(h *host.Host) {
+			h.SetManagentSecret(secret.Id)
 			_, err := s.host.SaveHost(ctx, h)
 			if err != nil {
 				t.AddDetailFailed(h.Information.Name, err.Error())
@@ -122,6 +123,7 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, t *task.T
 			// 调用host服务保持数据
 			for i := range p.Data.Items {
 				target := p.Data.Items[i]
+				target.SetManagentSecret(secret.Id)
 				h, err := s.host.SaveHost(ctx, target)
 				if err != nil {
 					s.log.Warnf("save host error, %s", err)
