@@ -38,9 +38,6 @@ message Resource {
     // 资源信息
     // @gotags: json:"information"
     Information information = 2;
-    // 管理信息
-    // @gotags: json:"management"
-    Management  management = 3;
 }
 
 message Base {

@@ -17,7 +17,7 @@ const (
 	insertResourceSQL = `INSERT INTO resource (
 		id,vendor,region,zone,create_at,expire_at,category,type,instance_id,
 		name,description,status,update_at,sync_at,sync_accout,public_ip,
-		private_ip,pay_type,describe_hash,resource_hash
+		private_ip,pay_type,describe_hash,resource_hash,secret_id
 	) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);`
 	insertHostSQL = `INSERT INTO host (
 		resource_id,cpu,memory,gpu_amount,gpu_spec,os_type,os_name,
@@ -28,6 +28,7 @@ const (
 		expire_at=?,category=?,type=?,name=?,description=?,
 		status=?,update_at=?,sync_at=?,sync_accout=?,
 		public_ip=?,private_ip=?,pay_type=?,describe_hash=?,resource_hash=?
+		secret_id=? 
 	WHERE id = ?`
 	updateHostSQL = `UPDATE host SET 
 		cpu=?,memory=?,gpu_amount=?,gpu_spec=?,os_type=?,os_name=?,
@@ -94,7 +95,8 @@ func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 			&base.Id, &base.Vendor, &base.Region, &base.Zone, &base.CreateAt, &info.ExpireAt,
 			&info.Category, &info.Type, &base.InstanceId, &info.Name, &info.Description,
 			&info.Status, &info.UpdateAt, &base.SyncAt, &info.SyncAccount,
-			&publicIPList, &privateIPList, &info.PayType, &base.DescribeHash, &base.ResourceHash, &desc.ResourceId,
+			&publicIPList, &privateIPList, &info.PayType, &base.DescribeHash, &base.ResourceHash,
+			&base.SecretId, &desc.ResourceId,
 			&desc.Cpu, &desc.Memory, &desc.GpuAmount, &desc.GpuSpec, &desc.OsType, &desc.OsName,
 			&desc.SerialNumber, &desc.ImageId, &desc.InternetMaxBandwidthOut, &desc.InternetMaxBandwidthIn,
 			&keyPairNameList, &securityGroupsList,
@@ -178,7 +180,7 @@ func (s *service) UpdateHost(ctx context.Context, req *host.UpdateHostRequest) (
 			info.ExpireAt, info.Category, info.Type, info.Name, info.Description,
 			info.Status, info.UpdateAt, base.SyncAt, info.SyncAccount,
 			info.PublicIp, info.PrivateIp, info.PayType, base.DescribeHash, base.ResourceHash,
-			ins.Describe.ResourceId,
+			ins.Base.SecretId, ins.Describe.ResourceId,
 		)
 		if err != nil {
 			return nil, err
@@ -241,7 +243,8 @@ func (s *service) DescribeHost(ctx context.Context, req *host.DescribeHostReques
 		&base.Id, &base.Vendor, &base.Region, &base.Zone, &base.CreateAt, &info.ExpireAt,
 		&info.Category, &info.Type, &base.InstanceId, &info.Name, &info.Description,
 		&info.Status, &info.UpdateAt, &base.SyncAt, &info.SyncAccount,
-		&publicIPList, &privateIPList, &info.PayType, &base.DescribeHash, &base.ResourceHash, &desc.ResourceId,
+		&publicIPList, &privateIPList, &info.PayType, &base.DescribeHash, &base.ResourceHash,
+		&base.SecretId, &desc.ResourceId,
 		&desc.Cpu, &desc.Memory, &desc.GpuAmount, &desc.GpuSpec, &desc.OsType, &desc.OsName,
 		&desc.SerialNumber, &desc.ImageId, &desc.InternetMaxBandwidthOut, &desc.InternetMaxBandwidthIn,
 		&keyPairNameList, &securityGroupsList,

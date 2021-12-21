@@ -16,16 +16,8 @@ func NewDefaultHost() *Host {
 			ResourceType: resource.Type_HOST,
 		},
 		Information: &resource.Information{},
-		Management:  &resource.Management{},
 		Describe:    &Describe{},
 	}
-}
-
-func (h *Host) SetManagentSecret(id string) {
-	if h.Management == nil {
-		h.Management = &resource.Management{}
-	}
-	h.Management.SecretId = id
 }
 
 func (h *Host) Put(req *UpdateHostData) {

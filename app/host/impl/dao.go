@@ -50,7 +50,7 @@ func (s *service) save(ctx context.Context, h *host.Host) error {
 	_, err = stmt.Exec(
 		base.Id, base.Vendor, base.Region, base.Zone, base.CreateAt, info.ExpireAt, info.Category, info.Type, base.InstanceId,
 		info.Name, info.Description, info.Status, info.UpdateAt, base.SyncAt, info.SyncAccount, info.PublicIPToString(),
-		info.PrivateIPToString(), info.PayType, base.DescribeHash, base.ResourceHash,
+		info.PrivateIPToString(), info.PayType, base.DescribeHash, base.ResourceHash, base.SecretId,
 	)
 	if err != nil {
 		return fmt.Errorf("save host resource info error, %s", err)

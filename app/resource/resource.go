@@ -6,7 +6,6 @@ func NewDefaultResource() *Resource {
 	return &Resource{
 		Base:        &Base{},
 		Information: &Information{},
-		Management:  &Management{},
 	}
 }
 
@@ -28,6 +27,10 @@ func (i *Information) LoadPublicIPString(s string) {
 	if s != "" {
 		i.PublicIp = strings.Split(s, ",")
 	}
+}
+
+func (m *Management) SetManagentSecret(id string) {
+	m.SecretId = id
 }
 
 func (req *SearchRequest) OffSet() int64 {
