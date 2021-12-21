@@ -45,6 +45,7 @@ func (o *RdsOperater) transferOne(ins rds.DBInstanceAttribute) *cmdbRds.RDS {
 
 	info := r.Information
 	info.ExpireAt = o.parseTime(ins.ExpireTime)
+	info.Name = ins.DBInstanceDescription
 	info.Type = ins.DBInstanceType
 	info.Description = ins.DBInstanceDescription
 	info.Status = ins.DBInstanceStatus

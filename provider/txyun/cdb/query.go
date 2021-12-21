@@ -14,3 +14,7 @@ func (o *CDBOperater) Query(req *cdb.DescribeDBInstancesRequest) (*rds.Set, erro
 
 	return o.transferSet(resp.Response.Items), nil
 }
+
+func (o *CDBOperater) PageQuery() rds.Pager {
+	return newPager(20, o)
+}

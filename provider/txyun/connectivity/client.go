@@ -2,6 +2,7 @@ package connectivity
 
 import (
 	billing "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/billing/v20180709"
+	cdb "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cdb/v20170320"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
 	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
@@ -22,6 +23,7 @@ type TencentCloudClient struct {
 	SecretID  string
 	SecretKey string
 	cvmConn   *cvm.Client
+	cdbConn   *cdb.Client
 	billConn  *billing.Client
 }
 
@@ -65,4 +67,25 @@ func (me *TencentCloudClient) BillingClient() *billing.Client {
 	me.billConn = billConn
 
 	return me.billConn
+}
+
+// CDBClient cdb
+func (me *TencentCloudClient) CDBClient() *cdb.Client {
+	if me.cdbConn != nil {
+		return me.cdbConn
+	}
+
+	credential := common.NewCredential(
+		me.SecretID,
+		me.SecretKey,
+	)
+
+	cpf := profile.NewClientProfile()
+	cpf.HttpProfile.ReqMethod = "POST"
+	cpf.HttpProfile.ReqTimeout = 300
+	cpf.Language = "en-US"
+
+	cdbConn, _ := cdb.NewClient(credential, me.Region, cpf)
+	me.cdbConn = cdbConn
+	return me.cdbConn
 }

@@ -5,6 +5,7 @@ import (
 
 	"github.com/infraboard/cmdb/app/bill"
 	"github.com/infraboard/cmdb/app/host"
+	"github.com/infraboard/cmdb/app/rds"
 	"github.com/infraboard/cmdb/app/resource"
 	"github.com/infraboard/cmdb/app/secret"
 	"github.com/infraboard/mcube/logger"
@@ -56,4 +57,9 @@ func (c *Client) Secret() secret.ServiceClient {
 // Bill service
 func (c *Client) Bill() bill.ServiceClient {
 	return bill.NewServiceClient(c.conn)
+}
+
+// Rds service
+func (c *Client) Rds() rds.ServiceClient {
+	return rds.NewServiceClient(c.conn)
 }
