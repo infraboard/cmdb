@@ -92,34 +92,34 @@ type Describe struct {
 
 	// 类型 (系统盘, 数据盘) 阿里: system：系统盘; data：数据盘
 	// @gotags: json:"type"
-	Type string `protobuf:"bytes,1,opt,name=type,proto3" json:"type,omitempty"`
+	Type string `protobuf:"bytes,1,opt,name=type,proto3" json:"type"`
 	// 关联的实例
 	// @gotags: json:"instance_id"
-	InstanceId string `protobuf:"bytes,2,opt,name=instance_id,json=instanceId,proto3" json:"instance_id,omitempty"`
+	InstanceId string `protobuf:"bytes,2,opt,name=instance_id,json=instanceId,proto3" json:"instance_id"`
 	// 容量大小
 	// @gotags: json:"size"
-	Size uint64 `protobuf:"varint,3,opt,name=size,proto3" json:"size,omitempty"`
+	Size uint64 `protobuf:"varint,3,opt,name=size,proto3" json:"size"`
 	// 卸载时间
 	// @gotags: json:"detached_time"
-	DetachedTime int64 `protobuf:"varint,4,opt,name=detached_time,json=detachedTime,proto3" json:"detached_time,omitempty"`
+	DetachedTime int64 `protobuf:"varint,4,opt,name=detached_time,json=detachedTime,proto3" json:"detached_time"`
 	// 挂载时间
 	// @gotags: json:"attached_time"
-	AttachedTime int64 `protobuf:"varint,5,opt,name=attached_time,json=attachedTime,proto3" json:"attached_time,omitempty"`
+	AttachedTime int64 `protobuf:"varint,5,opt,name=attached_time,json=attachedTime,proto3" json:"attached_time"`
 	// 是否为弹性云盘
 	// @gotags: json:"portable"
-	Portable bool `protobuf:"varint,6,opt,name=portable,proto3" json:"portable,omitempty"`
+	Portable bool `protobuf:"varint,6,opt,name=portable,proto3" json:"portable"`
 	// 比如: /dev/xvdc
 	// @gotags: json:"device"
-	Device string `protobuf:"bytes,7,opt,name=device,proto3" json:"device,omitempty"`
+	Device string `protobuf:"bytes,7,opt,name=device,proto3" json:"device"`
 	// 是否加密
 	// @gotags: json:"encrypted"
-	Encrypted bool `protobuf:"varint,8,opt,name=encrypted,proto3" json:"encrypted,omitempty"`
+	Encrypted bool `protobuf:"varint,8,opt,name=encrypted,proto3" json:"encrypted"`
 	// 自动快照
 	// @gotags: json:"enable_auto_snapshot"
-	EnableAutoSnapshot bool `protobuf:"varint,9,opt,name=enable_auto_snapshot,json=enableAutoSnapshot,proto3" json:"enable_auto_snapshot,omitempty"`
+	EnableAutoSnapshot bool `protobuf:"varint,9,opt,name=enable_auto_snapshot,json=enableAutoSnapshot,proto3" json:"enable_auto_snapshot"`
 	// 随实例销毁
 	// @gotags: json:"delete_with_instance"
-	DeleteWithInstance bool `protobuf:"varint,10,opt,name=delete_with_instance,json=deleteWithInstance,proto3" json:"delete_with_instance,omitempty"`
+	DeleteWithInstance bool `protobuf:"varint,10,opt,name=delete_with_instance,json=deleteWithInstance,proto3" json:"delete_with_instance"`
 }
 
 func (x *Describe) Reset() {
@@ -231,10 +231,10 @@ type Set struct {
 
 	// 列表项
 	// @gotags: json:"items"
-	Items []*Disk `protobuf:"bytes,1,rep,name=items,proto3" json:"items,omitempty"`
+	Items []*Disk `protobuf:"bytes,1,rep,name=items,proto3" json:"items"`
 	// 总数量
 	// @gotags: json:"total"
-	Total int64 `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
+	Total int64 `protobuf:"varint,2,opt,name=total,proto3" json:"total"`
 }
 
 func (x *Set) Reset() {
@@ -290,7 +290,7 @@ type QueryDiskRequest struct {
 
 	// 分页参数
 	// @gotags: json:"page"
-	Page *page.PageRequest `protobuf:"bytes,1,opt,name=page,proto3" json:"page,omitempty"`
+	Page *page.PageRequest `protobuf:"bytes,1,opt,name=page,proto3" json:"page"`
 }
 
 func (x *QueryDiskRequest) Reset() {

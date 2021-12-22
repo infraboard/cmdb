@@ -45,18 +45,7 @@ clean: ## Remove previous build
 
 gen: ## generate code
 	@protoc -I=. -I=/usr/local/include --go_out=. --go-grpc_out=. --go_opt=module="${PKG}" --go-grpc_opt=module="${PKG}"  app/*/pb/*
-	@protoc-go-inject-tag -input=app/resource/*.pb.go
-	@protoc-go-inject-tag -input=app/host/*.pb.go
-	@protoc-go-inject-tag -input=app/secret/*.pb.go
-	@protoc-go-inject-tag -input=app/task/*.pb.go
-	@protoc-go-inject-tag -input=app/bill/*.pb.go
-	@protoc-go-inject-tag -input=app/eip/*.pb.go
-	@protoc-go-inject-tag -input=app/mongodb/*.pb.go
-	@protoc-go-inject-tag -input=app/oss/*.pb.go
-	@protoc-go-inject-tag -input=app/rds/*.pb.go
-	@protoc-go-inject-tag -input=app/redis/*.pb.go
-	@protoc-go-inject-tag -input=app/slb/*.pb.go
-
+	@mcube inject-tag  app/*/*.pb.go
 
 push: # push git to multi repo
 	@git push -u gitee

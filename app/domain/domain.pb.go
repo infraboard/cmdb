@@ -100,25 +100,25 @@ type Describe struct {
 
 	// 域名的等级
 	// @gotags: json:"grade"
-	Grade string `protobuf:"bytes,1,opt,name=grade,proto3" json:"grade,omitempty"`
+	Grade string `protobuf:"bytes,1,opt,name=grade,proto3" json:"grade"`
 	// 域名的 ID
 	// @gotags: json:"id"
-	Id string `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
+	Id string `protobuf:"bytes,2,opt,name=id,proto3" json:"id"`
 	// 当前域名允许的最小的 TTL
 	// @gotags: json:"min_ttl"
-	MinTtl int64 `protobuf:"varint,3,opt,name=min_ttl,json=minTtl,proto3" json:"min_ttl,omitempty"`
+	MinTtl int64 `protobuf:"varint,3,opt,name=min_ttl,json=minTtl,proto3" json:"min_ttl"`
 	// 域名
 	// @gotags: json:"name"
-	Name string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+	Name string `protobuf:"bytes,4,opt,name=name,proto3" json:"name"`
 	// 域名所有者的邮箱帐号
 	// @gotags: json:"owner"
-	Owner string `protobuf:"bytes,5,opt,name=owner,proto3" json:"owner,omitempty"`
+	Owner string `protobuf:"bytes,5,opt,name=owner,proto3" json:"owner"`
 	// punycode编码后的域名
 	// @gotags: json:"punycode"
-	Punycode string `protobuf:"bytes,6,opt,name=punycode,proto3" json:"punycode,omitempty"`
+	Punycode string `protobuf:"bytes,6,opt,name=punycode,proto3" json:"punycode"`
 	// 域名下的解析记录默认的 TTL 值
 	// @gotags: json:"ttl"
-	Ttl int64 `protobuf:"varint,7,opt,name=ttl,proto3" json:"ttl,omitempty"`
+	Ttl int64 `protobuf:"varint,7,opt,name=ttl,proto3" json:"ttl"`
 }
 
 func (x *Describe) Reset() {
@@ -209,10 +209,10 @@ type Set struct {
 
 	// 列表项
 	// @gotags: json:"items"
-	Items []*Domain `protobuf:"bytes,1,rep,name=items,proto3" json:"items,omitempty"`
+	Items []*Domain `protobuf:"bytes,1,rep,name=items,proto3" json:"items"`
 	// 总数量
 	// @gotags: json:"total"
-	Total int64 `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
+	Total int64 `protobuf:"varint,2,opt,name=total,proto3" json:"total"`
 }
 
 func (x *Set) Reset() {
@@ -268,7 +268,7 @@ type QueryDomainRequest struct {
 
 	// 分页参数
 	// @gotags: json:"page"
-	Page *page.PageRequest `protobuf:"bytes,1,opt,name=page,proto3" json:"page,omitempty"`
+	Page *page.PageRequest `protobuf:"bytes,1,opt,name=page,proto3" json:"page"`
 }
 
 func (x *QueryDomainRequest) Reset() {
@@ -317,34 +317,34 @@ type Record struct {
 
 	// 记录的暂停、启用状态，1和0分别代表启用和暂停
 	// @gotags: json:"enabled"
-	Enabled bool `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	Enabled bool `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled"`
 	// 解析记录的ID
 	// @gotags: json:"id"
-	Id string `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
+	Id string `protobuf:"bytes,2,opt,name=id,proto3" json:"id"`
 	// 解析记录的线路编号
 	// @gotags: json:"line"
-	Line string `protobuf:"bytes,3,opt,name=line,proto3" json:"line,omitempty"`
+	Line string `protobuf:"bytes,3,opt,name=line,proto3" json:"line"`
 	// 记录的优先级，非 MX 记录的话，该值为0
 	// @gotags: json:"mx"
-	Mx int64 `protobuf:"varint,4,opt,name=mx,proto3" json:"mx,omitempty"`
+	Mx int64 `protobuf:"varint,4,opt,name=mx,proto3" json:"mx"`
 	// 子域名
 	// @gotags: json:"name"
-	Name string `protobuf:"bytes,5,opt,name=name,proto3" json:"name,omitempty"`
+	Name string `protobuf:"bytes,5,opt,name=name,proto3" json:"name"`
 	// 解析记录的备注信息
 	// @gotags: json:"remark"
-	Remark string `protobuf:"bytes,6,opt,name=remark,proto3" json:"remark,omitempty"`
+	Remark string `protobuf:"bytes,6,opt,name=remark,proto3" json:"remark"`
 	// 记录的 TTL 值
 	// @gotags: json:"ttl"
-	Ttl int64 `protobuf:"varint,7,opt,name=ttl,proto3" json:"ttl,omitempty"`
+	Ttl int64 `protobuf:"varint,7,opt,name=ttl,proto3" json:"ttl"`
 	// 解析记录的类型
 	// @gotags: json:"type"
-	Type string `protobuf:"bytes,8,opt,name=type,proto3" json:"type,omitempty"`
+	Type string `protobuf:"bytes,8,opt,name=type,proto3" json:"type"`
 	// 解析记录的最后修改时间
 	// @gotags: json:"updated_on"
-	UpdatedOn int64 `protobuf:"varint,9,opt,name=updated_on,json=updatedOn,proto3" json:"updated_on,omitempty"`
+	UpdatedOn int64 `protobuf:"varint,9,opt,name=updated_on,json=updatedOn,proto3" json:"updated_on"`
 	// 记录的值
 	// @gotags: json:"value"
-	Value string `protobuf:"bytes,10,opt,name=value,proto3" json:"value,omitempty"`
+	Value string `protobuf:"bytes,10,opt,name=value,proto3" json:"value"`
 }
 
 func (x *Record) Reset() {
@@ -456,10 +456,10 @@ type RecordSet struct {
 
 	// 列表项
 	// @gotags: json:"items"
-	Items []*Record `protobuf:"bytes,1,rep,name=items,proto3" json:"items,omitempty"`
+	Items []*Record `protobuf:"bytes,1,rep,name=items,proto3" json:"items"`
 	// 总数量
 	// @gotags: json:"total"
-	Total int64 `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
+	Total int64 `protobuf:"varint,2,opt,name=total,proto3" json:"total"`
 }
 
 func (x *RecordSet) Reset() {
