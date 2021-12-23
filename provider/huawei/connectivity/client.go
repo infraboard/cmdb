@@ -6,8 +6,9 @@ import (
 	bss "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/bss/v2"
 	dcs "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/dcs/v2"
 	ecs "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ecs/v2"
-	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ecs/v2/region"
+	ecs_region "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ecs/v2/region"
 	rds "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/rds/v3"
+	rds_region "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/rds/v3/region"
 )
 
 // NewHuaweiCloudClient client
@@ -53,7 +54,7 @@ func (c *HuaweiCloudClient) EcsClient() (*ecs.EcsClient, error) {
 	}
 
 	client := ecs.EcsClientBuilder().
-		WithRegion(region.ValueOf(c.Region)).
+		WithRegion(ecs_region.ValueOf(c.Region)).
 		WithCredential(c.Credentials()).
 		Build()
 
@@ -69,7 +70,7 @@ func (c *HuaweiCloudClient) RdsClient() (*rds.RdsClient, error) {
 	}
 
 	client := rds.RdsClientBuilder().
-		WithRegion(region.ValueOf(c.Region)).
+		WithRegion(rds_region.ValueOf(c.Region)).
 		WithCredential(c.Credentials()).
 		Build()
 
@@ -85,7 +86,7 @@ func (c *HuaweiCloudClient) DcsClient() (*dcs.DcsClient, error) {
 	}
 
 	client := dcs.DcsClientBuilder().
-		WithRegion(region.ValueOf(c.Region)).
+		WithRegion(ecs_region.ValueOf(c.Region)).
 		WithCredential(c.Credentials()).
 		Build()
 

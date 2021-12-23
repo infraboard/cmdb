@@ -20,37 +20,53 @@ enum UpdateMode {
 }
 
 message Host {
+    // @gotags: json:"base"
     infraboard.cmdb.resource.Base base = 1;
+    // @gotags: json:"information"
     infraboard.cmdb.resource.Information information = 2;
+    // @gotags: json:"describe"
     Describe describe = 3;
 }
 
 message Describe {
     // 关联Resource
+    // @gotags: json:"resource_id"
     string resource_id = 1;
     // 核数
+    // @gotags: json:"cpu"
     int64 cpu = 2;
     // 内存
+    // @gotags: json:"memory"
     int64 memory = 3;
     // GPU数量
+    // @gotags: json:"gpu_amount"
     int32 gpu_amount = 4;
     // GPU类型
+    // @gotags: json:"gpu_spec"
     string gpu_spec = 5;
     // 操作系统类型，分为Windows和Linux
+    // @gotags: json:"os_type"
     string os_type = 6;
     // 操作系统名称
+    // @gotags: json:"os_name"
     string os_name = 7;
     // 序列号
+    // @gotags: json:"serial_number"
     string serial_number = 8;
     // 镜像ID
+    // @gotags: json:"image_id"
     string image_id = 9;
     // 公网出带宽最大值，单位为 Mbps
+    // @gotags: json:"internet_max_bandwidth_out"
     int64 internet_max_bandwidth_out = 10;
     // 公网入带宽最大值，单位为 Mbps
+    // @gotags: json:"internet_max_bandwidth_in"
     int64 internet_max_bandwidth_in = 11;
     // 秘钥对名称
+    // @gotags: json:"key_pair_name"
     repeated string key_pair_name = 12;
     // 安全组  采用逗号分隔
+    // @gotags: json:"security_groups"
     repeated string security_groups = 13;
 }
 
@@ -64,8 +80,10 @@ message QueryHostRequest {
 }
 
 message HostSet {
-    repeated Host items = 1;
-    int64 total = 2;
+    // @gotags: json:"total"
+    int64 total = 1;
+    // @gotags: json:"items"
+    repeated Host items = 2;
 }
 
 message UpdateHostRequest {
@@ -78,7 +96,9 @@ message UpdateHostRequest {
 }
 
 message UpdateHostData {
+    // @gotags: json:"information"
     infraboard.cmdb.resource.Information information = 1;
+    // @gotags: json:"describe"
     Describe describe = 2;
 }
 

@@ -11,7 +11,7 @@ require (
 	github.com/caarlos0/env/v6 v6.7.2
 	github.com/go-playground/validator/v10 v10.9.0
 	github.com/go-sql-driver/mysql v1.6.0
-	github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.0.66
+	github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.0.72
 	github.com/infraboard/keyauth v0.6.6
 	github.com/infraboard/mcube v1.5.6
 	github.com/rs/xid v1.3.0

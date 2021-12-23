@@ -119,9 +119,12 @@ type Host struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Base        *resource.Base        `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
-	Information *resource.Information `protobuf:"bytes,2,opt,name=information,proto3" json:"information,omitempty"`
-	Describe    *Describe             `protobuf:"bytes,3,opt,name=describe,proto3" json:"describe,omitempty"`
+	// @gotags: json:"base"
+	Base *resource.Base `protobuf:"bytes,1,opt,name=base,proto3" json:"base"`
+	// @gotags: json:"information"
+	Information *resource.Information `protobuf:"bytes,2,opt,name=information,proto3" json:"information"`
+	// @gotags: json:"describe"
+	Describe *Describe `protobuf:"bytes,3,opt,name=describe,proto3" json:"describe"`
 }
 
 func (x *Host) Reset() {
@@ -183,31 +186,44 @@ type Describe struct {
 	unknownFields protoimpl.UnknownFields
 
 	// 关联Resource
-	ResourceId string `protobuf:"bytes,1,opt,name=resource_id,json=resourceId,proto3" json:"resource_id,omitempty"`
+	// @gotags: json:"resource_id"
+	ResourceId string `protobuf:"bytes,1,opt,name=resource_id,json=resourceId,proto3" json:"resource_id"`
 	// 核数
-	Cpu int64 `protobuf:"varint,2,opt,name=cpu,proto3" json:"cpu,omitempty"`
+	// @gotags: json:"cpu"
+	Cpu int64 `protobuf:"varint,2,opt,name=cpu,proto3" json:"cpu"`
 	// 内存
-	Memory int64 `protobuf:"varint,3,opt,name=memory,proto3" json:"memory,omitempty"`
+	// @gotags: json:"memory"
+	Memory int64 `protobuf:"varint,3,opt,name=memory,proto3" json:"memory"`
 	// GPU数量
-	GpuAmount int32 `protobuf:"varint,4,opt,name=gpu_amount,json=gpuAmount,proto3" json:"gpu_amount,omitempty"`
+	// @gotags: json:"gpu_amount"
+	GpuAmount int32 `protobuf:"varint,4,opt,name=gpu_amount,json=gpuAmount,proto3" json:"gpu_amount"`
 	// GPU类型
-	GpuSpec string `protobuf:"bytes,5,opt,name=gpu_spec,json=gpuSpec,proto3" json:"gpu_spec,omitempty"`
+	// @gotags: json:"gpu_spec"
+	GpuSpec string `protobuf:"bytes,5,opt,name=gpu_spec,json=gpuSpec,proto3" json:"gpu_spec"`
 	// 操作系统类型，分为Windows和Linux
-	OsType string `protobuf:"bytes,6,opt,name=os_type,json=osType,proto3" json:"os_type,omitempty"`
+	// @gotags: json:"os_type"
+	OsType string `protobuf:"bytes,6,opt,name=os_type,json=osType,proto3" json:"os_type"`
 	// 操作系统名称
-	OsName string `protobuf:"bytes,7,opt,name=os_name,json=osName,proto3" json:"os_name,omitempty"`
+	// @gotags: json:"os_name"
+	OsName string `protobuf:"bytes,7,opt,name=os_name,json=osName,proto3" json:"os_name"`
 	// 序列号
-	SerialNumber string `protobuf:"bytes,8,opt,name=serial_number,json=serialNumber,proto3" json:"serial_number,omitempty"`
+	// @gotags: json:"serial_number"
+	SerialNumber string `protobuf:"bytes,8,opt,name=serial_number,json=serialNumber,proto3" json:"serial_number"`
 	// 镜像ID
-	ImageId string `protobuf:"bytes,9,opt,name=image_id,json=imageId,proto3" json:"image_id,omitempty"`
+	// @gotags: json:"image_id"
+	ImageId string `protobuf:"bytes,9,opt,name=image_id,json=imageId,proto3" json:"image_id"`
 	// 公网出带宽最大值，单位为 Mbps
-	InternetMaxBandwidthOut int64 `protobuf:"varint,10,opt,name=internet_max_bandwidth_out,json=internetMaxBandwidthOut,proto3" json:"internet_max_bandwidth_out,omitempty"`
+	// @gotags: json:"internet_max_bandwidth_out"
+	InternetMaxBandwidthOut int64 `protobuf:"varint,10,opt,name=internet_max_bandwidth_out,json=internetMaxBandwidthOut,proto3" json:"internet_max_bandwidth_out"`
 	// 公网入带宽最大值，单位为 Mbps
-	InternetMaxBandwidthIn int64 `protobuf:"varint,11,opt,name=internet_max_bandwidth_in,json=internetMaxBandwidthIn,proto3" json:"internet_max_bandwidth_in,omitempty"`
+	// @gotags: json:"internet_max_bandwidth_in"
+	InternetMaxBandwidthIn int64 `protobuf:"varint,11,opt,name=internet_max_bandwidth_in,json=internetMaxBandwidthIn,proto3" json:"internet_max_bandwidth_in"`
 	// 秘钥对名称
-	KeyPairName []string `protobuf:"bytes,12,rep,name=key_pair_name,json=keyPairName,proto3" json:"key_pair_name,omitempty"`
+	// @gotags: json:"key_pair_name"
+	KeyPairName []string `protobuf:"bytes,12,rep,name=key_pair_name,json=keyPairName,proto3" json:"key_pair_name"`
 	// 安全组  采用逗号分隔
-	SecurityGroups []string `protobuf:"bytes,13,rep,name=security_groups,json=securityGroups,proto3" json:"security_groups,omitempty"`
+	// @gotags: json:"security_groups"
+	SecurityGroups []string `protobuf:"bytes,13,rep,name=security_groups,json=securityGroups,proto3" json:"security_groups"`
 }
 
 func (x *Describe) Reset() {
@@ -397,8 +413,10 @@ type HostSet struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Items []*Host `protobuf:"bytes,1,rep,name=items,proto3" json:"items,omitempty"`
-	Total int64   `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
+	// @gotags: json:"total"
+	Total int64 `protobuf:"varint,1,opt,name=total,proto3" json:"total"`
+	// @gotags: json:"items"
+	Items []*Host `protobuf:"bytes,2,rep,name=items,proto3" json:"items"`
 }
 
 func (x *HostSet) Reset() {
@@ -433,18 +451,18 @@ func (*HostSet) Descriptor() ([]byte, []int) {
 	return file_app_host_pb_host_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *HostSet) GetItems() []*Host {
-	if x != nil {
-		return x.Items
-	}
-	return nil
-}
-
 func (x *HostSet) GetTotal() int64 {
 	if x != nil {
 		return x.Total
 	}
 	return 0
+}
+
+func (x *HostSet) GetItems() []*Host {
+	if x != nil {
+		return x.Items
+	}
+	return nil
 }
 
 type UpdateHostRequest struct {
@@ -518,8 +536,10 @@ type UpdateHostData struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Information *resource.Information `protobuf:"bytes,1,opt,name=information,proto3" json:"information,omitempty"`
-	Describe    *Describe             `protobuf:"bytes,2,opt,name=describe,proto3" json:"describe,omitempty"`
+	// @gotags: json:"information"
+	Information *resource.Information `protobuf:"bytes,1,opt,name=information,proto3" json:"information"`
+	// @gotags: json:"describe"
+	Describe *Describe `protobuf:"bytes,2,opt,name=describe,proto3" json:"describe"`
 }
 
 func (x *UpdateHostData) Reset() {
@@ -731,12 +751,12 @@ var file_app_host_pb_host_proto_rawDesc = []byte{
 	0x61, 0x67, 0x65, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52,
 	0x04, 0x70, 0x61, 0x67, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x6b, 0x65, 0x79, 0x77, 0x6f, 0x72, 0x64,
 	0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x6b, 0x65, 0x79, 0x77, 0x6f, 0x72, 0x64,
-	0x73, 0x22, 0x51, 0x0a, 0x07, 0x48, 0x6f, 0x73, 0x74, 0x53, 0x65, 0x74, 0x12, 0x30, 0x0a, 0x05,
-	0x69, 0x74, 0x65, 0x6d, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x69, 0x6e,
-	0x66, 0x72, 0x61, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x63, 0x6d, 0x64, 0x62, 0x2e, 0x68, 0x6f,
-	0x73, 0x74, 0x2e, 0x48, 0x6f, 0x73, 0x74, 0x52, 0x05, 0x69, 0x74, 0x65, 0x6d, 0x73, 0x12, 0x14,
-	0x0a, 0x05, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x05, 0x74,
-	0x6f, 0x74, 0x61, 0x6c, 0x22, 0xb6, 0x01, 0x0a, 0x11, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x48,
+	0x73, 0x22, 0x51, 0x0a, 0x07, 0x48, 0x6f, 0x73, 0x74, 0x53, 0x65, 0x74, 0x12, 0x14, 0x0a, 0x05,
+	0x74, 0x6f, 0x74, 0x61, 0x6c, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x05, 0x74, 0x6f, 0x74,
+	0x61, 0x6c, 0x12, 0x30, 0x0a, 0x05, 0x69, 0x74, 0x65, 0x6d, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28,
+	0x0b, 0x32, 0x1a, 0x2e, 0x69, 0x6e, 0x66, 0x72, 0x61, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x63,
+	0x6d, 0x64, 0x62, 0x2e, 0x68, 0x6f, 0x73, 0x74, 0x2e, 0x48, 0x6f, 0x73, 0x74, 0x52, 0x05, 0x69,
+	0x74, 0x65, 0x6d, 0x73, 0x22, 0xb6, 0x01, 0x0a, 0x11, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x48,
 	0x6f, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64,
 	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x41, 0x0a, 0x0b, 0x75, 0x70,
 	0x64, 0x61, 0x74, 0x65, 0x5f, 0x6d, 0x6f, 0x64, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0e, 0x32,
