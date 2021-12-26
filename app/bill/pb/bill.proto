@@ -91,6 +91,9 @@ message Bill {
     // 欠费金额
     // @gotags: json:"outstanding_amount"
     double outstanding_amount = 25;
+    // 额外的无法通用的一些属性, 比如只有腾讯云独有的一些属性
+    // @gotags: json:"extra"
+    map<string, string> extra = 35;
 }
 
 message BillSet {
