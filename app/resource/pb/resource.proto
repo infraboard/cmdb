@@ -115,12 +115,6 @@ message Information {
     string pay_type = 12;
 }
 
-message Management {
-    // 管理凭证ID
-    // @gotags: json:"secret_id"
-    string secret_id = 1;
-}
-
 message SearchRequest {
     uint64 page_size = 1;
     uint64 page_number = 2;
