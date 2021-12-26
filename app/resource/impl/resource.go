@@ -8,13 +8,9 @@ import (
 	"github.com/infraboard/mcube/sqlbuilder"
 )
 
-const (
-	queryResourceSQL = `SELECT * FROM resource`
-)
-
 func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 	*resource.ResourceSet, error) {
-	query := sqlbuilder.NewQuery(queryResourceSQL)
+	query := sqlbuilder.NewQuery(SQLQueryResource)
 
 	if req.Keywords != "" {
 		query.Where("name LIKE ? OR id = ? OR instance_id = ? OR private_ip LIKE ? OR public_ip LIKE ?",

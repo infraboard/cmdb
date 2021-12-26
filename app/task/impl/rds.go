@@ -11,6 +11,10 @@ import (
 
 	aliConn "github.com/infraboard/cmdb/provider/aliyun/connectivity"
 	rdsOp "github.com/infraboard/cmdb/provider/aliyun/rds"
+	hwConn "github.com/infraboard/cmdb/provider/huawei/connectivity"
+	hwRdsOp "github.com/infraboard/cmdb/provider/huawei/rds"
+	cdbOp "github.com/infraboard/cmdb/provider/txyun/cdb"
+	txConn "github.com/infraboard/cmdb/provider/txyun/connectivity"
 )
 
 func (s *service) syncRds(ctx context.Context, secret *secret.Secret, t *task.Task, cb SyncTaskCallback) {
@@ -41,8 +45,19 @@ func (s *service) syncRds(ctx context.Context, secret *secret.Secret, t *task.Ta
 		pager = operater.PageQuery(req)
 	case resource.Vendor_TENCENT:
 		s.log.Debugf("sync txyun rds ...")
+		client := txConn.NewTencentCloudClient(secret.ApiKey, secret.ApiSecret, t.Region)
+		operater := cdbOp.NewCDBOperater(client.CDBClient())
+		pager = operater.PageQuery()
 	case resource.Vendor_HUAWEI:
 		s.log.Debugf("sync hwyun rds ...")
+		client := hwConn.NewHuaweiCloudClient(secret.ApiKey, secret.ApiSecret, t.Region)
+		ec, err := client.RdsClient()
+		if err != nil {
+			t.Failed(err.Error())
+			return
+		}
+		operater := hwRdsOp.NewEcsOperater(ec)
+		pager = operater.PageQuery()
 	default:
 		t.Failed(fmt.Sprintf("unsuport bill syncing vendor %s", secret.Vendor))
 		return

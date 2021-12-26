@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/infraboard/cmdb/app/host"
+	"github.com/infraboard/cmdb/app/resource/impl"
 )
 
 func (s *service) save(ctx context.Context, h *host.Host) error {
@@ -34,7 +35,7 @@ func (s *service) save(ctx context.Context, h *host.Host) error {
 	}()
 
 	// 避免SQL注入, 请使用Prepare
-	stmt, err = tx.Prepare(insertResourceSQL)
+	stmt, err = tx.Prepare(impl.SQLInsertResource)
 	if err != nil {
 		return err
 	}
@@ -111,7 +112,7 @@ func (s *service) delete(ctx context.Context, req *host.DeleteHostRequest) error
 		return err
 	}
 
-	stmt, err = s.db.Prepare(deleteResourceSQL)
+	stmt, err = s.db.Prepare(impl.SQLDeleteResource)
 	if err != nil {
 		return err
 	}
