@@ -36,17 +36,19 @@ func (o *RdsOperater) transferSet(list *[]model.InstanceResponse) *rds.Set {
 
 func (o *RdsOperater) transferOne(ins model.InstanceResponse) *rds.RDS {
 	h := rds.NewDefaultRDS()
-	h.Base.Vendor = resource.Vendor_HUAWEI
-	h.Base.Region = ins.Region
-	h.Base.CreateAt = o.parseTime(ins.Created)
-	h.Base.InstanceId = ins.Id
+	b := h.Base
+	b.Vendor = resource.Vendor_HUAWEI
+	b.Region = ins.Region
+	b.CreateAt = o.parseTime(ins.Created)
+	b.InstanceId = ins.Id
 
-	h.Information.Category = ins.Type
-	h.Information.Name = ins.Name
-	h.Information.Description = utils.PtrStrV(ins.Alias)
-	h.Information.Status = ins.Status
-	h.Information.Tags = o.transferTags(ins.Tags)
-	h.Information.PrivateIp, h.Information.PublicIp = ins.PrivateIps, ins.PublicIps
+	i := h.Information
+	i.Category = ins.Type
+	i.Name = ins.Name
+	i.Description = utils.PtrStrV(ins.Alias)
+	i.Status = ins.Status
+	i.Tags = o.transferTags(ins.Tags)
+	i.PrivateIp, i.PublicIp = ins.PrivateIps, ins.PublicIps
 
 	return h
 }
