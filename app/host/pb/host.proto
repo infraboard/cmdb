@@ -68,6 +68,9 @@ message Describe {
     // 安全组  采用逗号分隔
     // @gotags: json:"security_groups"
     repeated string security_groups = 13;
+    // 额外的无法通用的一些属性, 比如只有腾讯云独有的一些属性
+    // @gotags: json:"extra"
+    map<string, string> extra = 15;
 }
 
 message QueryHostRequest {

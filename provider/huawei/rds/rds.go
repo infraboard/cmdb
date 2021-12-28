@@ -1,6 +1,9 @@
 package rds
 
 import (
+	"bytes"
+	"encoding/json"
+	"strconv"
 	"time"
 
 	hw_rds "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/rds/v3"
@@ -43,13 +46,30 @@ func (o *RdsOperater) transferOne(ins model.InstanceResponse) *rds.RDS {
 	b.InstanceId = ins.Id
 
 	i := h.Information
+	i.ExpireAt = o.parseTime(utils.PtrStrV(ins.ExpirationTime))
 	i.Category = ins.Type
 	i.Name = ins.Name
 	i.Description = utils.PtrStrV(ins.Alias)
 	i.Status = ins.Status
 	i.Tags = o.transferTags(ins.Tags)
 	i.PrivateIp, i.PublicIp = ins.PrivateIps, ins.PublicIps
+	i.PayType = o.getEnumValue(ins.ChargeInfo.ChargeMode)
 
+	d := h.Describe
+	cpu, _ := strconv.ParseInt(utils.PtrStrV(ins.Cpu), 10, 32)
+	mem, _ := strconv.ParseInt(utils.PtrStrV(ins.Mem), 10, 64)
+
+	d.Category = ins.FlavorRef
+	d.EngineType = o.getEnumValue(ins.Datastore.Type)
+	d.EngineVersion = ins.Datastore.Version
+	d.Cpu = int32(cpu)
+	d.Memory = mem * 1024
+	d.TimeZone = ins.TimeZone
+	d.MaxIops = utils.PtrInt64(ins.MaxIops)
+
+	d.StorageType = o.getEnumValue(ins.Volume.Type)
+	d.StorageCapacity = int64(ins.Volume.Size)
+	d.Port = int64(ins.Port)
 	return h
 }
 
@@ -69,4 +89,17 @@ func (o *RdsOperater) parseTime(t string) int64 {
 
 func (o *RdsOperater) transferTags(tags []model.TagResponse) map[string]string {
 	return nil
+}
+
+func (o *RdsOperater) getEnumValue(m json.Marshaler) string {
+	vb, err := m.MarshalJSON()
+	if err != nil {
+		o.log.Errorf("marshal enum error, %s", err)
+		return ""
+	}
+
+	new := []byte{}
+	new = bytes.ReplaceAll(vb, []byte("\""), []byte(""))
+	new = bytes.ReplaceAll(new, []byte("\n"), []byte(""))
+	return string(new)
 }

@@ -29,10 +29,6 @@ func (i *Information) LoadPublicIPString(s string) {
 	}
 }
 
-func (m *Management) SetManagentSecret(id string) {
-	m.SecretId = id
-}
-
 func (req *SearchRequest) OffSet() int64 {
 	return int64(req.PageSize) * int64(req.PageNumber-1)
 }

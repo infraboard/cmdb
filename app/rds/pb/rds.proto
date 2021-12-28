@@ -96,6 +96,9 @@ message Describe {
     // 端口
     // @gotags: json:"port"
     int64 port = 26;
+    // 额外的无法通用的一些属性, 比如只有腾讯云独有的一些属性
+    // @gotags: json:"extra"
+    map<string, string> extra = 27;
 }
 
 message Set {
