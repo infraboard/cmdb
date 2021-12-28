@@ -54,12 +54,12 @@ func (o *RdsOperater) transferOne(ins model.InstanceResponse) *rds.RDS {
 	i.Tags = o.transferTags(ins.Tags)
 	i.PrivateIp, i.PublicIp = ins.PrivateIps, ins.PublicIps
 	i.PayType = o.getEnumValue(ins.ChargeInfo.ChargeMode)
+	i.Category = ins.FlavorRef
 
 	d := h.Describe
 	cpu, _ := strconv.ParseInt(utils.PtrStrV(ins.Cpu), 10, 32)
 	mem, _ := strconv.ParseInt(utils.PtrStrV(ins.Mem), 10, 64)
 
-	d.Category = ins.FlavorRef
 	d.EngineType = o.getEnumValue(ins.Datastore.Type)
 	d.EngineVersion = ins.Datastore.Version
 	d.Cpu = int32(cpu)

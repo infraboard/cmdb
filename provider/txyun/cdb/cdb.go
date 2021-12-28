@@ -46,13 +46,13 @@ func (o *CDBOperater) transferOne(ins *cdb.InstanceInfo) *rds.RDS {
 	info := r.Information
 	info.ExpireAt = o.parseTime(utils.PtrStrV(ins.DeadlineTime))
 	info.Name = utils.PtrStrV(ins.InstanceName)
+	info.Category = utils.PtrStrV(ins.DeviceType)
 	// info.Type = ins.DBInstanceType
 	// info.Description = ins.DBInstanceDescription
 	// info.Status = ins.DBInstanceStatus
 	// info.PayType = ins.PayType
 
 	desc := r.Describe
-	desc.Category = utils.PtrStrV(ins.DeviceType)
 	desc.EngineType = "MySQL"
 	desc.EngineVersion = utils.PtrStrV(ins.EngineVersion)
 	// desc.InstanceClass = ins.DBInstanceClass

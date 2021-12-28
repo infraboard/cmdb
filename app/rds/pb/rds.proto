@@ -18,9 +18,6 @@ message RDS {
 }
 
 message Describe {
-    // 实例系列，取值：Basic：基础版；HighAvailability：高可用版；AlwaysOn：集群版；Finance：金融版（仅中国站支持）
-    // @gotags: json:"category"
-    string category = 1;
     // 引擎 比如 MYSQL, SQLServer, PGSQL
     // @gotags: json:"engine_type"
     string engine_type = 2;
