@@ -10,6 +10,7 @@ service Service {
     rpc SaveHost(Host) returns(Host) {}
     rpc QueryHost(QueryHostRequest) returns(HostSet) {}
     rpc UpdateHost(UpdateHostRequest) returns(Host) {}
+    rpc SaveOrUpdateHost(Host) returns(Host) {}
     rpc DescribeHost(DescribeHostRequest) returns(Host) {}
     rpc DeleteHost(DeleteHostRequest) returns(Host) {}
 }

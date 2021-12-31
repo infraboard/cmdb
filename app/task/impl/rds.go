@@ -75,18 +75,31 @@ func (s *service) syncRds(ctx context.Context, secret *secret.Secret, t *task.Ta
 				return
 			}
 
-			// 调用host服务保持数据
+			// 调用rds服务保持数据
 			for i := range p.Data.Items {
 				target := p.Data.Items[i]
-				b, err := s.rds.SaveRDS(ctx, target)
-				if err != nil {
-					s.log.Warnf("save host error, %s", err)
-					t.AddDetailFailed(target.Base.InstanceId, err.Error())
-				} else {
-					s.log.Debugf("save host %s to db", b.ShortDesc())
-					t.AddDetailSucceed(target.Base.InstanceId, "")
-				}
+				target.Base.SecretId = secret.Id
+				s.SaveOrUpdateRds(ctx, target, t)
 			}
 		}
+	}
+}
+
+// Rds数据入库
+func (s *service) SaveOrUpdateRds(ctx context.Context, ins *rds.RDS, t *task.Task) {
+	b, err := s.rds.SaveRDS(ctx, ins)
+
+	var detail *task.Detail
+	if err != nil {
+		s.log.Warnf("save rds error, %s", err)
+		detail = task.NewSyncFailedDetail(ins.Base.InstanceId, ins.Information.Name, err.Error())
+	} else {
+		s.log.Debugf("save host %s to db", b.ShortDesc())
+		detail = task.NewSyncSucceedDetail(ins.Base.InstanceId, ins.Information.Name)
+	}
+
+	t.AddDetail(detail)
+	if err := s.insertOrUpdateDetail(ctx, t.Id, detail); err != nil {
+		s.log.Errorf("update detail error, %s", err)
 	}
 }

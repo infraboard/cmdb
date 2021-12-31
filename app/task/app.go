@@ -49,3 +49,20 @@ func NewQueryTaskRequestFromHTTP(r *http.Request) *QueryTaskRequest {
 func (req *QueryTaskRequest) OffSet() int64 {
 	return int64(req.PageSize) * int64(req.PageNumber-1)
 }
+
+func NewSyncSucceedDetail(instanceId, instanceName string) *Detail {
+	return &Detail{
+		IsSuccess:  true,
+		InstanceId: instanceId,
+		Name:       instanceName,
+	}
+}
+
+func NewSyncFailedDetail(instanceId, instanceName, message string) *Detail {
+	return &Detail{
+		IsSuccess:  false,
+		InstanceId: instanceId,
+		Name:       instanceName,
+		Message:    message,
+	}
+}

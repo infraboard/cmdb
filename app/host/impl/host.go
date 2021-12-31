@@ -191,6 +191,37 @@ func (s *service) UpdateHost(ctx context.Context, req *host.UpdateHostRequest) (
 	return ins, nil
 }
 
+func (s *service) SaveOrUpdateHost(ctx context.Context, ins *host.Host) (
+	*host.Host, error) {
+	exist, err := s.DescribeHost(ctx, host.NewDescribeHostRequestInstanceID(ins.Base.InstanceId))
+	if err != nil {
+		// 如果不是Not Found则直接返回
+		if !exception.IsNotFoundError(err) {
+			return nil, err
+		}
+	}
+
+	// 检查ins已经存在 我们则需要更新ins
+	if exist != nil {
+		updateReq := host.NewUpdateHostRequest(exist.Base.Id)
+		updateReq.UpdateHostData.Information = ins.Information
+		updateReq.UpdateHostData.Describe = ins.Describe
+		ins, err := s.UpdateHost(ctx, updateReq)
+		if err != nil {
+			return nil, err
+		}
+		return ins, nil
+	}
+
+	// 如果没有我们则直接保存
+	resp, err := s.SaveHost(ctx, ins)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, nil
+}
+
 func (s *service) DescribeHost(ctx context.Context, req *host.DescribeHostRequest) (
 	*host.Host, error) {
 	query := sqlbuilder.NewQuery(queryHostSQL)

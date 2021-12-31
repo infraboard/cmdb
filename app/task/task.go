@@ -51,22 +51,13 @@ func (s *Task) Failed(message string) {
 	s.Message = message
 }
 
-func (s *Task) AddDetailFailed(name, message string) {
-	s.Details = append(s.Details, &Detail{
-		IsSuccess: false,
-		Name:      name,
-		Message:   message,
-	})
-	s.TotalFailed++
-}
-
-func (s *Task) AddDetailSucceed(name, message string) {
-	s.Details = append(s.Details, &Detail{
-		IsSuccess: true,
-		Name:      name,
-		Message:   message,
-	})
-	s.TotalSucceed++
+func (s *Task) AddDetail(d *Detail) {
+	if d.IsSuccess {
+		s.TotalSucceed++
+	} else {
+		s.TotalFailed++
+	}
+	s.Details = append(s.Details, d)
 }
 
 func NewTaskSet() *TaskSet {

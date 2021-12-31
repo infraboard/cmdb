@@ -17,6 +17,11 @@ const (
 	total_succeed=?,total_failed=? WHERE id = ?`
 
 	queryTaskSQL = `SELECT * FROM task`
+
+	updateOrInsertDetailSQL = `INSERT INTO task_detail (
+		instance_id,instance_name,is_success,message,task_id) 
+		VALUES (?,?,?,?,?) ON DUPLICATE KEY UPDATE 
+		instance_name=?,is_success=?,message=?,task_id=?`
 )
 
 func (s *service) insert(ctx context.Context, t *task.Task) error {
@@ -48,6 +53,24 @@ func (s *service) update(ctx context.Context, t *task.Task) error {
 	)
 	if err != nil {
 		return fmt.Errorf("update task info error, %s", err)
+	}
+
+	return nil
+}
+
+func (s *service) insertOrUpdateDetail(ctx context.Context, taskId string, detail *task.Detail) error {
+	stmt, err := s.db.Prepare(updateOrInsertDetailSQL)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(
+		detail.InstanceId, detail.Name, detail.IsSuccess, detail.Message, taskId,
+		detail.Name, detail.IsSuccess, detail.Message, taskId,
+	)
+	if err != nil {
+		return fmt.Errorf("insert or update task %s detail info error, %s", taskId, err)
 	}
 
 	return nil

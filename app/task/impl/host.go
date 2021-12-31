@@ -86,12 +86,7 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, t *task.T
 		err = operater.Query(func(h *host.Host) {
 			// 补充管理信息
 			h.Base.SecretId = secret.Id
-			_, err := s.host.SaveHost(ctx, h)
-			if err != nil {
-				t.AddDetailFailed(h.Information.Name, err.Error())
-			} else {
-				t.AddDetailSucceed(h.Information.Name, "")
-			}
+			s.SaveOrUpdateHost(ctx, h, t)
 		})
 		if err != nil {
 			t.Failed(err.Error())
@@ -119,15 +114,27 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, t *task.T
 				target := p.Data.Items[i]
 				// 补充管理信息
 				target.Base.SecretId = secret.Id
-				h, err := s.host.SaveHost(ctx, target)
-				if err != nil {
-					s.log.Warnf("save host error, %s", err)
-					t.AddDetailFailed(target.Information.Name, err.Error())
-				} else {
-					s.log.Debugf("save host %s to db", h.ShortDesc())
-					t.AddDetailSucceed(target.Information.Name, "")
-				}
+				s.SaveOrUpdateHost(ctx, target, t)
 			}
 		}
+	}
+}
+
+// Host主机数据入库
+func (s *service) SaveOrUpdateHost(ctx context.Context, ins *host.Host, t *task.Task) {
+	h, err := s.host.SaveOrUpdateHost(ctx, ins)
+
+	var detail *task.Detail
+	if err != nil {
+		s.log.Warnf("save host error, %s", err)
+		detail = task.NewSyncFailedDetail(ins.Base.InstanceId, ins.Information.Name, err.Error())
+	} else {
+		s.log.Debugf("save host %s to db", h.ShortDesc())
+		detail = task.NewSyncSucceedDetail(ins.Base.InstanceId, ins.Information.Name)
+	}
+
+	t.AddDetail(detail)
+	if err := s.insertOrUpdateDetail(ctx, t.Id, detail); err != nil {
+		s.log.Errorf("update detail error, %s", err)
 	}
 }

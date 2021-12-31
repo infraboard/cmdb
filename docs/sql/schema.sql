@@ -103,3 +103,12 @@ CREATE TABLE `task` (
   `total_failed` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `task_detail` (
+  `instance_id` varchar(64) NOT NULL COMMENT '实例Id',
+  `instance_name` varchar(255) CHARACTER SET utf8mb4 NOT NULL COMMENT '实例名称',
+  `is_success` tinyint(2) NOT NULL COMMENT '是否同步成功',
+  `message` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '通过异常时的信息',
+  `task_id` varchar(64) NOT NULL COMMENT 'task id',
+  PRIMARY KEY (`instance_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1

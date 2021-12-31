@@ -62,15 +62,18 @@ message Task {
 }
 
 message Detail {
+    // 资源实例Id
+    // @gotags: json:"instance_id"
+    string instance_id= 1;
     // 资源名称
     // @gotags: json:"name"
-    string name = 1;
+    string name = 2;
     // 是否同步成功
     // @gotags: json:"is_success"
-    bool is_success = 2;
+    bool is_success = 3;
     // 同步失败原因
     // @gotags: json:"message"
-    string message = 3;
+    string message = 4;
 }
 
 message TaskSet {

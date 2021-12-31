@@ -79,16 +79,14 @@ func (s *service) syncBill(ctx context.Context, secret *secret.Secret, t *task.T
 				return
 			}
 
-			// 调用host服务保持数据
+			// 调用bill服务保持数据
 			for i := range p.Data.Items {
 				target := p.Data.Items[i]
 				b, err := s.bill.SaveBill(ctx, target)
 				if err != nil {
-					s.log.Warnf("save host error, %s", err)
-					t.AddDetailFailed(target.InstanceId, err.Error())
+					s.log.Warnf("save bill error, %s", err)
 				} else {
 					s.log.Debugf("save host %s to db", b.ShortDesc())
-					t.AddDetailSucceed(target.InstanceId, "")
 				}
 			}
 		}

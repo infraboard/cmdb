@@ -47,6 +47,13 @@ func NewDescribeHostRequestWithID(id string) *DescribeHostRequest {
 	}
 }
 
+func NewDescribeHostRequestInstanceID(instanceId string) *DescribeHostRequest {
+	return &DescribeHostRequest{
+		DescribeBy: DescribeBy_INSTANCE_ID,
+		Value:      instanceId,
+	}
+}
+
 func NewDeleteHostRequestWithID(id string) *DeleteHostRequest {
 	return &DeleteHostRequest{Id: id}
 }

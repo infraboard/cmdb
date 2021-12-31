@@ -21,6 +21,7 @@ type ServiceClient interface {
 	SaveHost(ctx context.Context, in *Host, opts ...grpc.CallOption) (*Host, error)
 	QueryHost(ctx context.Context, in *QueryHostRequest, opts ...grpc.CallOption) (*HostSet, error)
 	UpdateHost(ctx context.Context, in *UpdateHostRequest, opts ...grpc.CallOption) (*Host, error)
+	SaveOrUpdateHost(ctx context.Context, in *Host, opts ...grpc.CallOption) (*Host, error)
 	DescribeHost(ctx context.Context, in *DescribeHostRequest, opts ...grpc.CallOption) (*Host, error)
 	DeleteHost(ctx context.Context, in *DeleteHostRequest, opts ...grpc.CallOption) (*Host, error)
 }
@@ -60,6 +61,15 @@ func (c *serviceClient) UpdateHost(ctx context.Context, in *UpdateHostRequest, o
 	return out, nil
 }
 
+func (c *serviceClient) SaveOrUpdateHost(ctx context.Context, in *Host, opts ...grpc.CallOption) (*Host, error) {
+	out := new(Host)
+	err := c.cc.Invoke(ctx, "/infraboard.cmdb.host.Service/SaveOrUpdateHost", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *serviceClient) DescribeHost(ctx context.Context, in *DescribeHostRequest, opts ...grpc.CallOption) (*Host, error) {
 	out := new(Host)
 	err := c.cc.Invoke(ctx, "/infraboard.cmdb.host.Service/DescribeHost", in, out, opts...)
@@ -85,6 +95,7 @@ type ServiceServer interface {
 	SaveHost(context.Context, *Host) (*Host, error)
 	QueryHost(context.Context, *QueryHostRequest) (*HostSet, error)
 	UpdateHost(context.Context, *UpdateHostRequest) (*Host, error)
+	SaveOrUpdateHost(context.Context, *Host) (*Host, error)
 	DescribeHost(context.Context, *DescribeHostRequest) (*Host, error)
 	DeleteHost(context.Context, *DeleteHostRequest) (*Host, error)
 	mustEmbedUnimplementedServiceServer()
@@ -102,6 +113,9 @@ func (UnimplementedServiceServer) QueryHost(context.Context, *QueryHostRequest) 
 }
 func (UnimplementedServiceServer) UpdateHost(context.Context, *UpdateHostRequest) (*Host, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateHost not implemented")
+}
+func (UnimplementedServiceServer) SaveOrUpdateHost(context.Context, *Host) (*Host, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveOrUpdateHost not implemented")
 }
 func (UnimplementedServiceServer) DescribeHost(context.Context, *DescribeHostRequest) (*Host, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DescribeHost not implemented")
@@ -176,6 +190,24 @@ func _Service_UpdateHost_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Service_SaveOrUpdateHost_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Host)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServiceServer).SaveOrUpdateHost(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/infraboard.cmdb.host.Service/SaveOrUpdateHost",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServiceServer).SaveOrUpdateHost(ctx, req.(*Host))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Service_DescribeHost_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DescribeHostRequest)
 	if err := dec(in); err != nil {
@@ -230,6 +262,10 @@ var Service_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateHost",
 			Handler:    _Service_UpdateHost_Handler,
+		},
+		{
+			MethodName: "SaveOrUpdateHost",
+			Handler:    _Service_SaveOrUpdateHost_Handler,
 		},
 		{
 			MethodName: "DescribeHost",
