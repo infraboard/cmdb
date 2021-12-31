@@ -29,48 +29,45 @@ message Host {
 }
 
 message Describe {
-    // 关联Resource
-    // @gotags: json:"resource_id"
-    string resource_id = 1;
     // 核数
     // @gotags: json:"cpu"
-    int64 cpu = 2;
+    int64 cpu = 1;
     // 内存
     // @gotags: json:"memory"
-    int64 memory = 3;
+    int64 memory = 2;
     // GPU数量
     // @gotags: json:"gpu_amount"
-    int32 gpu_amount = 4;
+    int32 gpu_amount = 3;
     // GPU类型
     // @gotags: json:"gpu_spec"
-    string gpu_spec = 5;
+    string gpu_spec = 4;
     // 操作系统类型，分为Windows和Linux
     // @gotags: json:"os_type"
-    string os_type = 6;
+    string os_type = 5;
     // 操作系统名称
     // @gotags: json:"os_name"
-    string os_name = 7;
+    string os_name = 6;
     // 序列号
     // @gotags: json:"serial_number"
-    string serial_number = 8;
+    string serial_number = 7;
     // 镜像ID
     // @gotags: json:"image_id"
-    string image_id = 9;
+    string image_id = 8;
     // 公网出带宽最大值，单位为 Mbps
     // @gotags: json:"internet_max_bandwidth_out"
-    int64 internet_max_bandwidth_out = 10;
+    int64 internet_max_bandwidth_out = 9;
     // 公网入带宽最大值，单位为 Mbps
     // @gotags: json:"internet_max_bandwidth_in"
-    int64 internet_max_bandwidth_in = 11;
+    int64 internet_max_bandwidth_in = 10;
     // 秘钥对名称
     // @gotags: json:"key_pair_name"
-    repeated string key_pair_name = 12;
+    repeated string key_pair_name = 11;
     // 安全组  采用逗号分隔
     // @gotags: json:"security_groups"
-    repeated string security_groups = 13;
+    repeated string security_groups = 12;
     // 额外的无法通用的一些属性, 比如只有腾讯云独有的一些属性
     // @gotags: json:"extra"
-    map<string, string> extra = 15;
+    map<string, string> extra = 13;
 }
 
 message QueryHostRequest {

@@ -17,7 +17,6 @@ import (
 func (s *service) SaveHost(ctx context.Context, h *host.Host) (
 	*host.Host, error) {
 	h.Base.Id = xid.New().String()
-	h.Describe.ResourceId = h.Base.Id
 	h.Base.SyncAt = ftime.Now().Timestamp()
 
 	if err := s.save(ctx, h); err != nil {
@@ -69,7 +68,7 @@ func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 			&info.Category, &info.Type, &base.InstanceId, &info.Name, &info.Description,
 			&info.Status, &info.UpdateAt, &base.SyncAt, &info.SyncAccount,
 			&publicIPList, &privateIPList, &info.PayType, &base.DescribeHash, &base.ResourceHash,
-			&base.SecretId, &desc.ResourceId,
+			&base.SecretId, &base.Id,
 			&desc.Cpu, &desc.Memory, &desc.GpuAmount, &desc.GpuSpec, &desc.OsType, &desc.OsName,
 			&desc.SerialNumber, &desc.ImageId, &desc.InternetMaxBandwidthOut, &desc.InternetMaxBandwidthIn,
 			&keyPairNameList, &securityGroupsList,
@@ -141,7 +140,7 @@ func (s *service) UpdateHost(ctx context.Context, req *host.UpdateHostRequest) (
 
 	if oldRH != ins.Base.ResourceHash {
 		// 避免SQL注入, 请使用Prepare
-		stmt, err = tx.Prepare(impl.SQLDeleteResource)
+		stmt, err = tx.Prepare(impl.SQLUpdateResource)
 		if err != nil {
 			return nil, err
 		}
@@ -153,7 +152,7 @@ func (s *service) UpdateHost(ctx context.Context, req *host.UpdateHostRequest) (
 			info.ExpireAt, info.Category, info.Type, info.Name, info.Description,
 			info.Status, info.UpdateAt, base.SyncAt, info.SyncAccount,
 			info.PublicIp, info.PrivateIp, info.PayType, base.DescribeHash, base.ResourceHash,
-			ins.Base.SecretId, ins.Describe.ResourceId,
+			ins.Base.SecretId, ins.Base.Id,
 		)
 		if err != nil {
 			return nil, err
@@ -217,7 +216,7 @@ func (s *service) DescribeHost(ctx context.Context, req *host.DescribeHostReques
 		&info.Category, &info.Type, &base.InstanceId, &info.Name, &info.Description,
 		&info.Status, &info.UpdateAt, &base.SyncAt, &info.SyncAccount,
 		&publicIPList, &privateIPList, &info.PayType, &base.DescribeHash, &base.ResourceHash,
-		&base.SecretId, &desc.ResourceId,
+		&base.SecretId, &base.Id,
 		&desc.Cpu, &desc.Memory, &desc.GpuAmount, &desc.GpuSpec, &desc.OsType, &desc.OsName,
 		&desc.SerialNumber, &desc.ImageId, &desc.InternetMaxBandwidthOut, &desc.InternetMaxBandwidthIn,
 		&keyPairNameList, &securityGroupsList,

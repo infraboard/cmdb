@@ -1,6 +1,8 @@
 package rds
 
 import (
+	"crypto/sha1"
+	"encoding/json"
 	"fmt"
 
 	resource "github.com/infraboard/cmdb/app/resource"
@@ -51,4 +53,14 @@ type Pager interface {
 
 func (r *RDS) ShortDesc() string {
 	return fmt.Sprintf("%s %s", r.Information.Name, r.Information.PrivateIp)
+}
+
+func (d *Describe) Hash() string {
+	hash := sha1.New()
+	b, err := json.Marshal(d)
+	if err != nil {
+		return ""
+	}
+	hash.Write(b)
+	return fmt.Sprintf("%x", hash.Sum(nil))
 }

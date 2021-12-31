@@ -27,9 +27,15 @@ type RDS struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Base        *resource.Base        `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
-	Information *resource.Information `protobuf:"bytes,2,opt,name=information,proto3" json:"information,omitempty"`
-	Describe    *Describe             `protobuf:"bytes,3,opt,name=describe,proto3" json:"describe,omitempty"`
+	// 资源元数据信息
+	// @gotags: json:"base"
+	Base *resource.Base `protobuf:"bytes,1,opt,name=base,proto3" json:"base"`
+	// 资源基础信息
+	// @gotags: json:"information"
+	Information *resource.Information `protobuf:"bytes,2,opt,name=information,proto3" json:"information"`
+	// Rds描述信息
+	// @gotags: json:"describe"
+	Describe *Describe `protobuf:"bytes,3,opt,name=describe,proto3" json:"describe"`
 }
 
 func (x *RDS) Reset() {
