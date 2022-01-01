@@ -37,7 +37,7 @@ func (s *service) CreatTask(ctx context.Context, req *task.CreateTaskRequst) (
 	t.UpdateSecretDesc(secret.ShortDesc())
 
 	// 如果不是vsphere 需要检查region
-	if !(secret.Vendor.Equal(resource.Vendor_VSPHERE) || req.ResourceType.IsGlobal()) {
+	if !(secret.Vendor.Equal(resource.Vendor_VSPHERE) || req.ResourceType.IsIn(resource.Type_BILL)) {
 		if req.Region == "" {
 			return nil, exception.NewBadRequest("region required")
 		}
