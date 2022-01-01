@@ -7,9 +7,7 @@ import (
 )
 
 func NewDefaultTask() *Task {
-	return &Task{
-		Details: []*Detail{},
-	}
+	return &Task{}
 }
 
 func NewTaskFromReq(req *CreateTaskRequst) (*Task, error) {
@@ -22,7 +20,6 @@ func NewTaskFromReq(req *CreateTaskRequst) (*Task, error) {
 		Region:       req.Region,
 		ResourceType: req.ResourceType,
 		SecretId:     req.SecretId,
-		Details:      []*Detail{},
 	}, nil
 }
 
@@ -57,7 +54,6 @@ func (s *Task) AddDetail(d *Detail) {
 	} else {
 		s.TotalFailed++
 	}
-	s.Details = append(s.Details, d)
 }
 
 func NewTaskSet() *TaskSet {

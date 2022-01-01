@@ -19,6 +19,8 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ServiceClient interface {
 	QueryTask(ctx context.Context, in *QueryTaskRequest, opts ...grpc.CallOption) (*TaskSet, error)
+	DescribeTask(ctx context.Context, in *DescribeTaskRequest, opts ...grpc.CallOption) (*Task, error)
+	QueryTaskDetail(ctx context.Context, in *QueryTaskDetailRequest, opts ...grpc.CallOption) (*DetailSet, error)
 	CreatTask(ctx context.Context, in *CreateTaskRequst, opts ...grpc.CallOption) (*Task, error)
 }
 
@@ -39,6 +41,24 @@ func (c *serviceClient) QueryTask(ctx context.Context, in *QueryTaskRequest, opt
 	return out, nil
 }
 
+func (c *serviceClient) DescribeTask(ctx context.Context, in *DescribeTaskRequest, opts ...grpc.CallOption) (*Task, error) {
+	out := new(Task)
+	err := c.cc.Invoke(ctx, "/infraboard.cmdb.task.Service/DescribeTask", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) QueryTaskDetail(ctx context.Context, in *QueryTaskDetailRequest, opts ...grpc.CallOption) (*DetailSet, error) {
+	out := new(DetailSet)
+	err := c.cc.Invoke(ctx, "/infraboard.cmdb.task.Service/QueryTaskDetail", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *serviceClient) CreatTask(ctx context.Context, in *CreateTaskRequst, opts ...grpc.CallOption) (*Task, error) {
 	out := new(Task)
 	err := c.cc.Invoke(ctx, "/infraboard.cmdb.task.Service/CreatTask", in, out, opts...)
@@ -53,6 +73,8 @@ func (c *serviceClient) CreatTask(ctx context.Context, in *CreateTaskRequst, opt
 // for forward compatibility
 type ServiceServer interface {
 	QueryTask(context.Context, *QueryTaskRequest) (*TaskSet, error)
+	DescribeTask(context.Context, *DescribeTaskRequest) (*Task, error)
+	QueryTaskDetail(context.Context, *QueryTaskDetailRequest) (*DetailSet, error)
 	CreatTask(context.Context, *CreateTaskRequst) (*Task, error)
 	mustEmbedUnimplementedServiceServer()
 }
@@ -63,6 +85,12 @@ type UnimplementedServiceServer struct {
 
 func (UnimplementedServiceServer) QueryTask(context.Context, *QueryTaskRequest) (*TaskSet, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryTask not implemented")
+}
+func (UnimplementedServiceServer) DescribeTask(context.Context, *DescribeTaskRequest) (*Task, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DescribeTask not implemented")
+}
+func (UnimplementedServiceServer) QueryTaskDetail(context.Context, *QueryTaskDetailRequest) (*DetailSet, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method QueryTaskDetail not implemented")
 }
 func (UnimplementedServiceServer) CreatTask(context.Context, *CreateTaskRequst) (*Task, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreatTask not implemented")
@@ -98,6 +126,42 @@ func _Service_QueryTask_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Service_DescribeTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DescribeTaskRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServiceServer).DescribeTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/infraboard.cmdb.task.Service/DescribeTask",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServiceServer).DescribeTask(ctx, req.(*DescribeTaskRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Service_QueryTaskDetail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryTaskDetailRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServiceServer).QueryTaskDetail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/infraboard.cmdb.task.Service/QueryTaskDetail",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServiceServer).QueryTaskDetail(ctx, req.(*QueryTaskDetailRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Service_CreatTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateTaskRequst)
 	if err := dec(in); err != nil {
@@ -126,6 +190,14 @@ var Service_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "QueryTask",
 			Handler:    _Service_QueryTask_Handler,
+		},
+		{
+			MethodName: "DescribeTask",
+			Handler:    _Service_DescribeTask_Handler,
+		},
+		{
+			MethodName: "QueryTaskDetail",
+			Handler:    _Service_QueryTaskDetail_Handler,
 		},
 		{
 			MethodName: "CreatTask",

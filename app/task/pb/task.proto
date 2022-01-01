@@ -7,6 +7,8 @@ import "app/resource/pb/resource.proto";
 
 service Service {
     rpc QueryTask (QueryTaskRequest) returns (TaskSet);
+    rpc DescribeTask(DescribeTaskRequest) returns(Task);
+    rpc QueryTaskDetail(QueryTaskDetailRequest) returns(DetailSet);
     rpc CreatTask (CreateTaskRequst) returns (Task);
 }
 
@@ -56,24 +58,35 @@ message Task {
     // 失败的条数
     // @gotags: json:"total_failed"
     int64 total_failed = 12;
-    // 同步详情
-    // @gotags: json:"details"
-    repeated Detail details = 13;
 }
 
+message DetailSet {
+    // @gotags: json:"total"
+    int64 total = 1;
+    // @gotags: json:"items"
+    repeated Detail items = 2;
+}
+
+// 用于描述资源同步的详情信息
 message Detail {
+    // 任务的Id
+    // @gotags: json:"task_id"
+    string task_id = 1;
+    // 该资源同步的时间
+    // @gotags: json:"sync_at"
+    int64 sync_at = 2;
     // 资源实例Id
     // @gotags: json:"instance_id"
-    string instance_id= 1;
+    string instance_id= 3;
     // 资源名称
     // @gotags: json:"name"
-    string name = 2;
+    string name = 4;
     // 是否同步成功
     // @gotags: json:"is_success"
-    bool is_success = 3;
+    bool is_success = 5;
     // 同步失败原因
     // @gotags: json:"message"
-    string message = 4;
+    string message = 6;
 }
 
 message TaskSet {
@@ -103,4 +116,16 @@ message CreateTaskRequst {
     infraboard.cmdb.resource.Type resource_type = 3;
     // @gotags: json:"timeout"
     int64 timeout = 4;
+}
+
+message DescribeTaskRequest {
+    // Task id
+    // @gotags: json:"id" validate:"required"
+    string id = 1; 
+}
+
+message QueryTaskDetailRequest {
+    // Task id
+    // @gotags: json:"task_id" validate:"required"
+    string task_id = 1;
 }
