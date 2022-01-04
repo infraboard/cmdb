@@ -48,3 +48,15 @@ func (h *handler) DescribeTask(w http.ResponseWriter, r *http.Request) {
 
 	response.Success(w, ins)
 }
+
+func (h *handler) DescribeTaskRecord(w http.ResponseWriter, r *http.Request) {
+	ctx := context.GetContext(r)
+	req := task.NewQueryTaskRecordRequest(ctx.PS.ByName("id"))
+	ins, err := h.task.QueryTaskRecord(r.Context(), req)
+	if err != nil {
+		response.Failed(w, err)
+		return
+	}
+
+	response.Success(w, ins)
+}

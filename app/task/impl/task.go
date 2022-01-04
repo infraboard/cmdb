@@ -124,7 +124,7 @@ func (s *service) QueryTask(ctx context.Context, req *task.QueryTaskRequest) (*t
 func (s *service) DescribeTask(ctx context.Context, req *task.DescribeTaskRequest) (
 	*task.Task, error) {
 	query := sqlbuilder.NewQuery(queryTaskSQL)
-	query.Where("task_id = ?", req.Id)
+	query.Where("id = ?", req.Id)
 
 	querySQL, args := query.BuildQuery()
 	queryStmt, err := s.db.Prepare(querySQL)
@@ -147,5 +147,43 @@ func (s *service) DescribeTask(ctx context.Context, req *task.DescribeTaskReques
 
 func (s *service) QueryTaskRecord(ctx context.Context, req *task.QueryTaskRecordRequest) (
 	*task.RecordSet, error) {
-	return nil, nil
+	query := sqlbuilder.NewQuery(queryTaskRecordSQL)
+	query.Where("task_id = ?", req.TaskId)
+
+	querySQL, args := query.BuildQuery()
+	queryStmt, err := s.db.Prepare(querySQL)
+	if err != nil {
+		return nil, err
+	}
+	defer queryStmt.Close()
+
+	set := task.NewRecordSet()
+
+	rows, err := queryStmt.Query(args...)
+	if err != nil {
+		return nil, err
+	}
+	for rows.Next() {
+		rc := task.NewDefaultTaskRecord()
+		rows.Scan(
+			rc.InstanceId, rc.Name, rc.IsSuccess, rc.Message,
+			rc.TaskId, rc.CreateAt,
+		)
+		set.Add(rc)
+	}
+
+	// 获取total SELECT COUNT(*) FROMT t Where ....
+	countSQL, args := query.BuildCount()
+	countStmt, err := s.db.Prepare(countSQL)
+	if err != nil {
+		return nil, exception.NewInternalServerError(err.Error())
+	}
+
+	defer countStmt.Close()
+	err = countStmt.QueryRow(args...).Scan(&set.Total)
+	if err != nil {
+		return nil, exception.NewInternalServerError(err.Error())
+	}
+
+	return set, nil
 }

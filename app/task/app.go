@@ -51,6 +51,20 @@ func (req *QueryTaskRequest) OffSet() int64 {
 	return int64(req.PageSize) * int64(req.PageNumber-1)
 }
 
+func NewRecordSet() *RecordSet {
+	return &RecordSet{
+		Items: []*Record{},
+	}
+}
+
+func (s *RecordSet) Add(item *Record) {
+	s.Items = append(s.Items, item)
+}
+
+func NewDefaultTaskRecord() *Record {
+	return &Record{}
+}
+
 func NewSyncSucceedRecord(taskId, instanceId, instanceName string) *Record {
 	return &Record{
 		TaskId:     taskId,
@@ -75,5 +89,11 @@ func NewSyncFailedRecord(taskId, instanceId, instanceName, message string) *Reco
 func NewDescribeTaskRequestWithId(id string) *DescribeTaskRequest {
 	return &DescribeTaskRequest{
 		Id: id,
+	}
+}
+
+func NewQueryTaskRecordRequest(id string) *QueryTaskRecordRequest {
+	return &QueryTaskRecordRequest{
+		TaskId: id,
 	}
 }
