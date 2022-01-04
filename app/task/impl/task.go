@@ -120,3 +120,32 @@ func (s *service) QueryTask(ctx context.Context, req *task.QueryTaskRequest) (*t
 	}
 	return set, nil
 }
+
+func (s *service) DescribeTask(ctx context.Context, req *task.DescribeTaskRequest) (
+	*task.Task, error) {
+	query := sqlbuilder.NewQuery(queryTaskSQL)
+	query.Where("task_id = ?", req.Id)
+
+	querySQL, args := query.BuildQuery()
+	queryStmt, err := s.db.Prepare(querySQL)
+	if err != nil {
+		return nil, err
+	}
+	defer queryStmt.Close()
+
+	ins := task.NewDefaultTask()
+	err = queryStmt.QueryRow(args...).Scan(
+		&ins.Id, &ins.Region, &ins.ResourceType, &ins.SecretId, &ins.SecretDescription, &ins.Timeout,
+		&ins.Status, &ins.Message, &ins.StartAt, &ins.EndAt, &ins.TotalSucceed, &ins.TotalFailed,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return ins, nil
+}
+
+func (s *service) QueryTaskRecord(ctx context.Context, req *task.QueryTaskRecordRequest) (
+	*task.RecordSet, error) {
+	return nil, nil
+}

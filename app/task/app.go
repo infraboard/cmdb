@@ -71,3 +71,9 @@ func NewSyncFailedRecord(taskId, instanceId, instanceName, message string) *Reco
 		Message:    message,
 	}
 }
+
+func NewDescribeTaskRequestWithId(id string) *DescribeTaskRequest {
+	return &DescribeTaskRequest{
+		Id: id,
+	}
+}
