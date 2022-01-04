@@ -50,16 +50,18 @@ func (req *QueryTaskRequest) OffSet() int64 {
 	return int64(req.PageSize) * int64(req.PageNumber-1)
 }
 
-func NewSyncSucceedDetail(instanceId, instanceName string) *Detail {
-	return &Detail{
+func NewSyncSucceedRecord(taskId, instanceId, instanceName string) *Record {
+	return &Record{
+		TaskId:     taskId,
 		IsSuccess:  true,
 		InstanceId: instanceId,
 		Name:       instanceName,
 	}
 }
 
-func NewSyncFailedDetail(instanceId, instanceName, message string) *Detail {
-	return &Detail{
+func NewSyncFailedRecord(taskId, instanceId, instanceName, message string) *Record {
+	return &Record{
+		TaskId:     taskId,
 		IsSuccess:  false,
 		InstanceId: instanceId,
 		Name:       instanceName,

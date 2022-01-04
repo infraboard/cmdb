@@ -48,7 +48,7 @@ func (s *Task) Failed(message string) {
 	s.Message = message
 }
 
-func (s *Task) AddDetail(d *Detail) {
+func (s *Task) AddDetail(d *Record) {
 	if d.IsSuccess {
 		s.TotalSucceed++
 	} else {

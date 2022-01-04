@@ -8,7 +8,7 @@ import "app/resource/pb/resource.proto";
 service Service {
     rpc QueryTask (QueryTaskRequest) returns (TaskSet);
     rpc DescribeTask(DescribeTaskRequest) returns(Task);
-    rpc QueryTaskDetail(QueryTaskDetailRequest) returns(DetailSet);
+    rpc QueryTaskRecord(QueryTaskRecordRequest) returns(RecordSet);
     rpc CreatTask (CreateTaskRequst) returns (Task);
 }
 
@@ -60,15 +60,15 @@ message Task {
     int64 total_failed = 12;
 }
 
-message DetailSet {
+message RecordSet {
     // @gotags: json:"total"
     int64 total = 1;
     // @gotags: json:"items"
-    repeated Detail items = 2;
+    repeated Record items = 2;
 }
 
 // 用于描述资源同步的详情信息
-message Detail {
+message Record {
     // 任务的Id
     // @gotags: json:"task_id"
     string task_id = 1;
@@ -124,7 +124,7 @@ message DescribeTaskRequest {
     string id = 1; 
 }
 
-message QueryTaskDetailRequest {
+message QueryTaskRecordRequest {
     // Task id
     // @gotags: json:"task_id" validate:"required"
     string task_id = 1;

@@ -20,7 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 type ServiceClient interface {
 	QueryTask(ctx context.Context, in *QueryTaskRequest, opts ...grpc.CallOption) (*TaskSet, error)
 	DescribeTask(ctx context.Context, in *DescribeTaskRequest, opts ...grpc.CallOption) (*Task, error)
-	QueryTaskDetail(ctx context.Context, in *QueryTaskDetailRequest, opts ...grpc.CallOption) (*DetailSet, error)
+	QueryTaskRecord(ctx context.Context, in *QueryTaskRecordRequest, opts ...grpc.CallOption) (*RecordSet, error)
 	CreatTask(ctx context.Context, in *CreateTaskRequst, opts ...grpc.CallOption) (*Task, error)
 }
 
@@ -50,9 +50,9 @@ func (c *serviceClient) DescribeTask(ctx context.Context, in *DescribeTaskReques
 	return out, nil
 }
 
-func (c *serviceClient) QueryTaskDetail(ctx context.Context, in *QueryTaskDetailRequest, opts ...grpc.CallOption) (*DetailSet, error) {
-	out := new(DetailSet)
-	err := c.cc.Invoke(ctx, "/infraboard.cmdb.task.Service/QueryTaskDetail", in, out, opts...)
+func (c *serviceClient) QueryTaskRecord(ctx context.Context, in *QueryTaskRecordRequest, opts ...grpc.CallOption) (*RecordSet, error) {
+	out := new(RecordSet)
+	err := c.cc.Invoke(ctx, "/infraboard.cmdb.task.Service/QueryTaskRecord", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -74,7 +74,7 @@ func (c *serviceClient) CreatTask(ctx context.Context, in *CreateTaskRequst, opt
 type ServiceServer interface {
 	QueryTask(context.Context, *QueryTaskRequest) (*TaskSet, error)
 	DescribeTask(context.Context, *DescribeTaskRequest) (*Task, error)
-	QueryTaskDetail(context.Context, *QueryTaskDetailRequest) (*DetailSet, error)
+	QueryTaskRecord(context.Context, *QueryTaskRecordRequest) (*RecordSet, error)
 	CreatTask(context.Context, *CreateTaskRequst) (*Task, error)
 	mustEmbedUnimplementedServiceServer()
 }
@@ -89,8 +89,8 @@ func (UnimplementedServiceServer) QueryTask(context.Context, *QueryTaskRequest) 
 func (UnimplementedServiceServer) DescribeTask(context.Context, *DescribeTaskRequest) (*Task, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DescribeTask not implemented")
 }
-func (UnimplementedServiceServer) QueryTaskDetail(context.Context, *QueryTaskDetailRequest) (*DetailSet, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method QueryTaskDetail not implemented")
+func (UnimplementedServiceServer) QueryTaskRecord(context.Context, *QueryTaskRecordRequest) (*RecordSet, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method QueryTaskRecord not implemented")
 }
 func (UnimplementedServiceServer) CreatTask(context.Context, *CreateTaskRequst) (*Task, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreatTask not implemented")
@@ -144,20 +144,20 @@ func _Service_DescribeTask_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Service_QueryTaskDetail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryTaskDetailRequest)
+func _Service_QueryTaskRecord_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryTaskRecordRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ServiceServer).QueryTaskDetail(ctx, in)
+		return srv.(ServiceServer).QueryTaskRecord(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/infraboard.cmdb.task.Service/QueryTaskDetail",
+		FullMethod: "/infraboard.cmdb.task.Service/QueryTaskRecord",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).QueryTaskDetail(ctx, req.(*QueryTaskDetailRequest))
+		return srv.(ServiceServer).QueryTaskRecord(ctx, req.(*QueryTaskRecordRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -196,8 +196,8 @@ var Service_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Service_DescribeTask_Handler,
 		},
 		{
-			MethodName: "QueryTaskDetail",
-			Handler:    _Service_QueryTaskDetail_Handler,
+			MethodName: "QueryTaskRecord",
+			Handler:    _Service_QueryTaskRecord_Handler,
 		},
 		{
 			MethodName: "CreatTask",

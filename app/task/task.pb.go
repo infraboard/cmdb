@@ -236,7 +236,7 @@ func (x *Task) GetTotalFailed() int64 {
 	return 0
 }
 
-type DetailSet struct {
+type RecordSet struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -244,11 +244,11 @@ type DetailSet struct {
 	// @gotags: json:"total"
 	Total int64 `protobuf:"varint,1,opt,name=total,proto3" json:"total"`
 	// @gotags: json:"items"
-	Items []*Detail `protobuf:"bytes,2,rep,name=items,proto3" json:"items"`
+	Items []*Record `protobuf:"bytes,2,rep,name=items,proto3" json:"items"`
 }
 
-func (x *DetailSet) Reset() {
-	*x = DetailSet{}
+func (x *RecordSet) Reset() {
+	*x = RecordSet{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_app_task_pb_task_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -256,13 +256,13 @@ func (x *DetailSet) Reset() {
 	}
 }
 
-func (x *DetailSet) String() string {
+func (x *RecordSet) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*DetailSet) ProtoMessage() {}
+func (*RecordSet) ProtoMessage() {}
 
-func (x *DetailSet) ProtoReflect() protoreflect.Message {
+func (x *RecordSet) ProtoReflect() protoreflect.Message {
 	mi := &file_app_task_pb_task_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -274,19 +274,19 @@ func (x *DetailSet) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use DetailSet.ProtoReflect.Descriptor instead.
-func (*DetailSet) Descriptor() ([]byte, []int) {
+// Deprecated: Use RecordSet.ProtoReflect.Descriptor instead.
+func (*RecordSet) Descriptor() ([]byte, []int) {
 	return file_app_task_pb_task_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *DetailSet) GetTotal() int64 {
+func (x *RecordSet) GetTotal() int64 {
 	if x != nil {
 		return x.Total
 	}
 	return 0
 }
 
-func (x *DetailSet) GetItems() []*Detail {
+func (x *RecordSet) GetItems() []*Record {
 	if x != nil {
 		return x.Items
 	}
@@ -294,7 +294,7 @@ func (x *DetailSet) GetItems() []*Detail {
 }
 
 // 用于描述资源同步的详情信息
-type Detail struct {
+type Record struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -319,8 +319,8 @@ type Detail struct {
 	Message string `protobuf:"bytes,6,opt,name=message,proto3" json:"message"`
 }
 
-func (x *Detail) Reset() {
-	*x = Detail{}
+func (x *Record) Reset() {
+	*x = Record{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_app_task_pb_task_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -328,13 +328,13 @@ func (x *Detail) Reset() {
 	}
 }
 
-func (x *Detail) String() string {
+func (x *Record) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Detail) ProtoMessage() {}
+func (*Record) ProtoMessage() {}
 
-func (x *Detail) ProtoReflect() protoreflect.Message {
+func (x *Record) ProtoReflect() protoreflect.Message {
 	mi := &file_app_task_pb_task_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -346,47 +346,47 @@ func (x *Detail) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Detail.ProtoReflect.Descriptor instead.
-func (*Detail) Descriptor() ([]byte, []int) {
+// Deprecated: Use Record.ProtoReflect.Descriptor instead.
+func (*Record) Descriptor() ([]byte, []int) {
 	return file_app_task_pb_task_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *Detail) GetTaskId() string {
+func (x *Record) GetTaskId() string {
 	if x != nil {
 		return x.TaskId
 	}
 	return ""
 }
 
-func (x *Detail) GetSyncAt() int64 {
+func (x *Record) GetSyncAt() int64 {
 	if x != nil {
 		return x.SyncAt
 	}
 	return 0
 }
 
-func (x *Detail) GetInstanceId() string {
+func (x *Record) GetInstanceId() string {
 	if x != nil {
 		return x.InstanceId
 	}
 	return ""
 }
 
-func (x *Detail) GetName() string {
+func (x *Record) GetName() string {
 	if x != nil {
 		return x.Name
 	}
 	return ""
 }
 
-func (x *Detail) GetIsSuccess() bool {
+func (x *Record) GetIsSuccess() bool {
 	if x != nil {
 		return x.IsSuccess
 	}
 	return false
 }
 
-func (x *Detail) GetMessage() string {
+func (x *Record) GetMessage() string {
 	if x != nil {
 		return x.Message
 	}
@@ -649,7 +649,7 @@ func (x *DescribeTaskRequest) GetId() string {
 	return ""
 }
 
-type QueryTaskDetailRequest struct {
+type QueryTaskRecordRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -659,8 +659,8 @@ type QueryTaskDetailRequest struct {
 	TaskId string `protobuf:"bytes,1,opt,name=task_id,json=taskId,proto3" json:"task_id" validate:"required"`
 }
 
-func (x *QueryTaskDetailRequest) Reset() {
-	*x = QueryTaskDetailRequest{}
+func (x *QueryTaskRecordRequest) Reset() {
+	*x = QueryTaskRecordRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_app_task_pb_task_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -668,13 +668,13 @@ func (x *QueryTaskDetailRequest) Reset() {
 	}
 }
 
-func (x *QueryTaskDetailRequest) String() string {
+func (x *QueryTaskRecordRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*QueryTaskDetailRequest) ProtoMessage() {}
+func (*QueryTaskRecordRequest) ProtoMessage() {}
 
-func (x *QueryTaskDetailRequest) ProtoReflect() protoreflect.Message {
+func (x *QueryTaskRecordRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_app_task_pb_task_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -686,12 +686,12 @@ func (x *QueryTaskDetailRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use QueryTaskDetailRequest.ProtoReflect.Descriptor instead.
-func (*QueryTaskDetailRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use QueryTaskRecordRequest.ProtoReflect.Descriptor instead.
+func (*QueryTaskRecordRequest) Descriptor() ([]byte, []int) {
 	return file_app_task_pb_task_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *QueryTaskDetailRequest) GetTaskId() string {
+func (x *QueryTaskRecordRequest) GetTaskId() string {
 	if x != nil {
 		return x.TaskId
 	}
@@ -732,13 +732,13 @@ var file_app_task_pb_task_proto_rawDesc = []byte{
 	0x01, 0x28, 0x03, 0x52, 0x0c, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x53, 0x75, 0x63, 0x63, 0x65, 0x65,
 	0x64, 0x12, 0x21, 0x0a, 0x0c, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x5f, 0x66, 0x61, 0x69, 0x6c, 0x65,
 	0x64, 0x18, 0x0c, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0b, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x46, 0x61,
-	0x69, 0x6c, 0x65, 0x64, 0x22, 0x55, 0x0a, 0x09, 0x44, 0x65, 0x74, 0x61, 0x69, 0x6c, 0x53, 0x65,
+	0x69, 0x6c, 0x65, 0x64, 0x22, 0x55, 0x0a, 0x09, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x53, 0x65,
 	0x74, 0x12, 0x14, 0x0a, 0x05, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03,
 	0x52, 0x05, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x12, 0x32, 0x0a, 0x05, 0x69, 0x74, 0x65, 0x6d, 0x73,
 	0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x69, 0x6e, 0x66, 0x72, 0x61, 0x62, 0x6f,
-	0x61, 0x72, 0x64, 0x2e, 0x63, 0x6d, 0x64, 0x62, 0x2e, 0x74, 0x61, 0x73, 0x6b, 0x2e, 0x44, 0x65,
-	0x74, 0x61, 0x69, 0x6c, 0x52, 0x05, 0x69, 0x74, 0x65, 0x6d, 0x73, 0x22, 0xa8, 0x01, 0x0a, 0x06,
-	0x44, 0x65, 0x74, 0x61, 0x69, 0x6c, 0x12, 0x17, 0x0a, 0x07, 0x74, 0x61, 0x73, 0x6b, 0x5f, 0x69,
+	0x61, 0x72, 0x64, 0x2e, 0x63, 0x6d, 0x64, 0x62, 0x2e, 0x74, 0x61, 0x73, 0x6b, 0x2e, 0x52, 0x65,
+	0x63, 0x6f, 0x72, 0x64, 0x52, 0x05, 0x69, 0x74, 0x65, 0x6d, 0x73, 0x22, 0xa8, 0x01, 0x0a, 0x06,
+	0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x12, 0x17, 0x0a, 0x07, 0x74, 0x61, 0x73, 0x6b, 0x5f, 0x69,
 	0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x74, 0x61, 0x73, 0x6b, 0x49, 0x64, 0x12,
 	0x17, 0x0a, 0x07, 0x73, 0x79, 0x6e, 0x63, 0x5f, 0x61, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03,
 	0x52, 0x06, 0x73, 0x79, 0x6e, 0x63, 0x41, 0x74, 0x12, 0x1f, 0x0a, 0x0b, 0x69, 0x6e, 0x73, 0x74,
@@ -778,7 +778,7 @@ var file_app_task_pb_task_proto_rawDesc = []byte{
 	0x69, 0x6d, 0x65, 0x6f, 0x75, 0x74, 0x22, 0x25, 0x0a, 0x13, 0x44, 0x65, 0x73, 0x63, 0x72, 0x69,
 	0x62, 0x65, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a,
 	0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x22, 0x31, 0x0a,
-	0x16, 0x51, 0x75, 0x65, 0x72, 0x79, 0x54, 0x61, 0x73, 0x6b, 0x44, 0x65, 0x74, 0x61, 0x69, 0x6c,
+	0x16, 0x51, 0x75, 0x65, 0x72, 0x79, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64,
 	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x17, 0x0a, 0x07, 0x74, 0x61, 0x73, 0x6b, 0x5f,
 	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x74, 0x61, 0x73, 0x6b, 0x49, 0x64,
 	0x2a, 0x49, 0x0a, 0x06, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x0c, 0x0a, 0x08, 0x50, 0x45,
@@ -797,13 +797,13 @@ var file_app_task_pb_task_proto_rawDesc = []byte{
 	0x73, 0x6b, 0x2e, 0x44, 0x65, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x54, 0x61, 0x73, 0x6b, 0x52,
 	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1a, 0x2e, 0x69, 0x6e, 0x66, 0x72, 0x61, 0x62, 0x6f,
 	0x61, 0x72, 0x64, 0x2e, 0x63, 0x6d, 0x64, 0x62, 0x2e, 0x74, 0x61, 0x73, 0x6b, 0x2e, 0x54, 0x61,
-	0x73, 0x6b, 0x12, 0x60, 0x0a, 0x0f, 0x51, 0x75, 0x65, 0x72, 0x79, 0x54, 0x61, 0x73, 0x6b, 0x44,
-	0x65, 0x74, 0x61, 0x69, 0x6c, 0x12, 0x2c, 0x2e, 0x69, 0x6e, 0x66, 0x72, 0x61, 0x62, 0x6f, 0x61,
+	0x73, 0x6b, 0x12, 0x60, 0x0a, 0x0f, 0x51, 0x75, 0x65, 0x72, 0x79, 0x54, 0x61, 0x73, 0x6b, 0x52,
+	0x65, 0x63, 0x6f, 0x72, 0x64, 0x12, 0x2c, 0x2e, 0x69, 0x6e, 0x66, 0x72, 0x61, 0x62, 0x6f, 0x61,
 	0x72, 0x64, 0x2e, 0x63, 0x6d, 0x64, 0x62, 0x2e, 0x74, 0x61, 0x73, 0x6b, 0x2e, 0x51, 0x75, 0x65,
-	0x72, 0x79, 0x54, 0x61, 0x73, 0x6b, 0x44, 0x65, 0x74, 0x61, 0x69, 0x6c, 0x52, 0x65, 0x71, 0x75,
+	0x72, 0x79, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x52, 0x65, 0x71, 0x75,
 	0x65, 0x73, 0x74, 0x1a, 0x1f, 0x2e, 0x69, 0x6e, 0x66, 0x72, 0x61, 0x62, 0x6f, 0x61, 0x72, 0x64,
-	0x2e, 0x63, 0x6d, 0x64, 0x62, 0x2e, 0x74, 0x61, 0x73, 0x6b, 0x2e, 0x44, 0x65, 0x74, 0x61, 0x69,
-	0x6c, 0x53, 0x65, 0x74, 0x12, 0x4f, 0x0a, 0x09, 0x43, 0x72, 0x65, 0x61, 0x74, 0x54, 0x61, 0x73,
+	0x2e, 0x63, 0x6d, 0x64, 0x62, 0x2e, 0x74, 0x61, 0x73, 0x6b, 0x2e, 0x52, 0x65, 0x63, 0x6f, 0x72,
+	0x64, 0x53, 0x65, 0x74, 0x12, 0x4f, 0x0a, 0x09, 0x43, 0x72, 0x65, 0x61, 0x74, 0x54, 0x61, 0x73,
 	0x6b, 0x12, 0x26, 0x2e, 0x69, 0x6e, 0x66, 0x72, 0x61, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x63,
 	0x6d, 0x64, 0x62, 0x2e, 0x74, 0x61, 0x73, 0x6b, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54,
 	0x61, 0x73, 0x6b, 0x52, 0x65, 0x71, 0x75, 0x73, 0x74, 0x1a, 0x1a, 0x2e, 0x69, 0x6e, 0x66, 0x72,
@@ -831,29 +831,29 @@ var file_app_task_pb_task_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_app_task_pb_task_proto_goTypes = []interface{}{
 	(Status)(0),                    // 0: infraboard.cmdb.task.Status
 	(*Task)(nil),                   // 1: infraboard.cmdb.task.Task
-	(*DetailSet)(nil),              // 2: infraboard.cmdb.task.DetailSet
-	(*Detail)(nil),                 // 3: infraboard.cmdb.task.Detail
+	(*RecordSet)(nil),              // 2: infraboard.cmdb.task.RecordSet
+	(*Record)(nil),                 // 3: infraboard.cmdb.task.Record
 	(*TaskSet)(nil),                // 4: infraboard.cmdb.task.TaskSet
 	(*QueryTaskRequest)(nil),       // 5: infraboard.cmdb.task.QueryTaskRequest
 	(*CreateTaskRequst)(nil),       // 6: infraboard.cmdb.task.CreateTaskRequst
 	(*DescribeTaskRequest)(nil),    // 7: infraboard.cmdb.task.DescribeTaskRequest
-	(*QueryTaskDetailRequest)(nil), // 8: infraboard.cmdb.task.QueryTaskDetailRequest
+	(*QueryTaskRecordRequest)(nil), // 8: infraboard.cmdb.task.QueryTaskRecordRequest
 	(resource.Type)(0),             // 9: infraboard.cmdb.resource.Type
 }
 var file_app_task_pb_task_proto_depIdxs = []int32{
 	9,  // 0: infraboard.cmdb.task.Task.resource_type:type_name -> infraboard.cmdb.resource.Type
 	0,  // 1: infraboard.cmdb.task.Task.status:type_name -> infraboard.cmdb.task.Status
-	3,  // 2: infraboard.cmdb.task.DetailSet.items:type_name -> infraboard.cmdb.task.Detail
+	3,  // 2: infraboard.cmdb.task.RecordSet.items:type_name -> infraboard.cmdb.task.Record
 	1,  // 3: infraboard.cmdb.task.TaskSet.items:type_name -> infraboard.cmdb.task.Task
 	9,  // 4: infraboard.cmdb.task.QueryTaskRequest.resource_type:type_name -> infraboard.cmdb.resource.Type
 	9,  // 5: infraboard.cmdb.task.CreateTaskRequst.resource_type:type_name -> infraboard.cmdb.resource.Type
 	5,  // 6: infraboard.cmdb.task.Service.QueryTask:input_type -> infraboard.cmdb.task.QueryTaskRequest
 	7,  // 7: infraboard.cmdb.task.Service.DescribeTask:input_type -> infraboard.cmdb.task.DescribeTaskRequest
-	8,  // 8: infraboard.cmdb.task.Service.QueryTaskDetail:input_type -> infraboard.cmdb.task.QueryTaskDetailRequest
+	8,  // 8: infraboard.cmdb.task.Service.QueryTaskRecord:input_type -> infraboard.cmdb.task.QueryTaskRecordRequest
 	6,  // 9: infraboard.cmdb.task.Service.CreatTask:input_type -> infraboard.cmdb.task.CreateTaskRequst
 	4,  // 10: infraboard.cmdb.task.Service.QueryTask:output_type -> infraboard.cmdb.task.TaskSet
 	1,  // 11: infraboard.cmdb.task.Service.DescribeTask:output_type -> infraboard.cmdb.task.Task
-	2,  // 12: infraboard.cmdb.task.Service.QueryTaskDetail:output_type -> infraboard.cmdb.task.DetailSet
+	2,  // 12: infraboard.cmdb.task.Service.QueryTaskRecord:output_type -> infraboard.cmdb.task.RecordSet
 	1,  // 13: infraboard.cmdb.task.Service.CreatTask:output_type -> infraboard.cmdb.task.Task
 	10, // [10:14] is the sub-list for method output_type
 	6,  // [6:10] is the sub-list for method input_type
@@ -881,7 +881,7 @@ func file_app_task_pb_task_proto_init() {
 			}
 		}
 		file_app_task_pb_task_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DetailSet); i {
+			switch v := v.(*RecordSet); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -893,7 +893,7 @@ func file_app_task_pb_task_proto_init() {
 			}
 		}
 		file_app_task_pb_task_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Detail); i {
+			switch v := v.(*Record); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -953,7 +953,7 @@ func file_app_task_pb_task_proto_init() {
 			}
 		}
 		file_app_task_pb_task_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryTaskDetailRequest); i {
+			switch v := v.(*QueryTaskRecordRequest); i {
 			case 0:
 				return &v.state
 			case 1:

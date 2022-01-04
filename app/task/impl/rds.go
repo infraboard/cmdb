@@ -89,17 +89,17 @@ func (s *service) syncRds(ctx context.Context, secret *secret.Secret, t *task.Ta
 func (s *service) SaveOrUpdateRds(ctx context.Context, ins *rds.RDS, t *task.Task) {
 	b, err := s.rds.SaveRDS(ctx, ins)
 
-	var detail *task.Detail
+	var detail *task.Record
 	if err != nil {
 		s.log.Warnf("save rds error, %s", err)
-		detail = task.NewSyncFailedDetail(ins.Base.InstanceId, ins.Information.Name, err.Error())
+		detail = task.NewSyncFailedRecord(t.Id, ins.Base.InstanceId, ins.Information.Name, err.Error())
 	} else {
 		s.log.Debugf("save host %s to db", b.ShortDesc())
-		detail = task.NewSyncSucceedDetail(ins.Base.InstanceId, ins.Information.Name)
+		detail = task.NewSyncSucceedRecord(t.Id, ins.Base.InstanceId, ins.Information.Name)
 	}
 
 	t.AddDetail(detail)
-	if err := s.insertOrUpdateDetail(ctx, t.Id, detail); err != nil {
+	if err := s.insertOrUpdateDetail(ctx, detail); err != nil {
 		s.log.Errorf("update detail error, %s", err)
 	}
 }

@@ -104,7 +104,7 @@ CREATE TABLE `task` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE `task_detail` (
+CREATE TABLE `task_record` (
   `instance_id` varchar(64) NOT NULL COMMENT '实例Id',
   `instance_name` varchar(255) CHARACTER SET utf8mb4 NOT NULL COMMENT '实例名称',
   `is_success` tinyint(2) NOT NULL COMMENT '是否同步成功',

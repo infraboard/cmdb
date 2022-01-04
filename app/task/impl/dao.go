@@ -18,7 +18,7 @@ const (
 
 	queryTaskSQL = `SELECT * FROM task`
 
-	updateOrInsertDetailSQL = `INSERT INTO task_detail (
+	updateOrInsertDetailSQL = `INSERT INTO task_record (
 		instance_id,instance_name,is_success,message,task_id) 
 		VALUES (?,?,?,?,?) ON DUPLICATE KEY UPDATE 
 		instance_name=?,is_success=?,message=?,task_id=?`
@@ -58,7 +58,7 @@ func (s *service) update(ctx context.Context, t *task.Task) error {
 	return nil
 }
 
-func (s *service) insertOrUpdateDetail(ctx context.Context, taskId string, detail *task.Detail) error {
+func (s *service) insertOrUpdateDetail(ctx context.Context, detail *task.Record) error {
 	stmt, err := s.db.Prepare(updateOrInsertDetailSQL)
 	if err != nil {
 		return err
@@ -66,11 +66,11 @@ func (s *service) insertOrUpdateDetail(ctx context.Context, taskId string, detai
 	defer stmt.Close()
 
 	_, err = stmt.Exec(
-		detail.InstanceId, detail.Name, detail.IsSuccess, detail.Message, taskId,
-		detail.Name, detail.IsSuccess, detail.Message, taskId,
+		detail.InstanceId, detail.Name, detail.IsSuccess, detail.Message, detail.TaskId,
+		detail.Name, detail.IsSuccess, detail.Message, detail.TaskId,
 	)
 	if err != nil {
-		return fmt.Errorf("insert or update task %s detail info error, %s", taskId, err)
+		return fmt.Errorf("insert or update task %s detail info error, %s", detail.TaskId, err)
 	}
 
 	return nil
