@@ -72,9 +72,9 @@ message Record {
     // 任务的Id
     // @gotags: json:"task_id"
     string task_id = 1;
-    // 该资源同步的时间
-    // @gotags: json:"sync_at"
-    int64 sync_at = 2;
+    // 记录创建时间
+    // @gotags: json:"create_at"
+    int64 create_at = 2;
     // 资源实例Id
     // @gotags: json:"instance_id"
     string instance_id= 3;

@@ -134,7 +134,7 @@ func (s *service) SaveOrUpdateHost(ctx context.Context, ins *host.Host, t *task.
 	}
 
 	t.AddDetail(detail)
-	if err := s.insertOrUpdateDetail(ctx, detail); err != nil {
+	if err := s.insertTaskDetail(ctx, detail); err != nil {
 		s.log.Errorf("update detail error, %s", err)
 	}
 }

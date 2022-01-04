@@ -99,7 +99,7 @@ func (s *service) SaveOrUpdateRds(ctx context.Context, ins *rds.RDS, t *task.Tas
 	}
 
 	t.AddDetail(detail)
-	if err := s.insertOrUpdateDetail(ctx, detail); err != nil {
+	if err := s.insertTaskDetail(ctx, detail); err != nil {
 		s.log.Errorf("update detail error, %s", err)
 	}
 }

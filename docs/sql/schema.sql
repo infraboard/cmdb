@@ -110,5 +110,7 @@ CREATE TABLE `task_record` (
   `is_success` tinyint(2) NOT NULL COMMENT '是否同步成功',
   `message` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '通过异常时的信息',
   `task_id` varchar(64) NOT NULL COMMENT 'task id',
-  PRIMARY KEY (`instance_id`) USING BTREE
+  `create_at` bigint(20) NOT NULL COMMENT '记录创建时间',
+  KEY `idx_task` (`task_id`) USING HASH,
+  KEY `idx_instance` (`instance_id`) USING HASH
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1

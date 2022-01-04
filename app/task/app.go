@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/infraboard/mcube/types/ftime"
 )
 
 const (
@@ -56,6 +57,7 @@ func NewSyncSucceedRecord(taskId, instanceId, instanceName string) *Record {
 		IsSuccess:  true,
 		InstanceId: instanceId,
 		Name:       instanceName,
+		CreateAt:   ftime.Now().Timestamp(),
 	}
 }
 
@@ -63,6 +65,7 @@ func NewSyncFailedRecord(taskId, instanceId, instanceName, message string) *Reco
 	return &Record{
 		TaskId:     taskId,
 		IsSuccess:  false,
+		CreateAt:   ftime.Now().Timestamp(),
 		InstanceId: instanceId,
 		Name:       instanceName,
 		Message:    message,
