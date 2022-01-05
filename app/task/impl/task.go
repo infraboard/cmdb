@@ -166,8 +166,8 @@ func (s *service) QueryTaskRecord(ctx context.Context, req *task.QueryTaskRecord
 	for rows.Next() {
 		rc := task.NewDefaultTaskRecord()
 		rows.Scan(
-			rc.InstanceId, rc.Name, rc.IsSuccess, rc.Message,
-			rc.TaskId, rc.CreateAt,
+			&rc.InstanceId, &rc.Name, &rc.IsSuccess, &rc.Message,
+			&rc.TaskId, &rc.CreateAt,
 		)
 		set.Add(rc)
 	}
