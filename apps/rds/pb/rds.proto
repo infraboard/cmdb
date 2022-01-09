@@ -1,0 +1,116 @@
+syntax = "proto3";
+
+package infraboard.cmdb.rds;
+option go_package="github.com/infraboard/cmdb/apps/rds";
+
+import "apps/resource/pb/resource.proto";
+import "github.com/infraboard/mcube/pb/page/page.proto";
+
+service Service {
+    rpc SaveRDS(RDS) returns(RDS) {}
+    rpc QueryRDS(QueryRDSRequest) returns(Set) {}
+}
+
+message RDS {
+    // 资源元数据信息
+    // @gotags: json:"base"
+    infraboard.cmdb.resource.Base base = 1;
+    // 资源基础信息
+    // @gotags: json:"information"
+    infraboard.cmdb.resource.Information information = 2;
+    // Rds描述信息
+    // @gotags: json:"describe"
+    Describe describe = 3;
+}
+
+message Describe {
+    // 引擎 比如 MYSQL, SQLServer, PGSQL
+    // @gotags: json:"engine_type"
+    string engine_type = 2;
+    // 引擎版本
+    // @gotags: json:"engine_version"
+    string engine_version = 3;
+    // 实例规格: 对应ALI(DBInstanceClass)
+    // @gotags: json:"instance_class"
+    string instance_class = 4;
+    // 实例规格族，取值：s：共享型；x：通用型；d：独享套餐；h：独占物理机。
+    // @gotags: json:"class_type"
+    string class_type = 5;
+    // 实例是内网或外网 (Internet：外网/Intranet：内网)
+    // @gotags: json:"export_type"
+    string export_type = 6;
+    // 实例的网络类型 (Classic：经典网络/VPC：专有网络。)
+    // @gotags: json:"network_type"
+    string network_type = 7;
+    // 实例类型 Primary：主实例, Readonly：只读实例, Guard：灾备实例, Temp：临时实例
+    // @gotags: json:"type"
+    string type = 8;
+    // CPU 核数
+    // @gotags: json:"cpu"
+    int32 cpu = 9;
+    // 实例内存，单位：M。
+    // @gotags: json:"memory"
+    int64 memory = 10;
+    // 一个实例下可创建最大数据库数量
+    // @gotags: json:"db_max_quantity"
+    int64 db_max_quantity = 11;
+    // 可创建账号的最大数量
+    // @gotags: json:"account_max_quantity"
+    int64 account_max_quantity = 12;
+    // 最大并发连接数
+    // @gotags: json:"max_connections"
+    int64 max_connections = 13;
+    // 最大每秒IO请求次数
+    // @gotags: json:"max_iops"
+    int64 max_iops = 14;
+    // 系统字符集排序规则
+    // @gotags: json:"collation"
+    string collation = 15;
+    // 时区
+    // @gotags: json:"time_zone"
+    string time_zone = 16;
+    // 实例存储空间，单位：GB。
+    // @gotags: json:"storage_capacity"
+    int64 storage_capacity = 17;
+    // 实例储存类型 local_ssd/ephemeral_ssd：本地SSD盘, cloud_ssd：SSD云盘；cloud_essd：ESSD云盘
+    // @gotags: json:"storage_type"
+    string storage_type = 18;
+    // 安全名单模式, 默认白名单
+    // @gotags: json:"security_ip_mode"
+    string security_ip_mode = 19;
+    // IP白名单
+    // @gotags: json:"security_ip_list"
+    repeated string security_ip_list = 20;
+    // 实例的访问模式，取值：Standard：标准访问模式；Safe：数据库代理模式。
+    // @gotags: json:"connection_mode"
+    string connection_mode = 21;
+    // IP类型
+    // @gotags: json:"ip_type"
+    string ip_type = 22;
+    // 实例锁定模式; Unlock：正常；ManualLock：手动触发锁定；LockByExpiration：实例过期自动锁定；LockByRestoration：实例回滚前的自动锁定；LockByDiskQuota：实例空间满自动锁定
+    // @gotags: json:"lock_mode"
+    string lock_mode = 23;
+    // 锁定原因
+    // @gotags: json:"lock_reason"
+    string lock_reason = 24;
+    // 部署模式(腾讯云独有)
+    // @gotags: json:"deploy_mode"
+    string deploy_mode = 25;
+    // 端口
+    // @gotags: json:"port"
+    int64 port = 26;
+    // 额外的无法通用的一些属性, 比如只有腾讯云独有的一些属性
+    // @gotags: json:"extra"
+    map<string, string> extra = 27;
+}
+
+message Set {
+    repeated RDS items = 1;
+    int64 total = 2;
+}
+
+message QueryRDSRequest {
+    // 分页参数
+    // @gotags: json:"page"
+    infraboard.mcube.page.PageRequest page = 1;
+}

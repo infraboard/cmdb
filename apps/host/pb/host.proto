@@ -1,0 +1,122 @@
+syntax = "proto3";
+
+package infraboard.cmdb.host;
+option go_package="github.com/infraboard/cmdb/apps/host";
+
+import "apps/resource/pb/resource.proto";
+import "github.com/infraboard/mcube/pb/page/page.proto";
+
+service Service {
+    rpc SaveHost(Host) returns(Host) {}
+    rpc QueryHost(QueryHostRequest) returns(HostSet) {}
+    rpc UpdateHost(UpdateHostRequest) returns(Host) {}
+    rpc SaveOrUpdateHost(Host) returns(Host) {}
+    rpc DescribeHost(DescribeHostRequest) returns(Host) {}
+    rpc DeleteHost(DeleteHostRequest) returns(Host) {}
+}
+
+enum UpdateMode {
+    PUT = 0;
+    PATCH = 1;
+}
+
+message Host {
+    // @gotags: json:"base"
+    infraboard.cmdb.resource.Base base = 1;
+    // @gotags: json:"information"
+    infraboard.cmdb.resource.Information information = 2;
+    // @gotags: json:"describe"
+    Describe describe = 3;
+}
+
+message Describe {
+    // 核数
+    // @gotags: json:"cpu"
+    int64 cpu = 1;
+    // 内存
+    // @gotags: json:"memory"
+    int64 memory = 2;
+    // GPU数量
+    // @gotags: json:"gpu_amount"
+    int32 gpu_amount = 3;
+    // GPU类型
+    // @gotags: json:"gpu_spec"
+    string gpu_spec = 4;
+    // 操作系统类型，分为Windows和Linux
+    // @gotags: json:"os_type"
+    string os_type = 5;
+    // 操作系统名称
+    // @gotags: json:"os_name"
+    string os_name = 6;
+    // 序列号
+    // @gotags: json:"serial_number"
+    string serial_number = 7;
+    // 镜像ID
+    // @gotags: json:"image_id"
+    string image_id = 8;
+    // 公网出带宽最大值，单位为 Mbps
+    // @gotags: json:"internet_max_bandwidth_out"
+    int64 internet_max_bandwidth_out = 9;
+    // 公网入带宽最大值，单位为 Mbps
+    // @gotags: json:"internet_max_bandwidth_in"
+    int64 internet_max_bandwidth_in = 10;
+    // 秘钥对名称
+    // @gotags: json:"key_pair_name"
+    repeated string key_pair_name = 11;
+    // 安全组  采用逗号分隔
+    // @gotags: json:"security_groups"
+    repeated string security_groups = 12;
+    // 额外的无法通用的一些属性, 比如只有腾讯云独有的一些属性
+    // @gotags: json:"extra"
+    map<string, string> extra = 13;
+}
+
+message QueryHostRequest {
+    // 分页参数
+    // @gotags: json:"page"
+    infraboard.mcube.page.PageRequest page = 1;
+    // 关键字参数
+    // @gotags: json:"keywords"
+    string keywords = 2;
+}
+
+message HostSet {
+    // @gotags: json:"total"
+    int64 total = 1;
+    // @gotags: json:"items"
+    repeated Host items = 2;
+}
+
+message UpdateHostRequest {
+    // @gotags: json:"id" validate:"required"
+    string id = 1;
+    // @gotags: json:"update_mode"
+    UpdateMode update_mode = 2;
+    // @gotags: json:"data" validate:"required"
+    UpdateHostData update_host_data = 3;
+}
+
+message UpdateHostData {
+    // @gotags: json:"information"
+    infraboard.cmdb.resource.Information information = 1;
+    // @gotags: json:"describe"
+    Describe describe = 2;
+}
+
+enum DescribeBy {
+    HOST_ID = 0;
+    INSTANCE_ID = 1;
+}
+
+message DescribeHostRequest {
+    // @gotags: json:"describe_by"
+    DescribeBy describe_by = 1;
+    // @gotags: json:"value" validate:"required"
+    string value = 2;
+
+}
+
+message DeleteHostRequest {
+    // @gotags: json:"id" validate:"required"
+    string id = 1;
+}

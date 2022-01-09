@@ -3,7 +3,7 @@ package billing
 import (
 	billing "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/billing/v20180709"
 
-	"github.com/infraboard/cmdb/app/bill"
+	"github.com/infraboard/cmdb/apps/bill"
 	"github.com/infraboard/cmdb/utils"
 )
 

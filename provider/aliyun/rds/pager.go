@@ -7,7 +7,7 @@ import (
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 
-	cmdbRds "github.com/infraboard/cmdb/app/rds"
+	cmdbRds "github.com/infraboard/cmdb/apps/rds"
 )
 
 func newPager(pageSize int, operater *RdsOperater, rate int) *pager {

@@ -3,7 +3,7 @@ package rds
 import (
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/rds/v3/model"
 
-	"github.com/infraboard/cmdb/app/rds"
+	"github.com/infraboard/cmdb/apps/rds"
 )
 
 func (o *RdsOperater) Query(req *model.ListInstancesRequest) (*rds.Set, error) {

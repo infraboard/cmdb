@@ -3,7 +3,7 @@ package rds
 import (
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/rds"
 
-	cmdbRds "github.com/infraboard/cmdb/app/rds"
+	cmdbRds "github.com/infraboard/cmdb/apps/rds"
 )
 
 func (o *RdsOperater) Query(req *rds.DescribeDBInstancesRequest) (*cmdbRds.Set, error) {

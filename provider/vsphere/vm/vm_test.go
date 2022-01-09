@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/infraboard/cmdb/app/host"
+	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/cmdb/provider/vsphere/connectivity"
 	"github.com/infraboard/mcube/logger/zap"
 

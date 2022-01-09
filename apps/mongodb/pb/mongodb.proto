@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package infraboard.cmdb.mongodb;
+option go_package="github.com/infraboard/cmdb/apps/mongodb";
+
+import "apps/resource/pb/resource.proto";
+import "github.com/infraboard/mcube/pb/page/page.proto";
+
+service Service {
+    rpc SaveMongoDB(MongoDB) returns(MongoDB) {}
+    rpc QueryMongoDB(QueryMongoDBRequest) returns(Set) {}
+}
+
+message MongoDB {
+    infraboard.cmdb.resource.Base base = 1;
+    infraboard.cmdb.resource.Information information = 2;
+    Describe describe = 3;
+}
+
+message Describe {
+}
+
+message Set {
+    // 列表项
+    // @gotags: json:"items"
+    repeated MongoDB items = 1;
+    // 总数量
+    // @gotags: json:"total"
+    int64 total = 2;
+}
+
+message QueryMongoDBRequest {
+    // 分页参数
+    // @gotags: json:"page"
+    infraboard.mcube.page.PageRequest page = 1;
+}

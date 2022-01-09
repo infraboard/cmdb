@@ -6,8 +6,8 @@ import (
 	v2 "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/bss/v2"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/bss/v2/model"
 
-	"github.com/infraboard/cmdb/app/bill"
-	"github.com/infraboard/cmdb/app/resource"
+	"github.com/infraboard/cmdb/apps/bill"
+	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"

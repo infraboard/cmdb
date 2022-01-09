@@ -47,9 +47,9 @@ install: ## install mcube cli
 	@go install github.com/infraboard/mcube/cmd/mcube@latest
 
 gen: ## generate code
-	@protoc -I=. -I=/usr/local/include --go_out=. --go-grpc_out=. --go_opt=module="${PKG}" --go-grpc_opt=module="${PKG}"  app/*/pb/*
-	@protoc-go-inject-tag -input=app/*/*.pb.go
-	@mcube enum -p -m app/*/*.pb.go
+	@protoc -I=. -I=/usr/local/include --go_out=. --go-grpc_out=. --go_opt=module="${PKG}" --go-grpc_opt=module="${PKG}"  apps/*/pb/*
+	@protoc-go-inject-tag -input=apps/*/*.pb.go
+	@mcube enum -p -m apps/*/*.pb.go
 
 push: # push git to multi repo
 	@git push -u gitee

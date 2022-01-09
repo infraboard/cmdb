@@ -3,11 +3,11 @@ package client
 import (
 	"google.golang.org/grpc"
 
-	"github.com/infraboard/cmdb/app/bill"
-	"github.com/infraboard/cmdb/app/host"
-	"github.com/infraboard/cmdb/app/rds"
-	"github.com/infraboard/cmdb/app/resource"
-	"github.com/infraboard/cmdb/app/secret"
+	"github.com/infraboard/cmdb/apps/bill"
+	"github.com/infraboard/cmdb/apps/host"
+	"github.com/infraboard/cmdb/apps/rds"
+	"github.com/infraboard/cmdb/apps/resource"
+	"github.com/infraboard/cmdb/apps/secret"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 )

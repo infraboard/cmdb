@@ -2,7 +2,7 @@ package bss
 
 import (
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/bssopenapi"
-	"github.com/infraboard/cmdb/app/bill"
+	"github.com/infraboard/cmdb/apps/bill"
 )
 
 func (o *BssOperater) Query(req *bssopenapi.QueryInstanceBillRequest) (*bill.BillSet, error) {

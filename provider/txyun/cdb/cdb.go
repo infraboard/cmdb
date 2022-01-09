@@ -5,9 +5,9 @@ import (
 
 	cdb "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cdb/v20170320"
 
-	"github.com/infraboard/cmdb/app/rds"
-	cmdbRds "github.com/infraboard/cmdb/app/rds"
-	"github.com/infraboard/cmdb/app/resource"
+	"github.com/infraboard/cmdb/apps/rds"
+	cmdbRds "github.com/infraboard/cmdb/apps/rds"
+	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"

@@ -7,8 +7,8 @@ import (
 	ecs "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ecs/v2"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ecs/v2/model"
 
-	"github.com/infraboard/cmdb/app/host"
-	"github.com/infraboard/cmdb/app/resource"
+	"github.com/infraboard/cmdb/apps/host"
+	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"

@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	"github.com/infraboard/cmdb/app/host"
+	"github.com/infraboard/cmdb/apps/host"
 	"github.com/vmware/govmomi/object"
 	"github.com/vmware/govmomi/vim25/mo"
 )

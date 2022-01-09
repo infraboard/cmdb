@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/infraboard/cmdb/app/resource"
+	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/client"
 	"github.com/stretchr/testify/assert"
 )

@@ -7,8 +7,8 @@ import (
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 
-	"github.com/infraboard/cmdb/app/host"
-	"github.com/infraboard/cmdb/app/resource"
+	"github.com/infraboard/cmdb/apps/host"
+	"github.com/infraboard/cmdb/apps/resource"
 )
 
 type Ec2Operater struct {

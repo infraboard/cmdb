@@ -7,7 +7,7 @@ import (
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 
-	"github.com/infraboard/cmdb/app/host"
+	"github.com/infraboard/cmdb/apps/host"
 )
 
 func newPager(pageSize int, operater *EcsOperater, rate int) *pager {

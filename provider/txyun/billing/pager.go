@@ -4,7 +4,7 @@ import (
 	billing "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/billing/v20180709"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 
-	"github.com/infraboard/cmdb/app/bill"
+	"github.com/infraboard/cmdb/apps/bill"
 	"github.com/infraboard/mcube/flowcontrol/tokenbucket"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"

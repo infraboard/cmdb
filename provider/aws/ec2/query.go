@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
-	"github.com/infraboard/cmdb/app/host"
+	"github.com/infraboard/cmdb/apps/host"
 )
 
 func (o *Ec2Operater) Query(ctx context.Context, req *ec2.DescribeInstancesInput) (*host.HostSet, error) {
