@@ -33,6 +33,9 @@ message Task {
     // 任务类型
     // @gotags: json:"type"
     Type type = 13;
+    // 测试运行
+    // @gotags: json:"dry_run"
+    bool dry_run = 14;
     // 任务id
     // @gotags: json:"id"
     string id = 1;
