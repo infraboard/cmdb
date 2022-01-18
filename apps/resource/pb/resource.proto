@@ -38,6 +38,25 @@ message Resource {
     // 资源信息
     // @gotags: json:"information"
     Information information = 2;
+    // 资源释放计划
+    // @gotags: json:"release_plan"
+    ReleasePlan release_plan = 3;
+}
+
+// 资源释放计划
+message ReleasePlan {
+    // 是否立即释放
+    // @gotags: json:"immediately"
+    bool immediately = 1;
+    // 释放时间
+    // @gotags: json:"release_at"
+    int64 release_at = 2;
+    // 计划释放时间
+    // @gotags: json:"plan_at"
+    int64 plan_at = 3;
+    // 释放原因
+    // @gotags: json:"reason"
+    string reason = 4;
 }
 
 message Base {

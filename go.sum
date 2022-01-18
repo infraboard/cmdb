@@ -271,8 +271,9 @@ github.com/inconshreveable/mousetrap v1.0.0 h1:Z8tu5sraLXCXIcARxBp/8cbvlwVa7Z1NH
 github.com/inconshreveable/mousetrap v1.0.0/go.mod h1:PxqpIevigyE2G7u3NXJIT2ANytuPF1OarO4DADm73n8=
 github.com/infraboard/keyauth v0.7.0 h1:eS6VE2zybnvjylI3Q544D+8QYvIe1fv34O2mifx0ou4=
 github.com/infraboard/keyauth v0.7.0/go.mod h1:UORd2k5xn64wV1x4fGmYMI6zgvkDRxR1fpTifq35uio=
-github.com/infraboard/mcube v1.5.8 h1:936bdo3NHgLS9iHPbIuYZVUNtxMbVXSPRPnDhY333sQ=
 github.com/infraboard/mcube v1.5.8/go.mod h1:x22foyGm+sWSNUg4DZkP4z/eC2ykMzN8HJHdK8a3/Qo=
+github.com/infraboard/mcube v1.5.9 h1:2G0nfqp61Re9ryb8H/09GgRoVeAlt5biEgLq4zAvkVI=
+github.com/infraboard/mcube v1.5.9/go.mod h1:x22foyGm+sWSNUg4DZkP4z/eC2ykMzN8HJHdK8a3/Qo=
 github.com/jcmturner/aescts/v2 v2.0.0/go.mod h1:AiaICIRyfYg35RUkr8yESTqvSy7csK90qZ5xfvvsoNs=
 github.com/jcmturner/dnsutils/v2 v2.0.0/go.mod h1:b0TnjGOvI/n42bZa+hmXL+kFJZsFT7G4t3HTlQ184QM=
 github.com/jcmturner/gofork v1.0.0/go.mod h1:MK8+TM0La+2rjBD4jE12Kj1pCCxK7d2LK/UM3ncEo0o=

@@ -20,8 +20,19 @@ enum Status {
     WARNING = 4;
 }
 
+// 任务类型
+enum Type {
+    // 资源同步任务
+    RESOURCE_SYNC = 0;
+    // 资源释放任务
+    RESOURCE_DELTE = 1;
+}
+
 // Task 同个区域的同一种资源一次只能有1个task run
 message Task {
+    // 任务类型
+    // @gotags: json:"type"
+    Type type = 13;
     // 任务id
     // @gotags: json:"id"
     string id = 1;
