@@ -9,6 +9,8 @@ import (
 
 	"github.com/infraboard/cmdb/provider/txyun/connectivity"
 	op "github.com/infraboard/cmdb/provider/txyun/cvm"
+	"github.com/infraboard/cmdb/utils"
+	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 )
 
 var (
@@ -27,6 +29,24 @@ func TestQuery(t *testing.T) {
 		hasNext = p.HasNext
 		fmt.Println(p.Data)
 	}
+}
+
+func TestInquiryPrice(t *testing.T) {
+	req := cvm.NewInquiryPriceRunInstancesRequest()
+	req.Placement = &cvm.Placement{
+		Zone: utils.StringPtr("ap-shanghai-2"),
+	}
+	req.ImageId = utils.StringPtr("img-l5eqiljn")
+	req.InstanceChargeType = utils.StringPtr("SPOTPAID")
+	operater.InquiryPrice(req)
+}
+
+func TestDescribeZones(t *testing.T) {
+	operater.DescribeZones()
+}
+
+func TestDescribeInstanceType(t *testing.T) {
+	operater.DescribeInstanceType()
 }
 
 func init() {

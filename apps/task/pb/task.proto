@@ -25,7 +25,7 @@ enum Type {
     // 资源同步任务
     RESOURCE_SYNC = 0;
     // 资源释放任务
-    RESOURCE_DELTE = 1;
+    RESOURCE_RELEASE = 1;
 }
 
 // Task 同个区域的同一种资源一次只能有1个task run
@@ -122,14 +122,22 @@ message QueryTaskRequest {
 }
 
 message CreateTaskRequst {
+    // 任务类型
+    // @gotags: json:"type"
+    Type type = 1;
+    // 测试运行
+    // @gotags: json:"dry_run"
+    bool dry_run = 2;
+    // 任务使用的云商凭证Id
     // @gotags: json:"secret_id" validate:"required,lte=100"
-    string secret_id = 1;
-    // @gotags: json:"region"
-    string region = 2;
+    string secret_id = 3;
+    // 任务操作的资源类型
     // @gotags: json:"resource_type"
-    infraboard.cmdb.resource.Type resource_type = 3;
+    infraboard.cmdb.resource.Type resource_type = 4;
+    // @gotags: json:"region"
+    string region = 5;
     // @gotags: json:"timeout"
-    int64 timeout = 4;
+    int64 timeout = 6;
 }
 
 message DescribeTaskRequest {

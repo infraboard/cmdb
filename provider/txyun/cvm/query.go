@@ -6,6 +6,7 @@ import (
 	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 )
 
+// 查看实例列表: https://cloud.tencent.com/document/api/213/15728
 func (o *CVMOperater) Query(req *cvm.DescribeInstancesRequest) (*host.HostSet, error) {
 	resp, err := o.client.DescribeInstances(req)
 	if err != nil {

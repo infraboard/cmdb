@@ -274,7 +274,7 @@ type ReleasePlan struct {
 	// 执行时间
 	// @gotags: json:"exec_at"
 	ExecAt int64 `protobuf:"varint,4,opt,name=exec_at,json=execAt,proto3" json:"exec_at"`
-	// 释放前 提前几天通知
+	// 释放前 提前几天通知, 过期后 云商会自动释放的也需要提前通知
 	// @gotags: json:"notice_before_days"
 	NoticeBeforeDays int64 `protobuf:"varint,5,opt,name=notice_before_days,json=noticeBeforeDays,proto3" json:"notice_before_days"`
 }

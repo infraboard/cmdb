@@ -57,7 +57,7 @@ message ReleasePlan {
     // 执行时间
     // @gotags: json:"exec_at"
     int64 exec_at = 4;
-    // 释放前 提前几天通知
+    // 释放前 提前几天通知, 过期后 云商会自动释放的也需要提前通知
     // @gotags: json:"notice_before_days"
     int64 notice_before_days = 5;
 }
