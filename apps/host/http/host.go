@@ -51,7 +51,7 @@ func (h *handler) DescribeHost(w http.ResponseWriter, r *http.Request) {
 func (h *handler) DeleteHost(w http.ResponseWriter, r *http.Request) {
 	ctx := context.GetContext(r)
 	req := host.NewDeleteHostRequestWithID(ctx.PS.ByName("id"))
-	set, err := h.service.DeleteHost(r.Context(), req)
+	set, err := h.service.ReleaseHost(r.Context(), req)
 	if err != nil {
 		response.Failed(w, err)
 		return

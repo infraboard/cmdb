@@ -153,7 +153,7 @@ func (s *service) update(ctx context.Context, ins *host.Host) error {
 	return tx.Commit()
 }
 
-func (s *service) delete(ctx context.Context, req *host.DeleteHostRequest) error {
+func (s *service) delete(ctx context.Context, req *host.ReleaseHostRequest) error {
 	var (
 		stmt *sql.Stmt
 		err  error

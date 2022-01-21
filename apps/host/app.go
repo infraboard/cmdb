@@ -195,8 +195,8 @@ func NewDescribeHostRequestInstanceID(instanceId string) *DescribeHostRequest {
 	}
 }
 
-func NewDeleteHostRequestWithID(id string) *DeleteHostRequest {
-	return &DeleteHostRequest{Id: id}
+func NewDeleteHostRequestWithID(id string) *ReleaseHostRequest {
+	return &ReleaseHostRequest{Id: id}
 }
 
 func NewUpdateHostRequest(id string) *UpdateHostRequest {

@@ -187,7 +187,7 @@ func (s *service) UpdateHost(ctx context.Context, req *host.UpdateHostRequest) (
 	return ins, nil
 }
 
-func (s *service) DeleteHost(ctx context.Context, req *host.DeleteHostRequest) (
+func (s *service) ReleaseHost(ctx context.Context, req *host.ReleaseHostRequest) (
 	*host.Host, error) {
 	ins, err := s.DescribeHost(ctx, host.NewDescribeHostRequestWithID(req.Id))
 	if err != nil {

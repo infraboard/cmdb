@@ -60,6 +60,9 @@ message ReleasePlan {
     // 释放前 提前几天通知, 过期后 云商会自动释放的也需要提前通知
     // @gotags: json:"notice_before_days"
     int64 notice_before_days = 5;
+    // 资源释放后, 什么时候销毁该数据
+    // @gotags: json:"destory_at"
+    int64 destory_at = 6;
 }
 
 message Base {

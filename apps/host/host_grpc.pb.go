@@ -28,10 +28,10 @@ type ServiceClient interface {
 	QueryHost(ctx context.Context, in *QueryHostRequest, opts ...grpc.CallOption) (*HostSet, error)
 	// 查询主机详情信息
 	DescribeHost(ctx context.Context, in *DescribeHostRequest, opts ...grpc.CallOption) (*Host, error)
-	// 更新主机信息
+	// 更新主机信息, 同步更新云商资源信息
 	UpdateHost(ctx context.Context, in *UpdateHostRequest, opts ...grpc.CallOption) (*Host, error)
-	// 销毁主机
-	DeleteHost(ctx context.Context, in *DeleteHostRequest, opts ...grpc.CallOption) (*Host, error)
+	// 释放主机, 按计划释放后, 信息会保留一段时间
+	ReleaseHost(ctx context.Context, in *ReleaseHostRequest, opts ...grpc.CallOption) (*Host, error)
 }
 
 type serviceClient struct {
@@ -78,9 +78,9 @@ func (c *serviceClient) UpdateHost(ctx context.Context, in *UpdateHostRequest, o
 	return out, nil
 }
 
-func (c *serviceClient) DeleteHost(ctx context.Context, in *DeleteHostRequest, opts ...grpc.CallOption) (*Host, error) {
+func (c *serviceClient) ReleaseHost(ctx context.Context, in *ReleaseHostRequest, opts ...grpc.CallOption) (*Host, error) {
 	out := new(Host)
-	err := c.cc.Invoke(ctx, "/infraboard.cmdb.host.Service/DeleteHost", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/infraboard.cmdb.host.Service/ReleaseHost", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -97,10 +97,10 @@ type ServiceServer interface {
 	QueryHost(context.Context, *QueryHostRequest) (*HostSet, error)
 	// 查询主机详情信息
 	DescribeHost(context.Context, *DescribeHostRequest) (*Host, error)
-	// 更新主机信息
+	// 更新主机信息, 同步更新云商资源信息
 	UpdateHost(context.Context, *UpdateHostRequest) (*Host, error)
-	// 销毁主机
-	DeleteHost(context.Context, *DeleteHostRequest) (*Host, error)
+	// 释放主机, 按计划释放后, 信息会保留一段时间
+	ReleaseHost(context.Context, *ReleaseHostRequest) (*Host, error)
 	mustEmbedUnimplementedServiceServer()
 }
 
@@ -120,8 +120,8 @@ func (UnimplementedServiceServer) DescribeHost(context.Context, *DescribeHostReq
 func (UnimplementedServiceServer) UpdateHost(context.Context, *UpdateHostRequest) (*Host, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateHost not implemented")
 }
-func (UnimplementedServiceServer) DeleteHost(context.Context, *DeleteHostRequest) (*Host, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteHost not implemented")
+func (UnimplementedServiceServer) ReleaseHost(context.Context, *ReleaseHostRequest) (*Host, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReleaseHost not implemented")
 }
 func (UnimplementedServiceServer) mustEmbedUnimplementedServiceServer() {}
 
@@ -208,20 +208,20 @@ func _Service_UpdateHost_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Service_DeleteHost_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteHostRequest)
+func _Service_ReleaseHost_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReleaseHostRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ServiceServer).DeleteHost(ctx, in)
+		return srv.(ServiceServer).ReleaseHost(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/infraboard.cmdb.host.Service/DeleteHost",
+		FullMethod: "/infraboard.cmdb.host.Service/ReleaseHost",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).DeleteHost(ctx, req.(*DeleteHostRequest))
+		return srv.(ServiceServer).ReleaseHost(ctx, req.(*ReleaseHostRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -250,8 +250,8 @@ var Service_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Service_UpdateHost_Handler,
 		},
 		{
-			MethodName: "DeleteHost",
-			Handler:    _Service_DeleteHost_Handler,
+			MethodName: "ReleaseHost",
+			Handler:    _Service_ReleaseHost_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

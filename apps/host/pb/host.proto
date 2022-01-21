@@ -14,10 +14,10 @@ service Service {
     rpc QueryHost(QueryHostRequest) returns(HostSet) {}
     // 查询主机详情信息
     rpc DescribeHost(DescribeHostRequest) returns(Host) {}
-    // 更新主机信息
+    // 更新主机信息, 同步更新云商资源信息
     rpc UpdateHost(UpdateHostRequest) returns(Host) {}
-    // 销毁主机
-    rpc DeleteHost(DeleteHostRequest) returns(Host) {}
+    // 释放主机, 按计划释放后, 信息会保留一段时间
+    rpc ReleaseHost(ReleaseHostRequest) returns(Host) {}
 }
 
 message Host {
@@ -117,7 +117,11 @@ message DescribeHostRequest {
 
 }
 
-message DeleteHostRequest {
+message ReleaseHostRequest {
+    // 主机Id
     // @gotags: json:"id" validate:"required"
     string id = 1;
+    // 释放计划
+    // @gotags: json:"release_plan"
+    infraboard.cmdb.resource.ReleasePlan release_plan = 2;
 }
