@@ -38,7 +38,7 @@ func (o *EcsOperater) transferOne(ins ecs.Instance) *host.Host {
 	h.Base.Zone = ins.ZoneId
 
 	h.Base.CreateAt = o.parseTime(ins.CreationTime)
-	h.Base.InstanceId = ins.InstanceId
+	h.Base.Id = ins.InstanceId
 
 	h.Information.ExpireAt = o.parseTime(ins.ExpiredTime)
 	h.Information.Type = ins.InstanceType

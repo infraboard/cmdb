@@ -58,7 +58,7 @@ func (s *service) save(ctx context.Context, h *host.Host) error {
 	base := h.Base
 	info := h.Information
 	_, err = stmt.Exec(
-		base.Id, base.Vendor, base.Region, base.Zone, base.CreateAt, info.ExpireAt, info.Category, info.Type, base.InstanceId,
+		base.Id, base.Vendor, base.Region, base.Zone, base.CreateAt, info.ExpireAt, info.Category, info.Type,
 		info.Name, info.Description, info.Status, info.UpdateAt, base.SyncAt, info.SyncAccount, info.PublicIPToString(),
 		info.PrivateIPToString(), info.PayType, base.DescribeHash, base.ResourceHash, base.SecretId,
 	)

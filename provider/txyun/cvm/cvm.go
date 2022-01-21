@@ -38,7 +38,7 @@ func (o *CVMOperater) transferOne(ins *cvm.Instance) *host.Host {
 	h.Base.Region = o.client.GetRegion()
 	h.Base.Zone = utils.PtrStrV(ins.Placement.Zone)
 	h.Base.CreateAt = o.parseTime(utils.PtrStrV(ins.CreatedTime))
-	h.Base.InstanceId = utils.PtrStrV(ins.InstanceId)
+	h.Base.Id = utils.PtrStrV(ins.InstanceId)
 
 	h.Information.ExpireAt = o.parseTime(utils.PtrStrV(ins.ExpiredTime))
 	h.Information.Type = utils.PtrStrV(ins.InstanceType)

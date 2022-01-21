@@ -5,6 +5,7 @@ option go_package="github.com/infraboard/cmdb/apps/host";
 
 import "apps/resource/pb/resource.proto";
 import "github.com/infraboard/mcube/pb/page/page.proto";
+import "github.com/infraboard/mcube/pb/request/request.proto";
 
 service Service {
     // 同步云商的主机资源
@@ -17,11 +18,6 @@ service Service {
     rpc UpdateHost(UpdateHostRequest) returns(Host) {}
     // 销毁主机
     rpc DeleteHost(DeleteHostRequest) returns(Host) {}
-}
-
-enum UpdateMode {
-    PUT = 0;
-    PATCH = 1;
 }
 
 message Host {
@@ -94,8 +90,9 @@ message HostSet {
 message UpdateHostRequest {
     // @gotags: json:"id" validate:"required"
     string id = 1;
+    // 更新模式
     // @gotags: json:"update_mode"
-    UpdateMode update_mode = 2;
+    infraboard.mcube.request.UpdateMode update_mode = 2;
     // @gotags: json:"data" validate:"required"
     UpdateHostData update_host_data = 3;
 }

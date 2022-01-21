@@ -5,6 +5,7 @@ import (
 	"database/sql"
 
 	"github.com/infraboard/mcube/exception"
+	"github.com/infraboard/mcube/pb/request"
 	"github.com/infraboard/mcube/sqlbuilder"
 
 	"github.com/infraboard/cmdb/apps/host"
@@ -12,7 +13,7 @@ import (
 
 func (s *service) SyncHost(ctx context.Context, ins *host.Host) (
 	*host.Host, error) {
-	exist, err := s.DescribeHost(ctx, host.NewDescribeHostRequestInstanceID(ins.Base.InstanceId))
+	exist, err := s.DescribeHost(ctx, host.NewDescribeHostRequestInstanceID(ins.Base.Id))
 	if err != nil {
 		// 如果不是Not Found则直接返回
 		if !exception.IsNotFoundError(err) {
@@ -76,7 +77,7 @@ func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 		desc := ins.Describe
 		err := rows.Scan(
 			&base.Id, &base.Vendor, &base.Region, &base.Zone, &base.CreateAt, &info.ExpireAt,
-			&info.Category, &info.Type, &base.InstanceId, &info.Name, &info.Description,
+			&info.Category, &info.Type, &info.Name, &info.Description,
 			&info.Status, &info.UpdateAt, &base.SyncAt, &info.SyncAccount,
 			&publicIPList, &privateIPList, &info.PayType, &base.DescribeHash, &base.ResourceHash,
 			&base.SecretId, &base.Id,
@@ -132,7 +133,7 @@ func (s *service) DescribeHost(ctx context.Context, req *host.DescribeHostReques
 	desc := ins.Describe
 	err = queryStmt.QueryRow(args...).Scan(
 		&base.Id, &base.Vendor, &base.Region, &base.Zone, &base.CreateAt, &info.ExpireAt,
-		&info.Category, &info.Type, &base.InstanceId, &info.Name, &info.Description,
+		&info.Category, &info.Type, &info.Name, &info.Description,
 		&info.Status, &info.UpdateAt, &base.SyncAt, &info.SyncAccount,
 		&publicIPList, &privateIPList, &info.PayType, &base.DescribeHash, &base.ResourceHash,
 		&base.SecretId, &base.Id,
@@ -170,7 +171,7 @@ func (s *service) UpdateHost(ctx context.Context, req *host.UpdateHostRequest) (
 	}
 
 	switch req.UpdateMode {
-	case host.UpdateMode_PATCH:
+	case request.UpdateMode_PATCH:
 		ins.Patch(req.UpdateHostData)
 	default:
 		ins.Put(req.UpdateHostData)

@@ -51,7 +51,7 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 		info := ins.Information
 		err := rows.Scan(
 			&base.Id, &base.Vendor, &base.Region, &base.Zone, &base.CreateAt, &info.ExpireAt,
-			&info.Category, &info.Type, &base.InstanceId, &info.Name, &info.Description,
+			&info.Category, &info.Type, &info.Name, &info.Description,
 			&info.Status, &info.UpdateAt, &base.SyncAt, &info.SyncAccount,
 			&publicIPList, &privateIPList, &info.PayType, &base.DescribeHash, &base.ResourceHash,
 		)

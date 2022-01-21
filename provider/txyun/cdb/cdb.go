@@ -41,7 +41,7 @@ func (o *CDBOperater) transferOne(ins *cdb.InstanceInfo) *rds.RDS {
 	b.Region = utils.PtrStrV(ins.Region)
 	b.Zone = utils.PtrStrV(ins.Zone)
 	b.CreateAt = o.parseTime(utils.PtrStrV(ins.CreateTime))
-	b.InstanceId = utils.PtrStrV(ins.InstanceId)
+	b.Id = utils.PtrStrV(ins.InstanceId)
 
 	info := r.Information
 	info.ExpireAt = o.parseTime(utils.PtrStrV(ins.DeadlineTime))

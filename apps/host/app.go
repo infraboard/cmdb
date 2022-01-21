@@ -11,6 +11,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/mcube/http/request"
+	pb_request "github.com/infraboard/mcube/pb/request"
 	"github.com/infraboard/mcube/types/ftime"
 )
 
@@ -201,7 +202,7 @@ func NewDeleteHostRequestWithID(id string) *DeleteHostRequest {
 func NewUpdateHostRequest(id string) *UpdateHostRequest {
 	return &UpdateHostRequest{
 		Id:             id,
-		UpdateMode:     UpdateMode_PUT,
+		UpdateMode:     pb_request.UpdateMode_PUT,
 		UpdateHostData: &UpdateHostData{},
 	}
 }

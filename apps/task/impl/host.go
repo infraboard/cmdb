@@ -86,7 +86,7 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, t *task.T
 		err = operater.Query(func(h *host.Host) {
 			// 补充管理信息
 			h.Base.SecretId = secret.Id
-			s.SaveOrUpdateHost(ctx, h, t)
+			s.SyncHost(ctx, h, t)
 		})
 		if err != nil {
 			t.Failed(err.Error())
@@ -114,23 +114,23 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, t *task.T
 				target := p.Data.Items[i]
 				// 补充管理信息
 				target.Base.SecretId = secret.Id
-				s.SaveOrUpdateHost(ctx, target, t)
+				s.SyncHost(ctx, target, t)
 			}
 		}
 	}
 }
 
 // Host主机数据入库
-func (s *service) SaveOrUpdateHost(ctx context.Context, ins *host.Host, t *task.Task) {
-	h, err := s.host.SaveOrUpdateHost(ctx, ins)
+func (s *service) SyncHost(ctx context.Context, ins *host.Host, t *task.Task) {
+	h, err := s.host.SyncHost(ctx, ins)
 
 	var detail *task.Record
 	if err != nil {
 		s.log.Warnf("save host error, %s", err)
-		detail = task.NewSyncFailedRecord(t.Id, ins.Base.InstanceId, ins.Information.Name, err.Error())
+		detail = task.NewSyncFailedRecord(t.Id, ins.Base.Id, ins.Information.Name, err.Error())
 	} else {
 		s.log.Debugf("save host %s to db", h.ShortDesc())
-		detail = task.NewSyncSucceedRecord(t.Id, ins.Base.InstanceId, ins.Information.Name)
+		detail = task.NewSyncSucceedRecord(t.Id, ins.Base.Id, ins.Information.Name)
 	}
 
 	t.AddDetail(detail)

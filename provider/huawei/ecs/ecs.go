@@ -40,7 +40,7 @@ func (o *EcsOperater) transferOne(ins model.ServerDetail) *host.Host {
 	h.Base.Vendor = resource.Vendor_HUAWEI
 	h.Base.Zone = ins.OSEXTAZavailabilityZone
 	h.Base.CreateAt = o.parseTime(ins.Created)
-	h.Base.InstanceId = ins.Id
+	h.Base.Id = ins.Id
 
 	h.Information.Category = ins.Flavor.Name
 	h.Information.ExpireAt = o.parseTime(ins.AutoTerminateTime)

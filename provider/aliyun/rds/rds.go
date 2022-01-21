@@ -41,7 +41,7 @@ func (o *RdsOperater) transferOne(ins rds.DBInstanceAttribute) *cmdbRds.RDS {
 	b.Region = ins.RegionId
 	b.Zone = ins.ZoneId
 	b.CreateAt = o.parseTime(ins.CreationTime)
-	b.InstanceId = ins.DBInstanceId
+	b.Id = ins.DBInstanceId
 
 	info := r.Information
 	info.ExpireAt = o.parseTime(ins.ExpireTime)

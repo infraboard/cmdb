@@ -43,7 +43,7 @@ func (o *RdsOperater) transferOne(ins model.InstanceResponse) *rds.RDS {
 	b.Vendor = resource.Vendor_HUAWEI
 	b.Region = ins.Region
 	b.CreateAt = o.parseTime(ins.Created)
-	b.InstanceId = ins.Id
+	b.Id = ins.Id
 
 	i := h.Information
 	i.ExpireAt = o.parseTime(utils.PtrStrV(ins.ExpirationTime))

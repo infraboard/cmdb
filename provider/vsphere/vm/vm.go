@@ -35,7 +35,7 @@ func (o *VMOperater) transferOne(ins *mo.VirtualMachine, dcName string) *host.Ho
 	h.Base.Region = o.client.URL().Host
 	h.Base.Zone = dcName
 	h.Base.CreateAt = ins.Config.CreateDate.UnixNano() / 1000000
-	h.Base.InstanceId = ins.Config.Uuid
+	h.Base.Id = ins.Config.Uuid
 
 	h.Information.Name = ins.Name
 	h.Information.Status = string(ins.Summary.Runtime.PowerState)

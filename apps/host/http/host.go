@@ -6,6 +6,7 @@ import (
 	"github.com/infraboard/mcube/http/context"
 	"github.com/infraboard/mcube/http/request"
 	"github.com/infraboard/mcube/http/response"
+	pb_request "github.com/infraboard/mcube/pb/request"
 
 	"github.com/infraboard/cmdb/apps/host"
 )
@@ -79,7 +80,7 @@ func (h *handler) PutHost(w http.ResponseWriter, r *http.Request) {
 func (h *handler) PatchHost(w http.ResponseWriter, r *http.Request) {
 	ctx := context.GetContext(r)
 	req := host.NewUpdateHostRequest(ctx.PS.ByName("id"))
-	req.UpdateMode = host.UpdateMode_PATCH
+	req.UpdateMode = pb_request.UpdateMode_PATCH
 
 	if err := request.GetDataFromRequest(r, req.UpdateHostData); err != nil {
 		response.Failed(w, err)

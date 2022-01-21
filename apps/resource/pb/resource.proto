@@ -41,7 +41,6 @@ message Resource {
     // 资源释放计划
     // @gotags: json:"release_plan"
     ReleasePlan release_plan = 3;
-
 }
 
 // 资源释放计划
@@ -64,7 +63,7 @@ message ReleasePlan {
 }
 
 message Base {
-    // 全局唯一Id
+    // 全局唯一Id, 直接使用个云商自己的Id
     // @gotags: json:"id"
     string id = 1; 
     // 同步时间
@@ -88,9 +87,6 @@ message Base {
     // 创建时间
     // @gotags: json:"create_at"
     int64  create_at = 8;
-    // 实例ID
-    // @gotags: json:"instance_id"
-    string instance_id =9;
     // 基础数据Hash
     // @gotags: json:"resource_hash"
     string resource_hash = 10;
