@@ -9,15 +9,15 @@ import "github.com/infraboard/mcube/pb/request/request.proto";
 
 service Service {
     // 同步云商的主机资源
-    rpc SyncHost(Host) returns(Host) {}
+    rpc SyncHost(Host) returns(Host);
     // 查询本地同步后的主机资源列表
-    rpc QueryHost(QueryHostRequest) returns(HostSet) {}
+    rpc QueryHost(QueryHostRequest) returns(HostSet);
     // 查询主机详情信息
-    rpc DescribeHost(DescribeHostRequest) returns(Host) {}
+    rpc DescribeHost(DescribeHostRequest) returns(Host);
     // 更新主机信息, 同步更新云商资源信息
-    rpc UpdateHost(UpdateHostRequest) returns(Host) {}
+    rpc UpdateHost(UpdateHostRequest) returns(Host);
     // 释放主机, 按计划释放后, 信息会保留一段时间
-    rpc ReleaseHost(ReleaseHostRequest) returns(Host) {}
+    rpc ReleaseHost(ReleaseHostRequest) returns(Host);
 }
 
 message Host {
