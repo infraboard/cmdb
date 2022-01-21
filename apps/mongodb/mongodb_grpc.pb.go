@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ServiceClient interface {
-	SaveMongoDB(ctx context.Context, in *MongoDB, opts ...grpc.CallOption) (*MongoDB, error)
+	SyncMongoDB(ctx context.Context, in *MongoDB, opts ...grpc.CallOption) (*MongoDB, error)
 	QueryMongoDB(ctx context.Context, in *QueryMongoDBRequest, opts ...grpc.CallOption) (*Set, error)
 }
 
@@ -34,9 +34,9 @@ func NewServiceClient(cc grpc.ClientConnInterface) ServiceClient {
 	return &serviceClient{cc}
 }
 
-func (c *serviceClient) SaveMongoDB(ctx context.Context, in *MongoDB, opts ...grpc.CallOption) (*MongoDB, error) {
+func (c *serviceClient) SyncMongoDB(ctx context.Context, in *MongoDB, opts ...grpc.CallOption) (*MongoDB, error) {
 	out := new(MongoDB)
-	err := c.cc.Invoke(ctx, "/infraboard.cmdb.mongodb.Service/SaveMongoDB", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/infraboard.cmdb.mongodb.Service/SyncMongoDB", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +56,7 @@ func (c *serviceClient) QueryMongoDB(ctx context.Context, in *QueryMongoDBReques
 // All implementations must embed UnimplementedServiceServer
 // for forward compatibility
 type ServiceServer interface {
-	SaveMongoDB(context.Context, *MongoDB) (*MongoDB, error)
+	SyncMongoDB(context.Context, *MongoDB) (*MongoDB, error)
 	QueryMongoDB(context.Context, *QueryMongoDBRequest) (*Set, error)
 	mustEmbedUnimplementedServiceServer()
 }
@@ -65,8 +65,8 @@ type ServiceServer interface {
 type UnimplementedServiceServer struct {
 }
 
-func (UnimplementedServiceServer) SaveMongoDB(context.Context, *MongoDB) (*MongoDB, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SaveMongoDB not implemented")
+func (UnimplementedServiceServer) SyncMongoDB(context.Context, *MongoDB) (*MongoDB, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SyncMongoDB not implemented")
 }
 func (UnimplementedServiceServer) QueryMongoDB(context.Context, *QueryMongoDBRequest) (*Set, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryMongoDB not implemented")
@@ -84,20 +84,20 @@ func RegisterServiceServer(s grpc.ServiceRegistrar, srv ServiceServer) {
 	s.RegisterService(&Service_ServiceDesc, srv)
 }
 
-func _Service_SaveMongoDB_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Service_SyncMongoDB_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MongoDB)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ServiceServer).SaveMongoDB(ctx, in)
+		return srv.(ServiceServer).SyncMongoDB(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/infraboard.cmdb.mongodb.Service/SaveMongoDB",
+		FullMethod: "/infraboard.cmdb.mongodb.Service/SyncMongoDB",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).SaveMongoDB(ctx, req.(*MongoDB))
+		return srv.(ServiceServer).SyncMongoDB(ctx, req.(*MongoDB))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -128,8 +128,8 @@ var Service_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SaveMongoDB",
-			Handler:    _Service_SaveMongoDB_Handler,
+			MethodName: "SyncMongoDB",
+			Handler:    _Service_SyncMongoDB_Handler,
 		},
 		{
 			MethodName: "QueryMongoDB",

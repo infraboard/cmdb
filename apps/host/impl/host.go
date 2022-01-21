@@ -3,26 +3,37 @@ package impl
 import (
 	"context"
 	"database/sql"
-	"fmt"
 
 	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/sqlbuilder"
-	"github.com/infraboard/mcube/types/ftime"
-	"github.com/rs/xid"
 
 	"github.com/infraboard/cmdb/apps/host"
-	"github.com/infraboard/cmdb/apps/resource/impl"
 )
 
-func (s *service) SaveHost(ctx context.Context, h *host.Host) (
+func (s *service) SyncHost(ctx context.Context, ins *host.Host) (
 	*host.Host, error) {
-	h.Base.Id = xid.New().String()
-	h.Base.SyncAt = ftime.Now().Timestamp()
+	exist, err := s.DescribeHost(ctx, host.NewDescribeHostRequestInstanceID(ins.Base.InstanceId))
+	if err != nil {
+		// 如果不是Not Found则直接返回
+		if !exception.IsNotFoundError(err) {
+			return nil, err
+		}
+	}
 
-	if err := s.save(ctx, h); err != nil {
+	// 检查ins已经存在 我们则需要更新ins
+	if exist != nil {
+		if err := s.update(ctx, ins); err != nil {
+			return nil, err
+		}
+		return ins, nil
+	}
+
+	// 如果没有我们则直接保存
+	if err := s.save(ctx, ins); err != nil {
 		return nil, err
 	}
-	return h, nil
+
+	return ins, nil
 }
 
 func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
@@ -99,129 +110,6 @@ func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 	return set, nil
 }
 
-func (s *service) UpdateHost(ctx context.Context, req *host.UpdateHostRequest) (
-	*host.Host, error) {
-	var (
-		stmt *sql.Stmt
-		err  error
-	)
-
-	// 检测参数合法性
-	if err := req.Validate(); err != nil {
-		return nil, exception.NewBadRequest("validate update host error, %s", err)
-	}
-
-	tx, err := s.db.BeginTx(ctx, nil)
-	if err != nil {
-		return nil, fmt.Errorf("start tx error, %s", err)
-	}
-
-	// 查询出该条实例的数据
-	ins, err := s.DescribeHost(ctx, host.NewDescribeHostRequestWithID(req.Id))
-	if err != nil {
-		return nil, err
-	}
-
-	oldRH, oldDH := ins.Base.ResourceHash, ins.Base.DescribeHash
-
-	switch req.UpdateMode {
-	case host.UpdateMode_PATCH:
-		ins.Patch(req.UpdateHostData)
-	default:
-		ins.Put(req.UpdateHostData)
-	}
-
-	defer func() {
-		if err != nil {
-			tx.Rollback()
-			return
-		}
-	}()
-
-	if oldRH != ins.Base.ResourceHash {
-		// 避免SQL注入, 请使用Prepare
-		stmt, err = tx.Prepare(impl.SQLUpdateResource)
-		if err != nil {
-			return nil, err
-		}
-		defer stmt.Close()
-
-		base := ins.Base
-		info := ins.Information
-		_, err = stmt.Exec(
-			info.ExpireAt, info.Category, info.Type, info.Name, info.Description,
-			info.Status, info.UpdateAt, base.SyncAt, info.SyncAccount,
-			info.PublicIp, info.PrivateIp, info.PayType, base.DescribeHash, base.ResourceHash,
-			ins.Base.SecretId, ins.Base.Id,
-		)
-		if err != nil {
-			return nil, err
-		}
-	} else {
-		s.log.Debug("resource data hash not changed, needn't update")
-	}
-
-	if oldDH != ins.Base.DescribeHash {
-		// 避免SQL注入, 请使用Prepare
-		stmt, err = tx.Prepare(updateHostSQL)
-		if err != nil {
-			return nil, err
-		}
-		defer stmt.Close()
-
-		base := ins.Base
-		desc := ins.Describe
-		_, err = stmt.Exec(
-			desc.Cpu, desc.Memory, desc.GpuAmount, desc.GpuSpec, desc.OsType, desc.OsName,
-			desc.ImageId, desc.InternetMaxBandwidthOut,
-			desc.InternetMaxBandwidthIn, desc.KeyPairNameToString(), desc.SecurityGroupsToString(),
-			base.Id,
-		)
-		if err != nil {
-			return nil, err
-		}
-	} else {
-		s.log.Debug("describe data hash not changed, needn't update")
-	}
-
-	if err := tx.Commit(); err != nil {
-		return nil, err
-	}
-
-	return ins, nil
-}
-
-func (s *service) SaveOrUpdateHost(ctx context.Context, ins *host.Host) (
-	*host.Host, error) {
-	exist, err := s.DescribeHost(ctx, host.NewDescribeHostRequestInstanceID(ins.Base.InstanceId))
-	if err != nil {
-		// 如果不是Not Found则直接返回
-		if !exception.IsNotFoundError(err) {
-			return nil, err
-		}
-	}
-
-	// 检查ins已经存在 我们则需要更新ins
-	if exist != nil {
-		updateReq := host.NewUpdateHostRequest(exist.Base.Id)
-		updateReq.UpdateHostData.Information = ins.Information
-		updateReq.UpdateHostData.Describe = ins.Describe
-		ins, err := s.UpdateHost(ctx, updateReq)
-		if err != nil {
-			return nil, err
-		}
-		return ins, nil
-	}
-
-	// 如果没有我们则直接保存
-	resp, err := s.SaveHost(ctx, ins)
-	if err != nil {
-		return nil, err
-	}
-
-	return resp, nil
-}
-
 func (s *service) DescribeHost(ctx context.Context, req *host.DescribeHostRequest) (
 	*host.Host, error) {
 	query := sqlbuilder.NewQuery(queryHostSQL)
@@ -268,12 +156,44 @@ func (s *service) DescribeHost(ctx context.Context, req *host.DescribeHostReques
 	return ins, nil
 }
 
+func (s *service) UpdateHost(ctx context.Context, req *host.UpdateHostRequest) (
+	*host.Host, error) {
+	// 检测参数合法性
+	if err := req.Validate(); err != nil {
+		return nil, exception.NewBadRequest("validate update host error, %s", err)
+	}
+
+	// 查询出该条实例的数据
+	ins, err := s.DescribeHost(ctx, host.NewDescribeHostRequestWithID(req.Id))
+	if err != nil {
+		return nil, err
+	}
+
+	switch req.UpdateMode {
+	case host.UpdateMode_PATCH:
+		ins.Patch(req.UpdateHostData)
+	default:
+		ins.Put(req.UpdateHostData)
+	}
+
+	// 更新云商主机
+
+	// 更新数据库
+	if err := s.update(ctx, ins); err != nil {
+		return nil, err
+	}
+
+	return ins, nil
+}
+
 func (s *service) DeleteHost(ctx context.Context, req *host.DeleteHostRequest) (
 	*host.Host, error) {
 	ins, err := s.DescribeHost(ctx, host.NewDescribeHostRequestWithID(req.Id))
 	if err != nil {
 		return nil, err
 	}
+
+	// 删除云商上该主机
 
 	if err := s.delete(ctx, req); err != nil {
 		return nil, err

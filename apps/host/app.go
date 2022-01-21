@@ -29,10 +29,19 @@ func NewDefaultHost() *Host {
 }
 
 func (h *Host) Put(req *UpdateHostData) {
+	oldRH, oldDH := h.Base.ResourceHash, h.Base.DescribeHash
+
 	h.Information = req.Information
 	h.Describe = req.Describe
 	h.Information.UpdateAt = ftime.Now().Timestamp()
 	h.GenHash()
+
+	if h.Base.ResourceHash != oldRH {
+		h.Base.ResourceHashChanged = true
+	}
+	if h.Base.DescribeHash != oldDH {
+		h.Base.DescribeHashChanged = true
+	}
 }
 
 func (h *Host) ShortDesc() string {
@@ -40,6 +49,8 @@ func (h *Host) ShortDesc() string {
 }
 
 func (h *Host) Patch(req *UpdateHostData) error {
+	oldRH, oldDH := h.Base.ResourceHash, h.Base.DescribeHash
+
 	err := ObjectPatch(h.Information, req.Information)
 	if err != nil {
 		return err
@@ -52,6 +63,14 @@ func (h *Host) Patch(req *UpdateHostData) error {
 
 	h.Information.UpdateAt = ftime.Now().Timestamp()
 	h.GenHash()
+
+	if h.Base.ResourceHash != oldRH {
+		h.Base.ResourceHashChanged = true
+	}
+	if h.Base.DescribeHash != oldDH {
+		h.Base.DescribeHashChanged = true
+	}
+
 	return nil
 }
 

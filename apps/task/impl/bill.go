@@ -82,7 +82,7 @@ func (s *service) syncBill(ctx context.Context, secret *secret.Secret, t *task.T
 			// 调用bill服务保持数据
 			for i := range p.Data.Items {
 				target := p.Data.Items[i]
-				b, err := s.bill.SaveBill(ctx, target)
+				b, err := s.bill.SyncBill(ctx, target)
 				if err != nil {
 					s.log.Warnf("save bill error, %s", err)
 				} else {

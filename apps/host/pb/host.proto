@@ -7,11 +7,15 @@ import "apps/resource/pb/resource.proto";
 import "github.com/infraboard/mcube/pb/page/page.proto";
 
 service Service {
-    rpc SaveHost(Host) returns(Host) {}
+    // 同步云商的主机资源
+    rpc SyncHost(Host) returns(Host) {}
+    // 查询本地同步后的主机资源列表
     rpc QueryHost(QueryHostRequest) returns(HostSet) {}
-    rpc UpdateHost(UpdateHostRequest) returns(Host) {}
-    rpc SaveOrUpdateHost(Host) returns(Host) {}
+    // 查询主机详情信息
     rpc DescribeHost(DescribeHostRequest) returns(Host) {}
+    // 更新主机信息
+    rpc UpdateHost(UpdateHostRequest) returns(Host) {}
+    // 销毁主机
     rpc DeleteHost(DeleteHostRequest) returns(Host) {}
 }
 

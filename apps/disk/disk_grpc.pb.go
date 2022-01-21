@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ServiceClient interface {
-	SaveDisk(ctx context.Context, in *Disk, opts ...grpc.CallOption) (*Disk, error)
+	SyncDisk(ctx context.Context, in *Disk, opts ...grpc.CallOption) (*Disk, error)
 	QueryDisk(ctx context.Context, in *QueryDiskRequest, opts ...grpc.CallOption) (*Set, error)
 }
 
@@ -34,9 +34,9 @@ func NewServiceClient(cc grpc.ClientConnInterface) ServiceClient {
 	return &serviceClient{cc}
 }
 
-func (c *serviceClient) SaveDisk(ctx context.Context, in *Disk, opts ...grpc.CallOption) (*Disk, error) {
+func (c *serviceClient) SyncDisk(ctx context.Context, in *Disk, opts ...grpc.CallOption) (*Disk, error) {
 	out := new(Disk)
-	err := c.cc.Invoke(ctx, "/infraboard.cmdb.disk.Service/SaveDisk", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/infraboard.cmdb.disk.Service/SyncDisk", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +56,7 @@ func (c *serviceClient) QueryDisk(ctx context.Context, in *QueryDiskRequest, opt
 // All implementations must embed UnimplementedServiceServer
 // for forward compatibility
 type ServiceServer interface {
-	SaveDisk(context.Context, *Disk) (*Disk, error)
+	SyncDisk(context.Context, *Disk) (*Disk, error)
 	QueryDisk(context.Context, *QueryDiskRequest) (*Set, error)
 	mustEmbedUnimplementedServiceServer()
 }
@@ -65,8 +65,8 @@ type ServiceServer interface {
 type UnimplementedServiceServer struct {
 }
 
-func (UnimplementedServiceServer) SaveDisk(context.Context, *Disk) (*Disk, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SaveDisk not implemented")
+func (UnimplementedServiceServer) SyncDisk(context.Context, *Disk) (*Disk, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SyncDisk not implemented")
 }
 func (UnimplementedServiceServer) QueryDisk(context.Context, *QueryDiskRequest) (*Set, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryDisk not implemented")
@@ -84,20 +84,20 @@ func RegisterServiceServer(s grpc.ServiceRegistrar, srv ServiceServer) {
 	s.RegisterService(&Service_ServiceDesc, srv)
 }
 
-func _Service_SaveDisk_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Service_SyncDisk_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Disk)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ServiceServer).SaveDisk(ctx, in)
+		return srv.(ServiceServer).SyncDisk(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/infraboard.cmdb.disk.Service/SaveDisk",
+		FullMethod: "/infraboard.cmdb.disk.Service/SyncDisk",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).SaveDisk(ctx, req.(*Disk))
+		return srv.(ServiceServer).SyncDisk(ctx, req.(*Disk))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -128,8 +128,8 @@ var Service_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SaveDisk",
-			Handler:    _Service_SaveDisk_Handler,
+			MethodName: "SyncDisk",
+			Handler:    _Service_SyncDisk_Handler,
 		},
 		{
 			MethodName: "QueryDisk",

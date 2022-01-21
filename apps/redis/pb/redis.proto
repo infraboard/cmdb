@@ -7,7 +7,7 @@ import "apps/resource/pb/resource.proto";
 import "github.com/infraboard/mcube/pb/page/page.proto";
 
 service Service {
-    rpc SaveRedis(Redis) returns(Redis) {}
+    rpc SyncRedis(Redis) returns(Redis) {}
     rpc QueryRedis(QueryRedisRequest) returns(Set) {}
 }
 

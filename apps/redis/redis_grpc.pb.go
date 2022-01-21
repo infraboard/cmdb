@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ServiceClient interface {
-	SaveRedis(ctx context.Context, in *Redis, opts ...grpc.CallOption) (*Redis, error)
+	SyncRedis(ctx context.Context, in *Redis, opts ...grpc.CallOption) (*Redis, error)
 	QueryRedis(ctx context.Context, in *QueryRedisRequest, opts ...grpc.CallOption) (*Set, error)
 }
 
@@ -34,9 +34,9 @@ func NewServiceClient(cc grpc.ClientConnInterface) ServiceClient {
 	return &serviceClient{cc}
 }
 
-func (c *serviceClient) SaveRedis(ctx context.Context, in *Redis, opts ...grpc.CallOption) (*Redis, error) {
+func (c *serviceClient) SyncRedis(ctx context.Context, in *Redis, opts ...grpc.CallOption) (*Redis, error) {
 	out := new(Redis)
-	err := c.cc.Invoke(ctx, "/infraboard.cmdb.redis.Service/SaveRedis", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/infraboard.cmdb.redis.Service/SyncRedis", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +56,7 @@ func (c *serviceClient) QueryRedis(ctx context.Context, in *QueryRedisRequest, o
 // All implementations must embed UnimplementedServiceServer
 // for forward compatibility
 type ServiceServer interface {
-	SaveRedis(context.Context, *Redis) (*Redis, error)
+	SyncRedis(context.Context, *Redis) (*Redis, error)
 	QueryRedis(context.Context, *QueryRedisRequest) (*Set, error)
 	mustEmbedUnimplementedServiceServer()
 }
@@ -65,8 +65,8 @@ type ServiceServer interface {
 type UnimplementedServiceServer struct {
 }
 
-func (UnimplementedServiceServer) SaveRedis(context.Context, *Redis) (*Redis, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SaveRedis not implemented")
+func (UnimplementedServiceServer) SyncRedis(context.Context, *Redis) (*Redis, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SyncRedis not implemented")
 }
 func (UnimplementedServiceServer) QueryRedis(context.Context, *QueryRedisRequest) (*Set, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryRedis not implemented")
@@ -84,20 +84,20 @@ func RegisterServiceServer(s grpc.ServiceRegistrar, srv ServiceServer) {
 	s.RegisterService(&Service_ServiceDesc, srv)
 }
 
-func _Service_SaveRedis_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Service_SyncRedis_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Redis)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ServiceServer).SaveRedis(ctx, in)
+		return srv.(ServiceServer).SyncRedis(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/infraboard.cmdb.redis.Service/SaveRedis",
+		FullMethod: "/infraboard.cmdb.redis.Service/SyncRedis",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).SaveRedis(ctx, req.(*Redis))
+		return srv.(ServiceServer).SyncRedis(ctx, req.(*Redis))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -128,8 +128,8 @@ var Service_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SaveRedis",
-			Handler:    _Service_SaveRedis_Handler,
+			MethodName: "SyncRedis",
+			Handler:    _Service_SyncRedis_Handler,
 		},
 		{
 			MethodName: "QueryRedis",

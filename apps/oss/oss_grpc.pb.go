@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ServiceClient interface {
-	SaveOSS(ctx context.Context, in *OSS, opts ...grpc.CallOption) (*OSS, error)
+	SyncOSS(ctx context.Context, in *OSS, opts ...grpc.CallOption) (*OSS, error)
 	QueryOSS(ctx context.Context, in *QueryOSSRequest, opts ...grpc.CallOption) (*Set, error)
 }
 
@@ -34,9 +34,9 @@ func NewServiceClient(cc grpc.ClientConnInterface) ServiceClient {
 	return &serviceClient{cc}
 }
 
-func (c *serviceClient) SaveOSS(ctx context.Context, in *OSS, opts ...grpc.CallOption) (*OSS, error) {
+func (c *serviceClient) SyncOSS(ctx context.Context, in *OSS, opts ...grpc.CallOption) (*OSS, error) {
 	out := new(OSS)
-	err := c.cc.Invoke(ctx, "/infraboard.cmdb.oss.Service/SaveOSS", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/infraboard.cmdb.oss.Service/SyncOSS", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +56,7 @@ func (c *serviceClient) QueryOSS(ctx context.Context, in *QueryOSSRequest, opts 
 // All implementations must embed UnimplementedServiceServer
 // for forward compatibility
 type ServiceServer interface {
-	SaveOSS(context.Context, *OSS) (*OSS, error)
+	SyncOSS(context.Context, *OSS) (*OSS, error)
 	QueryOSS(context.Context, *QueryOSSRequest) (*Set, error)
 	mustEmbedUnimplementedServiceServer()
 }
@@ -65,8 +65,8 @@ type ServiceServer interface {
 type UnimplementedServiceServer struct {
 }
 
-func (UnimplementedServiceServer) SaveOSS(context.Context, *OSS) (*OSS, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SaveOSS not implemented")
+func (UnimplementedServiceServer) SyncOSS(context.Context, *OSS) (*OSS, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SyncOSS not implemented")
 }
 func (UnimplementedServiceServer) QueryOSS(context.Context, *QueryOSSRequest) (*Set, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryOSS not implemented")
@@ -84,20 +84,20 @@ func RegisterServiceServer(s grpc.ServiceRegistrar, srv ServiceServer) {
 	s.RegisterService(&Service_ServiceDesc, srv)
 }
 
-func _Service_SaveOSS_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Service_SyncOSS_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(OSS)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ServiceServer).SaveOSS(ctx, in)
+		return srv.(ServiceServer).SyncOSS(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/infraboard.cmdb.oss.Service/SaveOSS",
+		FullMethod: "/infraboard.cmdb.oss.Service/SyncOSS",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).SaveOSS(ctx, req.(*OSS))
+		return srv.(ServiceServer).SyncOSS(ctx, req.(*OSS))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -128,8 +128,8 @@ var Service_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SaveOSS",
-			Handler:    _Service_SaveOSS_Handler,
+			MethodName: "SyncOSS",
+			Handler:    _Service_SyncOSS_Handler,
 		},
 		{
 			MethodName: "QueryOSS",

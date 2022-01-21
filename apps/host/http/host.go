@@ -27,7 +27,7 @@ func (h *handler) CreateHost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ins, err := h.service.SaveHost(r.Context(), ins)
+	ins, err := h.service.SyncHost(r.Context(), ins)
 	if err != nil {
 		response.Failed(w, err)
 		return

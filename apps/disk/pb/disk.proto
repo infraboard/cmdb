@@ -7,7 +7,7 @@ import "apps/resource/pb/resource.proto";
 import "github.com/infraboard/mcube/pb/page/page.proto";
 
 service Service {
-    rpc SaveDisk(Disk) returns(Disk) {}
+    rpc SyncDisk(Disk) returns(Disk) {}
     rpc QueryDisk(QueryDiskRequest) returns(Set) {}
 }
 

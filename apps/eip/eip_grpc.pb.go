@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ServiceClient interface {
-	SaveEIP(ctx context.Context, in *EIP, opts ...grpc.CallOption) (*EIP, error)
+	SyncEIP(ctx context.Context, in *EIP, opts ...grpc.CallOption) (*EIP, error)
 	QueryEIP(ctx context.Context, in *QueryEIPRequest, opts ...grpc.CallOption) (*Set, error)
 }
 
@@ -34,9 +34,9 @@ func NewServiceClient(cc grpc.ClientConnInterface) ServiceClient {
 	return &serviceClient{cc}
 }
 
-func (c *serviceClient) SaveEIP(ctx context.Context, in *EIP, opts ...grpc.CallOption) (*EIP, error) {
+func (c *serviceClient) SyncEIP(ctx context.Context, in *EIP, opts ...grpc.CallOption) (*EIP, error) {
 	out := new(EIP)
-	err := c.cc.Invoke(ctx, "/infraboard.cmdb.eip.Service/SaveEIP", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/infraboard.cmdb.eip.Service/SyncEIP", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +56,7 @@ func (c *serviceClient) QueryEIP(ctx context.Context, in *QueryEIPRequest, opts 
 // All implementations must embed UnimplementedServiceServer
 // for forward compatibility
 type ServiceServer interface {
-	SaveEIP(context.Context, *EIP) (*EIP, error)
+	SyncEIP(context.Context, *EIP) (*EIP, error)
 	QueryEIP(context.Context, *QueryEIPRequest) (*Set, error)
 	mustEmbedUnimplementedServiceServer()
 }
@@ -65,8 +65,8 @@ type ServiceServer interface {
 type UnimplementedServiceServer struct {
 }
 
-func (UnimplementedServiceServer) SaveEIP(context.Context, *EIP) (*EIP, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SaveEIP not implemented")
+func (UnimplementedServiceServer) SyncEIP(context.Context, *EIP) (*EIP, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SyncEIP not implemented")
 }
 func (UnimplementedServiceServer) QueryEIP(context.Context, *QueryEIPRequest) (*Set, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryEIP not implemented")
@@ -84,20 +84,20 @@ func RegisterServiceServer(s grpc.ServiceRegistrar, srv ServiceServer) {
 	s.RegisterService(&Service_ServiceDesc, srv)
 }
 
-func _Service_SaveEIP_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Service_SyncEIP_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(EIP)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ServiceServer).SaveEIP(ctx, in)
+		return srv.(ServiceServer).SyncEIP(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/infraboard.cmdb.eip.Service/SaveEIP",
+		FullMethod: "/infraboard.cmdb.eip.Service/SyncEIP",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).SaveEIP(ctx, req.(*EIP))
+		return srv.(ServiceServer).SyncEIP(ctx, req.(*EIP))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -128,8 +128,8 @@ var Service_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SaveEIP",
-			Handler:    _Service_SaveEIP_Handler,
+			MethodName: "SyncEIP",
+			Handler:    _Service_SyncEIP_Handler,
 		},
 		{
 			MethodName: "QueryEIP",

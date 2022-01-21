@@ -7,7 +7,7 @@ import "github.com/infraboard/mcube/pb/page/page.proto";
 import "apps/resource/pb/resource.proto";
 
 service Service {
-    rpc SaveBill(Bill) returns(Bill) {}
+    rpc SyncBill(Bill) returns(Bill) {}
     rpc QueryBill(QueryBillRequest) returns(BillSet) {}
 }
 

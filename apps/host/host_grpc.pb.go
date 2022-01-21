@@ -22,11 +22,15 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ServiceClient interface {
-	SaveHost(ctx context.Context, in *Host, opts ...grpc.CallOption) (*Host, error)
+	// 同步云商的主机资源
+	SyncHost(ctx context.Context, in *Host, opts ...grpc.CallOption) (*Host, error)
+	// 查询本地同步后的主机资源列表
 	QueryHost(ctx context.Context, in *QueryHostRequest, opts ...grpc.CallOption) (*HostSet, error)
-	UpdateHost(ctx context.Context, in *UpdateHostRequest, opts ...grpc.CallOption) (*Host, error)
-	SaveOrUpdateHost(ctx context.Context, in *Host, opts ...grpc.CallOption) (*Host, error)
+	// 查询主机详情信息
 	DescribeHost(ctx context.Context, in *DescribeHostRequest, opts ...grpc.CallOption) (*Host, error)
+	// 更新主机信息
+	UpdateHost(ctx context.Context, in *UpdateHostRequest, opts ...grpc.CallOption) (*Host, error)
+	// 销毁主机
 	DeleteHost(ctx context.Context, in *DeleteHostRequest, opts ...grpc.CallOption) (*Host, error)
 }
 
@@ -38,9 +42,9 @@ func NewServiceClient(cc grpc.ClientConnInterface) ServiceClient {
 	return &serviceClient{cc}
 }
 
-func (c *serviceClient) SaveHost(ctx context.Context, in *Host, opts ...grpc.CallOption) (*Host, error) {
+func (c *serviceClient) SyncHost(ctx context.Context, in *Host, opts ...grpc.CallOption) (*Host, error) {
 	out := new(Host)
-	err := c.cc.Invoke(ctx, "/infraboard.cmdb.host.Service/SaveHost", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/infraboard.cmdb.host.Service/SyncHost", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -56,27 +60,18 @@ func (c *serviceClient) QueryHost(ctx context.Context, in *QueryHostRequest, opt
 	return out, nil
 }
 
-func (c *serviceClient) UpdateHost(ctx context.Context, in *UpdateHostRequest, opts ...grpc.CallOption) (*Host, error) {
-	out := new(Host)
-	err := c.cc.Invoke(ctx, "/infraboard.cmdb.host.Service/UpdateHost", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *serviceClient) SaveOrUpdateHost(ctx context.Context, in *Host, opts ...grpc.CallOption) (*Host, error) {
-	out := new(Host)
-	err := c.cc.Invoke(ctx, "/infraboard.cmdb.host.Service/SaveOrUpdateHost", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *serviceClient) DescribeHost(ctx context.Context, in *DescribeHostRequest, opts ...grpc.CallOption) (*Host, error) {
 	out := new(Host)
 	err := c.cc.Invoke(ctx, "/infraboard.cmdb.host.Service/DescribeHost", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) UpdateHost(ctx context.Context, in *UpdateHostRequest, opts ...grpc.CallOption) (*Host, error) {
+	out := new(Host)
+	err := c.cc.Invoke(ctx, "/infraboard.cmdb.host.Service/UpdateHost", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -96,11 +91,15 @@ func (c *serviceClient) DeleteHost(ctx context.Context, in *DeleteHostRequest, o
 // All implementations must embed UnimplementedServiceServer
 // for forward compatibility
 type ServiceServer interface {
-	SaveHost(context.Context, *Host) (*Host, error)
+	// 同步云商的主机资源
+	SyncHost(context.Context, *Host) (*Host, error)
+	// 查询本地同步后的主机资源列表
 	QueryHost(context.Context, *QueryHostRequest) (*HostSet, error)
-	UpdateHost(context.Context, *UpdateHostRequest) (*Host, error)
-	SaveOrUpdateHost(context.Context, *Host) (*Host, error)
+	// 查询主机详情信息
 	DescribeHost(context.Context, *DescribeHostRequest) (*Host, error)
+	// 更新主机信息
+	UpdateHost(context.Context, *UpdateHostRequest) (*Host, error)
+	// 销毁主机
 	DeleteHost(context.Context, *DeleteHostRequest) (*Host, error)
 	mustEmbedUnimplementedServiceServer()
 }
@@ -109,20 +108,17 @@ type ServiceServer interface {
 type UnimplementedServiceServer struct {
 }
 
-func (UnimplementedServiceServer) SaveHost(context.Context, *Host) (*Host, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SaveHost not implemented")
+func (UnimplementedServiceServer) SyncHost(context.Context, *Host) (*Host, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SyncHost not implemented")
 }
 func (UnimplementedServiceServer) QueryHost(context.Context, *QueryHostRequest) (*HostSet, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryHost not implemented")
 }
-func (UnimplementedServiceServer) UpdateHost(context.Context, *UpdateHostRequest) (*Host, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateHost not implemented")
-}
-func (UnimplementedServiceServer) SaveOrUpdateHost(context.Context, *Host) (*Host, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SaveOrUpdateHost not implemented")
-}
 func (UnimplementedServiceServer) DescribeHost(context.Context, *DescribeHostRequest) (*Host, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DescribeHost not implemented")
+}
+func (UnimplementedServiceServer) UpdateHost(context.Context, *UpdateHostRequest) (*Host, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateHost not implemented")
 }
 func (UnimplementedServiceServer) DeleteHost(context.Context, *DeleteHostRequest) (*Host, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteHost not implemented")
@@ -140,20 +136,20 @@ func RegisterServiceServer(s grpc.ServiceRegistrar, srv ServiceServer) {
 	s.RegisterService(&Service_ServiceDesc, srv)
 }
 
-func _Service_SaveHost_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Service_SyncHost_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Host)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ServiceServer).SaveHost(ctx, in)
+		return srv.(ServiceServer).SyncHost(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/infraboard.cmdb.host.Service/SaveHost",
+		FullMethod: "/infraboard.cmdb.host.Service/SyncHost",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).SaveHost(ctx, req.(*Host))
+		return srv.(ServiceServer).SyncHost(ctx, req.(*Host))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -176,42 +172,6 @@ func _Service_QueryHost_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Service_UpdateHost_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateHostRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ServiceServer).UpdateHost(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/infraboard.cmdb.host.Service/UpdateHost",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).UpdateHost(ctx, req.(*UpdateHostRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Service_SaveOrUpdateHost_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Host)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ServiceServer).SaveOrUpdateHost(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/infraboard.cmdb.host.Service/SaveOrUpdateHost",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).SaveOrUpdateHost(ctx, req.(*Host))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Service_DescribeHost_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DescribeHostRequest)
 	if err := dec(in); err != nil {
@@ -226,6 +186,24 @@ func _Service_DescribeHost_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ServiceServer).DescribeHost(ctx, req.(*DescribeHostRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Service_UpdateHost_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateHostRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServiceServer).UpdateHost(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/infraboard.cmdb.host.Service/UpdateHost",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServiceServer).UpdateHost(ctx, req.(*UpdateHostRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -256,24 +234,20 @@ var Service_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SaveHost",
-			Handler:    _Service_SaveHost_Handler,
+			MethodName: "SyncHost",
+			Handler:    _Service_SyncHost_Handler,
 		},
 		{
 			MethodName: "QueryHost",
 			Handler:    _Service_QueryHost_Handler,
 		},
 		{
-			MethodName: "UpdateHost",
-			Handler:    _Service_UpdateHost_Handler,
-		},
-		{
-			MethodName: "SaveOrUpdateHost",
-			Handler:    _Service_SaveOrUpdateHost_Handler,
-		},
-		{
 			MethodName: "DescribeHost",
 			Handler:    _Service_DescribeHost_Handler,
+		},
+		{
+			MethodName: "UpdateHost",
+			Handler:    _Service_UpdateHost_Handler,
 		},
 		{
 			MethodName: "DeleteHost",

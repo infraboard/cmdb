@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ServiceClient interface {
-	SaveRDS(ctx context.Context, in *RDS, opts ...grpc.CallOption) (*RDS, error)
+	SyncRDS(ctx context.Context, in *RDS, opts ...grpc.CallOption) (*RDS, error)
 	QueryRDS(ctx context.Context, in *QueryRDSRequest, opts ...grpc.CallOption) (*Set, error)
 }
 
@@ -34,9 +34,9 @@ func NewServiceClient(cc grpc.ClientConnInterface) ServiceClient {
 	return &serviceClient{cc}
 }
 
-func (c *serviceClient) SaveRDS(ctx context.Context, in *RDS, opts ...grpc.CallOption) (*RDS, error) {
+func (c *serviceClient) SyncRDS(ctx context.Context, in *RDS, opts ...grpc.CallOption) (*RDS, error) {
 	out := new(RDS)
-	err := c.cc.Invoke(ctx, "/infraboard.cmdb.rds.Service/SaveRDS", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/infraboard.cmdb.rds.Service/SyncRDS", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +56,7 @@ func (c *serviceClient) QueryRDS(ctx context.Context, in *QueryRDSRequest, opts 
 // All implementations must embed UnimplementedServiceServer
 // for forward compatibility
 type ServiceServer interface {
-	SaveRDS(context.Context, *RDS) (*RDS, error)
+	SyncRDS(context.Context, *RDS) (*RDS, error)
 	QueryRDS(context.Context, *QueryRDSRequest) (*Set, error)
 	mustEmbedUnimplementedServiceServer()
 }
@@ -65,8 +65,8 @@ type ServiceServer interface {
 type UnimplementedServiceServer struct {
 }
 
-func (UnimplementedServiceServer) SaveRDS(context.Context, *RDS) (*RDS, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SaveRDS not implemented")
+func (UnimplementedServiceServer) SyncRDS(context.Context, *RDS) (*RDS, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SyncRDS not implemented")
 }
 func (UnimplementedServiceServer) QueryRDS(context.Context, *QueryRDSRequest) (*Set, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryRDS not implemented")
@@ -84,20 +84,20 @@ func RegisterServiceServer(s grpc.ServiceRegistrar, srv ServiceServer) {
 	s.RegisterService(&Service_ServiceDesc, srv)
 }
 
-func _Service_SaveRDS_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Service_SyncRDS_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RDS)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ServiceServer).SaveRDS(ctx, in)
+		return srv.(ServiceServer).SyncRDS(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/infraboard.cmdb.rds.Service/SaveRDS",
+		FullMethod: "/infraboard.cmdb.rds.Service/SyncRDS",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).SaveRDS(ctx, req.(*RDS))
+		return srv.(ServiceServer).SyncRDS(ctx, req.(*RDS))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -128,8 +128,8 @@ var Service_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SaveRDS",
-			Handler:    _Service_SaveRDS_Handler,
+			MethodName: "SyncRDS",
+			Handler:    _Service_SyncRDS_Handler,
 		},
 		{
 			MethodName: "QueryRDS",

@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ServiceClient interface {
-	SaveDomain(ctx context.Context, in *Domain, opts ...grpc.CallOption) (*Domain, error)
+	SyncDomain(ctx context.Context, in *Domain, opts ...grpc.CallOption) (*Domain, error)
 	QueryDomain(ctx context.Context, in *QueryDomainRequest, opts ...grpc.CallOption) (*Set, error)
 }
 
@@ -34,9 +34,9 @@ func NewServiceClient(cc grpc.ClientConnInterface) ServiceClient {
 	return &serviceClient{cc}
 }
 
-func (c *serviceClient) SaveDomain(ctx context.Context, in *Domain, opts ...grpc.CallOption) (*Domain, error) {
+func (c *serviceClient) SyncDomain(ctx context.Context, in *Domain, opts ...grpc.CallOption) (*Domain, error) {
 	out := new(Domain)
-	err := c.cc.Invoke(ctx, "/infraboard.cmdb.domain.Service/SaveDomain", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/infraboard.cmdb.domain.Service/SyncDomain", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +56,7 @@ func (c *serviceClient) QueryDomain(ctx context.Context, in *QueryDomainRequest,
 // All implementations must embed UnimplementedServiceServer
 // for forward compatibility
 type ServiceServer interface {
-	SaveDomain(context.Context, *Domain) (*Domain, error)
+	SyncDomain(context.Context, *Domain) (*Domain, error)
 	QueryDomain(context.Context, *QueryDomainRequest) (*Set, error)
 	mustEmbedUnimplementedServiceServer()
 }
@@ -65,8 +65,8 @@ type ServiceServer interface {
 type UnimplementedServiceServer struct {
 }
 
-func (UnimplementedServiceServer) SaveDomain(context.Context, *Domain) (*Domain, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SaveDomain not implemented")
+func (UnimplementedServiceServer) SyncDomain(context.Context, *Domain) (*Domain, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SyncDomain not implemented")
 }
 func (UnimplementedServiceServer) QueryDomain(context.Context, *QueryDomainRequest) (*Set, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryDomain not implemented")
@@ -84,20 +84,20 @@ func RegisterServiceServer(s grpc.ServiceRegistrar, srv ServiceServer) {
 	s.RegisterService(&Service_ServiceDesc, srv)
 }
 
-func _Service_SaveDomain_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Service_SyncDomain_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Domain)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ServiceServer).SaveDomain(ctx, in)
+		return srv.(ServiceServer).SyncDomain(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/infraboard.cmdb.domain.Service/SaveDomain",
+		FullMethod: "/infraboard.cmdb.domain.Service/SyncDomain",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).SaveDomain(ctx, req.(*Domain))
+		return srv.(ServiceServer).SyncDomain(ctx, req.(*Domain))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -128,8 +128,8 @@ var Service_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SaveDomain",
-			Handler:    _Service_SaveDomain_Handler,
+			MethodName: "SyncDomain",
+			Handler:    _Service_SyncDomain_Handler,
 		},
 		{
 			MethodName: "QueryDomain",

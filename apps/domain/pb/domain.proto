@@ -7,7 +7,7 @@ import "apps/resource/pb/resource.proto";
 import "github.com/infraboard/mcube/pb/page/page.proto";
 
 service Service {
-    rpc SaveDomain(Domain) returns(Domain) {}
+    rpc SyncDomain(Domain) returns(Domain) {}
     rpc QueryDomain(QueryDomainRequest) returns(Set) {}
 }
 

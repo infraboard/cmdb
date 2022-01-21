@@ -87,7 +87,7 @@ func (s *service) syncRds(ctx context.Context, secret *secret.Secret, t *task.Ta
 
 // Rds数据入库
 func (s *service) SaveOrUpdateRds(ctx context.Context, ins *rds.RDS, t *task.Task) {
-	b, err := s.rds.SaveRDS(ctx, ins)
+	b, err := s.rds.SyncRDS(ctx, ins)
 
 	var detail *task.Record
 	if err != nil {

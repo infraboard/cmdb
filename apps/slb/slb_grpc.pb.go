@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ServiceClient interface {
-	SaveSLB(ctx context.Context, in *SLB, opts ...grpc.CallOption) (*SLB, error)
+	SyncSLB(ctx context.Context, in *SLB, opts ...grpc.CallOption) (*SLB, error)
 	QuerySLB(ctx context.Context, in *QuerySLBRequest, opts ...grpc.CallOption) (*Set, error)
 }
 
@@ -34,9 +34,9 @@ func NewServiceClient(cc grpc.ClientConnInterface) ServiceClient {
 	return &serviceClient{cc}
 }
 
-func (c *serviceClient) SaveSLB(ctx context.Context, in *SLB, opts ...grpc.CallOption) (*SLB, error) {
+func (c *serviceClient) SyncSLB(ctx context.Context, in *SLB, opts ...grpc.CallOption) (*SLB, error) {
 	out := new(SLB)
-	err := c.cc.Invoke(ctx, "/infraboard.cmdb.slb.Service/SaveSLB", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/infraboard.cmdb.slb.Service/SyncSLB", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +56,7 @@ func (c *serviceClient) QuerySLB(ctx context.Context, in *QuerySLBRequest, opts 
 // All implementations must embed UnimplementedServiceServer
 // for forward compatibility
 type ServiceServer interface {
-	SaveSLB(context.Context, *SLB) (*SLB, error)
+	SyncSLB(context.Context, *SLB) (*SLB, error)
 	QuerySLB(context.Context, *QuerySLBRequest) (*Set, error)
 	mustEmbedUnimplementedServiceServer()
 }
@@ -65,8 +65,8 @@ type ServiceServer interface {
 type UnimplementedServiceServer struct {
 }
 
-func (UnimplementedServiceServer) SaveSLB(context.Context, *SLB) (*SLB, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SaveSLB not implemented")
+func (UnimplementedServiceServer) SyncSLB(context.Context, *SLB) (*SLB, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SyncSLB not implemented")
 }
 func (UnimplementedServiceServer) QuerySLB(context.Context, *QuerySLBRequest) (*Set, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QuerySLB not implemented")
@@ -84,20 +84,20 @@ func RegisterServiceServer(s grpc.ServiceRegistrar, srv ServiceServer) {
 	s.RegisterService(&Service_ServiceDesc, srv)
 }
 
-func _Service_SaveSLB_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Service_SyncSLB_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SLB)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ServiceServer).SaveSLB(ctx, in)
+		return srv.(ServiceServer).SyncSLB(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/infraboard.cmdb.slb.Service/SaveSLB",
+		FullMethod: "/infraboard.cmdb.slb.Service/SyncSLB",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).SaveSLB(ctx, req.(*SLB))
+		return srv.(ServiceServer).SyncSLB(ctx, req.(*SLB))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -128,8 +128,8 @@ var Service_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SaveSLB",
-			Handler:    _Service_SaveSLB_Handler,
+			MethodName: "SyncSLB",
+			Handler:    _Service_SyncSLB_Handler,
 		},
 		{
 			MethodName: "QuerySLB",

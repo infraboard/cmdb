@@ -5,6 +5,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/regions"
 
 	"github.com/infraboard/cmdb/provider/txyun/connectivity"
@@ -32,13 +33,18 @@ func TestQuery(t *testing.T) {
 }
 
 func TestInquiryPrice(t *testing.T) {
+	should := assert.New(t)
+
 	req := cvm.NewInquiryPriceRunInstancesRequest()
 	req.Placement = &cvm.Placement{
-		Zone: utils.StringPtr("ap-shanghai-2"),
+		Zone: utils.StringPtr("ap-shanghai-1"),
 	}
 	req.ImageId = utils.StringPtr("img-l5eqiljn")
+	req.InstanceType = utils.StringPtr("S1.SMALL1")
 	req.InstanceChargeType = utils.StringPtr("SPOTPAID")
-	operater.InquiryPrice(req)
+	err := operater.InquiryPrice(req)
+	should.NoError(err)
+
 }
 
 func TestDescribeZones(t *testing.T) {
@@ -47,6 +53,9 @@ func TestDescribeZones(t *testing.T) {
 
 func TestDescribeInstanceType(t *testing.T) {
 	operater.DescribeInstanceType()
+}
+
+func TestCreate(t *testing.T) {
 }
 
 func init() {

@@ -7,7 +7,7 @@ import "apps/resource/pb/resource.proto";
 import "github.com/infraboard/mcube/pb/page/page.proto";
 
 service Service {
-    rpc SaveMongoDB(MongoDB) returns(MongoDB) {}
+    rpc SyncMongoDB(MongoDB) returns(MongoDB) {}
     rpc QueryMongoDB(QueryMongoDBRequest) returns(Set) {}
 }
 

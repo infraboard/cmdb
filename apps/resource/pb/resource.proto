@@ -41,6 +41,7 @@ message Resource {
     // 资源释放计划
     // @gotags: json:"release_plan"
     ReleasePlan release_plan = 3;
+
 }
 
 // 资源释放计划
@@ -96,6 +97,12 @@ message Base {
     // 描述数据Hash
     // @gotags: json:"describe_hash"
     string describe_hash = 11;
+    // Resource信息释放有变化
+    // @gotags: json:"resource_hash_changed"
+    bool resource_hash_changed = 12;
+    // Describe信息释放有变化
+    // @gotags: json:"describe_hash_changed"
+    bool describe_hash_changed = 13;
 }
 
 message Information {

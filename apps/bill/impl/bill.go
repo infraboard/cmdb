@@ -17,7 +17,7 @@ const (
 	queryBillSQL = `SELECT * FROM bill`
 )
 
-func (s *service) SaveBill(ctx context.Context, req *bill.Bill) (
+func (s *service) SyncBill(ctx context.Context, req *bill.Bill) (
 	*bill.Bill, error) {
 	stmt, err := s.db.Prepare(insertBillSQL)
 	if err != nil {
