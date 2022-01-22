@@ -19,6 +19,16 @@ func (o *CVMOperater) Query(req *cvm.DescribeInstancesRequest) (*host.HostSet, e
 	return set, nil
 }
 
-func (o *CVMOperater) PageQuery() host.Pager {
-	return newPager(20, o)
+func NewPageQueryRequest(reqPerSecond int) *PageQueryRequest {
+	return &PageQueryRequest{
+		ReqPerSecond: reqPerSecond,
+	}
+}
+
+type PageQueryRequest struct {
+	ReqPerSecond int
+}
+
+func (o *CVMOperater) PageQuery(req *PageQueryRequest) host.Pager {
+	return newPager(20, o, req.ReqPerSecond)
 }

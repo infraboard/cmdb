@@ -19,7 +19,7 @@ var (
 )
 
 func TestQuery(t *testing.T) {
-	pager := operater.PageQuery()
+	pager := operater.PageQuery(op.NewPageQueryRequest(5))
 
 	hasNext := true
 	for hasNext {
@@ -37,10 +37,10 @@ func TestInquiryPrice(t *testing.T) {
 
 	req := cvm.NewInquiryPriceRunInstancesRequest()
 	req.Placement = &cvm.Placement{
-		Zone: utils.StringPtr("ap-shanghai-1"),
+		Zone: utils.StringPtr("ap-shanghai-2"),
 	}
 	req.ImageId = utils.StringPtr("img-l5eqiljn")
-	req.InstanceType = utils.StringPtr("S1.SMALL1")
+	req.InstanceType = utils.StringPtr("S4.SMALL1")
 	req.InstanceChargeType = utils.StringPtr("SPOTPAID")
 	err := operater.InquiryPrice(req)
 	should.NoError(err)

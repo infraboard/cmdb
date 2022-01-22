@@ -5,11 +5,12 @@ import (
 	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 
 	"github.com/infraboard/cmdb/apps/host"
+	"github.com/infraboard/mcube/flowcontrol/tokenbucket"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 )
 
-func newPager(pageSize int, operater *CVMOperater) *pager {
+func newPager(pageSize int, operater *CVMOperater, reqPs int) *pager {
 	req := cvm.NewDescribeInstancesRequest()
 	req.Limit = common.Int64Ptr(int64(pageSize))
 
@@ -19,6 +20,7 @@ func newPager(pageSize int, operater *CVMOperater) *pager {
 		operater: operater,
 		req:      req,
 		log:      zap.L().Named("Pagger"),
+		tb:       tokenbucket.NewBucketWithRate(1/float64(reqPs), 1),
 	}
 }
 
@@ -29,6 +31,7 @@ type pager struct {
 	operater *CVMOperater
 	req      *cvm.DescribeInstancesRequest
 	log      logger.Logger
+	tb       *tokenbucket.Bucket
 }
 
 func (p *pager) Next() *host.PagerResult {
@@ -50,6 +53,9 @@ func (p *pager) Next() *host.PagerResult {
 }
 
 func (p *pager) nextReq() *cvm.DescribeInstancesRequest {
+	// 生成请求的时候, 现获取速率令牌, 等待一个可用的令牌
+	p.tb.Wait(1)
+
 	p.log.Debugf("请求第%d页数据", p.number)
 	p.req.Offset = common.Int64Ptr(p.offset())
 	return p.req

@@ -7,10 +7,6 @@ import (
 	"github.com/infraboard/cmdb/apps/secret"
 )
 
-const (
-	deleteSecretSQL = `DELETE FROM secret WHERE id = ?;`
-)
-
 func (s *service) deleteSecret(ctx context.Context, ins *secret.Secret) error {
 	if ins == nil {
 		return fmt.Errorf("secret is nil")

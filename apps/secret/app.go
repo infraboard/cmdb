@@ -4,12 +4,12 @@ import (
 	"encoding/base64"
 	"fmt"
 	"net/http"
-	"strconv"
 	"strings"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/infraboard/cmdb/conf"
 	"github.com/infraboard/mcube/crypto/cbc"
+	"github.com/infraboard/mcube/http/request"
 	"github.com/infraboard/mcube/types/ftime"
 	"github.com/rs/xid"
 )
@@ -156,36 +156,17 @@ func (req *CreateSecretRequest) Validate() error {
 func NewQuerySecretRequestFromHTTP(r *http.Request) *QuerySecretRequest {
 	qs := r.URL.Query()
 
-	ps := qs.Get("page_size")
-	pn := qs.Get("page_number")
-	kw := qs.Get("keywords")
-
-	psUint64, _ := strconv.ParseUint(ps, 10, 64)
-	pnUint64, _ := strconv.ParseUint(pn, 10, 64)
-
-	if psUint64 == 0 {
-		psUint64 = 20
-	}
-	if pnUint64 == 0 {
-		pnUint64 = 1
-	}
 	return &QuerySecretRequest{
-		PageSize:   psUint64,
-		PageNumber: pnUint64,
-		Keywords:   kw,
+		Page:     request.NewPageRequestFromHTTP(r),
+		Keywords: qs.Get("keywords"),
 	}
 }
 
 func NewQuerySecretRequest() *QuerySecretRequest {
 	return &QuerySecretRequest{
-		PageSize:   20,
-		PageNumber: 1,
-		Keywords:   "",
+		Page:     request.NewDefaultPageRequest(),
+		Keywords: "",
 	}
-}
-
-func (req *QuerySecretRequest) OffSet() int64 {
-	return int64(req.PageSize) * int64(req.PageNumber-1)
 }
 
 func NewDescribeSecretRequest(id string) *DescribeSecretRequest {

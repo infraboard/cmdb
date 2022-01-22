@@ -4,18 +4,11 @@ import (
 	"context"
 	"database/sql"
 
-	"github.com/infraboard/cmdb/apps/secret"
-	"github.com/infraboard/cmdb/conf"
 	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/sqlbuilder"
-)
 
-const (
-	insertSecretSQL = `INSERT INTO secret (
-		id,create_at,description,vendor,address,allow_regions,crendential_type,api_key,api_secret,request_rate
-	) VALUES (?,?,?,?,?,?,?,?,?,?);`
-
-	querySecretSQL = `SELECT * FROM secret`
+	"github.com/infraboard/cmdb/apps/secret"
+	"github.com/infraboard/cmdb/conf"
 )
 
 func (s *service) CreateSecret(ctx context.Context, req *secret.CreateSecretRequest) (
@@ -59,7 +52,7 @@ func (s *service) QuerySecret(ctx context.Context, req *secret.QuerySecretReques
 		)
 	}
 
-	querySQL, args := query.Order("create_at").Desc().Limit(req.OffSet(), uint(req.PageSize)).BuildQuery()
+	querySQL, args := query.Order("create_at").Desc().Limit(req.Page.ComputeOffset(), uint(req.Page.PageSize)).BuildQuery()
 	s.log.Debugf("sql: %s, args: %v", querySQL, args)
 
 	queryStmt, err := s.db.Prepare(querySQL)

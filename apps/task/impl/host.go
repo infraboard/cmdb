@@ -50,7 +50,8 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, t *task.T
 		s.log.Debugf("sync txyun cvm ...")
 		client := txConn.NewTencentCloudClient(secret.ApiKey, secret.ApiSecret, t.Region)
 		operater := cvmOp.NewCVMOperater(client.CvmClient())
-		pager = operater.PageQuery()
+		req := cvmOp.NewPageQueryRequest(int(secret.RequestRate))
+		pager = operater.PageQuery(req)
 	case resource.Vendor_HUAWEI:
 		s.log.Debugf("sync hwyun ecs ...")
 		client := hwConn.NewHuaweiCloudClient(secret.ApiKey, secret.ApiSecret, t.Region)

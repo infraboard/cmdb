@@ -3,24 +3,23 @@ syntax = "proto3";
 package infraboard.cmdb.resource;
 option go_package="github.com/infraboard/cmdb/apps/resource";
 
+import "github.com/infraboard/mcube/pb/page/page.proto";
 
 service Service {
     rpc Search (SearchRequest) returns (ResourceSet);
 }
 
 enum Vendor {
-    NULL = 0;
-    ALIYUN = 1;
-    TENCENT = 2;
-    HUAWEI = 3;
-    VSPHERE = 4;
-    AMAZON = 5;
+    ALIYUN = 0;
+    TENCENT = 1;
+    HUAWEI = 2;
+    VSPHERE = 3;
+    AMAZON = 4;
 }
 
 enum Type {
-    UNSUPORT = 0;
-    HOST = 1;
-    RDS = 2;
+    HOST = 0;
+    RDS = 1;
     BILL = 99;
 }
 
@@ -144,9 +143,16 @@ message Information {
 }
 
 message SearchRequest {
-    uint64 page_size = 1;
-    uint64 page_number = 2;
-    Vendor vendor = 3;
-    Type type = 4;
+    // 分页参数
+    // @gotags: json:"page"
+    infraboard.mcube.page.PageRequest page = 1;
+    // 厂商
+    // @gotags: json:"vendor"
+    optional Vendor vendor = 3;
+    // 资源类型
+    // @gotags: json:"type"
+    optional Type type = 4;
+    // 关键字参数
+    // @gotags: json:"keywords"
     string keywords = 5;
 }

@@ -22,11 +22,11 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 		)
 	}
 
-	if req.Vendor != resource.Vendor_NULL {
+	if req.Vendor != nil {
 		query.Where("vendor = ?", req.Vendor)
 	}
 
-	querySQL, args := query.Order("sync_at").Desc().Limit(req.OffSet(), uint(req.PageSize)).BuildQuery()
+	querySQL, args := query.Order("sync_at").Desc().Limit(req.Page.ComputeOffset(), uint(req.Page.PageSize)).BuildQuery()
 	s.log.Debugf("sql: %s", querySQL)
 
 	queryStmt, err := s.db.Prepare(querySQL)
