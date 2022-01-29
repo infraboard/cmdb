@@ -31,7 +31,7 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 
 	queryStmt, err := s.db.Prepare(querySQL)
 	if err != nil {
-		return nil, exception.NewInternalServerError("prepare query host error, %s", err.Error())
+		return nil, exception.NewInternalServerError("prepare query resource error, %s", err.Error())
 	}
 	defer queryStmt.Close()
 
@@ -54,9 +54,10 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 			&info.Category, &info.Type, &info.Name, &info.Description,
 			&info.Status, &info.UpdateAt, &base.SyncAt, &info.SyncAccount,
 			&publicIPList, &privateIPList, &info.PayType, &base.DescribeHash, &base.ResourceHash,
+			&base.SecretId,
 		)
 		if err != nil {
-			return nil, exception.NewInternalServerError("query host error, %s", err.Error())
+			return nil, exception.NewInternalServerError("query resource error, %s", err.Error())
 		}
 		info.LoadPrivateIPString(privateIPList)
 		info.LoadPublicIPString(publicIPList)

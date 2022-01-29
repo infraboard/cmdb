@@ -120,7 +120,7 @@ func (s *service) DescribeHost(ctx context.Context, req *host.DescribeHostReques
 
 	queryStmt, err := s.db.Prepare(querySQL)
 	if err != nil {
-		return nil, exception.NewInternalServerError("prepare query host error, %s", err.Error())
+		return nil, exception.NewInternalServerError("prepare describe host error, %s", err.Error())
 	}
 	defer queryStmt.Close()
 
