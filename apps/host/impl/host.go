@@ -13,7 +13,7 @@ import (
 
 func (s *service) SyncHost(ctx context.Context, ins *host.Host) (
 	*host.Host, error) {
-	exist, err := s.DescribeHost(ctx, host.NewDescribeHostRequestInstanceID(ins.Base.Id))
+	exist, err := s.DescribeHost(ctx, host.NewDescribeHostRequestWithID(ins.Base.Id))
 	if err != nil {
 		// 如果不是Not Found则直接返回
 		if !exception.IsNotFoundError(err) {

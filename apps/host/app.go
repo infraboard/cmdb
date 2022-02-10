@@ -140,12 +140,8 @@ func (s *HostSet) ToJsonString() string {
 
 func (req *DescribeHostRequest) Where() (string, interface{}) {
 	switch req.DescribeBy {
-	case DescribeBy_HOST_ID:
-		return "id = ?", req.Value
-	case DescribeBy_INSTANCE_ID:
-		return "instance_id = ?", req.Value
 	default:
-		return "", nil
+		return "id = ?", req.Value
 	}
 }
 
@@ -185,13 +181,6 @@ func NewDescribeHostRequestWithID(id string) *DescribeHostRequest {
 	return &DescribeHostRequest{
 		DescribeBy: DescribeBy_HOST_ID,
 		Value:      id,
-	}
-}
-
-func NewDescribeHostRequestInstanceID(instanceId string) *DescribeHostRequest {
-	return &DescribeHostRequest{
-		DescribeBy: DescribeBy_INSTANCE_ID,
-		Value:      instanceId,
 	}
 }
 

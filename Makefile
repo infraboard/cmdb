@@ -52,7 +52,7 @@ install: ## install mcube cli
 gen: ## generate code
 	@protoc -I=. -I=/usr/local/include --go_out=. --go-grpc_out=. --go_opt=module="${PKG}" --go-grpc_opt=module="${PKG}"  apps/*/pb/*
 	@protoc-go-inject-tag -input=apps/*/*.pb.go
-	@mcube enum -p -m apps/*/*.pb.go
+	@mcube generate enum -p -m apps/*/*.pb.go
 
 push: # push git to multi repo
 	@git push -u gitee

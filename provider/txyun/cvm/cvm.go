@@ -70,6 +70,10 @@ func transferTags(tags []*cvm.Tag) map[string]string {
 }
 
 func (o *CVMOperater) parseTime(t string) int64 {
+	if t == "" {
+		return 0
+	}
+
 	ts, err := time.Parse("2006-01-02T15:04:05Z", t)
 	if err != nil {
 		o.log.Errorf("parse time %s error, %s", t, err)
