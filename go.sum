@@ -545,6 +545,8 @@ github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.334/go.mod 
 github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm v1.0.334 h1:ulfSODMy8rpKa8MfnTIPbe5HyOArnlB4RJ1qmpj09to=
 github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm v1.0.334/go.mod h1:AqyM/ZZMD7q5mHBqNY9YImbSpEpoEe7E/vrTbUWX+po=
 github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms v1.0.272/go.mod h1:zW5ecXUX55GaUA558VrM+iP7uagfDDHhXWlymeCyj48=
+github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sts v1.0.341 h1:UWpgKvMbDHWo0p66PLvNjkJ+zd2Jq1QyLragwPKrjrs=
+github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sts v1.0.341/go.mod h1:3LRL4bjS4JieTruoWSqnMA/rPOxd2TXsstNBKtN+2qQ=
 github.com/tidwall/pretty v1.0.0/go.mod h1:XNkn88O1ChpSDQmQeStsy+sBenx6DDtFZJxhVysOjyk=
 github.com/tv42/httpunix v0.0.0-20150427012821-b75d8614f926/go.mod h1:9ESjWnEqriFuLhtthL60Sar/7RFoluCcXsuvEwTV5KM=
 github.com/vmware/govmomi v0.27.2 h1:Ecooqg069gUbl5EuWYwcrvzRqMkah9J8BXaf9HCEGVM=

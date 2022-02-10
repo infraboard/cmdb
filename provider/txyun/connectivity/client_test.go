@@ -1,6 +1,7 @@
 package connectivity_test
 
 import (
+	"fmt"
 	"os"
 	"testing"
 
@@ -21,4 +22,5 @@ func TestClient(t *testing.T) {
 
 	client := connectivity.NewTencentCloudClient(secretID, secretKey, regions.Shanghai)
 	client.CvmClient()
+	fmt.Println(client.AccountID())
 }

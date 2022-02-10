@@ -21,6 +21,7 @@ require (
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cdb v1.0.334
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.334
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm v1.0.334
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sts v1.0.341
 	github.com/vmware/govmomi v0.27.2
 	google.golang.org/grpc v1.43.0
 	google.golang.org/protobuf v1.27.1

@@ -1,11 +1,15 @@
 package connectivity
 
 import (
+	"fmt"
+
+	"github.com/infraboard/cmdb/utils"
 	billing "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/billing/v20180709"
 	cdb "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cdb/v20170320"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
 	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
+	sts "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sts/v20180813"
 )
 
 // NewTencentCloudClient client
@@ -22,6 +26,7 @@ type TencentCloudClient struct {
 	Region    string
 	SecretID  string
 	SecretKey string
+	accountId string
 	cvmConn   *cvm.Client
 	cdbConn   *cdb.Client
 	billConn  *billing.Client
@@ -88,4 +93,33 @@ func (me *TencentCloudClient) CDBClient() *cdb.Client {
 	cdbConn, _ := cdb.NewClient(credential, me.Region, cpf)
 	me.cdbConn = cdbConn
 	return me.cdbConn
+}
+
+// 获取客户端账号ID
+func (me *TencentCloudClient) AccountID() (string, error) {
+	if me.accountId != "" {
+		return me.accountId, nil
+	}
+
+	credential := common.NewCredential(
+		me.SecretID,
+		me.SecretKey,
+	)
+
+	cpf := profile.NewClientProfile()
+	cpf.HttpProfile.ReqMethod = "POST"
+	cpf.HttpProfile.ReqTimeout = 300
+	cpf.Language = "en-US"
+
+	stsConn, _ := sts.NewClient(credential, me.Region, cpf)
+
+	req := sts.NewGetCallerIdentityRequest()
+
+	resp, err := stsConn.GetCallerIdentity(req)
+	if err != nil {
+		return "", fmt.Errorf("unable to initialize the STS client: %#v", err)
+	}
+
+	me.accountId = utils.PtrStrV(resp.Response.AccountId)
+	return me.accountId, nil
 }
