@@ -8,13 +8,9 @@ import (
 
 	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/cmdb/apps/resource/impl"
-	"github.com/rs/xid"
 )
 
 func (s *service) save(ctx context.Context, h *host.Host) error {
-	if h.Base.Id != "" {
-		h.Base.Id = xid.New().String()
-	}
 	if h.Base.SyncAt != 0 {
 		h.Base.SyncAt = time.Now().UnixMicro()
 	}

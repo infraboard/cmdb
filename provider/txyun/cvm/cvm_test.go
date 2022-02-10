@@ -69,5 +69,10 @@ func init() {
 	}
 
 	client := connectivity.NewTencentCloudClient(secretID, secretKey, regions.Shanghai)
+	err := client.Check()
+	if err != nil {
+		panic(err)
+	}
 	operater = op.NewCVMOperater(client.CvmClient())
+	operater.WithAccountId(client.AccountID())
 }
