@@ -7,8 +7,11 @@ import (
 	dcs "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/dcs/v2"
 	ecs "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ecs/v2"
 	ecs_region "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ecs/v2/region"
+	iam "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/iam/v3"
 	rds "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/rds/v3"
 	rds_region "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/rds/v3/region"
+
+	iam_model "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/iam/v3/model"
 )
 
 // NewHuaweiCloudClient client
@@ -25,10 +28,12 @@ type HuaweiCloudClient struct {
 	AccessKey    string
 	AccessSecret string
 	accountId    string
+	userId       string
 	ecsConn      *ecs.EcsClient
 	rdsConn      *rds.RdsClient
 	dcsConn      *dcs.DcsClient
 	bssConn      *bss.BssClient
+	iamConn      *iam.IamClient
 }
 
 func (c *HuaweiCloudClient) Credentials() basic.Credentials {
@@ -108,4 +113,40 @@ func (c *HuaweiCloudClient) BssClient() (*bss.BssClient, error) {
 
 	c.bssConn = bss.NewBssClient(client)
 	return c.bssConn, nil
+}
+
+// IamClient 客户端
+func (c *HuaweiCloudClient) IamClient() (*iam.IamClient, error) {
+	if c.iamConn != nil {
+		return c.iamConn, nil
+	}
+	client := iam.IamClientBuilder().
+		WithRegion(ecs_region.ValueOf(c.Region)).
+		WithCredential(c.GlobalCredentials()).
+		Build()
+
+	c.iamConn = iam.NewIamClient(client)
+	return c.iamConn, nil
+}
+
+// IamClient 客户端
+func (c *HuaweiCloudClient) Check() error {
+	iamConn, err := c.IamClient()
+	if err != nil {
+		return err
+	}
+
+	req := &iam_model.ShowUserRequest{}
+	resp, err := iamConn.ShowUser(req)
+	if err != nil {
+		return err
+	}
+
+	c.accountId = resp.User.Id
+	c.userId = resp.User.Name
+	return nil
+}
+
+func (c *HuaweiCloudClient) AccountID() string {
+	return c.accountId
 }

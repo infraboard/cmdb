@@ -29,7 +29,11 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, t *task.T
 	// 处理任务状态
 	t.Run()
 	defer func() {
-		t.Completed()
+		if err := recover(); err != nil {
+			t.Failed(fmt.Sprintf("pannic, %v", err))
+		} else {
+			t.Completed()
+		}
 		cb(t)
 	}()
 
@@ -65,12 +69,17 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, t *task.T
 	case resource.Vendor_HUAWEI:
 		s.log.Debugf("sync hwyun ecs ...")
 		client := hwConn.NewHuaweiCloudClient(secret.ApiKey, secret.ApiSecret, t.Region)
+		if err := client.Check(); err != nil {
+			t.Failed(err.Error())
+			return
+		}
 		ec, err := client.EcsClient()
 		if err != nil {
 			t.Failed(err.Error())
 			return
 		}
 		operater := hwEcsOp.NewEcsOperater(ec)
+		operater.WithAccountId(client.AccountID())
 		pager = operater.PageQuery()
 	case resource.Vendor_AMAZON:
 		s.log.Debugf("sync aws ec2 ...")

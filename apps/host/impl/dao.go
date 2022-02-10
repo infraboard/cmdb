@@ -188,7 +188,7 @@ func (s *service) delete(ctx context.Context, req *host.ReleaseHostRequest) erro
 		return err
 	}
 
-	stmt, err = s.db.Prepare(impl.SQLDeleteResource)
+	stmt, err = tx.Prepare(impl.SQLDeleteResource)
 	if err != nil {
 		return err
 	}

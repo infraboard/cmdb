@@ -16,14 +16,16 @@ import (
 
 func NewEcsOperater(client *ecs.EcsClient) *EcsOperater {
 	return &EcsOperater{
-		client: client,
-		log:    zap.L().Named("Huawei ECS"),
+		client:        client,
+		log:           zap.L().Named("Huawei ECS"),
+		AccountGetter: &resource.AccountGetter{},
 	}
 }
 
 type EcsOperater struct {
 	client *ecs.EcsClient
 	log    logger.Logger
+	*resource.AccountGetter
 }
 
 func (o *EcsOperater) transferSet(list *[]model.ServerDetail) *host.HostSet {
@@ -50,6 +52,7 @@ func (o *EcsOperater) transferOne(ins model.ServerDetail) *host.Host {
 	h.Information.Tags = o.transferTags(ins.Tags)
 	h.Information.PrivateIp, h.Information.PublicIp = o.parseIp(ins.Addresses)
 	h.Information.PayType = ins.Metadata["charging_mode"]
+	h.Information.SyncAccount = o.GetAccountId()
 
 	h.Describe.SerialNumber = ins.Id
 	h.Describe.Cpu, _ = strconv.ParseInt(ins.Flavor.Vcpus, 10, 64)

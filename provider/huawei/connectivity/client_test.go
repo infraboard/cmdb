@@ -19,6 +19,6 @@ func TestClient(t *testing.T) {
 	}
 
 	client := connectivity.NewHuaweiCloudClient(secretID, secretKey, "cn-north-4")
-	ec, _ := client.BssClient()
-	fmt.Println(ec.HcClient)
+	fmt.Println(client.Check())
+	fmt.Println(client.AccountID())
 }
