@@ -13,14 +13,16 @@ import (
 
 func NewEcsOperater(client *ecs.Client) *EcsOperater {
 	return &EcsOperater{
-		client: client,
-		log:    zap.L().Named("ALI ECS"),
+		client:        client,
+		log:           zap.L().Named("ALI ECS"),
+		AccountGetter: &resource.AccountGetter{},
 	}
 }
 
 type EcsOperater struct {
 	client *ecs.Client
 	log    logger.Logger
+	*resource.AccountGetter
 }
 
 func (o *EcsOperater) transferSet(items []ecs.Instance) *host.HostSet {
@@ -49,6 +51,7 @@ func (o *EcsOperater) transferOne(ins ecs.Instance) *host.Host {
 	h.Information.PublicIp = ins.PublicIpAddress.IpAddress
 	h.Information.PrivateIp = ins.InnerIpAddress.IpAddress
 	h.Information.PayType = ins.InstanceChargeType
+	h.Information.SyncAccount = o.GetAccountId()
 
 	h.Describe.Cpu = int64(ins.CPU)
 	h.Describe.Memory = int64(ins.Memory)

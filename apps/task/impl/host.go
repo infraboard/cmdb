@@ -37,19 +37,29 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, t *task.T
 	case resource.Vendor_ALIYUN:
 		s.log.Debugf("sync aliyun ecs ...")
 		client := aliConn.NewAliCloudClient(secret.ApiKey, secret.ApiSecret, t.Region)
+		if err := client.Check(); err != nil {
+			t.Failed(err.Error())
+			return
+		}
 		ec, err := client.EcsClient()
 		if err != nil {
 			t.Failed(err.Error())
 			return
 		}
 		operater := ecsOp.NewEcsOperater(ec)
+		operater.WithAccountId(client.AccountID())
 		req := ecsOp.NewPageQueryRequest()
 		req.Rate = int(secret.RequestRate)
 		pager = operater.PageQuery(req)
 	case resource.Vendor_TENCENT:
 		s.log.Debugf("sync txyun cvm ...")
 		client := txConn.NewTencentCloudClient(secret.ApiKey, secret.ApiSecret, t.Region)
+		if err := client.Check(); err != nil {
+			t.Failed(err.Error())
+			return
+		}
 		operater := cvmOp.NewCVMOperater(client.CvmClient())
+		operater.WithAccountId(client.AccountID())
 		req := cvmOp.NewPageQueryRequest(int(secret.RequestRate))
 		pager = operater.PageQuery(req)
 	case resource.Vendor_HUAWEI:

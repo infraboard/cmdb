@@ -21,6 +21,8 @@ func TestClient(t *testing.T) {
 	}
 
 	client := connectivity.NewTencentCloudClient(secretID, secretKey, regions.Shanghai)
-	client.CvmClient()
+	client.Check()
 	fmt.Println(client.AccountID())
+
+	client.CvmClient()
 }

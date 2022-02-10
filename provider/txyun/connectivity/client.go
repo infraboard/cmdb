@@ -96,11 +96,7 @@ func (me *TencentCloudClient) CDBClient() *cdb.Client {
 }
 
 // 获取客户端账号ID
-func (me *TencentCloudClient) AccountID() (string, error) {
-	if me.accountId != "" {
-		return me.accountId, nil
-	}
-
+func (me *TencentCloudClient) Check() error {
 	credential := common.NewCredential(
 		me.SecretID,
 		me.SecretKey,
@@ -117,9 +113,13 @@ func (me *TencentCloudClient) AccountID() (string, error) {
 
 	resp, err := stsConn.GetCallerIdentity(req)
 	if err != nil {
-		return "", fmt.Errorf("unable to initialize the STS client: %#v", err)
+		return fmt.Errorf("unable to initialize the STS client: %#v", err)
 	}
 
 	me.accountId = utils.PtrStrV(resp.Response.AccountId)
-	return me.accountId, nil
+	return nil
+}
+
+func (me *TencentCloudClient) AccountID() string {
+	return me.accountId
 }

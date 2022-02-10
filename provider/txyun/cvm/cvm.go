@@ -14,14 +14,16 @@ import (
 
 func NewCVMOperater(client *cvm.Client) *CVMOperater {
 	return &CVMOperater{
-		client: client,
-		log:    zap.L().Named("Tx CVM"),
+		client:        client,
+		log:           zap.L().Named("Tx CVM"),
+		AccountGetter: &resource.AccountGetter{},
 	}
 }
 
 type CVMOperater struct {
 	client *cvm.Client
 	log    logger.Logger
+	*resource.AccountGetter
 }
 
 func (o *CVMOperater) transferSet(items []*cvm.Instance) *host.HostSet {
@@ -48,6 +50,7 @@ func (o *CVMOperater) transferOne(ins *cvm.Instance) *host.Host {
 	h.Information.PublicIp = utils.SlicePtrStrv(ins.PublicIpAddresses)
 	h.Information.PrivateIp = utils.SlicePtrStrv(ins.PrivateIpAddresses)
 	h.Information.PayType = utils.PtrStrV(ins.InstanceChargeType)
+	h.Information.SyncAccount = o.GetAccountId()
 
 	h.Describe.Cpu = utils.PtrInt64(ins.CPU)
 	h.Describe.Memory = utils.PtrInt64(ins.Memory)

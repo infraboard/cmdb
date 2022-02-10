@@ -75,28 +75,28 @@ func (c *AliCloudClient) RdsClient() (*rds.Client, error) {
 }
 
 // 获取客户端账号ID
-func (c *AliCloudClient) AccountID() (string, error) {
-	if c.accountId != "" {
-		return c.accountId, nil
-	}
-
+func (c *AliCloudClient) Check() error {
 	args := sts.CreateGetCallerIdentityRequest()
 
 	stsClient, err := sts.NewClientWithAccessKey(c.Region, c.AccessKey, c.AccessSecret)
 	stsClient.GetConfig().WithScheme("HTTPS")
 
 	if err != nil {
-		return "", fmt.Errorf("unable to initialize the STS client: %#v", err)
+		return fmt.Errorf("unable to initialize the STS client: %#v", err)
 	}
 	stsClient.AppendUserAgent("Infraboard", "1.0")
 	identity, err := stsClient.GetCallerIdentity(args)
 	if err != nil {
-		return "", err
+		return err
 	}
 	if identity == nil {
-		return "", fmt.Errorf("caller identity not found")
+		return fmt.Errorf("caller identity not found")
 	}
-	c.accountId = identity.AccountId
 
-	return c.accountId, nil
+	c.accountId = identity.AccountId
+	return nil
+}
+
+func (c *AliCloudClient) AccountID() string {
+	return c.accountId
 }

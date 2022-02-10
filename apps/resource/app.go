@@ -76,3 +76,15 @@ func NewResourceSet() *ResourceSet {
 func (r *ResourceSet) Add(item *Resource) {
 	r.Items = append(r.Items, item)
 }
+
+type AccountGetter struct {
+	accountId string
+}
+
+func (ag *AccountGetter) WithAccountId(id string) {
+	ag.accountId = id
+}
+
+func (ag *AccountGetter) GetAccountId() string {
+	return ag.accountId
+}
