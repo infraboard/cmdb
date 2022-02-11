@@ -10,7 +10,8 @@ func NewConfig(address string) *Config {
 
 // Config 客户端配置
 type Config struct {
-	address string
+	address   string
+	enableTLS bool
 	*Authentication
 }
 
@@ -22,4 +23,28 @@ func (c *Config) SetAddress(addr string) {
 // Address 地址
 func (c *Config) Address() string {
 	return c.address
+}
+
+// Option configures how we set up the grpc.
+type Option interface {
+	apply(*Config)
+}
+
+func newFuncOption(f func(*Config)) Option {
+	return &funcOption{
+		f: f,
+	}
+}
+
+type funcOption struct {
+	f func(*Config)
+}
+
+func (fdo *funcOption) apply(do *Config) {
+	fdo.f(do)
+}
+func WithTLS() Option {
+	return newFuncOption(func(o *Config) {
+		o.enableTLS = true
+	})
 }
