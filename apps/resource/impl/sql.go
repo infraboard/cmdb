@@ -10,7 +10,7 @@ const (
 	SQLUpdateResource = `UPDATE resource SET 
 		expire_at=?,category=?,type=?,name=?,description=?,
 		status=?,update_at=?,sync_at=?,sync_accout=?,
-		public_ip=?,private_ip=?,pay_type=?,describe_hash=?,resource_hash=?
+		public_ip=?,private_ip=?,pay_type=?,describe_hash=?,resource_hash=?,
 		secret_id=? 
 	WHERE id = ?`
 

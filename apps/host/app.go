@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strconv"
 	"strings"
 
 	"github.com/go-playground/validator/v10"
@@ -47,6 +46,13 @@ func (h *Host) Put(req *UpdateHostData) {
 
 func (h *Host) ShortDesc() string {
 	return fmt.Sprintf("%s %s", h.Information.Name, h.Information.PrivateIp)
+}
+
+func NewUpdateHostDataByIns(ins *Host) *UpdateHostData {
+	return &UpdateHostData{
+		Information: ins.Information,
+		Describe:    ins.Describe,
+	}
 }
 
 func (h *Host) Patch(req *UpdateHostData) error {
@@ -153,20 +159,8 @@ var (
 func NewQueryHostRequestFromHTTP(r *http.Request) *QueryHostRequest {
 	qs := r.URL.Query()
 	page := request.NewPageRequestFromHTTP(r)
-
-	ps := qs.Get("page_size")
-	pn := qs.Get("page_number")
 	kw := qs.Get("keywords")
 
-	psUint64, _ := strconv.ParseUint(ps, 10, 64)
-	pnUint64, _ := strconv.ParseUint(pn, 10, 64)
-
-	if psUint64 == 0 {
-		psUint64 = 20
-	}
-	if pnUint64 == 0 {
-		pnUint64 = 1
-	}
 	return &QueryHostRequest{
 		Page:     page,
 		Keywords: kw,

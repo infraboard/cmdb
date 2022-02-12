@@ -42,7 +42,7 @@ func (s *service) save(ctx context.Context, h *host.Host) error {
 	// 避免SQL注入, 请使用Prepare
 	stmt, err = tx.Prepare(impl.SQLInsertResource)
 	if err != nil {
-		return err
+		return fmt.Errorf("prepare insert resource sql error, %s", err)
 	}
 	defer stmt.Close()
 
@@ -65,7 +65,7 @@ func (s *service) save(ctx context.Context, h *host.Host) error {
 	// 避免SQL注入, 请使用Prepare
 	stmt, err = tx.Prepare(insertHostSQL)
 	if err != nil {
-		return err
+		return fmt.Errorf("prepare insert host sql error, %s", err)
 	}
 	defer stmt.Close()
 
@@ -104,7 +104,7 @@ func (s *service) update(ctx context.Context, ins *host.Host) error {
 		// 避免SQL注入, 请使用Prepare
 		stmt, err = tx.Prepare(impl.SQLUpdateResource)
 		if err != nil {
-			return err
+			return fmt.Errorf("prepare update reousrce sql error, %s", err)
 		}
 		defer stmt.Close()
 
@@ -113,7 +113,7 @@ func (s *service) update(ctx context.Context, ins *host.Host) error {
 		_, err = stmt.Exec(
 			info.ExpireAt, info.Category, info.Type, info.Name, info.Description,
 			info.Status, info.UpdateAt, base.SyncAt, info.SyncAccount,
-			info.PublicIp, info.PrivateIp, info.PayType, base.DescribeHash, base.ResourceHash,
+			info.PublicIPToString(), info.PrivateIPToString(), info.PayType, base.DescribeHash, base.ResourceHash,
 			ins.Base.SecretId, ins.Base.Id,
 		)
 		if err != nil {
@@ -127,7 +127,7 @@ func (s *service) update(ctx context.Context, ins *host.Host) error {
 		// 避免SQL注入, 请使用Prepare
 		stmt, err = tx.Prepare(updateHostSQL)
 		if err != nil {
-			return err
+			return fmt.Errorf("prepare update host sql error, %s", err)
 		}
 		defer stmt.Close()
 

@@ -23,13 +23,16 @@ func (s *service) SyncHost(ctx context.Context, ins *host.Host) (
 
 	// 检查ins已经存在 我们则需要更新ins
 	if exist != nil {
-		if err := s.update(ctx, ins); err != nil {
+		s.log.Debugf("update host: %s", ins.Base.Id)
+		exist.Put(host.NewUpdateHostDataByIns(ins))
+		if err := s.update(ctx, exist); err != nil {
 			return nil, err
 		}
 		return ins, nil
 	}
 
 	// 如果没有我们则直接保存
+	s.log.Debugf("insert host: %s", ins.Base.Id)
 	if err := s.save(ctx, ins); err != nil {
 		return nil, err
 	}
