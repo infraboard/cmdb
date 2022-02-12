@@ -3,6 +3,7 @@ syntax = "proto3";
 package infraboard.cmdb.task;
 option go_package="github.com/infraboard/cmdb/apps/task";
 
+import "github.com/infraboard/mcube/pb/page/page.proto";
 import "apps/resource/pb/resource.proto";
 
 service Service {
@@ -111,10 +112,9 @@ message TaskSet {
 }
 
 message QueryTaskRequest {
-    // @gotags: json:"page_size"
-    uint64 page_size = 1;
-    // @gotags: json:"page_number"
-    uint64 page_number = 2;
+    // 分页参数
+    // @gotags: json:"page"
+    infraboard.mcube.page.PageRequest page = 1;
     // @gotags: json:"resource_type"
     infraboard.cmdb.resource.Type resource_type = 3;
     // @gotags: json:"keywords"

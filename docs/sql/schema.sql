@@ -79,7 +79,7 @@ CREATE TABLE `rds` (
   `address` varchar(255) NOT NULL,
   `allow_regions` text NOT NULL,
   `crendential_type` tinyint(1) NOT NULL,
-  `api_key` varchar(255) NOT NULL,
+  `api_key` varchar(255) CHARACTER SET utf8mb4 NOT NULL,
   `api_secret` text NOT NULL,
   `request_rate` int(11) NOT NULL,
   PRIMARY KEY (`id`),

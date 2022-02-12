@@ -78,7 +78,7 @@ func (s *service) CreatTask(ctx context.Context, req *task.CreateTaskRequst) (
 func (s *service) QueryTask(ctx context.Context, req *task.QueryTaskRequest) (*task.TaskSet, error) {
 	query := sqlbuilder.NewQuery(queryTaskSQL)
 
-	querySQL, args := query.Order("start_at").Desc().Limit(req.OffSet(), uint(req.PageSize)).BuildQuery()
+	querySQL, args := query.Order("start_at").Desc().Limit(req.OffSet(), uint(req.Page.PageSize)).BuildQuery()
 	s.log.Debugf("sql: %s", querySQL)
 
 	queryStmt, err := s.db.Prepare(querySQL)

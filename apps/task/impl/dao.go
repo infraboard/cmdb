@@ -42,7 +42,7 @@ func (s *service) update(ctx context.Context, t *task.Task) error {
 }
 
 func (s *service) insertTaskDetail(ctx context.Context, detail *task.Record) error {
-	stmt, err := s.db.Prepare(updateTaskRecordSQL)
+	stmt, err := s.db.Prepare(insertTaskRecordSQL)
 	if err != nil {
 		return err
 	}

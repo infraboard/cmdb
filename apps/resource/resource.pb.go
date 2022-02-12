@@ -357,8 +357,8 @@ type Base struct {
 	unknownFields protoimpl.UnknownFields
 
 	// 全局唯一Id, 直接使用个云商自己的Id
-	// @gotags: json:"id"
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
+	// @gotags: json:"id" validate:"required"
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id" validate:"required"`
 	// 同步时间
 	// @gotags: json:"sync_at"
 	SyncAt int64 `protobuf:"varint,2,opt,name=sync_at,json=syncAt,proto3" json:"sync_at"`

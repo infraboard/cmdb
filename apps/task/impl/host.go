@@ -62,10 +62,6 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, t *task.T
 			t.Failed(err.Error())
 			return
 		}
-		if err := client.Check(); err != nil {
-			t.Failed(err.Error())
-			return
-		}
 		operater := cvmOp.NewCVMOperater(client.CvmClient())
 		operater.WithAccountId(client.AccountID())
 		req := cvmOp.NewPageQueryRequest(int(secret.RequestRate))

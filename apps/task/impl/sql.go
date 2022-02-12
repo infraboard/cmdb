@@ -11,7 +11,7 @@ const (
 
 	queryTaskSQL = `SELECT * FROM task`
 
-	updateTaskRecordSQL = `INSERT INTO task_record (
+	insertTaskRecordSQL = `INSERT INTO task_record (
 		instance_id,instance_name,is_success,message,task_id,create_at) 
 		VALUES (?,?,?,?,?,?);`
 
