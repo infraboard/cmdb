@@ -124,7 +124,7 @@ message Information {
     string status = 6;
     // 标签
     // @gotags: json:"tags"
-    map<string,string> tags = 7;
+    repeated Tag tags = 7;
     // 更新时间
     // @gotags: json:"update_at"
     int64 update_at = 8;
@@ -140,6 +140,24 @@ message Information {
     // 实例付费方式
     // @gotags: json:"pay_type"
     string pay_type = 12;
+}
+
+message Tag {
+    // 标签的Id
+    // @gotags: json:"id"
+    int64 id = 1;
+    // 标签的Key
+    // @gotags: json:"key"
+    string key = 2;
+    // 标签的值
+    // @gotags: json:"value"
+    string value = 3;
+    // 标签的值的描述, 通常用于展示
+    // @gotags: json:"describe"
+    string describe = 4;
+    // 标签管理的资源Id
+    // @gotags: json:"resource_id"
+    string resource_id=5;
 }
 
 message SearchRequest {

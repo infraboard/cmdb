@@ -34,26 +34,13 @@ func (s *service) save(ctx context.Context, h *rds.RDS) error {
 		}
 	}()
 
-	// 避免SQL注入, 请使用Prepare
-	stmt, err = tx.Prepare(impl.SQLInsertResource)
-	if err != nil {
-		return err
-	}
-	defer stmt.Close()
-
 	// 生成描写信息的Hash
 	h.Base.ResourceHash = h.Information.Hash()
 	h.Base.DescribeHash = h.Describe.Hash()
 
-	base := h.Base
-	info := h.Information
-	_, err = stmt.Exec(
-		base.Id, base.Vendor, base.Region, base.Zone, base.CreateAt, info.ExpireAt, info.Category, info.Type,
-		info.Name, info.Description, info.Status, info.UpdateAt, base.SyncAt, info.SyncAccount, info.PublicIPToString(),
-		info.PrivateIPToString(), info.PayType, base.DescribeHash, base.ResourceHash, base.SecretId,
-	)
+	err = impl.SaveResource(tx, h.Base, h.Information)
 	if err != nil {
-		return fmt.Errorf("save host resource info error, %s", err)
+		return err
 	}
 
 	// 避免SQL注入, 请使用Prepare
@@ -65,7 +52,7 @@ func (s *service) save(ctx context.Context, h *rds.RDS) error {
 
 	desc := h.Describe
 	_, err = stmt.Exec(
-		base.Id, desc.Cpu,
+		h.Base.Id, desc.Cpu,
 	)
 	if err != nil {
 		return fmt.Errorf("save host resource describe error, %s", err)

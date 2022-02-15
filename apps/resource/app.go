@@ -1,13 +1,10 @@
 package resource
 
 import (
-	"crypto/sha1"
-	"encoding/json"
-
-	"fmt"
 	"net/http"
 	"strings"
 
+	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/http/request"
 )
 
@@ -58,13 +55,7 @@ func (i *Information) LoadPublicIPString(s string) {
 }
 
 func (i *Information) Hash() string {
-	hash := sha1.New()
-	b, err := json.Marshal(i)
-	if err != nil {
-		return ""
-	}
-	hash.Write(b)
-	return fmt.Sprintf("%x", hash.Sum(nil))
+	return utils.Hash(i)
 }
 
 func NewResourceSet() *ResourceSet {

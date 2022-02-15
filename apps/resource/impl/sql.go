@@ -16,4 +16,8 @@ const (
 
 	SQLQueryResource  = `SELECT * FROM resource`
 	SQLDeleteResource = `DELETE FROM resource WHERE id = ?;`
+
+	SQLInsertTag = `INSERT INTO tag (
+		key,value,describe,resource_id
+	) VALUES (?,?,?,?);`
 )
