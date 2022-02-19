@@ -1,7 +1,11 @@
 package client
 
 import (
+	"crypto/tls"
+
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/credentials/insecure"
 
 	"github.com/infraboard/cmdb/apps/bill"
 	"github.com/infraboard/cmdb/apps/host"
@@ -16,11 +20,22 @@ import (
 func NewClient(conf *Config) (*ClientSet, error) {
 	zap.DevelopmentSetup()
 
+	dialOptions := []grpc.DialOption{
+		grpc.WithPerRPCCredentials(conf.Authentication),
+	}
+	if !conf.enableTLS {
+		dialOptions = append(dialOptions, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	} else {
+		dialOptions = append(dialOptions, grpc.WithTransportCredentials(credentials.NewTLS(&tls.Config{})))
+	}
 	conn, err := grpc.Dial(
 		conf.address,
-		grpc.WithInsecure(),
-		grpc.WithPerRPCCredentials(conf.Authentication),
+		dialOptions...,
 	)
+	if err != nil {
+		return nil, err
+	}
+
 	if err != nil {
 		return nil, err
 	}

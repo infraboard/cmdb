@@ -1,7 +1,6 @@
 package host
 
 import (
-	"crypto/sha1"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -9,6 +8,7 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/infraboard/cmdb/apps/resource"
+	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/http/request"
 	pb_request "github.com/infraboard/mcube/pb/request"
 	"github.com/infraboard/mcube/types/ftime"
@@ -90,22 +90,8 @@ func ObjectPatch(old, new interface{}) error {
 }
 
 func (h *Host) GenHash() error {
-	hash := sha1.New()
-
-	b, err := json.Marshal(h.Information)
-	if err != nil {
-		return err
-	}
-	hash.Write(b)
-	h.Base.ResourceHash = fmt.Sprintf("%x", hash.Sum(nil))
-
-	b, err = json.Marshal(h.Describe)
-	if err != nil {
-		return err
-	}
-	hash.Reset()
-	hash.Write(b)
-	h.Base.DescribeHash = fmt.Sprintf("%x", hash.Sum(nil))
+	h.Base.ResourceHash = h.Information.Hash()
+	h.Base.DescribeHash = utils.Hash(h.Describe)
 	return nil
 }
 

@@ -1,6 +1,8 @@
 package task
 
 import (
+	"time"
+
 	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/types/ftime"
 	"github.com/rs/xid"
@@ -44,6 +46,7 @@ func (s *Task) Completed() {
 }
 
 func (s *Task) Failed(message string) {
+	s.EndAt = time.Now().UnixMilli()
 	s.Status = Status_FAILED
 	s.Message = message
 }

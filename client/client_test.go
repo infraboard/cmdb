@@ -12,7 +12,7 @@ import (
 
 func TestClient(t *testing.T) {
 	should := assert.New(t)
-	conf := client.NewConfig("localhost:18080")
+	conf := client.NewConfig("localhost:18060")
 	conf.WithClientCredentials("nHerVBlrKIDurviMGUXVOQHC", "l5FB38Mw2JmxHgGm8rUcich2ZrGRVrl7")
 
 	c, err := client.NewClient(conf)

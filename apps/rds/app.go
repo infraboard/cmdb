@@ -1,11 +1,10 @@
 package rds
 
 import (
-	"crypto/sha1"
-	"encoding/json"
 	"fmt"
 
 	resource "github.com/infraboard/cmdb/apps/resource"
+	"github.com/infraboard/cmdb/utils"
 )
 
 const (
@@ -56,11 +55,5 @@ func (r *RDS) ShortDesc() string {
 }
 
 func (d *Describe) Hash() string {
-	hash := sha1.New()
-	b, err := json.Marshal(d)
-	if err != nil {
-		return ""
-	}
-	hash.Write(b)
-	return fmt.Sprintf("%x", hash.Sum(nil))
+	return utils.Hash(d)
 }

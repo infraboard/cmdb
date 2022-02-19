@@ -39,27 +39,15 @@ func (s *service) save(ctx context.Context, h *host.Host) error {
 		}
 	}()
 
-	// 避免SQL注入, 请使用Prepare
-	stmt, err = tx.Prepare(impl.SQLInsertResource)
-	if err != nil {
-		return fmt.Errorf("prepare insert resource sql error, %s", err)
-	}
-	defer stmt.Close()
-
 	// 生成描写信息的Hash
 	if err := h.GenHash(); err != nil {
 		return err
 	}
 
-	base := h.Base
-	info := h.Information
-	_, err = stmt.Exec(
-		base.Id, base.Vendor, base.Region, base.Zone, base.CreateAt, info.ExpireAt, info.Category, info.Type,
-		info.Name, info.Description, info.Status, info.UpdateAt, base.SyncAt, info.SyncAccount, info.PublicIPToString(),
-		info.PrivateIPToString(), info.PayType, base.DescribeHash, base.ResourceHash, base.SecretId,
-	)
+	// 保存资源基础信息
+	err = impl.SaveResource(tx, h.Base, h.Information)
 	if err != nil {
-		return fmt.Errorf("save host resource info error, %s", err)
+		return err
 	}
 
 	// 避免SQL注入, 请使用Prepare
@@ -71,7 +59,7 @@ func (s *service) save(ctx context.Context, h *host.Host) error {
 
 	desc := h.Describe
 	_, err = stmt.Exec(
-		base.Id, desc.Cpu, desc.Memory, desc.GpuAmount, desc.GpuSpec, desc.OsType, desc.OsName,
+		h.Base.Id, desc.Cpu, desc.Memory, desc.GpuAmount, desc.GpuSpec, desc.OsType, desc.OsName,
 		desc.SerialNumber, desc.ImageId, desc.InternetMaxBandwidthOut,
 		desc.InternetMaxBandwidthIn, desc.KeyPairNameToString(), desc.SecurityGroupsToString(),
 	)
