@@ -64,7 +64,7 @@ func (o *EcsOperater) transferOne(ins model.ServerDetail) *host.Host {
 	return h
 }
 
-func (o *EcsOperater) transferTags(tags *[]string) map[string]string {
+func (o *EcsOperater) transferTags(tags *[]string) []*resource.Tag {
 	return nil
 }
 

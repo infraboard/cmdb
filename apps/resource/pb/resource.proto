@@ -155,9 +155,6 @@ message Tag {
     // 标签的值的描述, 通常用于展示
     // @gotags: json:"describe"
     string describe = 4;
-    // 标签管理的资源Id
-    // @gotags: json:"resource_id"
-    string resource_id=5;
 }
 
 message SearchRequest {

@@ -65,7 +65,7 @@ func (o *CVMOperater) transferOne(ins *cvm.Instance) *host.Host {
 	return h
 }
 
-func transferTags(tags []*cvm.Tag) map[string]string {
+func transferTags(tags []*cvm.Tag) []*resource.Tag {
 	return nil
 }
 

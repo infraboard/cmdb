@@ -87,7 +87,7 @@ func (o *RdsOperater) parseTime(t string) int64 {
 	return ts.UnixNano() / 1000000
 }
 
-func (o *RdsOperater) transferTags(tags []model.TagResponse) map[string]string {
+func (o *RdsOperater) transferTags(tags []model.TagResponse) []*resource.Tag {
 	return nil
 }
 

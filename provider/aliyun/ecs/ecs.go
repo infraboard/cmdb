@@ -68,7 +68,7 @@ func (o *EcsOperater) transferOne(ins ecs.Instance) *host.Host {
 	return h
 }
 
-func (o *EcsOperater) transferTags(tags []ecs.Tag) map[string]string {
+func (o *EcsOperater) transferTags(tags []ecs.Tag) []*resource.Tag {
 	return nil
 }
 

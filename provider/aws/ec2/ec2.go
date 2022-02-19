@@ -78,6 +78,6 @@ func ParseGroup(items []types.GroupIdentifier) []string {
 	return sg
 }
 
-func ParseTag(items []types.Tag) map[string]string {
+func ParseTag(items []types.Tag) []*resource.Tag {
 	return nil
 }
