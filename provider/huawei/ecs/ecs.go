@@ -64,8 +64,21 @@ func (o *EcsOperater) transferOne(ins model.ServerDetail) *host.Host {
 	return h
 }
 
-func (o *EcsOperater) transferTags(tags *[]string) []*resource.Tag {
-	return nil
+func (o *EcsOperater) transferTags(tags *[]string) (ret []*resource.Tag) {
+	if tags == nil {
+		return
+	}
+
+	t := *tags
+
+	for i := range t {
+		ret = append(ret, &resource.Tag{
+			Key:   "ecs",
+			Value: t[i],
+		})
+	}
+
+	return
 }
 
 func (o *EcsOperater) parseTime(t string) int64 {

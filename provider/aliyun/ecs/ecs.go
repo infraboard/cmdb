@@ -68,8 +68,14 @@ func (o *EcsOperater) transferOne(ins ecs.Instance) *host.Host {
 	return h
 }
 
-func (o *EcsOperater) transferTags(tags []ecs.Tag) []*resource.Tag {
-	return nil
+func (o *EcsOperater) transferTags(tags []ecs.Tag) (ret []*resource.Tag) {
+	for i := range tags {
+		ret = append(ret, &resource.Tag{
+			Key:   tags[i].Key,
+			Value: tags[i].Value,
+		})
+	}
+	return
 }
 
 func (o *EcsOperater) parseTime(t string) int64 {

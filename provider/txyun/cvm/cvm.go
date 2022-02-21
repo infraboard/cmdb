@@ -65,8 +65,14 @@ func (o *CVMOperater) transferOne(ins *cvm.Instance) *host.Host {
 	return h
 }
 
-func transferTags(tags []*cvm.Tag) []*resource.Tag {
-	return nil
+func transferTags(tags []*cvm.Tag) (ret []*resource.Tag) {
+	for i := range tags {
+		ret = append(ret, &resource.Tag{
+			Key:   utils.PtrStrV(tags[i].Key),
+			Value: utils.PtrStrV(tags[i].Value),
+		})
+	}
+	return
 }
 
 func (o *CVMOperater) parseTime(t string) int64 {
