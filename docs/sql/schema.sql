@@ -111,4 +111,17 @@ CREATE TABLE `task_record` (
   `create_at` bigint(20) NOT NULL COMMENT '记录创建时间',
   KEY `idx_task` (`task_id`) USING HASH,
   KEY `idx_instance` (`instance_id`) USING HASH
-) ENGINE=InnoDB DEFAULT CHARSET=latin1
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `tag` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `key` varchar(255) CHARACTER SET utf8mb4 NOT NULL COMMENT 'tag key的名称',
+  `value` varchar(255) CHARACTER SET utf8mb4 NOT NULL COMMENT 'tag value的值',
+  `describe` varchar(255) CHARACTER SET utf8mb4 NOT NULL COMMENT '值的描述信息',
+  `resource_id` varchar(64) NOT NULL COMMENT 'tag 关联的资源Id',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `idx_id` (`key`,`value`,`resource_id`) COMMENT '一个资源同一个key value只允许有一对',
+  KEY `idx_key` (`key`) USING HASH,
+  KEY `idx_value` (`value`) USING BTREE,
+  KEY `idx_resource_id` (`resource_id`) USING HASH
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
