@@ -387,11 +387,11 @@ type Base struct {
 	// @gotags: json:"describe_hash"
 	DescribeHash string `protobuf:"bytes,11,opt,name=describe_hash,json=describeHash,proto3" json:"describe_hash"`
 	// Resource信息释放有变化
-	// @gotags: json:"resource_hash_changed"
-	ResourceHashChanged bool `protobuf:"varint,12,opt,name=resource_hash_changed,json=resourceHashChanged,proto3" json:"resource_hash_changed"`
+	// @gotags: json:"resource_hash_changed,omitempty"
+	ResourceHashChanged bool `protobuf:"varint,12,opt,name=resource_hash_changed,json=resourceHashChanged,proto3" json:"resource_hash_changed,omitempty"`
 	// Describe信息释放有变化
-	// @gotags: json:"describe_hash_changed"
-	DescribeHashChanged bool `protobuf:"varint,13,opt,name=describe_hash_changed,json=describeHashChanged,proto3" json:"describe_hash_changed"`
+	// @gotags: json:"describe_hash_changed,omitempty"
+	DescribeHashChanged bool `protobuf:"varint,13,opt,name=describe_hash_changed,json=describeHashChanged,proto3" json:"describe_hash_changed,omitempty"`
 }
 
 func (x *Base) Reset() {

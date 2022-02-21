@@ -96,10 +96,10 @@ message Base {
     // @gotags: json:"describe_hash"
     string describe_hash = 11;
     // Resource信息释放有变化
-    // @gotags: json:"resource_hash_changed"
+    // @gotags: json:"resource_hash_changed,omitempty"
     bool resource_hash_changed = 12;
     // Describe信息释放有变化
-    // @gotags: json:"describe_hash_changed"
+    // @gotags: json:"describe_hash_changed,omitempty"
     bool describe_hash_changed = 13;
 }
 

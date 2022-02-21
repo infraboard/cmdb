@@ -1,6 +1,7 @@
 package resource
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -52,6 +53,30 @@ func (i *Information) LoadPublicIPString(s string) {
 	if s != "" {
 		i.PublicIp = strings.Split(s, ",")
 	}
+}
+
+func (i *Information) LoadTags(keys, values, describes string) error {
+	if keys == "" {
+		return nil
+	}
+
+	kl := strings.Split(keys, ",")
+	vl := strings.Split(values, ",")
+	dl := strings.Split(describes, ",")
+
+	if len(kl) != len(vl) || len(kl) != len(dl) {
+		return fmt.Errorf("len is not equal")
+	}
+
+	for idx := range kl {
+		i.Tags = append(i.Tags, &Tag{
+			Key:      kl[idx],
+			Value:    vl[idx],
+			Describe: dl[idx],
+		})
+	}
+
+	return nil
 }
 
 func (i *Information) Hash() string {

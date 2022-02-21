@@ -42,7 +42,7 @@ func (s *service) SyncHost(ctx context.Context, ins *host.Host) (
 
 func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 	*host.HostSet, error) {
-	query := sqlbuilder.NewQuery(queryHostSQL)
+	query := sqlbuilder.NewQuery(queryHostSQL).GroupBy("r.id").Order("sync_at").Desc()
 
 	if req.Keywords != "" {
 		query.Where("r.name LIKE ? OR r.id = ? OR r.instance_id = ? OR r.private_ip LIKE ? OR r.public_ip LIKE ?",
@@ -54,7 +54,7 @@ func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 		)
 	}
 
-	querySQL, args := query.Order("sync_at").Desc().Limit(req.OffSet(), uint(req.Page.PageSize)).BuildQuery()
+	querySQL, args := query.Limit(req.OffSet(), uint(req.Page.PageSize)).BuildQuery()
 	s.log.Debugf("sql: %s", querySQL)
 
 	queryStmt, err := s.db.Prepare(querySQL)
@@ -72,6 +72,7 @@ func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 	set := host.NewHostSet()
 	var (
 		publicIPList, privateIPList, keyPairNameList, securityGroupsList string
+		tagKeys, tagValues, tagDescribe                                  string
 	)
 	for rows.Next() {
 		ins := host.NewDefaultHost()
@@ -86,13 +87,16 @@ func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 			&base.SecretId, &base.Id,
 			&desc.Cpu, &desc.Memory, &desc.GpuAmount, &desc.GpuSpec, &desc.OsType, &desc.OsName,
 			&desc.SerialNumber, &desc.ImageId, &desc.InternetMaxBandwidthOut, &desc.InternetMaxBandwidthIn,
-			&keyPairNameList, &securityGroupsList,
+			&keyPairNameList, &securityGroupsList, &tagKeys, &tagValues, &tagDescribe,
 		)
 		if err != nil {
 			return nil, exception.NewInternalServerError("query host error, %s", err.Error())
 		}
 		info.LoadPrivateIPString(privateIPList)
 		info.LoadPublicIPString(publicIPList)
+		if err := info.LoadTags(tagKeys, tagValues, tagDescribe); err != nil {
+			s.log.Error("load tags error, %s", err)
+		}
 		desc.LoadKeyPairNameString(keyPairNameList)
 		desc.LoadSecurityGroupsString(securityGroupsList)
 		set.Add(ins)
