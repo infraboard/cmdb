@@ -23,6 +23,14 @@ enum Type {
     BILL = 99;
 }
 
+// 使用方式
+enum UsageMode {
+    // 共享使用
+    SHARED = 0;
+    // 独占使用
+    MONOPOLY = 1;
+}
+
 message ResourceSet {
     // @gotags: json:"items"
     repeated Resource items = 1;
@@ -101,6 +109,15 @@ message Base {
     // Describe信息释放有变化
     // @gotags: json:"describe_hash_changed,omitempty"
     bool describe_hash_changed = 13;
+    // 资源所属空间
+    // @gotags: json:"namespace"
+    string namespace = 14;
+    // 资源所属环境
+    // @gotags: json:"env"
+    string env = 15;
+    // 使用方式
+    // @gotags: json:"usage_mode"
+    UsageMode usage_mode = 16;
 }
 
 message Information {
