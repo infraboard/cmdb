@@ -97,6 +97,7 @@ func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 		if err := info.LoadTags(tagKeys, tagValues, tagDescribe); err != nil {
 			s.log.Error("load tags error, %s", err)
 		}
+
 		desc.LoadKeyPairNameString(keyPairNameList)
 		desc.LoadSecurityGroupsString(securityGroupsList)
 		set.Add(ins)
@@ -120,7 +121,7 @@ func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 
 func (s *service) DescribeHost(ctx context.Context, req *host.DescribeHostRequest) (
 	*host.Host, error) {
-	query := sqlbuilder.NewQuery(queryHostSQL)
+	query := sqlbuilder.NewQuery(queryHostSQL).GroupBy("r.id")
 	cond, val := req.Where()
 	querySQL, args := query.Where(cond, val).BuildQuery()
 	s.log.Debugf("sql: %s", querySQL)
@@ -134,6 +135,7 @@ func (s *service) DescribeHost(ctx context.Context, req *host.DescribeHostReques
 	ins := host.NewDefaultHost()
 	var (
 		publicIPList, privateIPList, keyPairNameList, securityGroupsList string
+		tagKeys, tagValues, tagDescribe                                  string
 	)
 	base := ins.Base
 	info := ins.Information
@@ -146,7 +148,7 @@ func (s *service) DescribeHost(ctx context.Context, req *host.DescribeHostReques
 		&base.SecretId, &base.Id,
 		&desc.Cpu, &desc.Memory, &desc.GpuAmount, &desc.GpuSpec, &desc.OsType, &desc.OsName,
 		&desc.SerialNumber, &desc.ImageId, &desc.InternetMaxBandwidthOut, &desc.InternetMaxBandwidthIn,
-		&keyPairNameList, &securityGroupsList,
+		&keyPairNameList, &securityGroupsList, &tagKeys, &tagValues, &tagDescribe,
 	)
 
 	if err != nil {
@@ -158,6 +160,10 @@ func (s *service) DescribeHost(ctx context.Context, req *host.DescribeHostReques
 
 	info.LoadPrivateIPString(privateIPList)
 	info.LoadPublicIPString(publicIPList)
+	if err := info.LoadTags(tagKeys, tagValues, tagDescribe); err != nil {
+		s.log.Error("load tags error, %s", err)
+	}
+
 	desc.LoadKeyPairNameString(keyPairNameList)
 	desc.LoadSecurityGroupsString(securityGroupsList)
 
@@ -183,8 +189,6 @@ func (s *service) UpdateHost(ctx context.Context, req *host.UpdateHostRequest) (
 	default:
 		ins.Put(req.UpdateHostData)
 	}
-
-	// 更新云商主机
 
 	// 更新数据库
 	if err := s.update(ctx, ins); err != nil {

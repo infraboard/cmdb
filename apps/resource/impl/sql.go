@@ -20,5 +20,5 @@ const (
 
 	SQLInsertTag = `INSERT INTO tag (
 		key,value,describe,resource_id
-	) VALUES (?,?,?,?);`
+	) VALUES (?,?,?,?) ON DUPLICATE KEY UPDATE key=key;`
 )

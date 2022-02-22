@@ -88,31 +88,17 @@ func (s *service) update(ctx context.Context, ins *host.Host) error {
 		}
 	}()
 
+	// 更新资源基本信息
 	if ins.Base.ResourceHashChanged {
-		// 避免SQL注入, 请使用Prepare
-		stmt, err = tx.Prepare(impl.SQLUpdateResource)
-		if err != nil {
-			return fmt.Errorf("prepare update reousrce sql error, %s", err)
-		}
-		defer stmt.Close()
-
-		base := ins.Base
-		info := ins.Information
-		_, err = stmt.Exec(
-			info.ExpireAt, info.Category, info.Type, info.Name, info.Description,
-			info.Status, info.UpdateAt, base.SyncAt, info.SyncAccount,
-			info.PublicIPToString(), info.PrivateIPToString(), info.PayType, base.DescribeHash, base.ResourceHash,
-			ins.Base.SecretId, ins.Base.Id,
-		)
-		if err != nil {
+		if err := impl.UpdateResource(tx, ins.Base, ins.Information); err != nil {
 			return err
 		}
 	} else {
 		s.log.Debug("resource data hash not changed, needn't update")
 	}
 
+	// 更新实例信息
 	if ins.Base.DescribeHashChanged {
-		// 避免SQL注入, 请使用Prepare
 		stmt, err = tx.Prepare(updateHostSQL)
 		if err != nil {
 			return fmt.Errorf("prepare update host sql error, %s", err)
