@@ -14,8 +14,9 @@ const (
 		secret_id=? 
 	WHERE id = ?`
 
-	SQLQueryResource  = `SELECT * FROM resource`
-	SQLDeleteResource = `DELETE FROM resource WHERE id = ?;`
+	SQLQueryResource     = `SELECT * FROM resource`
+	SQLDeleteResource    = `DELETE FROM resource WHERE id = ?;`
+	SQLDeleteResourceTag = `DELETE FROM tag WHERE resource_id = ?;`
 
 	SQLInsertTag = `INSERT INTO tag (
 		key,value,describe,resource_id

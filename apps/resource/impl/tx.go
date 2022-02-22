@@ -44,3 +44,29 @@ func SaveResource(tx *sql.Tx, base *resource.Base, info *resource.Information) e
 
 	return nil
 }
+
+func DeleteResource(tx *sql.Tx, id string) error {
+	stmt, err := tx.Prepare(SQLDeleteResource)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(id)
+	if err != nil {
+		return err
+	}
+
+	stmt, err = tx.Prepare(SQLDeleteResourceTag)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

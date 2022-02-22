@@ -172,14 +172,7 @@ func (s *service) delete(ctx context.Context, req *host.ReleaseHostRequest) erro
 		return err
 	}
 
-	stmt, err = tx.Prepare(impl.SQLDeleteResource)
-	if err != nil {
-		return err
-	}
-	defer stmt.Close()
-
-	_, err = stmt.Exec(req.Id)
-	if err != nil {
+	if err := impl.DeleteResource(tx, req.Id); err != nil {
 		return err
 	}
 
