@@ -98,3 +98,48 @@ func (t *Type) UnmarshalJSON(b []byte) error {
 	*t = ins
 	return nil
 }
+
+// ParseUsageModeFromString Parse UsageMode from string
+func ParseUsageModeFromString(str string) (UsageMode, error) {
+	key := strings.Trim(string(str), `"`)
+	v, ok := UsageMode_value[strings.ToUpper(key)]
+	if !ok {
+		return 0, fmt.Errorf("unknown UsageMode: %s", str)
+	}
+
+	return UsageMode(v), nil
+}
+
+// Equal type compare
+func (t UsageMode) Equal(target UsageMode) bool {
+	return t == target
+}
+
+// IsIn todo
+func (t UsageMode) IsIn(targets ...UsageMode) bool {
+	for _, target := range targets {
+		if t.Equal(target) {
+			return true
+		}
+	}
+
+	return false
+}
+
+// MarshalJSON todo
+func (t UsageMode) MarshalJSON() ([]byte, error) {
+	b := bytes.NewBufferString(`"`)
+	b.WriteString(strings.ToUpper(t.String()))
+	b.WriteString(`"`)
+	return b.Bytes(), nil
+}
+
+// UnmarshalJSON todo
+func (t *UsageMode) UnmarshalJSON(b []byte) error {
+	ins, err := ParseUsageModeFromString(string(b))
+	if err != nil {
+		return err
+	}
+	*t = ins
+	return nil
+}

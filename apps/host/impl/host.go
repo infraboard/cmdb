@@ -84,7 +84,7 @@ func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 			&info.Category, &info.Type, &info.Name, &info.Description,
 			&info.Status, &info.UpdateAt, &base.SyncAt, &info.SyncAccount,
 			&publicIPList, &privateIPList, &info.PayType, &base.DescribeHash, &base.ResourceHash,
-			&base.SecretId, &base.Id,
+			&base.SecretId, &base.Namespace, &base.Env, &base.UsageMode, &base.Id,
 			&desc.Cpu, &desc.Memory, &desc.GpuAmount, &desc.GpuSpec, &desc.OsType, &desc.OsName,
 			&desc.SerialNumber, &desc.ImageId, &desc.InternetMaxBandwidthOut, &desc.InternetMaxBandwidthIn,
 			&keyPairNameList, &securityGroupsList, &tagKeys, &tagValues, &tagDescribe,

@@ -20,6 +20,7 @@ func SaveResource(tx *sql.Tx, base *resource.Base, info *resource.Information) e
 		base.Id, base.Vendor, base.Region, base.Zone, base.CreateAt, info.ExpireAt, info.Category, info.Type,
 		info.Name, info.Description, info.Status, info.UpdateAt, base.SyncAt, info.SyncAccount, info.PublicIPToString(),
 		info.PrivateIPToString(), info.PayType, base.DescribeHash, base.ResourceHash, base.SecretId,
+		base.Namespace, base.Env, base.UsageMode,
 	)
 	if err != nil {
 		return fmt.Errorf("save host resource info error, %s", err)
@@ -44,7 +45,8 @@ func UpdateResource(tx *sql.Tx, base *resource.Base, info *resource.Information)
 		info.ExpireAt, info.Category, info.Type, info.Name, info.Description,
 		info.Status, info.UpdateAt, base.SyncAt, info.SyncAccount,
 		info.PublicIPToString(), info.PrivateIPToString(), info.PayType, base.DescribeHash, base.ResourceHash,
-		base.SecretId, base.Id,
+		base.SecretId, base.Namespace, base.Env, base.UsageMode,
+		base.Id,
 	)
 	if err != nil {
 		return err
@@ -85,7 +87,7 @@ func DeleteResource(tx *sql.Tx, id string) error {
 
 func updateResourceTag(tx *sql.Tx, resourceId string, tags []*resource.Tag) error {
 	// 保存资源标签
-	stmt, err := tx.Prepare(SQLInsertTag)
+	stmt, err := tx.Prepare(SQLInsertResourceTag)
 	if err != nil {
 		return err
 	}
