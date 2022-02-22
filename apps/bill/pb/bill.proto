@@ -7,14 +7,18 @@ import "github.com/infraboard/mcube/pb/page/page.proto";
 import "apps/resource/pb/resource.proto";
 
 service Service {
-    rpc SyncBill(Bill) returns(Bill) {}
-    rpc QueryBill(QueryBillRequest) returns(BillSet) {}
+    rpc SyncBill(Bill) returns(Bill);
+    rpc QueryBill(QueryBillRequest) returns(BillSet);
+    rpc DeleteBill(DeleteBillRequest) returns(BillSet);
 }
 
 // 账单数据结构参数:
 // 阿里云参考: https://www.alibabacloud.com/help/zh/doc-detail/100400.htm?spm=a2c63.p38356.b99.39.22b56c48uGGnNz
 // 腾讯云参考: https://cloud.tencent.com/document/api/555/19182
 message Bill {
+    // 本次账单同步关联的任务Id
+    // @gotags: json:"task_id"
+    string task_id = 26;
     // 厂商
     // @gotags: json:"vendor"
     infraboard.cmdb.resource.Vendor vendor = 1;
@@ -127,4 +131,16 @@ message QueryBillRequest {
     // 实例ID
     // @gotags: json:"instance_id"
     string instance_id = 7;
+}
+
+message DeleteBillRequest {
+    // 账号Id
+    // @gotags: json:"account_id"
+    string account_id = 1;
+    // 账单的月份
+    // @gotags: json:"month"
+    string month = 2;
+    // 账单的月份
+    // @gotags: json:"task_id"
+    string task_id = 3;
 }

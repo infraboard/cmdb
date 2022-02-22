@@ -79,7 +79,9 @@ func (s *service) syncBill(ctx context.Context, secret *secret.Secret, t *task.T
 				return
 			}
 
-			// 调用bill服务保持数据
+			// 调用bill服务保持数据, 由于账单对象没有更新逻辑
+			// 任务同步成功, 删除之前的成本
+			// 任务同步失败, 删除本地已经入库的账单
 			for i := range p.Data.Items {
 				target := p.Data.Items[i]
 				b, err := s.bill.SyncBill(ctx, target)
