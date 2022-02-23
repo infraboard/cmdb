@@ -51,13 +51,14 @@ func (o *BssOperater) transferOne(ins model.ResFeeRecordV2) *bill.Bill {
 	b.RegionName = utils.PtrStrV(ins.RegionName)
 
 	// 金额信息
-	b.SalePrice = utils.PtrFloat64(ins.OfficialAmount)
-	b.SalePrice = utils.PtrFloat64(ins.DiscountAmount)
-	b.RealCost = utils.PtrFloat64(ins.Amount)
-	b.CreditPay = utils.PtrFloat64(ins.CreditAmount)
-	b.VoucherPay = utils.PtrFloat64(ins.CouponAmount)
-	b.CashPay = utils.PtrFloat64(ins.CashAmount)
-	b.StoredcardPay = utils.PtrFloat64(ins.StoredCardAmount)
-	b.OutstandingAmount = utils.PtrFloat64(ins.DebtAmount)
+	cost := b.Cost
+	cost.SalePrice = utils.PtrFloat64(ins.OfficialAmount)
+	cost.SalePrice = utils.PtrFloat64(ins.DiscountAmount)
+	cost.RealCost = utils.PtrFloat64(ins.Amount)
+	cost.CreditPay = utils.PtrFloat64(ins.CreditAmount)
+	cost.VoucherPay = utils.PtrFloat64(ins.CouponAmount)
+	cost.CashPay = utils.PtrFloat64(ins.CashAmount)
+	cost.StoredcardPay = utils.PtrFloat64(ins.StoredCardAmount)
+	cost.OutstandingAmount = utils.PtrFloat64(ins.DebtAmount)
 	return b
 }

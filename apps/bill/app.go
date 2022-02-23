@@ -17,7 +17,9 @@ var (
 )
 
 func NewDefaultBill() *Bill {
-	return &Bill{}
+	return &Bill{
+		Cost: &Cost{},
+	}
 }
 
 func NewBillSet() *BillSet {

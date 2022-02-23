@@ -51,12 +51,13 @@ func (o *BssOperater) transferOne(ins bssopenapi.Item) *bill.Bill {
 	b.RegionCode = ins.RegionNo
 	b.RegionName = ins.Region
 
-	b.SalePrice = ins.PretaxGrossAmount
-	b.SaveCost = ins.InvoiceDiscount
-	b.RealCost = ins.PretaxAmount
-	b.StoredcardPay = ins.DeductedByPrepaidCard
-	b.VoucherPay = ins.DeductedByCashCoupons
-	b.CashPay = ins.PaymentAmount
-	b.OutstandingAmount = ins.OutstandingAmount
+	cost := b.Cost
+	cost.SalePrice = ins.PretaxGrossAmount
+	cost.SaveCost = ins.InvoiceDiscount
+	cost.RealCost = ins.PretaxAmount
+	cost.StoredcardPay = ins.DeductedByPrepaidCard
+	cost.VoucherPay = ins.DeductedByCashCoupons
+	cost.CashPay = ins.PaymentAmount
+	cost.OutstandingAmount = ins.OutstandingAmount
 	return b
 }

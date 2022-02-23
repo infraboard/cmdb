@@ -50,9 +50,10 @@ func (o *BillingOperater) transferOne(ins *billing.BillResourceSummary) *bill.Bi
 	b.RegionCode = fmt.Sprintf("%d", utils.PtrInt64(ins.RegionId))
 	b.RegionName = utils.PtrStrV(ins.RegionName)
 
-	b.SalePrice, _ = strconv.ParseFloat(utils.PtrStrV(ins.TotalCost), 64)
-	b.RealCost, _ = strconv.ParseFloat(utils.PtrStrV(ins.RealTotalCost), 64)
-	b.VoucherPay, _ = strconv.ParseFloat(utils.PtrStrV(ins.VoucherPayAmount), 64)
-	b.CashPay, _ = strconv.ParseFloat(utils.PtrStrV(ins.CashPayAmount), 64)
+	cost := b.Cost
+	cost.SalePrice, _ = strconv.ParseFloat(utils.PtrStrV(ins.TotalCost), 64)
+	cost.RealCost, _ = strconv.ParseFloat(utils.PtrStrV(ins.RealTotalCost), 64)
+	cost.VoucherPay, _ = strconv.ParseFloat(utils.PtrStrV(ins.VoucherPayAmount), 64)
+	cost.CashPay, _ = strconv.ParseFloat(utils.PtrStrV(ins.CashPayAmount), 64)
 	return b
 }
