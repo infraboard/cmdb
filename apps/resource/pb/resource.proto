@@ -112,15 +112,12 @@ message Base {
     // 资源所属空间
     // @gotags: json:"namespace"
     string namespace = 14;
-    // 资源所属环境
-    // @gotags: json:"env"
-    string env = 15;
     // 使用方式
     // @gotags: json:"usage_mode"
-    UsageMode usage_mode = 16;
+    UsageMode usage_mode = 15;
     // 资源所属域
     // @gotags: json:"domain"
-    UsageMode domain = 17;
+    UsageMode domain = 16;
 }
 
 message Information {

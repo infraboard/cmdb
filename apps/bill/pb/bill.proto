@@ -70,6 +70,12 @@ message Bill {
     // 地域名称
     // @gotags: json:"region_name"
     string region_name = 17;
+    // 实例所属空间
+    // @gotags: json:"namespace"
+    string namespace = 28;
+    // 账单月当时标签
+    // @gotags: json:"tags"
+    repeated infraboard.cmdb.resource.Tag tags = 27;
     // 官网价
     // @gotags: json:"sale_price"
     double sale_price = 18;
@@ -128,6 +134,9 @@ message QueryBillRequest {
     // 产品编码
     // @gotags: json:"product_code"
     string product_code = 6;
+    // 账单月当时标签
+    // @gotags: json:"tags"
+    repeated infraboard.cmdb.resource.Tag tags = 8;
     // 实例ID
     // @gotags: json:"instance_id"
     string instance_id = 7;
