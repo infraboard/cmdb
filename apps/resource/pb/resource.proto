@@ -118,6 +118,9 @@ message Base {
     // 使用方式
     // @gotags: json:"usage_mode"
     UsageMode usage_mode = 16;
+    // 资源所属域
+    // @gotags: json:"domain"
+    UsageMode domain = 17;
 }
 
 message Information {

@@ -134,10 +134,18 @@ message CreateTaskRequst {
     // 任务操作的资源类型
     // @gotags: json:"resource_type"
     infraboard.cmdb.resource.Type resource_type = 4;
+    // 通知资源的Region
     // @gotags: json:"region"
     string region = 5;
+    // 任务执行的超时时间
     // @gotags: json:"timeout"
     int64 timeout = 6;
+    // 任务所属域
+    // @gotags: json:"domain"
+    string domain = 7;
+    // 任务所属空间
+    // @gotags: json:"domain"
+    string namespace = 8;
 }
 
 message DescribeTaskRequest {

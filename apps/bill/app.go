@@ -4,10 +4,16 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/go-playground/validator/v10"
 )
 
 const (
 	AppName = "bill"
+)
+
+var (
+	validate = validator.New()
 )
 
 func NewDefaultBill() *Bill {
@@ -58,4 +64,8 @@ func (b *Bill) YearMonth() (int, int) {
 
 func (b *Bill) ShortDesc() string {
 	return fmt.Sprintf("%s %s", b.InstanceId, b.InstanceName)
+}
+
+func (req *DeleteBillRequest) Validate() error {
+	return validate.Struct(req)
 }

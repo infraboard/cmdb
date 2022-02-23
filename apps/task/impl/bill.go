@@ -84,6 +84,7 @@ func (s *service) syncBill(ctx context.Context, secret *secret.Secret, t *task.T
 			// 任务同步失败, 删除本地已经入库的账单
 			for i := range p.Data.Items {
 				target := p.Data.Items[i]
+				target.TaskId = t.Id
 				b, err := s.bill.SyncBill(ctx, target)
 				if err != nil {
 					s.log.Warnf("save bill error, %s", err)

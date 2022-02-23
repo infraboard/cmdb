@@ -135,7 +135,7 @@ message QueryBillRequest {
 
 message DeleteBillRequest {
     // 账号Id
-    // @gotags: json:"account_id"
+    // @gotags: json:"account_id" validate:"required"
     string account_id = 1;
     // 账单的月份
     // @gotags: json:"month"
