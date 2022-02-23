@@ -9,6 +9,7 @@ import "apps/resource/pb/resource.proto";
 service Service {
     rpc SyncBill(Bill) returns(Bill);
     rpc QueryBill(QueryBillRequest) returns(BillSet);
+    rpc ConfirmBill(ConfirmBillRequest) returns(BillSet);
     rpc DeleteBill(DeleteBillRequest) returns(BillSet);
 }
 
@@ -155,13 +156,13 @@ message QueryBillRequest {
 }
 
 message DeleteBillRequest {
-    // 账号Id
-    // @gotags: json:"account_id" validate:"required"
-    string account_id = 1;
     // 账单的月份
-    // @gotags: json:"month"
-    string month = 2;
+    // @gotags: json:"task_id" validate:"required"
+    string task_id = 1;
+}
+
+message ConfirmBillRequest {
     // 账单的月份
-    // @gotags: json:"task_id"
-    string task_id = 3;
+    // @gotags: json:"task_id" validate:"required"
+    string task_id = 1;
 }

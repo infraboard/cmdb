@@ -66,6 +66,18 @@ func (b *Bill) ShortDesc() string {
 	return fmt.Sprintf("%s %s", b.InstanceId, b.InstanceName)
 }
 
+func NewDeleteBillRequest(taskId string) *DeleteBillRequest {
+	return &DeleteBillRequest{
+		TaskId: taskId,
+	}
+}
+
 func (req *DeleteBillRequest) Validate() error {
 	return validate.Struct(req)
+}
+
+func NewConfirmBillRequest(taskId string) *ConfirmBillRequest {
+	return &ConfirmBillRequest{
+		TaskId: taskId,
+	}
 }

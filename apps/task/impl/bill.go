@@ -79,19 +79,49 @@ func (s *service) syncBill(ctx context.Context, secret *secret.Secret, t *task.T
 				return
 			}
 
-			// 调用bill服务保持数据, 由于账单对象没有更新逻辑
-			// 任务同步成功, 删除之前的成本
-			// 任务同步失败, 删除本地已经入库的账单
 			for i := range p.Data.Items {
 				target := p.Data.Items[i]
 				target.TaskId = t.Id
-				b, err := s.bill.SyncBill(ctx, target)
-				if err != nil {
-					s.log.Warnf("save bill error, %s", err)
-				} else {
-					s.log.Debugf("save host %s to db", b.ShortDesc())
-				}
+				s.doSyncBill(ctx, target, t)
 			}
 		}
+	}
+
+	// 调用bill服务保持数据, 由于账单对象没有更新逻辑
+	// 任务同步成功, 确认当前同步版本为正确版本, 删除之前的成本
+	// 任务同步失败, 删除当前同步的版本
+	if t.Status.Equal(task.Status_SUCCESS) {
+		resp, err := s.bill.ConfirmBill(ctx, bill.NewConfirmBillRequest(t.Id))
+		if err != nil {
+			s.log.Errorf("confirm bill error, %s", err)
+		} else {
+			s.log.Debugf("confirm bill success, total: %d bill", resp.Total)
+		}
+	} else {
+		resp, err := s.bill.DeleteBill(ctx, bill.NewDeleteBillRequest(t.Id))
+		if err != nil {
+			s.log.Errorf("delete bill error, %s", err)
+		} else {
+			s.log.Debugf("delete bill success, total: %d bill", resp.Total)
+		}
+	}
+}
+
+// Host主机数据入库
+func (s *service) doSyncBill(ctx context.Context, ins *bill.Bill, t *task.Task) {
+	h, err := s.bill.SyncBill(ctx, ins)
+
+	var detail *task.Record
+	if err != nil {
+		s.log.Warnf("save bill error, %s", err)
+		detail = task.NewSyncFailedRecord(t.Id, ins.InstanceId, ins.InstanceName, err.Error())
+	} else {
+		s.log.Debugf("save bill %s to db", h.ShortDesc())
+		detail = task.NewSyncSucceedRecord(t.Id, ins.InstanceId, ins.InstanceName)
+	}
+
+	t.AddDetail(detail)
+	if err := s.insertTaskDetail(ctx, detail); err != nil {
+		s.log.Errorf("update detail error, %s", err)
 	}
 }

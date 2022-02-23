@@ -106,7 +106,7 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, t *task.T
 		err = operater.Query(func(h *host.Host) {
 			// 补充管理信息
 			h.Base.SecretId = secret.Id
-			s.SyncHost(ctx, h, t)
+			s.doSyncHost(ctx, h, t)
 		})
 		if err != nil {
 			t.Failed(err.Error())
@@ -134,14 +134,14 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, t *task.T
 				target := p.Data.Items[i]
 				// 补充管理信息
 				target.Base.SecretId = secret.Id
-				s.SyncHost(ctx, target, t)
+				s.doSyncHost(ctx, target, t)
 			}
 		}
 	}
 }
 
 // Host主机数据入库
-func (s *service) SyncHost(ctx context.Context, ins *host.Host, t *task.Task) {
+func (s *service) doSyncHost(ctx context.Context, ins *host.Host, t *task.Task) {
 	h, err := s.host.SyncHost(ctx, ins)
 
 	var detail *task.Record

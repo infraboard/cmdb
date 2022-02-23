@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/infraboard/mcube/exception"
-	"github.com/infraboard/mcube/sqlbuilder"
 
 	"github.com/infraboard/cmdb/apps/bill"
 )
@@ -37,6 +36,11 @@ func (s *service) QueryBill(ctx context.Context, req *bill.QueryBillRequest) (
 	return nil, nil
 }
 
+func (s *service) ConfirmBill(ctx context.Context, req *bill.ConfirmBillRequest) (
+	*bill.BillSet, error) {
+	return nil, nil
+}
+
 func (s *service) DeleteBill(ctx context.Context, req *bill.DeleteBillRequest) (
 	*bill.BillSet, error) {
 	if err := req.Validate(); err != nil {
@@ -44,26 +48,15 @@ func (s *service) DeleteBill(ctx context.Context, req *bill.DeleteBillRequest) (
 	}
 
 	set := bill.NewBillSet()
-	builder := sqlbuilder.NewQuery(deleteBillSQL).Where("account_id", req.AccountId)
-	if req.Month != "" {
-		builder.Where("month", req.Month)
-	}
-	if req.TaskId != "" {
-		builder.Where("task_id", req.TaskId)
-	}
-
-	deleteSQL, args := builder.BuildQuery()
-	s.log.Debugf("sql: %s, args: %v", deleteSQL, args)
-
-	stmt, err := s.db.Prepare(deleteSQL)
+	stmt, err := s.db.Prepare(deleteBillSQL)
 	if err != nil {
-		return nil, err
+		return set, err
 	}
 	defer stmt.Close()
 
-	ret, err := stmt.Exec(args...)
+	ret, err := stmt.Exec(req.TaskId)
 	if err != nil {
-		return nil, err
+		return set, err
 	}
 	set.Total, _ = ret.RowsAffected()
 

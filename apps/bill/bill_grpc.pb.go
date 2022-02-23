@@ -24,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 type ServiceClient interface {
 	SyncBill(ctx context.Context, in *Bill, opts ...grpc.CallOption) (*Bill, error)
 	QueryBill(ctx context.Context, in *QueryBillRequest, opts ...grpc.CallOption) (*BillSet, error)
+	ConfirmBill(ctx context.Context, in *ConfirmBillRequest, opts ...grpc.CallOption) (*BillSet, error)
 	DeleteBill(ctx context.Context, in *DeleteBillRequest, opts ...grpc.CallOption) (*BillSet, error)
 }
 
@@ -53,6 +54,15 @@ func (c *serviceClient) QueryBill(ctx context.Context, in *QueryBillRequest, opt
 	return out, nil
 }
 
+func (c *serviceClient) ConfirmBill(ctx context.Context, in *ConfirmBillRequest, opts ...grpc.CallOption) (*BillSet, error) {
+	out := new(BillSet)
+	err := c.cc.Invoke(ctx, "/infraboard.cmdb.bill.Service/ConfirmBill", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *serviceClient) DeleteBill(ctx context.Context, in *DeleteBillRequest, opts ...grpc.CallOption) (*BillSet, error) {
 	out := new(BillSet)
 	err := c.cc.Invoke(ctx, "/infraboard.cmdb.bill.Service/DeleteBill", in, out, opts...)
@@ -68,6 +78,7 @@ func (c *serviceClient) DeleteBill(ctx context.Context, in *DeleteBillRequest, o
 type ServiceServer interface {
 	SyncBill(context.Context, *Bill) (*Bill, error)
 	QueryBill(context.Context, *QueryBillRequest) (*BillSet, error)
+	ConfirmBill(context.Context, *ConfirmBillRequest) (*BillSet, error)
 	DeleteBill(context.Context, *DeleteBillRequest) (*BillSet, error)
 	mustEmbedUnimplementedServiceServer()
 }
@@ -81,6 +92,9 @@ func (UnimplementedServiceServer) SyncBill(context.Context, *Bill) (*Bill, error
 }
 func (UnimplementedServiceServer) QueryBill(context.Context, *QueryBillRequest) (*BillSet, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryBill not implemented")
+}
+func (UnimplementedServiceServer) ConfirmBill(context.Context, *ConfirmBillRequest) (*BillSet, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ConfirmBill not implemented")
 }
 func (UnimplementedServiceServer) DeleteBill(context.Context, *DeleteBillRequest) (*BillSet, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteBill not implemented")
@@ -134,6 +148,24 @@ func _Service_QueryBill_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Service_ConfirmBill_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ConfirmBillRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServiceServer).ConfirmBill(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/infraboard.cmdb.bill.Service/ConfirmBill",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServiceServer).ConfirmBill(ctx, req.(*ConfirmBillRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Service_DeleteBill_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteBillRequest)
 	if err := dec(in); err != nil {
@@ -166,6 +198,10 @@ var Service_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "QueryBill",
 			Handler:    _Service_QueryBill_Handler,
+		},
+		{
+			MethodName: "ConfirmBill",
+			Handler:    _Service_ConfirmBill_Handler,
 		},
 		{
 			MethodName: "DeleteBill",
