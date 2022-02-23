@@ -122,27 +122,36 @@ message QueryBillRequest {
     // 分页
     // @gotags: json:"page"
     infraboard.mcube.page.PageRequest page = 1;
+    // 实例所属域
+    // @gotags: json:"domain"
+    string domain = 2;
+    // 实例所属空间
+    // @gotags: json:"namespace"
+    string namespace = 3;
+    // 资源所属环境
+    // @gotags: json:"env"
+    string env = 4;
     // 厂商
     // @gotags: json:"vendor"
-    infraboard.cmdb.resource.Vendor vendor = 2;
+    infraboard.cmdb.resource.Vendor vendor = 5;
     // 账单的月份
     // @gotags: json:"month"
-    string month = 3;
+    string month = 6;
     // 账号Id
     // @gotags: json:"account_id"
-    string account_id = 4;
+    string account_id = 7;
     // 地域Id
     // @gotags: json:"region_code"
-    string region_code = 5;
+    string region_code = 8;
     // 产品编码
     // @gotags: json:"product_code"
-    string product_code = 6;
+    string product_code = 9;
     // 账单月当时标签
     // @gotags: json:"tags"
-    repeated infraboard.cmdb.resource.Tag tags = tags;
+    repeated infraboard.cmdb.resource.Tag tags = 10;
     // 实例ID
     // @gotags: json:"instance_id"
-    string instance_id = 7;
+    string instance_id = 11;
 }
 
 message DeleteBillRequest {

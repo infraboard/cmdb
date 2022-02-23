@@ -73,6 +73,12 @@ message Task {
     // 失败的条数
     // @gotags: json:"total_failed"
     int64 total_failed = 12;
+    // 任务所属域
+    // @gotags: json:"domain"
+    string domain = 15;
+    // 任务所属空间
+    // @gotags: json:"namespace"
+    string namespace = 16;
 }
 
 message RecordSet {
@@ -144,7 +150,7 @@ message CreateTaskRequst {
     // @gotags: json:"domain"
     string domain = 7;
     // 任务所属空间
-    // @gotags: json:"domain"
+    // @gotags: json:"namespace"
     string namespace = 8;
 }
 
