@@ -73,6 +73,9 @@ message Bill {
     // 实例所属空间
     // @gotags: json:"namespace"
     string namespace = 28;
+    // 资源所属环境
+    // @gotags: json:"env"
+    string env = 29;
     // 账单月当时标签
     // @gotags: json:"tags"
     repeated infraboard.cmdb.resource.Tag tags = 27;
@@ -136,7 +139,7 @@ message QueryBillRequest {
     string product_code = 6;
     // 账单月当时标签
     // @gotags: json:"tags"
-    repeated infraboard.cmdb.resource.Tag tags = 8;
+    repeated infraboard.cmdb.resource.Tag tags = tags;
     // 实例ID
     // @gotags: json:"instance_id"
     string instance_id = 7;
