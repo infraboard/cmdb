@@ -80,31 +80,9 @@ message Bill {
     // 账单月当时标签
     // @gotags: json:"tags"
     repeated infraboard.cmdb.resource.Tag tags = 27;
-    // 官网价
-    // @gotags: json:"sale_price"
-    double sale_price = 18;
-    // 优惠金额 
-    // @gotags: json:"save_cost"
-    double save_cost = 19;
-    // 应付金额
-    // @gotags: json:"real_cost"
-    double real_cost = 20;
-    // 信用额度支付金额
-    // @gotags: json:"credit_pay"
-    double credit_pay = 21;
-    // 代金券抵扣
-    // 腾讯对应: VoucherPayAmount
-    // 阿里云: DeductedByCashCoupons
-    double voucher_pay = 22;
-    // 现金抵扣
-    // @gotags: json:"cash_pay"
-    double cash_pay = 23;
-    // 储值卡抵扣
-    // @gotags: json:"storedcard_pay"
-    double storedcard_pay = 24;
-    // 欠费金额
-    // @gotags: json:"outstanding_amount"
-    double outstanding_amount = 25;
+    // 具体费用
+    // @gotags: json:"cost"
+    Cost cost = 30;
     // 额外的无法通用的一些属性, 比如只有腾讯云独有的一些属性
     // @gotags: json:"extra"
     map<string, string> extra = 35;
@@ -114,9 +92,40 @@ message BillSet {
     // 总条数
     // @gotags: json:"total"
     int64 total = 1;
+    // 费用统计
+    // @gotags: json:"sum"
+    Cost sum = 2;
     // 具体条目
     // @gotags: json:"items"
-    repeated Bill items = 2;
+    repeated Bill items = 3;
+}
+
+message Cost {
+    // 官网价
+    // @gotags: json:"sale_price"
+    double sale_price = 1;
+    // 优惠金额 
+    // @gotags: json:"save_cost"
+    double save_cost = 2;
+    // 应付金额
+    // @gotags: json:"real_cost"
+    double real_cost = 3;
+    // 信用额度支付金额
+    // @gotags: json:"credit_pay"
+    double credit_pay = 4;
+    // 代金券抵扣
+    // 腾讯对应: VoucherPayAmount
+    // 阿里云: DeductedByCashCoupons
+    double voucher_pay = 5;
+    // 现金抵扣
+    // @gotags: json:"cash_pay"
+    double cash_pay = 6;
+    // 储值卡抵扣
+    // @gotags: json:"storedcard_pay"
+    double storedcard_pay = 7;
+    // 欠费金额
+    // @gotags: json:"outstanding_amount"
+    double outstanding_amount = 8;
 }
 
 message QueryBillRequest {
