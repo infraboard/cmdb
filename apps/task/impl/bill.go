@@ -107,7 +107,7 @@ func (s *service) syncBill(ctx context.Context, secret *secret.Secret, t *task.T
 	}
 }
 
-// Host主机数据入库
+// 月底账单数据入库
 func (s *service) doSyncBill(ctx context.Context, ins *bill.Bill, t *task.Task) {
 	h, err := s.bill.SyncBill(ctx, ins)
 
