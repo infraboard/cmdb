@@ -120,7 +120,7 @@ message Base {
     UsageMode usage_mode = 16;
     // 资源所属域
     // @gotags: json:"domain"
-    UsageMode domain = 17;
+    string domain = 17;
 }
 
 message Information {
@@ -181,13 +181,34 @@ message SearchRequest {
     // 分页参数
     // @gotags: json:"page"
     infraboard.mcube.page.PageRequest page = 1;
+    // 资源所属域
+    // @gotags: json:"domain"
+    string domain = 2;
+    // 资源所属空间
+    // @gotags: json:"namespace"
+    string namespace = 3;
+    // 资源所属环境
+    // @gotags: json:"env"
+    string env = 4;
+    // 使用方式
+    // @gotags: json:"usage_mode"
+    optional UsageMode usage_mode = 5;
     // 厂商
     // @gotags: json:"vendor"
-    optional Vendor vendor = 3;
+    optional Vendor vendor = 6;
+    // 同步的账号
+    // @gotags: json:"sync_account"
+    string sync_account = 7;
     // 资源类型
     // @gotags: json:"type"
-    optional Type type = 4;
+    optional Type type = 8;
+    // 服务商中的状态
+    // @gotags: json:"status"
+    string status = 9;
+   // 账单月当时标签
+    // @gotags: json:"tags"
+    repeated Tag tags = 10;
     // 关键字参数
     // @gotags: json:"keywords"
-    string keywords = 5;
+    string keywords = 15;
 }
