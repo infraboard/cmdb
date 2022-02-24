@@ -7,6 +7,7 @@ import "github.com/infraboard/mcube/pb/page/page.proto";
 
 service Service {
     rpc Search (SearchRequest) returns (ResourceSet);
+    rpc UpdateTag (UpdateTagRequest) returns (Resource);
 }
 
 enum Vendor {
@@ -214,4 +215,23 @@ message SearchRequest {
     // 是否精确匹配
     // @gotags: json:"exact_match"
     bool exact_match = 15;
+}
+
+enum UpdateAction {
+    // 添加
+    ADD = 0;
+    // 移除
+    REMOVE = 1;
+}
+
+message UpdateTagRequest {
+    // 资源id
+    // @gotags: json:"id"
+    string id = 1;
+    // 资源id
+    // @gotags: json:"action"
+    UpdateAction action = 2;
+    // 需要添加的资源标签
+    // @gotags: json:"tags"
+    repeated Tag tags = 3;
 }

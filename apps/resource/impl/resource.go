@@ -79,3 +79,8 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 
 	return set, nil
 }
+
+func (s *service) UpdateTag(ctx context.Context, req *resource.UpdateTagRequest) (
+	*resource.Resource, error) {
+	return nil, nil
+}

@@ -143,3 +143,48 @@ func (t *UsageMode) UnmarshalJSON(b []byte) error {
 	*t = ins
 	return nil
 }
+
+// ParseUpdateActionFromString Parse UpdateAction from string
+func ParseUpdateActionFromString(str string) (UpdateAction, error) {
+	key := strings.Trim(string(str), `"`)
+	v, ok := UpdateAction_value[strings.ToUpper(key)]
+	if !ok {
+		return 0, fmt.Errorf("unknown UpdateAction: %s", str)
+	}
+
+	return UpdateAction(v), nil
+}
+
+// Equal type compare
+func (t UpdateAction) Equal(target UpdateAction) bool {
+	return t == target
+}
+
+// IsIn todo
+func (t UpdateAction) IsIn(targets ...UpdateAction) bool {
+	for _, target := range targets {
+		if t.Equal(target) {
+			return true
+		}
+	}
+
+	return false
+}
+
+// MarshalJSON todo
+func (t UpdateAction) MarshalJSON() ([]byte, error) {
+	b := bytes.NewBufferString(`"`)
+	b.WriteString(strings.ToUpper(t.String()))
+	b.WriteString(`"`)
+	return b.Bytes(), nil
+}
+
+// UnmarshalJSON todo
+func (t *UpdateAction) UnmarshalJSON(b []byte) error {
+	ins, err := ParseUpdateActionFromString(string(b))
+	if err != nil {
+		return err
+	}
+	*t = ins
+	return nil
+}

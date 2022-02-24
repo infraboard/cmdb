@@ -2,3 +2,45 @@ syntax = "proto3";
 
 package infraboard.cmdb.cost;
 option go_package="github.com/infraboard/cmdb/apps/cost";
+
+// 成本单元类型
+enum Type {
+    // 基于域统计的总账单
+    DOMAIN = 0;
+    // 基于空间的总账单
+    NAMESPACE = 1;
+    // 基于云商的总账单
+    VENDOR = 2;
+    // 基于云商账号的总账单
+    ACCOUNT = 3;
+    // 基于环境的总账单
+    ENV = 4;
+}
+
+// 用于成本聚合统计的单元
+message Unit {
+    // 财务单元类型
+    // @gotags: json:"type"
+    Type type = 1;
+    // 财务单元具体类型的值
+    // @gotags: json:"value"
+    string value = 2;
+    // 年份
+    // @gotags: json:"year"
+    int32 year = 3;
+    // 月份
+    // @gotags: json:"month"
+    int32 month = 4;
+    // 月账单
+    // @gotags: json:"real_cost"
+    double real_cost = 5;
+    // 相比上月上涨或下降的具体金额
+    // @gotags: json:"delta_cost"
+    double delta_cost = 6;
+    // 相比上月上涨或下降的百分比
+    // @gotags: json:"delta_percent"
+    double delta_percent = 7;
+    // 关联的具体详情Task
+    // @gotags: json:"task_id"
+    double task_id = 15;
+}
