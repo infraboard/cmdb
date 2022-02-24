@@ -16,6 +16,7 @@ service Service {
 // 账单数据结构参数:
 // 阿里云参考: https://www.alibabacloud.com/help/zh/doc-detail/100400.htm?spm=a2c63.p38356.b99.39.22b56c48uGGnNz
 // 腾讯云参考: https://cloud.tencent.com/document/api/555/19182
+// 华为云参考: 
 message Bill {
     // 本次账单同步关联的任务Id
     // @gotags: json:"task_id"
@@ -83,6 +84,9 @@ message Bill {
     // 具体费用
     // @gotags: json:"cost"
     Cost cost = 30;
+    // 是否已经按照实例聚合
+    // @gotags: json:"is_merged"
+    bool is_merged = 31;
     // 额外的无法通用的一些属性, 比如只有腾讯云独有的一些属性
     // @gotags: json:"extra"
     map<string, string> extra = 35;

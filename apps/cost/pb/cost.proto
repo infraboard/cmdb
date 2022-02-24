@@ -1,0 +1,4 @@
+syntax = "proto3";
+
+package infraboard.cmdb.cost;
+option go_package="github.com/infraboard/cmdb/apps/cost";

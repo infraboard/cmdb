@@ -22,7 +22,7 @@ func (s *service) SyncBill(ctx context.Context, req *bill.Bill) (
 		req.Vendor, y, m, req.OwnerId, req.OwnerName, req.ProductType, req.ProductCode, req.ProductDetail,
 		req.PayMode, req.OrderId, req.InstanceId, req.InstanceName, req.PublicIp, req.PrivateIp, req.InstanceConfig,
 		req.RegionCode, req.RegionName, req.Cost.SalePrice, req.Cost.SaveCost, req.Cost.RealCost, req.Cost.CreditPay,
-		req.Cost.VoucherPay, req.Cost.CashPay, req.Cost.StoredcardPay, req.Cost.OutstandingAmount,
+		req.Cost.VoucherPay, req.Cost.CashPay, req.Cost.StoredcardPay, req.Cost.OutstandingAmount, req.TaskId,
 	)
 	if err != nil {
 		return nil, err
@@ -38,6 +38,7 @@ func (s *service) QueryBill(ctx context.Context, req *bill.QueryBillRequest) (
 
 func (s *service) ConfirmBill(ctx context.Context, req *bill.ConfirmBillRequest) (
 	*bill.BillSet, error) {
+	//
 	return nil, nil
 }
 
