@@ -210,5 +210,8 @@ message SearchRequest {
     repeated Tag tags = 10;
     // 关键字参数
     // @gotags: json:"keywords"
-    string keywords = 15;
+    string keywords = 14;
+    // 是否精确匹配
+    // @gotags: json:"exact_match"
+    bool exact_match = 15;
 }
