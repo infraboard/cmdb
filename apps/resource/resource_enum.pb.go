@@ -144,6 +144,51 @@ func (t *UsageMode) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// ParseTagTypeFromString Parse TagType from string
+func ParseTagTypeFromString(str string) (TagType, error) {
+	key := strings.Trim(string(str), `"`)
+	v, ok := TagType_value[strings.ToUpper(key)]
+	if !ok {
+		return 0, fmt.Errorf("unknown TagType: %s", str)
+	}
+
+	return TagType(v), nil
+}
+
+// Equal type compare
+func (t TagType) Equal(target TagType) bool {
+	return t == target
+}
+
+// IsIn todo
+func (t TagType) IsIn(targets ...TagType) bool {
+	for _, target := range targets {
+		if t.Equal(target) {
+			return true
+		}
+	}
+
+	return false
+}
+
+// MarshalJSON todo
+func (t TagType) MarshalJSON() ([]byte, error) {
+	b := bytes.NewBufferString(`"`)
+	b.WriteString(strings.ToUpper(t.String()))
+	b.WriteString(`"`)
+	return b.Bytes(), nil
+}
+
+// UnmarshalJSON todo
+func (t *TagType) UnmarshalJSON(b []byte) error {
+	ins, err := ParseTagTypeFromString(string(b))
+	if err != nil {
+		return err
+	}
+	*t = ins
+	return nil
+}
+
 // ParseUpdateActionFromString Parse UpdateAction from string
 func ParseUpdateActionFromString(str string) (UpdateAction, error) {
 	key := strings.Trim(string(str), `"`)
