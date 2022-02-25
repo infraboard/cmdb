@@ -78,9 +78,9 @@ message Bill {
     // 资源所属环境
     // @gotags: json:"env"
     string env = 29;
-    // 账单月当时标签
-    // @gotags: json:"tags"
-    repeated infraboard.cmdb.resource.Tag tags = 27;
+    // 该资产的基于Tag的分摊
+    // @gotags: json:"share_units"
+    repeated ShareUnit share_units = 27;
     // 具体费用
     // @gotags: json:"cost"
     Cost cost = 30;
@@ -90,6 +90,15 @@ message Bill {
     // 额外的无法通用的一些属性, 比如只有腾讯云独有的一些属性
     // @gotags: json:"extra"
     map<string, string> extra = 35;
+}
+
+message ShareUnit {
+    // 账单月当时标签
+    // @gotags: json:"tags"
+    infraboard.cmdb.resource.Tag tag = 1;
+    // 具体分摊额度, 具体金额根据标签权重进行计算
+    // @gotags: json:"tags"
+    Cost cost = 2;
 }
 
 message BillSet {

@@ -186,6 +186,9 @@ message Tag {
     // 标签的值的描述, 通常用于展示
     // @gotags: json:"describe"
     string describe = 5;
+    // 标签权重, 针对同一个key, 多个value场景, 默认值1
+    // @gotags: json:"weight"
+    int32 weight = 6;
 }
 
 message SearchRequest {
@@ -232,6 +235,8 @@ enum UpdateAction {
     ADD = 0;
     // 移除
     REMOVE = 1;
+    // 更新标签, 只允许更新描述和权重
+    UPDATE = 2;
 }
 
 message UpdateTagRequest {

@@ -1,15 +1,13 @@
-类型             value   year  month  cost  delta_cost delta_percent task_id
+类型         value   year  month  cost  delta_cost delta_percent task_id
 domain(总账)        
 
 
-namespace(项目) 
-
-
-vendor   product_type
-account  
-
-app.env.deploy  
+namespace(项目)  domain
 env
+vendor 
+account
+  
+  
 
 
 
@@ -37,5 +35,13 @@ ns3  xxxx  +100(100%)
 app1 xxxx +192(200%)
 app2 xxxx -100(100%)
 
+ins1  xxxxx     app   weight   cost   
+   ns-app-c1   app1     1      10
+   ns-app-c2   app2     1      10
+   ns-app-c2   app3     1      10
 
+ins2  xxxxx     30      
+   app   app1   10
+   app   app2   10
+   app   app3   10
 

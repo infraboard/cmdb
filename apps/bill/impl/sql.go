@@ -23,5 +23,5 @@ const (
 		pay_mode,order_id,instance_id,instance_name,public_ip,private_ip,instance_config,
 		region_code,region_name,sum(sale_price),sum(save_cost),sum(real_cost),sum(credit_pay),sum(voucher_pay),
 		sum(cash_pay),sum(storedcard_pay),sum(outstanding_amount),task_id,1
-	 FROM bill GROUP BY instance_id WHERE is_merged=0`
+	 FROM bill WHERE is_merged=0 AND task_id=? GROUP BY instance_id`
 )
