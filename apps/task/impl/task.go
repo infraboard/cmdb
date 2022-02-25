@@ -30,10 +30,12 @@ func (s *service) CreatTask(ctx context.Context, req *task.CreateTaskRequst) (
 		return nil, err
 	}
 
-	secret, err := s.secret.DescribeSecret(ctx, secret.NewDescribeSecretRequest(req.SecretId))
+	secretIns, err := s.secret.DescribeSecret(ctx, secret.NewDescribeSecretRequest(req.SecretId))
 	if err != nil {
 		return nil, err
 	}
+
+	secret := secretIns.Data
 	t.UpdateSecretDesc(secret.ShortDesc())
 
 	// 如果不是vsphere 需要检查region
@@ -56,11 +58,11 @@ func (s *service) CreatTask(ctx context.Context, req *task.CreateTaskRequst) (
 	syncCtx, _ := context.WithTimeout(context.Background(), time.Minute*30)
 	switch req.ResourceType {
 	case resource.Type_HOST:
-		go s.syncHost(syncCtx, secret, t, s.SyncTaskCallback)
+		go s.syncHost(syncCtx, secretIns, t, s.SyncTaskCallback)
 	case resource.Type_BILL:
-		go s.syncBill(syncCtx, secret, t, s.SyncTaskCallback)
+		go s.syncBill(syncCtx, secretIns, t, s.SyncTaskCallback)
 	case resource.Type_RDS:
-		go s.syncRds(syncCtx, secret, t, s.SyncTaskCallback)
+		go s.syncRds(syncCtx, secretIns, t, s.SyncTaskCallback)
 	}
 
 	// 记录任务

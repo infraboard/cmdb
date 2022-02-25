@@ -25,14 +25,14 @@ func (s *service) CreateSecret(ctx context.Context, req *secret.CreateSecretRequ
 	defer stmt.Close()
 
 	// 入库之前先加密
-	if err := ins.EncryptAPISecret(conf.C().App.EncryptKey); err != nil {
+	if err := ins.Data.EncryptAPISecret(conf.C().App.EncryptKey); err != nil {
 		s.log.Warnf("encrypt api key error, %s", err)
 	}
 
 	_, err = stmt.Exec(
-		ins.Id, ins.CreateAt, ins.Description, ins.Vendor, ins.Address,
-		ins.AllowRegionString(), ins.CrendentialType, ins.ApiKey, ins.ApiSecret,
-		ins.RequestRate,
+		ins.Id, ins.CreateAt, ins.Data.Description, ins.Data.Vendor, ins.Data.Address,
+		ins.Data.AllowRegionString(), ins.Data.CrendentialType, ins.Data.ApiKey, ins.Data.ApiSecret,
+		ins.Data.RequestRate,
 	)
 	if err != nil {
 		return nil, err
@@ -72,15 +72,15 @@ func (s *service) QuerySecret(ctx context.Context, req *secret.QuerySecretReques
 	for rows.Next() {
 		ins := secret.NewDefaultSecret()
 		err := rows.Scan(
-			&ins.Id, &ins.CreateAt, &ins.Description, &ins.Vendor, &ins.Address,
-			&allowRegions, &ins.CrendentialType, &ins.ApiKey, &ins.ApiSecret,
-			&ins.RequestRate,
+			&ins.Id, &ins.CreateAt, &ins.Data.Description, &ins.Data.Vendor, &ins.Data.Address,
+			&allowRegions, &ins.Data.CrendentialType, &ins.Data.ApiKey, &ins.Data.ApiSecret,
+			&ins.Data.RequestRate,
 		)
 		if err != nil {
 			return nil, exception.NewInternalServerError("query secret error, %s", err.Error())
 		}
-		ins.LoadAllowRegionFromString(allowRegions)
-		ins.Desense()
+		ins.Data.LoadAllowRegionFromString(allowRegions)
+		ins.Data.Desense()
 		set.Add(ins)
 	}
 
@@ -115,9 +115,9 @@ func (s *service) DescribeSecret(ctx context.Context, req *secret.DescribeSecret
 	ins := secret.NewDefaultSecret()
 	allowRegions := ""
 	err = queryStmt.QueryRow(args...).Scan(
-		&ins.Id, &ins.CreateAt, &ins.Description, &ins.Vendor, &ins.Address,
-		&allowRegions, &ins.CrendentialType, &ins.ApiKey, &ins.ApiSecret,
-		&ins.RequestRate,
+		&ins.Id, &ins.CreateAt, &ins.Data.Description, &ins.Data.Vendor, &ins.Data.Address,
+		&allowRegions, &ins.Data.CrendentialType, &ins.Data.ApiKey, &ins.Data.ApiSecret,
+		&ins.Data.RequestRate,
 	)
 
 	if err != nil {
@@ -127,7 +127,7 @@ func (s *service) DescribeSecret(ctx context.Context, req *secret.DescribeSecret
 		return nil, exception.NewInternalServerError("describe secret error, %s", err.Error())
 	}
 
-	ins.LoadAllowRegionFromString(allowRegions)
+	ins.Data.LoadAllowRegionFromString(allowRegions)
 	return ins, nil
 }
 

@@ -17,7 +17,7 @@ import (
 	txConn "github.com/infraboard/cmdb/provider/txyun/connectivity"
 )
 
-func (s *service) syncBill(ctx context.Context, secret *secret.Secret, t *task.Task, cb SyncTaskCallback) {
+func (s *service) syncBill(ctx context.Context, secretIns *secret.Secret, t *task.Task, cb SyncTaskCallback) {
 	var (
 		pager bill.Pager
 	)
@@ -29,6 +29,7 @@ func (s *service) syncBill(ctx context.Context, secret *secret.Secret, t *task.T
 		cb(t)
 	}()
 
+	secret := secretIns.Data
 	switch secret.Vendor {
 	case resource.Vendor_ALIYUN:
 		s.log.Debugf("sync aliyun bill ...")

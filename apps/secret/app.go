@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/infraboard/cmdb/conf"
 	"github.com/infraboard/mcube/crypto/cbc"
 	"github.com/infraboard/mcube/http/request"
-	"github.com/infraboard/mcube/types/ftime"
 	"github.com/rs/xid"
 )
 
@@ -24,11 +24,13 @@ var (
 
 func NewDefaultSecret() *Secret {
 	return &Secret{
-		RequestRate: 5,
+		Data: &CreateSecretRequest{
+			RequestRate: 5,
+		},
 	}
 }
 
-func (s *Secret) EncryptAPISecret(key string) error {
+func (s *CreateSecretRequest) EncryptAPISecret(key string) error {
 	// 判断文本是否已经加密
 	if strings.HasPrefix(s.ApiSecret, conf.CIPHER_TEXT_PREFIX) {
 		return fmt.Errorf("text has ciphered")
@@ -44,7 +46,7 @@ func (s *Secret) EncryptAPISecret(key string) error {
 	return nil
 }
 
-func (s *Secret) DecryptAPISecret(key string) error {
+func (s *CreateSecretRequest) DecryptAPISecret(key string) error {
 	// 判断文本是否已经是明文
 	if !strings.HasPrefix(s.ApiSecret, conf.CIPHER_TEXT_PREFIX) {
 		return fmt.Errorf("text is plan text")
@@ -66,13 +68,13 @@ func (s *Secret) DecryptAPISecret(key string) error {
 	return nil
 }
 
-func (s *Secret) Desense() {
+func (s *CreateSecretRequest) Desense() {
 	if s.ApiSecret != "" {
 		s.ApiSecret = "******"
 	}
 }
 
-func (s *Secret) IsAllowRegion(region string) bool {
+func (s *CreateSecretRequest) IsAllowRegion(region string) bool {
 	for i := range s.AllowRegions {
 		if s.AllowRegions[i] == "*" {
 			return true
@@ -86,11 +88,11 @@ func (s *Secret) IsAllowRegion(region string) bool {
 	return false
 }
 
-func (s *Secret) ShortDesc() string {
+func (s *CreateSecretRequest) ShortDesc() string {
 	return fmt.Sprintf("%s[%s]", s.Description, s.DensenseKey())
 }
 
-func (s *Secret) DensenseKey() string {
+func (s *CreateSecretRequest) DensenseKey() string {
 	if s.ApiKey == "" {
 		return ""
 	}
@@ -101,11 +103,11 @@ func (s *Secret) DensenseKey() string {
 	return s.ApiKey
 }
 
-func (s *Secret) AllowRegionString() string {
+func (s *CreateSecretRequest) AllowRegionString() string {
 	return strings.Join(s.AllowRegions, ",")
 }
 
-func (s *Secret) LoadAllowRegionFromString(regions string) {
+func (s *CreateSecretRequest) LoadAllowRegionFromString(regions string) {
 	if regions != "" {
 		s.AllowRegions = strings.Split(regions, ",")
 	}
@@ -127,16 +129,9 @@ func NewSecret(req *CreateSecretRequest) (*Secret, error) {
 	}
 
 	return &Secret{
-		Id:              xid.New().String(),
-		CreateAt:        ftime.Now().Timestamp(),
-		Description:     req.Description,
-		Vendor:          req.Vendor,
-		AllowRegions:    req.AllowRegions,
-		CrendentialType: req.CrendentialType,
-		Address:         req.Address,
-		ApiKey:          req.ApiKey,
-		ApiSecret:       req.ApiSecret,
-		RequestRate:     req.RequestRate,
+		Id:       xid.New().String(),
+		CreateAt: time.Now().UnixMilli(),
+		Data:     req,
 	}, nil
 }
 

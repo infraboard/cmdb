@@ -45,7 +45,7 @@ func (h *handler) DescribeSecret(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ins.Desense()
+	ins.Data.Desense()
 	response.Success(w, ins)
 }
 

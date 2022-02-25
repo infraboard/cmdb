@@ -21,7 +21,7 @@ import (
 	vmOp "github.com/infraboard/cmdb/provider/vsphere/vm"
 )
 
-func (s *service) syncHost(ctx context.Context, secret *secret.Secret, t *task.Task, cb SyncTaskCallback) {
+func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *task.Task, cb SyncTaskCallback) {
 	var (
 		pager host.Pager
 	)
@@ -37,6 +37,7 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, t *task.T
 		cb(t)
 	}()
 
+	secret := secretIns.Data
 	switch secret.Vendor {
 	case resource.Vendor_ALIYUN:
 		s.log.Debugf("sync aliyun ecs ...")
@@ -105,7 +106,7 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, t *task.T
 		// 通过回调直接保存
 		err = operater.Query(func(h *host.Host) {
 			// 补充管理信息
-			h.Base.SecretId = secret.Id
+			h.Base.SecretId = secretIns.Id
 			s.doSyncHost(ctx, h, t)
 		})
 		if err != nil {
@@ -133,7 +134,7 @@ func (s *service) syncHost(ctx context.Context, secret *secret.Secret, t *task.T
 			for i := range p.Data.Items {
 				target := p.Data.Items[i]
 				// 补充管理信息
-				target.Base.SecretId = secret.Id
+				target.Base.SecretId = secretIns.Id
 				s.doSyncHost(ctx, target, t)
 			}
 		}

@@ -17,7 +17,7 @@ import (
 	txConn "github.com/infraboard/cmdb/provider/txyun/connectivity"
 )
 
-func (s *service) syncRds(ctx context.Context, secret *secret.Secret, t *task.Task, cb SyncTaskCallback) {
+func (s *service) syncRds(ctx context.Context, secretIns *secret.Secret, t *task.Task, cb SyncTaskCallback) {
 	var (
 		pager rds.Pager
 	)
@@ -29,6 +29,7 @@ func (s *service) syncRds(ctx context.Context, secret *secret.Secret, t *task.Ta
 		cb(t)
 	}()
 
+	secret := secretIns.Data
 	switch secret.Vendor {
 	case resource.Vendor_ALIYUN:
 		s.log.Debugf("sync aliyun rds ...")
@@ -78,7 +79,7 @@ func (s *service) syncRds(ctx context.Context, secret *secret.Secret, t *task.Ta
 			// 调用rds服务保持数据
 			for i := range p.Data.Items {
 				target := p.Data.Items[i]
-				target.Base.SecretId = secret.Id
+				target.Base.SecretId = secretIns.Id
 				s.SaveOrUpdateRds(ctx, target, t)
 			}
 		}

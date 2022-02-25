@@ -97,10 +97,10 @@ message Bill {
 
 message ShareUnit {
     // 账单月当时标签
-    // @gotags: json:"tags"
+    // @gotags: json:"tag"
     infraboard.cmdb.resource.Tag tag = 1;
     // 具体分摊额度, 具体金额根据标签权重进行计算
-    // @gotags: json:"tags"
+    // @gotags: json:"cost"
     Cost cost = 2;
 }
 
