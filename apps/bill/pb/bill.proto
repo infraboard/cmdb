@@ -72,6 +72,9 @@ message Bill {
     // 地域名称
     // @gotags: json:"region_name"
     string region_name = 17;
+    // 实例所属域
+    // @gotags: json:"domain"
+    string domain = 32;
     // 实例所属空间
     // @gotags: json:"namespace"
     string namespace = 28;
