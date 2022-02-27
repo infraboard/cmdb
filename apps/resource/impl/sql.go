@@ -2,9 +2,9 @@ package impl
 
 const (
 	SQLInsertResource = `INSERT INTO resource (
-		id,vendor,region,zone,create_at,expire_at,category,type,
+		id,resource_type,vendor,region,zone,create_at,expire_at,category,type,
 		name,description,status,update_at,sync_at,sync_accout,public_ip,
-		private_ip,pay_type,describe_hash,resource_hash,secret_id,
+		private_ip,pay_type,describe_hash,resource_hash,secret_id,domain,
 		namespace,env,usage_mode
 	) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);`
 
@@ -20,6 +20,6 @@ const (
 
 	SQLDeleteResourceTag = `DELETE FROM tag WHERE resource_id = ?;`
 	SQLInsertResourceTag = `INSERT INTO tag (
-		key,value,describe,resource_id
-	) VALUES (?,?,?,?) ON DUPLICATE KEY UPDATE key=key;`
+		t_key,t_value,description,resource_id,weight
+	) VALUES (?,?,?,?,?) ON DUPLICATE KEY UPDATE t_key=t_key;`
 )

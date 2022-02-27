@@ -133,7 +133,7 @@ func (s *HostSet) ToJsonString() string {
 func (req *DescribeHostRequest) Where() (string, interface{}) {
 	switch req.DescribeBy {
 	default:
-		return "id = ?", req.Value
+		return "r.id = ?", req.Value
 	}
 }
 

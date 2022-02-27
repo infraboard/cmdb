@@ -80,11 +80,11 @@ func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 		info := ins.Information
 		desc := ins.Describe
 		err := rows.Scan(
-			&base.Id, &base.Vendor, &base.Region, &base.Zone, &base.CreateAt, &info.ExpireAt,
+			&base.Id, &base.ResourceType, &base.Vendor, &base.Region, &base.Zone, &base.CreateAt, &info.ExpireAt,
 			&info.Category, &info.Type, &info.Name, &info.Description,
 			&info.Status, &info.UpdateAt, &base.SyncAt, &info.SyncAccount,
 			&publicIPList, &privateIPList, &info.PayType, &base.DescribeHash, &base.ResourceHash,
-			&base.SecretId, &base.Namespace, &base.Env, &base.UsageMode, &base.Id,
+			&base.SecretId, &base.Domain, &base.Namespace, &base.Env, &base.UsageMode, &base.Id,
 			&desc.Cpu, &desc.Memory, &desc.GpuAmount, &desc.GpuSpec, &desc.OsType, &desc.OsName,
 			&desc.SerialNumber, &desc.ImageId, &desc.InternetMaxBandwidthOut, &desc.InternetMaxBandwidthIn,
 			&keyPairNameList, &securityGroupsList, &tagKeys, &tagValues, &tagDescribe,
@@ -141,11 +141,11 @@ func (s *service) DescribeHost(ctx context.Context, req *host.DescribeHostReques
 	info := ins.Information
 	desc := ins.Describe
 	err = queryStmt.QueryRow(args...).Scan(
-		&base.Id, &base.Vendor, &base.Region, &base.Zone, &base.CreateAt, &info.ExpireAt,
+		&base.Id, &base.ResourceType, &base.Vendor, &base.Region, &base.Zone, &base.CreateAt, &info.ExpireAt,
 		&info.Category, &info.Type, &info.Name, &info.Description,
 		&info.Status, &info.UpdateAt, &base.SyncAt, &info.SyncAccount,
 		&publicIPList, &privateIPList, &info.PayType, &base.DescribeHash, &base.ResourceHash,
-		&base.SecretId, &base.Id,
+		&base.SecretId, &base.Domain, &base.Namespace, &base.Env, &base.UsageMode, &base.Id,
 		&desc.Cpu, &desc.Memory, &desc.GpuAmount, &desc.GpuSpec, &desc.OsType, &desc.OsName,
 		&desc.SerialNumber, &desc.ImageId, &desc.InternetMaxBandwidthOut, &desc.InternetMaxBandwidthIn,
 		&keyPairNameList, &securityGroupsList, &tagKeys, &tagValues, &tagDescribe,

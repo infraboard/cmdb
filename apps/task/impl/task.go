@@ -101,6 +101,7 @@ func (s *service) QueryTask(ctx context.Context, req *task.QueryTaskRequest) (*t
 		err := rows.Scan(
 			&ins.Id, &ins.Region, &ins.ResourceType, &ins.SecretId, &ins.SecretDescription, &ins.Timeout,
 			&ins.Status, &ins.Message, &ins.StartAt, &ins.EndAt, &ins.TotalSucceed, &ins.TotalFailed,
+			&ins.Domain, &ins.Namespace,
 		)
 		if err != nil {
 			return nil, exception.NewInternalServerError("query task error, %s", err.Error())
@@ -139,6 +140,7 @@ func (s *service) DescribeTask(ctx context.Context, req *task.DescribeTaskReques
 	err = queryStmt.QueryRow(args...).Scan(
 		&ins.Id, &ins.Region, &ins.ResourceType, &ins.SecretId, &ins.SecretDescription, &ins.Timeout,
 		&ins.Status, &ins.Message, &ins.StartAt, &ins.EndAt, &ins.TotalSucceed, &ins.TotalFailed,
+		&ins.Domain, &ins.Namespace,
 	)
 	if err != nil {
 		return nil, err

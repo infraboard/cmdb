@@ -50,11 +50,11 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 		base := ins.Base
 		info := ins.Information
 		err := rows.Scan(
-			&base.Id, &base.Vendor, &base.Region, &base.Zone, &base.CreateAt, &info.ExpireAt,
+			&base.Id, &base.ResourceType, &base.Vendor, &base.Region, &base.Zone, &base.CreateAt, &info.ExpireAt,
 			&info.Category, &info.Type, &info.Name, &info.Description,
 			&info.Status, &info.UpdateAt, &base.SyncAt, &info.SyncAccount,
 			&publicIPList, &privateIPList, &info.PayType, &base.DescribeHash, &base.ResourceHash,
-			&base.SecretId, &base.Namespace, &base.Env, &base.UsageMode,
+			&base.SecretId, &base.Domain, &base.Namespace, &base.Env, &base.UsageMode,
 		)
 		if err != nil {
 			return nil, exception.NewInternalServerError("query resource error, %s", err.Error())

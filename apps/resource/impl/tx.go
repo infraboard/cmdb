@@ -17,10 +17,10 @@ func SaveResource(tx *sql.Tx, base *resource.Base, info *resource.Information) e
 
 	// 保存资源数据
 	_, err = stmt.Exec(
-		base.Id, base.Vendor, base.Region, base.Zone, base.CreateAt, info.ExpireAt, info.Category, info.Type,
+		base.Id, base.ResourceType, base.Vendor, base.Region, base.Zone, base.CreateAt, info.ExpireAt, info.Category, info.Type,
 		info.Name, info.Description, info.Status, info.UpdateAt, base.SyncAt, info.SyncAccount, info.PublicIPToString(),
 		info.PrivateIPToString(), info.PayType, base.DescribeHash, base.ResourceHash, base.SecretId,
-		base.Namespace, base.Env, base.UsageMode,
+		base.Domain, base.Namespace, base.Env, base.UsageMode,
 	)
 	if err != nil {
 		return fmt.Errorf("save host resource info error, %s", err)
@@ -49,11 +49,11 @@ func UpdateResource(tx *sql.Tx, base *resource.Base, info *resource.Information)
 		base.Id,
 	)
 	if err != nil {
-		return err
+		return fmt.Errorf("update resource base info error, %s", err)
 	}
 
 	if err := updateResourceTag(tx, base.Id, info.Tags); err != nil {
-		return err
+		return fmt.Errorf("update resource tag error, %s", err)
 	}
 
 	return nil
@@ -96,7 +96,7 @@ func updateResourceTag(tx *sql.Tx, resourceId string, tags []*resource.Tag) erro
 	for i := range tags {
 		t := tags[i]
 		_, err = stmt.Exec(
-			t.Key, t.Value, t.Describe, resourceId,
+			t.Key, t.Value, t.Describe, resourceId, t.Weight,
 		)
 		if err != nil {
 			return fmt.Errorf("save resource tag error, %s", err)

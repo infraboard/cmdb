@@ -33,7 +33,9 @@ func (s *Set) AddSet(set *Set) {
 
 func NewDefaultRDS() *RDS {
 	return &RDS{
-		Base:        &resource.Base{},
+		Base: &resource.Base{
+			ResourceType: resource.Type_RDS,
+		},
 		Information: &resource.Information{},
 		Describe:    &Describe{},
 	}

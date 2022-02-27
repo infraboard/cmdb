@@ -32,7 +32,7 @@ func (s *service) CreateSecret(ctx context.Context, req *secret.CreateSecretRequ
 	_, err = stmt.Exec(
 		ins.Id, ins.CreateAt, ins.Data.Description, ins.Data.Vendor, ins.Data.Address,
 		ins.Data.AllowRegionString(), ins.Data.CrendentialType, ins.Data.ApiKey, ins.Data.ApiSecret,
-		ins.Data.RequestRate,
+		ins.Data.RequestRate, ins.Data.Domain, ins.Data.Namespace,
 	)
 	if err != nil {
 		return nil, err
@@ -74,7 +74,7 @@ func (s *service) QuerySecret(ctx context.Context, req *secret.QuerySecretReques
 		err := rows.Scan(
 			&ins.Id, &ins.CreateAt, &ins.Data.Description, &ins.Data.Vendor, &ins.Data.Address,
 			&allowRegions, &ins.Data.CrendentialType, &ins.Data.ApiKey, &ins.Data.ApiSecret,
-			&ins.Data.RequestRate,
+			&ins.Data.RequestRate, &ins.Data.Domain, &ins.Data.Namespace,
 		)
 		if err != nil {
 			return nil, exception.NewInternalServerError("query secret error, %s", err.Error())
@@ -117,7 +117,7 @@ func (s *service) DescribeSecret(ctx context.Context, req *secret.DescribeSecret
 	err = queryStmt.QueryRow(args...).Scan(
 		&ins.Id, &ins.CreateAt, &ins.Data.Description, &ins.Data.Vendor, &ins.Data.Address,
 		&allowRegions, &ins.Data.CrendentialType, &ins.Data.ApiKey, &ins.Data.ApiSecret,
-		&ins.Data.RequestRate,
+		&ins.Data.RequestRate, &ins.Data.Domain, &ins.Data.Namespace,
 	)
 
 	if err != nil {
