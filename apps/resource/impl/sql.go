@@ -18,8 +18,12 @@ const (
 	SQLQueryResource  = `SELECT * FROM resource`
 	SQLDeleteResource = `DELETE FROM resource WHERE id = ?;`
 
-	SQLDeleteResourceTag = `DELETE FROM tag WHERE resource_id = ?;`
-	SQLInsertResourceTag = `INSERT INTO tag (
+	SQLDeleteResourceTag         = `DELETE FROM tag WHERE resource_id = ?;`
+	SQLInsertOrUpdateResourceTag = `INSERT INTO tag (
 		t_key,t_value,description,resource_id,weight
 	) VALUES (?,?,?,?,?) ON DUPLICATE KEY UPDATE t_key=t_key;`
+	SQLUpdateResourceTag = `UPDATE tag SET
+		description=?,weight=? 
+	WHERE id = ?
+	`
 )

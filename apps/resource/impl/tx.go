@@ -87,7 +87,7 @@ func DeleteResource(tx *sql.Tx, id string) error {
 
 func updateResourceTag(tx *sql.Tx, resourceId string, tags []*resource.Tag) error {
 	// 保存资源标签
-	stmt, err := tx.Prepare(SQLInsertResourceTag)
+	stmt, err := tx.Prepare(SQLInsertOrUpdateResourceTag)
 	if err != nil {
 		return err
 	}
