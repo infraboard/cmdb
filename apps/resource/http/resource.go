@@ -22,7 +22,7 @@ func (h *handler) SearchResource(w http.ResponseWriter, r *http.Request) {
 func (h *handler) AddTag(w http.ResponseWriter, r *http.Request) {
 	ctx := context.GetContext(r)
 	req := resource.NewUpdateTagRequest(ctx.PS.ByName("id"), resource.UpdateAction_ADD)
-	if err := request.GetDataFromRequest(r, req.Tags); err != nil {
+	if err := request.GetDataFromRequest(r, &req.Tags); err != nil {
 		response.Failed(w, err)
 		return
 	}
@@ -37,7 +37,7 @@ func (h *handler) AddTag(w http.ResponseWriter, r *http.Request) {
 func (h *handler) RemoveTag(w http.ResponseWriter, r *http.Request) {
 	ctx := context.GetContext(r)
 	req := resource.NewUpdateTagRequest(ctx.PS.ByName("id"), resource.UpdateAction_REMOVE)
-	if err := request.GetDataFromRequest(r, req.Tags); err != nil {
+	if err := request.GetDataFromRequest(r, &req.Tags); err != nil {
 		response.Failed(w, err)
 		return
 	}

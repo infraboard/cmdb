@@ -18,6 +18,7 @@ func (s *service) addTag(ctx context.Context, resourceId string, tags []*resourc
 			tx.Rollback()
 			return
 		}
+		tx.Commit()
 	}()
 
 	err = updateResourceTag(tx, resourceId, tags)
@@ -38,6 +39,7 @@ func (s *service) removeTag(ctx context.Context, tags []*resource.Tag) (err erro
 			tx.Rollback()
 			return
 		}
+		tx.Commit()
 	}()
 
 	stmt, err = tx.Prepare(SQLDeleteResourceTag)

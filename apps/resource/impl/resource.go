@@ -83,6 +83,9 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 
 func (s *service) UpdateTag(ctx context.Context, req *resource.UpdateTagRequest) (
 	*resource.Resource, error) {
+	if err := req.Validate(); err != nil {
+		return nil, exception.NewBadRequest("validate update tag request error, %s", err)
+	}
 	switch req.Action {
 	case resource.UpdateAction_ADD:
 		s.addTag(ctx, req.Id, req.Tags)

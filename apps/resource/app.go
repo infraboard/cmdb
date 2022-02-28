@@ -129,3 +129,11 @@ func NewThirdTag(key, value string) *Tag {
 		Weight: 1,
 	}
 }
+
+func (req *UpdateTagRequest) Validate() error {
+	if len(req.Tags) == 0 {
+		return fmt.Errorf("no tags")
+	}
+
+	return nil
+}

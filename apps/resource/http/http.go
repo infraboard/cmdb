@@ -39,6 +39,8 @@ func (h *handler) Registry(r router.SubRouter) {
 	// 资源标签管理
 	rr.Handle("POST", "/resources/:id/tags", h.AddTag).AddLabel(label.Update)
 	rr.Handle("DELETE", "/resources/:id/tags", h.RemoveTag).AddLabel(label.Update)
+
+	// 资源发现
 }
 
 func init() {
