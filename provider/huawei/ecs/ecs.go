@@ -72,10 +72,7 @@ func (o *EcsOperater) transferTags(tags *[]string) (ret []*resource.Tag) {
 	t := *tags
 
 	for i := range t {
-		ret = append(ret, &resource.Tag{
-			Key:   "ecs",
-			Value: t[i],
-		})
+		ret = append(ret, resource.NewThirdTag("ecs", t[i]))
 	}
 
 	return

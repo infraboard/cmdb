@@ -3,6 +3,7 @@ package resource
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/infraboard/cmdb/utils"
@@ -55,25 +56,33 @@ func (i *Information) LoadPublicIPString(s string) {
 	}
 }
 
-func (i *Information) LoadTags(keys, values, describes string) error {
+func (i *Information) LoadTags(ids, keys, values, describes, weights, types string) error {
 	if keys == "" {
 		return nil
 	}
 
+	il := strings.Split(ids, ",")
 	kl := strings.Split(keys, ",")
 	vl := strings.Split(values, ",")
 	dl := strings.Split(describes, ",")
+	wl := strings.Split(weights, ",")
+	tl := strings.Split(types, ",")
 
 	if len(kl) != len(vl) || len(kl) != len(dl) {
 		return fmt.Errorf("len is not equal")
 	}
 
 	for idx := range kl {
-		i.Tags = append(i.Tags, &Tag{
+		t := &Tag{
 			Key:      kl[idx],
 			Value:    vl[idx],
 			Describe: dl[idx],
-		})
+		}
+		t.Id, _ = strconv.ParseInt(il[idx], 10, 64)
+		t.Weight, _ = strconv.ParseInt(wl[idx], 10, 64)
+		tti, _ := strconv.ParseInt(tl[idx], 10, 64)
+		t.Type = TagType(int32(tti))
+		i.Tags = append(i.Tags, t)
 	}
 
 	return nil
@@ -109,5 +118,14 @@ func NewUpdateTagRequest(resourceId string, action UpdateAction) *UpdateTagReque
 	return &UpdateTagRequest{
 		Id:     resourceId,
 		Action: action,
+	}
+}
+
+func NewThirdTag(key, value string) *Tag {
+	return &Tag{
+		Type:   TagType_THIRD,
+		Key:    key,
+		Value:  value,
+		Weight: 1,
 	}
 }

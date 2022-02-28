@@ -190,7 +190,7 @@ message Tag {
     string describe = 5;
     // 标签权重, 针对同一个key, 多个value场景, 默认值1
     // @gotags: json:"weight"
-    int32 weight = 6;
+    int64 weight = 6;
 }
 
 message SearchRequest {

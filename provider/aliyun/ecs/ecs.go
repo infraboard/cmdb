@@ -70,10 +70,10 @@ func (o *EcsOperater) transferOne(ins ecs.Instance) *host.Host {
 
 func (o *EcsOperater) transferTags(tags []ecs.Tag) (ret []*resource.Tag) {
 	for i := range tags {
-		ret = append(ret, &resource.Tag{
-			Key:   tags[i].Key,
-			Value: tags[i].Value,
-		})
+		ret = append(ret, resource.NewThirdTag(
+			tags[i].Key,
+			tags[i].Value,
+		))
 	}
 	return
 }
