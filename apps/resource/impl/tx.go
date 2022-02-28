@@ -96,7 +96,8 @@ func updateResourceTag(tx *sql.Tx, resourceId string, tags []*resource.Tag) erro
 	for i := range tags {
 		t := tags[i]
 		_, err = stmt.Exec(
-			t.Key, t.Value, t.Describe, resourceId, t.Weight,
+			t.Type, t.Key, t.Value, t.Describe, resourceId, t.Weight,
+			t.Describe, t.Weight,
 		)
 		if err != nil {
 			return fmt.Errorf("save resource tag error, %s", err)

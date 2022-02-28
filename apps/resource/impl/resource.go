@@ -85,11 +85,9 @@ func (s *service) UpdateTag(ctx context.Context, req *resource.UpdateTagRequest)
 	*resource.Resource, error) {
 	switch req.Action {
 	case resource.UpdateAction_ADD:
-		s.addTag(ctx, req.Tags)
+		s.addTag(ctx, req.Id, req.Tags)
 	case resource.UpdateAction_REMOVE:
 		s.removeTag(ctx, req.Tags)
-	case resource.UpdateAction_UPDATE:
-		s.updateTag(ctx, req.Tags)
 	default:
 		return nil, fmt.Errorf("unknow update tag action: %s", req.Action)
 	}

@@ -166,8 +166,10 @@ message Information {
 enum TagType {
     // 用户自定义标签, 允许用户修改
     USER = 0;
+    // 第三方定义的标签, 比如云商同步过来的标签
+    THIRD = 1;
     // 系统使用标签, 禁止用户修改
-    SYSTEM = 1;
+    SYSTEM = 2;
 }
 
 message Tag {
@@ -235,8 +237,6 @@ enum UpdateAction {
     ADD = 0;
     // 移除
     REMOVE = 1;
-    // 更新标签, 只允许更新描述和权重
-    UPDATE = 2;
 }
 
 message UpdateTagRequest {

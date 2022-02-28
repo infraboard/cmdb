@@ -20,8 +20,10 @@ const (
 
 	SQLDeleteResourceTag         = `DELETE FROM tag WHERE resource_id = ?;`
 	SQLInsertOrUpdateResourceTag = `INSERT INTO tag (
-		t_key,t_value,description,resource_id,weight
-	) VALUES (?,?,?,?,?) ON DUPLICATE KEY UPDATE t_key=t_key;`
+		type,t_key,t_value,description,resource_id,weight
+	) VALUES (?,?,?,?,?,?) ON DUPLICATE KEY UPDATE 
+		description=IF(type!=1,?,description),
+		weight=IF(type!=1,?,weight);`
 	SQLUpdateResourceTag = `UPDATE tag SET
 		description=?,weight=? 
 	WHERE id = ?

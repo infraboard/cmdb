@@ -205,6 +205,7 @@ CREATE TABLE `tag` (
   `description` varchar(255) NOT NULL COMMENT '值的描述信息',
   `resource_id` varchar(64) CHARACTER SET latin1 NOT NULL COMMENT '标签关联的资源Id',
   `weight` int(11) NOT NULL COMMENT '标签权重',
+  `type` tinyint(4) NOT NULL COMMENT '标签类型',
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_id` (`t_key`,`t_value`,`resource_id`) COMMENT '一个资源同一个key value只允许有一对',
   KEY `idx_key` (`t_key`) USING HASH,
