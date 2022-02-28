@@ -35,6 +35,10 @@ func (h *handler) Registry(r router.SubRouter) {
 	rr.Handle("GET", "/vendors", h.ListVendor).DisablePermission()
 	rr.Handle("GET", "/regions", h.ListVendorRegion).DisablePermission()
 	rr.Handle("GET", "/resource_types", h.ListResourceType).DisablePermission()
+
+	// 资源标签管理
+	rr.Handle("POST", "/resources/:id/tags", h.AddTag).AddLabel(label.Update)
+	rr.Handle("DELETE", "/resources/:id/tags", h.RemoveTag).AddLabel(label.Update)
 }
 
 func init() {

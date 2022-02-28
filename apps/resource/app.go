@@ -104,3 +104,10 @@ func (ag *AccountGetter) WithAccountId(id string) {
 func (ag *AccountGetter) GetAccountId() string {
 	return ag.accountId
 }
+
+func NewUpdateTagRequest(resourceId string, action UpdateAction) *UpdateTagRequest {
+	return &UpdateTagRequest{
+		Id:     resourceId,
+		Action: action,
+	}
+}
