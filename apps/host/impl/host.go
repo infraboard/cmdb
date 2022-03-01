@@ -57,8 +57,9 @@ func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 	set := host.NewHostSet()
 
 	// 获取total SELECT COUNT(*) FROMT t Where ....
-	countSQL, args := query.BuildCount()
+	countSQL, args := query.BuildCountWith("COUNT(DISTINCT r.id)")
 	countStmt, err := s.db.Prepare(countSQL)
+	s.log.Debugf("count sql: %s", countSQL)
 	if err != nil {
 		return nil, exception.NewInternalServerError(err.Error())
 	}
@@ -71,7 +72,7 @@ func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 
 	// 获取分页数据
 	querySQL, args := query.GroupBy("r.id").Limit(req.OffSet(), uint(req.Page.PageSize)).BuildQuery()
-	s.log.Debugf("sql: %s", querySQL)
+	s.log.Debugf("query sql: %s", querySQL)
 
 	queryStmt, err := s.db.Prepare(querySQL)
 	if err != nil {

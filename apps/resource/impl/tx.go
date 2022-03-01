@@ -11,7 +11,7 @@ func SaveResource(tx *sql.Tx, base *resource.Base, info *resource.Information) e
 	// 避免SQL注入, 请使用Prepare
 	stmt, err := tx.Prepare(SQLInsertResource)
 	if err != nil {
-		return err
+		return fmt.Errorf("prepare insert resource error, %s", err)
 	}
 	defer stmt.Close()
 
@@ -89,7 +89,7 @@ func updateResourceTag(tx *sql.Tx, resourceId string, tags []*resource.Tag) erro
 	// 保存资源标签
 	stmt, err := tx.Prepare(SQLInsertOrUpdateResourceTag)
 	if err != nil {
-		return err
+		return fmt.Errorf("prepare update resource tag error, %s", err)
 	}
 	defer stmt.Close()
 

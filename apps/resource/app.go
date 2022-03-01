@@ -25,13 +25,38 @@ func NewSearchRequest() *SearchRequest {
 	}
 }
 
-func NewSearchRequestFromHTTP(r *http.Request) *SearchRequest {
+func NewSearchRequestFromHTTP(r *http.Request) (*SearchRequest, error) {
 	qs := r.URL.Query()
-
-	return &SearchRequest{
-		Page:     request.NewPageRequestFromHTTP(r),
-		Keywords: qs.Get("keywords"),
+	req := &SearchRequest{
+		Page:        request.NewPageRequestFromHTTP(r),
+		Keywords:    qs.Get("keywords"),
+		ExactMatch:  qs.Get("exact_match") == "true",
+		Domain:      qs.Get("domain"),
+		Namespace:   qs.Get("namespace"),
+		Env:         qs.Get("env"),
+		Status:      qs.Get("status"),
+		SyncAccount: qs.Get("sync_account"),
 	}
+
+	umStr := qs.Get("usage_mode")
+	if umStr != "" {
+		mode, err := ParseUsageModeFromString(umStr)
+		if err != nil {
+			return nil, err
+		}
+		req.UsageMode = &mode
+	}
+
+	rtStr := qs.Get("resource_type")
+	if rtStr != "" {
+		rt, err := ParseTypeFromString(rtStr)
+		if err != nil {
+			return nil, err
+		}
+		req.Type = &rt
+	}
+
+	return req, nil
 }
 
 func (req *SearchRequest) GroupByKey() map[string][]*Tag {

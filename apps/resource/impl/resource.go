@@ -15,6 +15,21 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 	query := sqlbuilder.NewQuery(SQLQueryResource)
 	s.buildQuery(query, req)
 
+	set := resource.NewResourceSet()
+
+	// 获取total SELECT COUNT(*) FROMT t Where ....
+	countSQL, args := query.BuildCountWith("COUNT(DISTINCT r.id)")
+	countStmt, err := s.db.Prepare(countSQL)
+	if err != nil {
+		return nil, exception.NewInternalServerError(err.Error())
+	}
+
+	defer countStmt.Close()
+	err = countStmt.QueryRow(args...).Scan(&set.Total)
+	if err != nil {
+		return nil, exception.NewInternalServerError(err.Error())
+	}
+
 	// 获取分页数据
 	querySQL, args := query.Order("sync_at").Desc().Limit(req.Page.ComputeOffset(), uint(req.Page.PageSize)).BuildQuery()
 	s.log.Debugf("sql: %s", querySQL)
@@ -35,7 +50,7 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 		publicIPList, privateIPList                          string
 		tagKeys, tagValues, tagDescribe, tagWeighs, tagTypes string
 	)
-	set := resource.NewResourceSet()
+
 	for rows.Next() {
 		ins := resource.NewDefaultResource()
 		base := ins.Base
@@ -57,19 +72,6 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 			s.log.Error("load tags error, %s", err)
 		}
 		set.Add(ins)
-	}
-
-	// 获取total SELECT COUNT(*) FROMT t Where ....
-	countSQL, args := query.BuildCount()
-	countStmt, err := s.db.Prepare(countSQL)
-	if err != nil {
-		return nil, exception.NewInternalServerError(err.Error())
-	}
-
-	defer countStmt.Close()
-	err = countStmt.QueryRow(args...).Scan(&set.Total)
-	if err != nil {
-		return nil, exception.NewInternalServerError(err.Error())
 	}
 
 	return set, nil
