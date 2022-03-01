@@ -34,6 +34,20 @@ func NewSearchRequestFromHTTP(r *http.Request) *SearchRequest {
 	}
 }
 
+func (req *SearchRequest) GroupByKey() map[string][]*Tag {
+	gt := map[string][]*Tag{}
+	for i := range req.Tags {
+		t := req.Tags[i]
+		if _, ok := gt[t.Key]; ok {
+			gt[t.Key] = append(gt[t.Key], t)
+		} else {
+			gt[t.Key] = []*Tag{}
+		}
+	}
+
+	return gt
+}
+
 func NewDefaultResource() *Resource {
 	return &Resource{
 		Base:        &Base{},

@@ -3,6 +3,7 @@ package impl
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/mcube/exception"
@@ -12,21 +13,9 @@ import (
 func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 	*resource.ResourceSet, error) {
 	query := sqlbuilder.NewQuery(SQLQueryResource)
+	s.buildQuery(query, req)
 
-	if req.Keywords != "" {
-		query.Where("name LIKE ? OR id = ? OR instance_id = ? OR private_ip LIKE ? OR public_ip LIKE ?",
-			"%"+req.Keywords+"%",
-			req.Keywords,
-			req.Keywords,
-			req.Keywords+"%",
-			req.Keywords+"%",
-		)
-	}
-
-	if req.Vendor != nil {
-		query.Where("vendor = ?", req.Vendor)
-	}
-
+	// 获取分页数据
 	querySQL, args := query.Order("sync_at").Desc().Limit(req.Page.ComputeOffset(), uint(req.Page.PageSize)).BuildQuery()
 	s.log.Debugf("sql: %s", querySQL)
 
@@ -84,6 +73,65 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 	}
 
 	return set, nil
+}
+
+func (s *service) buildQuery(query *sqlbuilder.Query, req *resource.SearchRequest) {
+	if req.Keywords != "" {
+		if req.ExactMatch {
+			// 精确匹配
+			query.Where("r.name = ? OR r.id = ? OR r.private_ip = ? OR r.public_ip = ?",
+				req.Keywords,
+				req.Keywords,
+				req.Keywords,
+				req.Keywords,
+			)
+		} else {
+			// 模糊匹配
+			query.Where("r.name LIKE ? OR r.id = ? OR r.private_ip LIKE ? OR r.public_ip LIKE ?",
+				"%"+req.Keywords+"%",
+				req.Keywords,
+				req.Keywords+"%",
+				req.Keywords+"%",
+			)
+		}
+	}
+
+	if req.Domain != "" {
+		query.Where("r.domain = ?", req.Domain)
+	}
+	if req.Namespace != "" {
+		query.Where("r.namespace = ?", req.Namespace)
+	}
+	if req.Env != "" {
+		query.Where("r.env = ?", req.Env)
+	}
+	if req.UsageMode != nil {
+		query.Where("r.usage_mode = ?", req.UsageMode)
+	}
+	if req.Vendor != nil {
+		query.Where("r.vendor = ?", req.Vendor)
+	}
+	if req.SyncAccount != "" {
+		query.Where("r.sync_accout = ?", req.SyncAccount)
+	}
+	if req.Type != nil {
+		query.Where("r.resource_type = ?", req.Type)
+	}
+	if req.Status != "" {
+		query.Where("r.status = ?", req.Status)
+	}
+
+	// Tag过滤
+	for k, v := range req.GroupByKey() {
+		inset := []string{}
+		if len(v) == 0 {
+			continue
+		}
+		for i := range v {
+			inset = append(inset, v[i].Value)
+		}
+		query.Where(fmt.Sprintf("t.t_key=? AND t.t_value IN (%s)", strings.Join(inset, ",")), k)
+	}
 }
 
 func (s *service) UpdateTag(ctx context.Context, req *resource.UpdateTagRequest) (
