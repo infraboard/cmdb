@@ -16,7 +16,6 @@ const (
 	queryHostSQL = `SELECT
 	r.*,
 	h.*,
-	IFNULL(GROUP_CONCAT(t.id),'') tag_ids,
 	IFNULL(GROUP_CONCAT(t.t_key),'') tag_keys,
 	IFNULL(GROUP_CONCAT(t.t_value), '') tag_values,
 	IFNULL(GROUP_CONCAT(t.description), '') tag_describes,

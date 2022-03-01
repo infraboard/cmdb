@@ -863,18 +863,15 @@ type Tag struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// 标签的Id
-	// @gotags: json:"id"
-	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id"`
 	// 标签的类型
 	// @gotags: json:"type"
 	Type TagType `protobuf:"varint,2,opt,name=type,proto3,enum=infraboard.cmdb.resource.TagType" json:"type"`
 	// 标签的Key
-	// @gotags: json:"key"
-	Key string `protobuf:"bytes,3,opt,name=key,proto3" json:"key"`
+	// @gotags: json:"key" validate:"required"
+	Key string `protobuf:"bytes,3,opt,name=key,proto3" json:"key" validate:"required"`
 	// 标签的值
-	// @gotags: json:"value"
-	Value string `protobuf:"bytes,4,opt,name=value,proto3" json:"value"`
+	// @gotags: json:"value" validate:"required"
+	Value string `protobuf:"bytes,4,opt,name=value,proto3" json:"value" validate:"required"`
 	// 标签的值的描述, 通常用于展示
 	// @gotags: json:"describe"
 	Describe string `protobuf:"bytes,5,opt,name=describe,proto3" json:"describe"`
@@ -913,13 +910,6 @@ func (x *Tag) ProtoReflect() protoreflect.Message {
 // Deprecated: Use Tag.ProtoReflect.Descriptor instead.
 func (*Tag) Descriptor() ([]byte, []int) {
 	return file_apps_resource_pb_resource_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *Tag) GetId() int64 {
-	if x != nil {
-		return x.Id
-	}
-	return 0
 }
 
 func (x *Tag) GetType() TagType {
@@ -1122,14 +1112,14 @@ type UpdateTagRequest struct {
 	unknownFields protoimpl.UnknownFields
 
 	// 资源id
-	// @gotags: json:"id"
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id"`
+	// @gotags: json:"id" validate:"required"
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id" validate:"required"`
 	// 资源id
 	// @gotags: json:"action"
 	Action UpdateAction `protobuf:"varint,2,opt,name=action,proto3,enum=infraboard.cmdb.resource.UpdateAction" json:"action"`
 	// 需要添加的资源标签
-	// @gotags: json:"tags"
-	Tags []*Tag `protobuf:"bytes,3,rep,name=tags,proto3" json:"tags"`
+	// @gotags: json:"tags" validate:"required"
+	Tags []*Tag `protobuf:"bytes,3,rep,name=tags,proto3" json:"tags" validate:"required"`
 }
 
 func (x *UpdateTagRequest) Reset() {
@@ -1287,8 +1277,7 @@ var file_apps_resource_pb_resource_proto_rawDesc = []byte{
 	0x74, 0x65, 0x5f, 0x69, 0x70, 0x18, 0x0b, 0x20, 0x03, 0x28, 0x09, 0x52, 0x09, 0x70, 0x72, 0x69,
 	0x76, 0x61, 0x74, 0x65, 0x49, 0x70, 0x12, 0x19, 0x0a, 0x08, 0x70, 0x61, 0x79, 0x5f, 0x74, 0x79,
 	0x70, 0x65, 0x18, 0x0c, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x70, 0x61, 0x79, 0x54, 0x79, 0x70,
-	0x65, 0x22, 0xa8, 0x01, 0x0a, 0x03, 0x54, 0x61, 0x67, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x02, 0x69, 0x64, 0x12, 0x35, 0x0a, 0x04, 0x74, 0x79, 0x70,
+	0x65, 0x22, 0x98, 0x01, 0x0a, 0x03, 0x54, 0x61, 0x67, 0x12, 0x35, 0x0a, 0x04, 0x74, 0x79, 0x70,
 	0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x21, 0x2e, 0x69, 0x6e, 0x66, 0x72, 0x61, 0x62,
 	0x6f, 0x61, 0x72, 0x64, 0x2e, 0x63, 0x6d, 0x64, 0x62, 0x2e, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72,
 	0x63, 0x65, 0x2e, 0x54, 0x61, 0x67, 0x54, 0x79, 0x70, 0x65, 0x52, 0x04, 0x74, 0x79, 0x70, 0x65,

@@ -6,8 +6,13 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/http/request"
+)
+
+var (
+	validate = validator.New()
 )
 
 const (
@@ -56,12 +61,11 @@ func (i *Information) LoadPublicIPString(s string) {
 	}
 }
 
-func (i *Information) LoadTags(ids, keys, values, describes, weights, types string) error {
+func (i *Information) LoadTags(keys, values, describes, weights, types string) error {
 	if keys == "" {
 		return nil
 	}
 
-	il := strings.Split(ids, ",")
 	kl := strings.Split(keys, ",")
 	vl := strings.Split(values, ",")
 	dl := strings.Split(describes, ",")
@@ -78,7 +82,6 @@ func (i *Information) LoadTags(ids, keys, values, describes, weights, types stri
 			Value:    vl[idx],
 			Describe: dl[idx],
 		}
-		t.Id, _ = strconv.ParseInt(il[idx], 10, 64)
 		t.Weight, _ = strconv.ParseInt(wl[idx], 10, 64)
 		tti, _ := strconv.ParseInt(tl[idx], 10, 64)
 		t.Type = TagType(int32(tti))
@@ -135,5 +138,5 @@ func (req *UpdateTagRequest) Validate() error {
 		return fmt.Errorf("no tags")
 	}
 
-	return nil
+	return validate.Struct(req)
 }

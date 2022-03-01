@@ -173,17 +173,14 @@ enum TagType {
 }
 
 message Tag {
-    // 标签的Id
-    // @gotags: json:"id"
-    int64 id = 1;
     // 标签的类型
     // @gotags: json:"type"
     TagType type = 2;
     // 标签的Key
-    // @gotags: json:"key"
+    // @gotags: json:"key" validate:"required"
     string key = 3;
     // 标签的值
-    // @gotags: json:"value"
+    // @gotags: json:"value" validate:"required"
     string value = 4;
     // 标签的值的描述, 通常用于展示
     // @gotags: json:"describe"
@@ -241,12 +238,12 @@ enum UpdateAction {
 
 message UpdateTagRequest {
     // 资源id
-    // @gotags: json:"id"
+    // @gotags: json:"id" validate:"required"
     string id = 1;
     // 资源id
     // @gotags: json:"action"
     UpdateAction action = 2;
     // 需要添加的资源标签
-    // @gotags: json:"tags"
+    // @gotags: json:"tags" validate:"required"
     repeated Tag tags = 3;
 }

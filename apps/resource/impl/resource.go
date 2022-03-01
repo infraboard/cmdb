@@ -90,7 +90,7 @@ func (s *service) UpdateTag(ctx context.Context, req *resource.UpdateTagRequest)
 	case resource.UpdateAction_ADD:
 		s.addTag(ctx, req.Id, req.Tags)
 	case resource.UpdateAction_REMOVE:
-		s.removeTag(ctx, req.Tags)
+		s.removeTag(ctx, req.Id, req.Tags)
 	default:
 		return nil, fmt.Errorf("unknow update tag action: %s", req.Action)
 	}
