@@ -33,10 +33,10 @@ enum UsageMode {
 }
 
 message ResourceSet {
-    // @gotags: json:"items"
-    repeated Resource items = 1;
     // @gotags: json:"total"
-    int64 total = 2;
+    int64 total = 1;
+    // @gotags: json:"items"
+    repeated Resource items = 2;
 }
 
 message Resource {

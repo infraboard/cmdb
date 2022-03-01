@@ -105,8 +105,12 @@ message Describe {
 }
 
 message Set {
-    repeated RDS items = 1;
-    int64 total = 2;
+    // 总数量
+    // @gotags: json:"total"
+    int64 total = 1;
+   // 列表项
+    // @gotags: json:"items"
+    repeated RDS items = 2;
 }
 
 message QueryRDSRequest {

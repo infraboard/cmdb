@@ -39,12 +39,12 @@ message Describe {
 }
 
 message Set {
-    // 列表项
-    // @gotags: json:"items"
-    repeated EIP items = 1;
     // 总数量
     // @gotags: json:"total"
-    int64 total = 2;
+    int64 total = 1;
+    // 列表项
+    // @gotags: json:"items"
+    repeated EIP items = 2;
 }
 
 message QueryEIPRequest {

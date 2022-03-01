@@ -43,7 +43,8 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 	defer rows.Close()
 
 	var (
-		publicIPList, privateIPList string
+		publicIPList, privateIPList                          string
+		tagKeys, tagValues, tagDescribe, tagWeighs, tagTypes string
 	)
 	set := resource.NewResourceSet()
 	for rows.Next() {
@@ -56,12 +57,16 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 			&info.Status, &info.UpdateAt, &base.SyncAt, &info.SyncAccount,
 			&publicIPList, &privateIPList, &info.PayType, &base.DescribeHash, &base.ResourceHash,
 			&base.SecretId, &base.Domain, &base.Namespace, &base.Env, &base.UsageMode,
+			&tagKeys, &tagValues, &tagDescribe, &tagWeighs, &tagTypes,
 		)
 		if err != nil {
 			return nil, exception.NewInternalServerError("query resource error, %s", err.Error())
 		}
 		info.LoadPrivateIPString(privateIPList)
 		info.LoadPublicIPString(publicIPList)
+		if err := info.LoadTags(tagKeys, tagValues, tagDescribe, tagWeighs, tagTypes); err != nil {
+			s.log.Error("load tags error, %s", err)
+		}
 		set.Add(ins)
 	}
 
