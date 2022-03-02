@@ -1,3 +1,6 @@
+基于实例聚合后的账单为准
+
+
 类型         value   year  month  cost  delta_cost delta_percent task_id
 domain(总账)        
 

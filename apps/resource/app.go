@@ -3,6 +3,7 @@ package resource
 import (
 	"fmt"
 	"net/http"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -137,6 +138,12 @@ func (i *Information) LoadTags(keys, values, describes, weights, types string) e
 	}
 
 	return nil
+}
+
+func (i *Information) SortTag() {
+	sort.Slice(i.Tags, func(m, n int) bool {
+		return i.Tags[m].Weight < i.Tags[n].Weight
+	})
 }
 
 func (i *Information) Hash() string {

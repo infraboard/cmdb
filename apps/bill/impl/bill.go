@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/infraboard/mcube/exception"
+	"github.com/infraboard/mcube/sqlbuilder"
 
 	"github.com/infraboard/cmdb/apps/bill"
 )
@@ -36,9 +37,16 @@ func (s *service) QueryBill(ctx context.Context, req *bill.QueryBillRequest) (
 	return nil, nil
 }
 
+// 确认账单, 确认当前月的账单以TaskId同步的准, 之前其他Task同步的账单作废需要删除
 func (s *service) ConfirmBill(ctx context.Context, req *bill.ConfirmBillRequest) (
 	*bill.BillSet, error) {
-	//
+	b := sqlbuilder.NewQuery(deleteBillSQL)
+	b.Where("year = ?")
+
+	// 清理该月之前同步的账单数据
+
+	// 生产实例按照月的聚合的数据
+
 	return nil, nil
 }
 
