@@ -56,6 +56,15 @@ func NewSearchRequestFromHTTP(r *http.Request) (*SearchRequest, error) {
 		req.Type = &rt
 	}
 
+	tgStr := qs.Get("tag")
+	if tgStr != "" {
+		tg, err := NewTagsFromString(tgStr)
+		if err != nil {
+			return nil, err
+		}
+		req.Tags = tg
+	}
+
 	return req, nil
 }
 
@@ -178,4 +187,26 @@ func (req *UpdateTagRequest) Validate() error {
 	}
 
 	return validate.Struct(req)
+}
+
+// key=value,key=value
+func NewTagsFromString(tagStr string) (tags []*Tag, err error) {
+	if tagStr == "" {
+		return
+	}
+
+	items := strings.Split(tagStr, ",")
+	for _, v := range items {
+		kv := strings.Split(v, "=")
+		if len(kv) != 2 {
+			err = fmt.Errorf("key,value format error, requred key=value")
+			return
+		}
+		tags = append(tags, &Tag{
+			Key:   kv[0],
+			Value: kv[1],
+		})
+	}
+
+	return
 }
