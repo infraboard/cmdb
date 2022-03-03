@@ -43,7 +43,7 @@ func (p *pager) Next() *rds.PagerResult {
 	p.log.Debugf("get %d hosts", len(resp.Items))
 
 	result.Data = resp
-	result.HasNext = p.hasNext()
+	result.HasNext = p.HasNext()
 
 	p.number++
 	return result
@@ -55,7 +55,10 @@ func (p *pager) nextReq() *cdb.DescribeDBInstancesRequest {
 	return p.req
 }
 
-func (p *pager) hasNext() bool {
+func (p *pager) HasNext() bool {
+	if p.total == -1 {
+		return true
+	}
 	return int64(p.number*p.size) < p.total
 }
 
