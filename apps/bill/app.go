@@ -46,6 +46,7 @@ type PagerResult struct {
 
 // 分页迭代器
 type Pager interface {
+	HasNext() bool
 	Next() *PagerResult
 }
 

@@ -19,6 +19,7 @@ func newPager(pageSize int, operater *BssOperater, rate int, month string) *page
 	return &pager{
 		size:     pageSize,
 		number:   1,
+		total:    -1,
 		operater: operater,
 		req:      req,
 		log:      zap.L().Named("Pagger"),
@@ -47,7 +48,7 @@ func (p *pager) Next() *bill.PagerResult {
 	p.total = resp.Total
 
 	result.Data = resp
-	result.HasNext = p.hasNext()
+	result.HasNext = p.HasNext()
 
 	p.number++
 	return result
@@ -61,6 +62,6 @@ func (p *pager) nextReq() *model.ListCustomerselfResourceRecordsRequest {
 	return p.req
 }
 
-func (p *pager) hasNext() bool {
+func (p *pager) HasNext() bool {
 	return int64(p.number*p.size) < p.total
 }

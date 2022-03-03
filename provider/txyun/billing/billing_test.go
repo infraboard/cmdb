@@ -21,13 +21,11 @@ func TestQuery(t *testing.T) {
 	req.Month = "2021-10"
 
 	pager := operater.PageQuery(req)
-	hasNext := true
-	for hasNext {
+	for pager.HasNext() {
 		p := pager.Next()
 		if p.Err != nil {
 			panic(p.Err)
 		}
-		hasNext = p.HasNext
 		fmt.Println(p.Data)
 	}
 }
