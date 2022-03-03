@@ -19,6 +19,7 @@ func newPager(pageSize int, operater *RdsOperater) *pager {
 		number:   1,
 		operater: operater,
 		req:      req,
+		total:    -1,
 		log:      zap.L().Named("Pagger"),
 	}
 }
@@ -43,7 +44,7 @@ func (p *pager) Next() *rds.PagerResult {
 	p.total = resp.Total
 
 	result.Data = resp
-	result.HasNext = p.hasNext()
+	result.HasNext = p.HasNext()
 
 	p.number++
 	return result
@@ -57,6 +58,9 @@ func (p *pager) nextReq() *model.ListInstancesRequest {
 	return p.req
 }
 
-func (p *pager) hasNext() bool {
+func (p *pager) HasNext() bool {
+	if p.total == -1 {
+		return true
+	}
 	return int64(p.number*p.size) < p.total
 }

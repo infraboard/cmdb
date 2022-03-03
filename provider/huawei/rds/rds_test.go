@@ -17,13 +17,11 @@ var (
 func TestQuery(t *testing.T) {
 	pager := operater.PageQuery()
 
-	hasNext := true
-	for hasNext {
+	for pager.HasNext() {
 		p := pager.Next()
 		if p.Err != nil {
 			panic(p.Err)
 		}
-		hasNext = p.HasNext
 		fmt.Println(p.Data)
 	}
 }

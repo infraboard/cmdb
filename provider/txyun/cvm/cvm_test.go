@@ -11,6 +11,7 @@ import (
 	"github.com/infraboard/cmdb/provider/txyun/connectivity"
 	op "github.com/infraboard/cmdb/provider/txyun/cvm"
 	"github.com/infraboard/cmdb/utils"
+	"github.com/infraboard/mcube/logger/zap"
 	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 )
 
@@ -21,13 +22,11 @@ var (
 func TestQuery(t *testing.T) {
 	pager := operater.PageQuery(op.NewPageQueryRequest(5))
 
-	hasNext := true
-	for hasNext {
+	for pager.HasNext() {
 		p := pager.Next()
 		if p.Err != nil {
 			panic(p.Err)
 		}
-		hasNext = p.HasNext
 		fmt.Println(p.Data)
 	}
 }
@@ -59,6 +58,7 @@ func TestCreate(t *testing.T) {
 }
 
 func init() {
+	zap.DevelopmentSetup()
 	var secretID, secretKey string
 	if secretID = os.Getenv("TX_CLOUD_SECRET_ID"); secretID == "" {
 		panic("empty TX_CLOUD_SECRET_ID")

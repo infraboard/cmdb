@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/infraboard/cmdb/provider/aliyun/connectivity"
+	"github.com/infraboard/mcube/logger/zap"
 
 	op "github.com/infraboard/cmdb/provider/aliyun/ecs"
 )
@@ -17,19 +18,17 @@ var (
 func TestQuery(t *testing.T) {
 	req := op.NewPageQueryRequest()
 	pager := operater.PageQuery(req)
-
-	hasNext := true
-	for hasNext {
+	for pager.HasNext() {
 		p := pager.Next()
 		if p.Err != nil {
 			panic(p.Err)
 		}
-		hasNext = p.HasNext
 		fmt.Println(p.Data)
 	}
 }
 
 func init() {
+	zap.DevelopmentSetup()
 	var ak, sk string
 	if ak = os.Getenv("AL_CLOUD_ACCESS_KEY"); ak == "" {
 		panic("empty AL_CLOUD_ACCESS_KEY")

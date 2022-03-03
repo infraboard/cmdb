@@ -19,6 +19,7 @@ func newPager(pageSize int, operater *RdsOperater, rate int) *pager {
 		size:     pageSize,
 		number:   1,
 		operater: operater,
+		total:    -1,
 		req:      req,
 		log:      zap.L().Named("Pagger"),
 		tb:       tokenbucket.NewBucketWithRate(rateFloat, 1),
@@ -47,7 +48,7 @@ func (p *pager) Next() *cmdbRds.PagerResult {
 	p.total = int64(resp.Total)
 
 	result.Data = resp
-	result.HasNext = p.hasNext()
+	result.HasNext = p.HasNext()
 
 	p.number++
 	return result
@@ -63,6 +64,9 @@ func (p *pager) nextReq() *rds.DescribeDBInstancesRequest {
 	return p.req
 }
 
-func (p *pager) hasNext() bool {
+func (p *pager) HasNext() bool {
+	if p.total == -1 {
+		return true
+	}
 	return int64(p.number*p.size) < p.total
 }

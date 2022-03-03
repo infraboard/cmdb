@@ -66,11 +66,8 @@ func (s *service) syncRds(ctx context.Context, secretIns *secret.Secret, t *task
 
 	// 分页查询数据
 	if pager != nil {
-		hasNext := true
-		for hasNext {
+		for pager.HasNext() {
 			p := pager.Next()
-			hasNext = p.HasNext
-
 			if p.Err != nil {
 				t.Failed(fmt.Sprintf("sync error, %s", p.Err))
 				return

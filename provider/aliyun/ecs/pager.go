@@ -22,6 +22,7 @@ func newPager(pageSize int, operater *EcsOperater, rate int) *pager {
 		req:      req,
 		log:      zap.L().Named("Pagger"),
 		tb:       tokenbucket.NewBucketWithRate(rateFloat, 1),
+		total:    -1,
 	}
 }
 
@@ -47,7 +48,7 @@ func (p *pager) Next() *host.PagerResult {
 	p.total = int64(resp.Total)
 
 	result.Data = resp
-	result.HasNext = p.hasNext()
+	result.HasNext = p.HasNext()
 
 	p.number++
 	return result
@@ -66,6 +67,9 @@ func (p *pager) nextReq() *ecs.DescribeInstancesRequest {
 	return p.req
 }
 
-func (p *pager) hasNext() bool {
+func (p *pager) HasNext() bool {
+	if p.total == -1 {
+		return true
+	}
 	return int64(p.number*p.size) < p.total
 }
