@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"sort"
-	"strconv"
 	"strings"
 
 	"github.com/go-playground/validator/v10"
@@ -73,11 +72,11 @@ func (req *SearchRequest) GroupByKey() map[string][]*Tag {
 	gt := map[string][]*Tag{}
 	for i := range req.Tags {
 		t := req.Tags[i]
-		if _, ok := gt[t.Key]; ok {
-			gt[t.Key] = append(gt[t.Key], t)
-		} else {
+		if _, ok := gt[t.Key]; !ok {
 			gt[t.Key] = []*Tag{}
 		}
+
+		gt[t.Key] = append(gt[t.Key], t)
 	}
 
 	return gt
@@ -88,6 +87,10 @@ func NewDefaultResource() *Resource {
 		Base:        &Base{},
 		Information: &Information{},
 	}
+}
+
+func (r *Information) AddTag(t *Tag) {
+	r.Tags = append(r.Tags, t)
 }
 
 func (i *Information) PrivateIPToString() string {
@@ -110,36 +113,6 @@ func (i *Information) LoadPublicIPString(s string) {
 	}
 }
 
-func (i *Information) LoadTags(keys, values, describes, weights, types string) error {
-	if keys == "" {
-		return nil
-	}
-
-	kl := strings.Split(keys, ",")
-	vl := strings.Split(values, ",")
-	dl := strings.Split(describes, ",")
-	wl := strings.Split(weights, ",")
-	tl := strings.Split(types, ",")
-
-	if len(kl) != len(vl) || len(kl) != len(dl) {
-		return fmt.Errorf("len is not equal")
-	}
-
-	for idx := range kl {
-		t := &Tag{
-			Key:      kl[idx],
-			Value:    vl[idx],
-			Describe: dl[idx],
-		}
-		t.Weight, _ = strconv.ParseInt(wl[idx], 10, 64)
-		tti, _ := strconv.ParseInt(tl[idx], 10, 64)
-		t.Type = TagType(int32(tti))
-		i.Tags = append(i.Tags, t)
-	}
-
-	return nil
-}
-
 func (i *Information) SortTag() {
 	sort.Slice(i.Tags, func(m, n int) bool {
 		return i.Tags[m].Weight < i.Tags[n].Weight
@@ -156,8 +129,26 @@ func NewResourceSet() *ResourceSet {
 	}
 }
 
-func (r *ResourceSet) Add(item *Resource) {
-	r.Items = append(r.Items, item)
+func (s *ResourceSet) Add(item *Resource) {
+	s.Items = append(s.Items, item)
+}
+
+func (s *ResourceSet) ResourceIds() (ids []string) {
+	for i := range s.Items {
+		ids = append(ids, s.Items[i].Base.Id)
+	}
+
+	return
+}
+
+func (s *ResourceSet) UpdateTag(tags []*Tag) {
+	for i := range tags {
+		for j := range s.Items {
+			if s.Items[j].Base.Id == tags[i].ResourceId {
+				s.Items[j].Information.AddTag(tags[i])
+			}
+		}
+	}
 }
 
 type AccountGetter struct {
@@ -176,6 +167,13 @@ func NewUpdateTagRequest(resourceId string, action UpdateAction) *UpdateTagReque
 	return &UpdateTagRequest{
 		Id:     resourceId,
 		Action: action,
+	}
+}
+
+func NewDefaultTag() *Tag {
+	return &Tag{
+		Type:   TagType_USER,
+		Weight: 1,
 	}
 }
 
@@ -216,4 +214,10 @@ func NewTagsFromString(tagStr string) (tags []*Tag, err error) {
 	}
 
 	return
+}
+
+func NewTagSet() *TagSet {
+	return &TagSet{
+		Items: []*Tag{},
+	}
 }

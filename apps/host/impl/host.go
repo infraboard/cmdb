@@ -9,6 +9,7 @@ import (
 	"github.com/infraboard/mcube/sqlbuilder"
 
 	"github.com/infraboard/cmdb/apps/host"
+	"github.com/infraboard/cmdb/apps/resource/impl"
 )
 
 func (s *service) SyncHost(ctx context.Context, ins *host.Host) (
@@ -71,7 +72,12 @@ func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 	}
 
 	// 获取分页数据
-	querySQL, args := query.GroupBy("r.id").Limit(req.OffSet(), uint(req.Page.PageSize)).BuildQuery()
+	querySQL, args := query.
+		GroupBy("r.id").
+		Order("r.sync_at").
+		Desc().
+		Limit(req.OffSet(), uint(req.Page.PageSize)).
+		BuildQuery()
 	s.log.Debugf("query sql: %s", querySQL)
 
 	queryStmt, err := s.db.Prepare(querySQL)
@@ -88,7 +94,6 @@ func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 
 	var (
 		publicIPList, privateIPList, keyPairNameList, securityGroupsList string
-		tagKeys, tagValues, tagDescribe, tagWeighs, tagTypes             string
 	)
 	for rows.Next() {
 		ins := host.NewDefaultHost()
@@ -104,21 +109,23 @@ func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 			&desc.Cpu, &desc.Memory, &desc.GpuAmount, &desc.GpuSpec, &desc.OsType, &desc.OsName,
 			&desc.SerialNumber, &desc.ImageId, &desc.InternetMaxBandwidthOut, &desc.InternetMaxBandwidthIn,
 			&keyPairNameList, &securityGroupsList,
-			&tagKeys, &tagValues, &tagDescribe, &tagWeighs, &tagTypes,
 		)
 		if err != nil {
 			return nil, exception.NewInternalServerError("query host error, %s", err.Error())
 		}
 		info.LoadPrivateIPString(privateIPList)
 		info.LoadPublicIPString(publicIPList)
-		if err := info.LoadTags(tagKeys, tagValues, tagDescribe, tagWeighs, tagTypes); err != nil {
-			s.log.Error("load tags error, %s", err)
-		}
 
 		desc.LoadKeyPairNameString(keyPairNameList)
 		desc.LoadSecurityGroupsString(securityGroupsList)
 		set.Add(ins)
 	}
+
+	tags, err := impl.QueryTag(ctx, s.db, set.ResourceIds())
+	if err != nil {
+		return nil, err
+	}
+	set.UpdateTag(tags)
 
 	return set, nil
 }
@@ -139,7 +146,6 @@ func (s *service) DescribeHost(ctx context.Context, req *host.DescribeHostReques
 	ins := host.NewDefaultHost()
 	var (
 		publicIPList, privateIPList, keyPairNameList, securityGroupsList string
-		tagKeys, tagValues, tagDescribe, tagWeighs, tagTypes             string
 	)
 	base := ins.Base
 	info := ins.Information
@@ -153,7 +159,6 @@ func (s *service) DescribeHost(ctx context.Context, req *host.DescribeHostReques
 		&desc.Cpu, &desc.Memory, &desc.GpuAmount, &desc.GpuSpec, &desc.OsType, &desc.OsName,
 		&desc.SerialNumber, &desc.ImageId, &desc.InternetMaxBandwidthOut, &desc.InternetMaxBandwidthIn,
 		&keyPairNameList, &securityGroupsList,
-		&tagKeys, &tagValues, &tagDescribe, &tagWeighs, &tagTypes,
 	)
 
 	if err != nil {
@@ -165,10 +170,6 @@ func (s *service) DescribeHost(ctx context.Context, req *host.DescribeHostReques
 
 	info.LoadPrivateIPString(privateIPList)
 	info.LoadPublicIPString(publicIPList)
-	if err := info.LoadTags(tagKeys, tagValues, tagDescribe, tagWeighs, tagTypes); err != nil {
-		s.log.Error("load tags error, %s", err)
-	}
-
 	desc.LoadKeyPairNameString(keyPairNameList)
 	desc.LoadSecurityGroupsString(securityGroupsList)
 

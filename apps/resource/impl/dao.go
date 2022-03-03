@@ -4,9 +4,60 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"strings"
 
 	"github.com/infraboard/cmdb/apps/resource"
+	"github.com/infraboard/mcube/exception"
+	"github.com/infraboard/mcube/logger/zap"
+	"github.com/infraboard/mcube/sqlbuilder"
 )
+
+func QueryTag(ctx context.Context, db *sql.DB, resourceIds []string) (
+	tags []*resource.Tag, err error) {
+	if len(resourceIds) == 0 {
+		return
+	}
+
+	args, pos := []interface{}{}, []string{}
+	for _, id := range resourceIds {
+		args = append(args, id)
+		pos = append(pos, "?")
+	}
+
+	query := sqlbuilder.NewQuery(sqlQueryResourceTag)
+	inWhere := fmt.Sprintf("resource_id IN (%s)", strings.Join(pos, ","))
+	query.Where(inWhere, args...)
+	querySQL, args := query.BuildQuery()
+	zap.L().Debugf("sql: %s", querySQL)
+
+	queryStmt, err := db.Prepare(querySQL)
+	if err != nil {
+		return nil, exception.NewInternalServerError("prepare query resource tag error, %s", err.Error())
+	}
+	defer queryStmt.Close()
+
+	rows, err := queryStmt.Query(args...)
+	if err != nil {
+		return nil, exception.NewInternalServerError(err.Error())
+	}
+	defer rows.Close()
+
+	var (
+		tagId int
+	)
+	for rows.Next() {
+		ins := resource.NewDefaultTag()
+		err := rows.Scan(
+			&tagId, &ins.Key, &ins.Value, &ins.Describe, &ins.ResourceId, &ins.Weight, &ins.Type,
+		)
+		if err != nil {
+			return nil, exception.NewInternalServerError("query resource tag error, %s", err.Error())
+		}
+		tags = append(tags, ins)
+	}
+
+	return
+}
 
 func (s *service) addTag(ctx context.Context, resourceId string, tags []*resource.Tag) (
 	err error) {
@@ -44,7 +95,7 @@ func (s *service) removeTag(ctx context.Context, resourceId string, tags []*reso
 		tx.Commit()
 	}()
 
-	stmt, err = tx.Prepare(SQLDeleteResourceTag)
+	stmt, err = tx.Prepare(sqlDeleteResourceTag)
 	if err != nil {
 		err = fmt.Errorf("prepare delete tag sql error, %s", err)
 		return

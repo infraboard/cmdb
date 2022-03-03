@@ -7,6 +7,7 @@ import "github.com/infraboard/mcube/pb/page/page.proto";
 
 service Service {
     rpc Search (SearchRequest) returns (ResourceSet);
+    rpc QueryTag(QueryTagRequest) returns (TagSet);
     rpc UpdateTag (UpdateTagRequest) returns (Resource);
 }
 
@@ -173,6 +174,9 @@ enum TagType {
 }
 
 message Tag {
+    // 标签属于的资源
+    // @gotags: json:"resource_id"
+    string resource_id = 1;
     // 标签的类型
     // @gotags: json:"type"
     TagType type = 2;
@@ -191,6 +195,13 @@ message Tag {
     // 标签meta信息, 比如前端需要设置标签的颜色
     // @gotags: json:"meta"
     map<string,string> meta = 7;
+}
+
+message TagSet {
+    // @gotags: json:"total"
+    int64 total = 1;
+    // @gotags: json:"items"
+    repeated Tag items = 2;
 }
 
 message SearchRequest {
@@ -249,4 +260,10 @@ message UpdateTagRequest {
     // 需要添加的资源标签
     // @gotags: json:"tags" validate:"required"
     repeated Tag tags = 3;
+}
+
+message QueryTagRequest {
+    // 资源id
+    // @gotags: json:"resource_ids" 
+    repeated string resource_ids = 1;
 }

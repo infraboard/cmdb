@@ -23,6 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ServiceClient interface {
 	Search(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*ResourceSet, error)
+	QueryTag(ctx context.Context, in *QueryTagRequest, opts ...grpc.CallOption) (*TagSet, error)
 	UpdateTag(ctx context.Context, in *UpdateTagRequest, opts ...grpc.CallOption) (*Resource, error)
 }
 
@@ -43,6 +44,15 @@ func (c *serviceClient) Search(ctx context.Context, in *SearchRequest, opts ...g
 	return out, nil
 }
 
+func (c *serviceClient) QueryTag(ctx context.Context, in *QueryTagRequest, opts ...grpc.CallOption) (*TagSet, error) {
+	out := new(TagSet)
+	err := c.cc.Invoke(ctx, "/infraboard.cmdb.resource.Service/QueryTag", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *serviceClient) UpdateTag(ctx context.Context, in *UpdateTagRequest, opts ...grpc.CallOption) (*Resource, error) {
 	out := new(Resource)
 	err := c.cc.Invoke(ctx, "/infraboard.cmdb.resource.Service/UpdateTag", in, out, opts...)
@@ -57,6 +67,7 @@ func (c *serviceClient) UpdateTag(ctx context.Context, in *UpdateTagRequest, opt
 // for forward compatibility
 type ServiceServer interface {
 	Search(context.Context, *SearchRequest) (*ResourceSet, error)
+	QueryTag(context.Context, *QueryTagRequest) (*TagSet, error)
 	UpdateTag(context.Context, *UpdateTagRequest) (*Resource, error)
 	mustEmbedUnimplementedServiceServer()
 }
@@ -67,6 +78,9 @@ type UnimplementedServiceServer struct {
 
 func (UnimplementedServiceServer) Search(context.Context, *SearchRequest) (*ResourceSet, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
+}
+func (UnimplementedServiceServer) QueryTag(context.Context, *QueryTagRequest) (*TagSet, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method QueryTag not implemented")
 }
 func (UnimplementedServiceServer) UpdateTag(context.Context, *UpdateTagRequest) (*Resource, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateTag not implemented")
@@ -102,6 +116,24 @@ func _Service_Search_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Service_QueryTag_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryTagRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServiceServer).QueryTag(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/infraboard.cmdb.resource.Service/QueryTag",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServiceServer).QueryTag(ctx, req.(*QueryTagRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Service_UpdateTag_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateTagRequest)
 	if err := dec(in); err != nil {
@@ -130,6 +162,10 @@ var Service_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Search",
 			Handler:    _Service_Search_Handler,
+		},
+		{
+			MethodName: "QueryTag",
+			Handler:    _Service_QueryTag_Handler,
 		},
 		{
 			MethodName: "UpdateTag",

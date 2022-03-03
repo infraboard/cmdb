@@ -9,7 +9,7 @@ import (
 
 func SaveResource(tx *sql.Tx, base *resource.Base, info *resource.Information) error {
 	// 避免SQL注入, 请使用Prepare
-	stmt, err := tx.Prepare(SQLInsertResource)
+	stmt, err := tx.Prepare(sqlInsertResource)
 	if err != nil {
 		return fmt.Errorf("prepare insert resource error, %s", err)
 	}
@@ -35,7 +35,7 @@ func SaveResource(tx *sql.Tx, base *resource.Base, info *resource.Information) e
 
 func UpdateResource(tx *sql.Tx, base *resource.Base, info *resource.Information) error {
 	// 避免SQL注入, 请使用Prepare
-	stmt, err := tx.Prepare(SQLUpdateResource)
+	stmt, err := tx.Prepare(sqlUpdateResource)
 	if err != nil {
 		return fmt.Errorf("prepare update reousrce sql error, %s", err)
 	}
@@ -60,7 +60,7 @@ func UpdateResource(tx *sql.Tx, base *resource.Base, info *resource.Information)
 }
 
 func DeleteResource(tx *sql.Tx, id string) error {
-	stmt, err := tx.Prepare(SQLDeleteResource)
+	stmt, err := tx.Prepare(sqlDeleteResource)
 	if err != nil {
 		return err
 	}
@@ -71,7 +71,7 @@ func DeleteResource(tx *sql.Tx, id string) error {
 		return err
 	}
 
-	stmt, err = tx.Prepare(SQLDeleteResourceTag)
+	stmt, err = tx.Prepare(sqlDeleteResourceTag)
 	if err != nil {
 		return err
 	}
@@ -87,7 +87,7 @@ func DeleteResource(tx *sql.Tx, id string) error {
 
 func updateResourceTag(tx *sql.Tx, resourceId string, tags []*resource.Tag) error {
 	// 保存资源标签
-	stmt, err := tx.Prepare(SQLInsertOrUpdateResourceTag)
+	stmt, err := tx.Prepare(sqlInsertOrUpdateResourceTag)
 	if err != nil {
 		return fmt.Errorf("prepare update resource tag error, %s", err)
 	}

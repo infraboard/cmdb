@@ -125,9 +125,26 @@ func (s *HostSet) Add(item *Host) {
 	s.Items = append(s.Items, item)
 }
 
+func (s *HostSet) ResourceIds() (ids []string) {
+	for i := range s.Items {
+		ids = append(ids, s.Items[i].Base.Id)
+	}
+	return
+}
+
 func (s *HostSet) ToJsonString() string {
 	b, _ := json.Marshal(s)
 	return string(b)
+}
+
+func (s *HostSet) UpdateTag(tags []*resource.Tag) {
+	for i := range tags {
+		for j := range s.Items {
+			if s.Items[j].Base.Id == tags[i].ResourceId {
+				s.Items[j].Information.AddTag(tags[i])
+			}
+		}
+	}
 }
 
 func (req *DescribeHostRequest) Where() (string, interface{}) {

@@ -12,7 +12,7 @@ import (
 
 func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 	*resource.ResourceSet, error) {
-	query := sqlbuilder.NewQuery(SQLQueryResource)
+	query := sqlbuilder.NewQuery(sqlQueryResource)
 	s.buildQuery(query, req)
 
 	set := resource.NewResourceSet()
@@ -31,7 +31,12 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 	}
 
 	// 获取分页数据
-	querySQL, args := query.Order("sync_at").Desc().Limit(req.Page.ComputeOffset(), uint(req.Page.PageSize)).BuildQuery()
+	querySQL, args := query.
+		GroupBy("r.id").
+		Order("r.sync_at").
+		Desc().
+		Limit(req.Page.ComputeOffset(), uint(req.Page.PageSize)).
+		BuildQuery()
 	s.log.Debugf("sql: %s", querySQL)
 
 	queryStmt, err := s.db.Prepare(querySQL)
@@ -47,8 +52,7 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 	defer rows.Close()
 
 	var (
-		publicIPList, privateIPList                          string
-		tagKeys, tagValues, tagDescribe, tagWeighs, tagTypes string
+		publicIPList, privateIPList string
 	)
 
 	for rows.Next() {
@@ -61,18 +65,20 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 			&info.Status, &info.UpdateAt, &base.SyncAt, &info.SyncAccount,
 			&publicIPList, &privateIPList, &info.PayType, &base.DescribeHash, &base.ResourceHash,
 			&base.SecretId, &base.Domain, &base.Namespace, &base.Env, &base.UsageMode,
-			&tagKeys, &tagValues, &tagDescribe, &tagWeighs, &tagTypes,
 		)
 		if err != nil {
 			return nil, exception.NewInternalServerError("query resource error, %s", err.Error())
 		}
 		info.LoadPrivateIPString(privateIPList)
 		info.LoadPublicIPString(publicIPList)
-		if err := info.LoadTags(tagKeys, tagValues, tagDescribe, tagWeighs, tagTypes); err != nil {
-			s.log.Error("load tags error, %s", err)
-		}
 		set.Add(ins)
 	}
+
+	tags, err := QueryTag(ctx, s.db, set.ResourceIds())
+	if err != nil {
+		return nil, err
+	}
+	set.UpdateTag(tags)
 
 	return set, nil
 }
@@ -130,7 +136,7 @@ func (s *service) buildQuery(query *sqlbuilder.Query, req *resource.SearchReques
 			continue
 		}
 		for i := range v {
-			inset = append(inset, v[i].Value)
+			inset = append(inset, fmt.Sprintf("'%s'", v[i].Value))
 		}
 		query.Where(fmt.Sprintf("t.t_key=? AND t.t_value IN (%s)", strings.Join(inset, ",")), k)
 	}
@@ -150,4 +156,15 @@ func (s *service) UpdateTag(ctx context.Context, req *resource.UpdateTagRequest)
 		return nil, fmt.Errorf("unknow update tag action: %s", req.Action)
 	}
 	return nil, nil
+}
+
+func (s *service) QueryTag(ctx context.Context, req *resource.QueryTagRequest) (
+	*resource.TagSet, error) {
+	set := resource.NewTagSet()
+	tags, err := QueryTag(ctx, s.db, req.ResourceIds)
+	if err != nil {
+		return nil, err
+	}
+	set.Items = tags
+	return set, nil
 }

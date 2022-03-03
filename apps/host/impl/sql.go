@@ -15,12 +15,7 @@ const (
 
 	queryHostSQL = `SELECT
 	r.*,
-	h.*,
-	IFNULL(GROUP_CONCAT(t.t_key),'') tag_keys,
-	IFNULL(GROUP_CONCAT(t.t_value), '') tag_values,
-	IFNULL(GROUP_CONCAT(t.description), '') tag_describes,
-	IFNULL(GROUP_CONCAT(t.weight), '') tag_weights,
-	IFNULL(GROUP_CONCAT(t.type), '') tag_types  
+	h.*
 	FROM
 	resource AS r
 	LEFT JOIN host h ON r.id = h.resource_id
