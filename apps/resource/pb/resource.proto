@@ -189,7 +189,7 @@ message Tag {
     // @gotags: json:"weight"
     int64 weight = 6;
     // 标签meta信息, 比如前端需要设置标签的颜色
-    // @gotags: json:"weight"
+    // @gotags: json:"meta"
     map<string,string> meta = 7;
 }
 

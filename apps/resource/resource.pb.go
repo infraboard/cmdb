@@ -879,8 +879,8 @@ type Tag struct {
 	// @gotags: json:"weight"
 	Weight int64 `protobuf:"varint,6,opt,name=weight,proto3" json:"weight"`
 	// 标签meta信息, 比如前端需要设置标签的颜色
-	// @gotags: json:"weight"
-	Meta map[string]string `protobuf:"bytes,7,rep,name=meta,proto3" json:"weight" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	// @gotags: json:"meta"
+	Meta map[string]string `protobuf:"bytes,7,rep,name=meta,proto3" json:"meta" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
 func (x *Tag) Reset() {

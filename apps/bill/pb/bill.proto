@@ -99,9 +99,15 @@ message ShareUnit {
     // 账单月当时标签
     // @gotags: json:"tag"
     infraboard.cmdb.resource.Tag tag = 1;
+    // 该成本单元的总权重, 用于计算分摊比例
+    // @gotags: json:"total_weight"
+    int64 total_weight = 2;
+    // 分摊逻辑描述, 比如 instance_cost * percent 
+    // @gotags: json:"share_describe"
+    string share_describe = 3;
     // 具体分摊额度, 具体金额根据标签权重进行计算
     // @gotags: json:"cost"
-    Cost cost = 2;
+    Cost cost = 4;
 }
 
 message BillSet {
