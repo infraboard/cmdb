@@ -102,6 +102,12 @@ message Describe {
     // 额外的无法通用的一些属性, 比如只有腾讯云独有的一些属性
     // @gotags: json:"extra"
     map<string, string> extra = 27;
+    // 实例链接地址
+    // @gotags: json:"connection_addr"
+    repeated ConnectionAddr connection_addr = 28;
+    // 数据库
+    // @gotags: json:"databases"
+    repeated Database databases = 29;
 }
 
 message Set {
@@ -117,4 +123,60 @@ message QueryRDSRequest {
     // 分页参数
     // @gotags: json:"page"
     infraboard.mcube.page.PageRequest page = 1;
+}
+
+message Database {
+    // 数据库 库的名称
+    // @gotags: json:"name"
+    string name = 1;
+    // 数据库实例类型
+    // @gotags: json:"engine"
+    string engine =2;
+    // 数据库状态
+    // @gotags: json:"status"
+    string status =3;
+    // 字符集
+    // @gotags: json:"character_set"
+    string character_set =4;
+    // 数据库描述
+    // @gotags: json:"description"
+    string description = 5;
+    // 数据库账号
+    // @gotags: json:"description"
+    repeated Account accounts = 6;
+}
+
+// 数据库 账号信息
+message Account {
+    // 账号名称
+    // @gotags: json:"name"
+    string name = 1;
+    // 账号对该数据库拥有的权限
+    // @gotags: json:"account_privilege"
+    string account_privilege = 2;
+    // 账号对该数据库具有的权限。
+    // @gotags: json:"account_privilege_detail"
+    string account_privilege_detail = 3;
+    // 账号描述
+    // @gotags: json:"description"
+    string description = 4;
+    // 创建时间
+    // @gotags: json:"create_at"
+    int64 create_at = 5;
+    // 修改时间
+    // @gotags: json:"modify_at"
+    int64 modify_at = 6;
+}
+
+// 数据库 连接地址
+message ConnectionAddr {
+    // 连接地址类型, 内网链接/公网链接
+   // @gotags: json:"type"
+    string type = 1;
+    // 连接地址
+   // @gotags: json:"host"
+    string host = 2;
+    // 连接端口
+   // @gotags: json:"port"
+    int64 port = 3;
 }

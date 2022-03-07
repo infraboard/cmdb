@@ -41,6 +41,7 @@ func (h *handler) Registry(r router.SubRouter) {
 	rr.Handle("DELETE", "/resources/:id/tags", h.RemoveTag).AddLabel(label.Update)
 
 	// 资源发现
+	// 需要携带的标签, domain, namesapce, env, vendor, region, account, instance_id, ip
 }
 
 func init() {

@@ -120,9 +120,22 @@ message Base {
     // 使用方式
     // @gotags: json:"usage_mode"
     UsageMode usage_mode = 16;
+    // 共享策略, 当一个资源被多个应用共享时, 可以指定允许的应用
+    // @gotags: json:"shared_policy"
+    SharedPolicy shared_policy = 17;
     // 资源所属域
     // @gotags: json:"domain"
-    string domain = 17;
+    string domain = 18;
+}
+
+// 共享策略
+message SharedPolicy {
+    // 分享的维度
+    // @gotags: json:"tag_key"
+    string tag_key = 1;
+    // 分享给哪些值
+    // @gotags: json:"tag_values"
+    repeated string tag_values = 2;
 }
 
 message Information {
@@ -153,10 +166,10 @@ message Information {
     // 同步的账号
     // @gotags: json:"sync_account"
     string sync_account = 9;
-    // 公网IP
+    // 公网IP, 或者域名
     // @gotags: json:"public_ip"
     repeated string public_ip = 10;
-    // 内网IP
+    // 内网IP, 或者域名
     // @gotags: json:"private_ip"
     repeated string private_ip = 11;
     // 实例付费方式
