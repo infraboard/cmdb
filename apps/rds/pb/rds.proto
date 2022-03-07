@@ -142,7 +142,7 @@ message Database {
     // @gotags: json:"description"
     string description = 5;
     // 数据库账号
-    // @gotags: json:"description"
+    // @gotags: json:"accounts"
     repeated Account accounts = 6;
 }
 
