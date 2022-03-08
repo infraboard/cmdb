@@ -9,8 +9,6 @@ service Service {
     rpc Search (SearchRequest) returns (ResourceSet);
     rpc QueryTag(QueryTagRequest) returns (TagSet);
     rpc UpdateTag (UpdateTagRequest) returns (Resource);
-    rpc UpdateFavorite(UpdateFavoriteRequest) returns (Resource);
-    rpc QueryUserResource(QueryUserResourceRequest) returns (ResourceSet);
 }
 
 enum Vendor {
@@ -247,15 +245,19 @@ message SearchRequest {
     // 服务商中的状态
     // @gotags: json:"status"
     string status = 9;
-   // 账单月当时标签
+    // 资源标签
     // @gotags: json:"tags"
     repeated Tag tags = 10;
+    // 是否返回资源的标签
+    // @gotags: json:"with_tags"
+    bool with_tags = 11;
     // 关键字参数
     // @gotags: json:"keywords"
     string keywords = 14;
     // 是否精确匹配
     // @gotags: json:"exact_match"
     bool exact_match = 15;
+    
 }
 
 enum UpdateAction {
@@ -269,7 +271,7 @@ message UpdateTagRequest {
     // 资源id
     // @gotags: json:"id" validate:"required"
     string id = 1;
-    // 更新动作
+    // 资源id
     // @gotags: json:"action"
     UpdateAction action = 2;
     // 需要添加的资源标签
@@ -281,75 +283,4 @@ message QueryTagRequest {
     // 资源id
     // @gotags: json:"resource_ids" 
     repeated string resource_ids = 1;
-}
-
-// 用户最近浏览的资源统计
-message BrowseHistory {
-    // 用户所处域
-    // @gotags: json:"domain" 
-    string domain = 1;
-    // 用户
-    // @gotags: json:"account" 
-    string account = 2;
-    // 资源Id
-    // @gotags: json:"resource_id" 
-    string resource_id = 3;
-    // 最近一次访问时间
-    // @gotags: json:"latest_at" 
-    int64 latest_at = 4;
-    // 总共访问多少次, 用于Top统计
-    // @gotags: json:"total_access" 
-    int64 total_access = 5;
-}
-
-// 用户收藏的资源
-message Favorite {
-    // 用户所处域
-    // @gotags: json:"domain" 
-    string domain = 1;
-    // 用户
-    // @gotags: json:"account" 
-    string account = 2;
-    // 资源Id
-    // @gotags: json:"resource_id" 
-    string resource_id = 3;
-    // 收藏时间
-    // @gotags: json:"add_at" 
-    int64 add_at = 4;
-}
-
-message UpdateFavoriteRequest {
-    // 用户所处域
-    // @gotags: json:"domain" 
-    string domain = 1;
-    // 用户
-    // @gotags: json:"account" 
-    string account = 2;
-    // 资源Id
-    // @gotags: json:"resource_id" 
-    string resource_id = 3;
-    // 更新动作
-    // @gotags: json:"action"
-    UpdateAction action = 4;
-}
-
-// 用户动作
-enum UserAction {
-    // 用户浏览过的
-    BROWSED = 1;
-    // 用户收藏
-    FAVORITE = 2;
-}
-
-// 查阅关于用户的资源
-message QueryUserResourceRequest {
-    // 用户所处域
-    // @gotags: json:"domain" 
-    string domain = 1;
-    // 用户
-    // @gotags: json:"account" 
-    string account = 2;
-    // 用户动作
-    // @gotags: json:"action" 
-    UserAction action = 3;
 }

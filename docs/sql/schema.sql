@@ -206,9 +206,10 @@ CREATE TABLE `tag` (
   `resource_id` varchar(64) CHARACTER SET latin1 NOT NULL COMMENT '标签关联的资源Id',
   `weight` int(11) NOT NULL COMMENT '标签权重',
   `type` tinyint(4) NOT NULL COMMENT '标签类型',
+  `create_at` bigint(13) NOT NULL COMMENT '标签创建时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_id` (`t_key`,`t_value`,`resource_id`) COMMENT '一个资源同一个key value只允许有一对',
   KEY `idx_key` (`t_key`) USING HASH,
   KEY `idx_value` (`t_value`) USING BTREE,
   KEY `idx_resource_id` (`resource_id`) USING HASH
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='资源标签'
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COMMENT='资源标签'

@@ -12,7 +12,13 @@ import (
 
 func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 	*resource.ResourceSet, error) {
-	query := sqlbuilder.NewQuery(sqlQueryResource)
+	// 为了提升效率, 当有Tag查询时, 采用右关联查询
+	join := "LEFT"
+	if req.HasTag() {
+		join = "RIGHT"
+	}
+
+	query := sqlbuilder.NewQuery(fmt.Sprintf(sqlQueryResource, join))
 	s.buildQuery(query, req)
 
 	set := resource.NewResourceSet()
@@ -30,10 +36,16 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 		return nil, exception.NewInternalServerError(err.Error())
 	}
 
+	// tag查询时，以tag时间排序
+	if req.HasTag() {
+		query.Order("t.create_at")
+	} else {
+		query.Order("r.create_at")
+	}
+
 	// 获取分页数据
 	querySQL, args := query.
 		GroupBy("r.id").
-		Order("r.sync_at").
 		Desc().
 		Limit(req.Page.ComputeOffset(), uint(req.Page.PageSize)).
 		BuildQuery()
@@ -74,11 +86,14 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 		set.Add(ins)
 	}
 
-	tags, err := QueryTag(ctx, s.db, set.ResourceIds())
-	if err != nil {
-		return nil, err
+	// 补充资源的标签
+	if req.WithTags {
+		tags, err := QueryTag(ctx, s.db, set.ResourceIds())
+		if err != nil {
+			return nil, err
+		}
+		set.UpdateTag(tags)
 	}
-	set.UpdateTag(tags)
 
 	return set, nil
 }
@@ -143,19 +158,22 @@ func (s *service) buildQuery(query *sqlbuilder.Query, req *resource.SearchReques
 }
 
 func (s *service) UpdateTag(ctx context.Context, req *resource.UpdateTagRequest) (
-	*resource.Resource, error) {
-	if err := req.Validate(); err != nil {
-		return nil, exception.NewBadRequest("validate update tag request error, %s", err)
+	ins *resource.Resource, err error) {
+	if err = req.Validate(); err != nil {
+		err = exception.NewBadRequest("validate update tag request error, %s", err)
+		return
 	}
+
 	switch req.Action {
 	case resource.UpdateAction_ADD:
-		s.addTag(ctx, req.Id, req.Tags)
+		err = s.addTag(ctx, req.Id, req.Tags)
 	case resource.UpdateAction_REMOVE:
-		s.removeTag(ctx, req.Id, req.Tags)
+		err = s.removeTag(ctx, req.Id, req.Tags)
 	default:
-		return nil, fmt.Errorf("unknow update tag action: %s", req.Action)
+		err = fmt.Errorf("unknow update tag action: %s", req.Action)
 	}
-	return nil, nil
+
+	return
 }
 
 func (s *service) QueryTag(ctx context.Context, req *resource.QueryTagRequest) (

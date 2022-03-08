@@ -3,6 +3,7 @@ package impl
 import (
 	"database/sql"
 	"fmt"
+	"time"
 
 	"github.com/infraboard/cmdb/apps/resource"
 )
@@ -99,7 +100,7 @@ func updateResourceTag(tx *sql.Tx, resourceId string, tags []*resource.Tag) erro
 			t.Weight = 1
 		}
 		_, err = stmt.Exec(
-			t.Type, t.Key, t.Value, t.Describe, resourceId, t.Weight,
+			t.Type, t.Key, t.Value, t.Describe, resourceId, t.Weight, time.Now().UnixMilli(),
 			t.Describe, t.Weight,
 		)
 		if err != nil {

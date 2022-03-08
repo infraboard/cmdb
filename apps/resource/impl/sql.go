@@ -14,14 +14,9 @@ const (
 		secret_id=?,namespace=?,env=?,usage_mode=?
 	WHERE id = ?`
 	sqlDeleteResource = `DELETE FROM resource WHERE id = ?;`
-	sqlQueryResource  = `
-	SELECT
-		r.*
-	FROM
-		resource r
-		LEFT JOIN tag t ON r.id = t.resource_id`
+	sqlQueryResource  = `SELECT r.* FROM resource r %s JOIN tag t ON r.id = t.resource_id`
 
-	sqlQueryResourceTag  = `SELECT * FROM tag`
+	sqlQueryResourceTag  = `SELECT t_key,t_value,description,resource_id,weight,type FROM tag`
 	sqlDeleteResourceTag = `
 		DELETE 
 		FROM
@@ -32,9 +27,9 @@ const (
 			AND t_value =?;
 	`
 	sqlInsertOrUpdateResourceTag = `
-		INSERT INTO tag ( type, t_key, t_value, description, resource_id, weight )
+		INSERT INTO tag ( type, t_key, t_value, description, resource_id, weight, create_at)
 		VALUES
-			( ?,?,?,?,?,? ) 
+			( ?,?,?,?,?,?,? ) 
 			ON DUPLICATE KEY UPDATE description =
 		IF
 			( type != 1,?, description ),

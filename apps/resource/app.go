@@ -36,6 +36,7 @@ func NewSearchRequestFromHTTP(r *http.Request) (*SearchRequest, error) {
 		Env:         qs.Get("env"),
 		Status:      qs.Get("status"),
 		SyncAccount: qs.Get("sync_account"),
+		WithTags:    qs.Get("with_tags") == "true",
 	}
 
 	umStr := qs.Get("usage_mode")
@@ -80,6 +81,13 @@ func (req *SearchRequest) GroupByKey() map[string][]*Tag {
 	}
 
 	return gt
+}
+
+func (req *SearchRequest) HasTag() bool {
+	if req.Tags == nil {
+		return false
+	}
+	return len(req.Tags) > 0
 }
 
 func NewDefaultResource() *Resource {
