@@ -280,3 +280,22 @@ message QueryTagRequest {
     // @gotags: json:"resource_ids" 
     repeated string resource_ids = 1;
 }
+
+// 用户最常用的资源
+message Favorite {
+    // 用户所处域
+    // @gotags: json:"domain" 
+    string domain = 1;
+    // 用户
+    // @gotags: json:"account" 
+    string account = 2;
+    // 资源Id
+    // @gotags: json:"resource_id" 
+    string resource_id = 3;
+    // 最近一次访问时间
+    // @gotags: json:"latest_at" 
+    int64 latest_at = 4;
+    // 总共访问多少次, 用于Top统计
+    // @gotags: json:"total_access" 
+    int64 total_access = 5;
+}
