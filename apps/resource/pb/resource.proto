@@ -10,6 +10,7 @@ service Service {
     rpc QueryTag(QueryTagRequest) returns (TagSet);
     rpc UpdateTag (UpdateTagRequest) returns (Resource);
     rpc UpdateFavorite(UpdateFavoriteRequest) returns (Resource);
+    rpc QueryUserResource(QueryUserResourceRequest) returns (ResourceSet);
 }
 
 enum Vendor {
@@ -282,8 +283,8 @@ message QueryTagRequest {
     repeated string resource_ids = 1;
 }
 
-// 用户最近访问的资源统计
-message LatestAccess {
+// 用户最近浏览的资源统计
+message BrowseHistory {
     // 用户所处域
     // @gotags: json:"domain" 
     string domain = 1;
@@ -330,4 +331,25 @@ message UpdateFavoriteRequest {
     // 更新动作
     // @gotags: json:"action"
     UpdateAction action = 4;
+}
+
+// 用户动作
+enum UserAction {
+    // 用户浏览过的
+    BROWSED = 1;
+    // 用户收藏
+    FAVORITE = 2;
+}
+
+// 查阅关于用户的资源
+message QueryUserResourceRequest {
+    // 用户所处域
+    // @gotags: json:"domain" 
+    string domain = 1;
+    // 用户
+    // @gotags: json:"account" 
+    string account = 2;
+    // 用户动作
+    // @gotags: json:"action" 
+    UserAction action = 3;
 }
