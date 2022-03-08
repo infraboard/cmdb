@@ -9,6 +9,7 @@ service Service {
     rpc Search (SearchRequest) returns (ResourceSet);
     rpc QueryTag(QueryTagRequest) returns (TagSet);
     rpc UpdateTag (UpdateTagRequest) returns (Resource);
+    rpc UpdateFavorite(UpdateFavoriteRequest) returns (Resource);
 }
 
 enum Vendor {
@@ -267,7 +268,7 @@ message UpdateTagRequest {
     // 资源id
     // @gotags: json:"id" validate:"required"
     string id = 1;
-    // 资源id
+    // 更新动作
     // @gotags: json:"action"
     UpdateAction action = 2;
     // 需要添加的资源标签
@@ -281,8 +282,8 @@ message QueryTagRequest {
     repeated string resource_ids = 1;
 }
 
-// 用户最常用的资源
-message Favorite {
+// 用户最近访问的资源统计
+message LatestAccess {
     // 用户所处域
     // @gotags: json:"domain" 
     string domain = 1;
@@ -298,4 +299,35 @@ message Favorite {
     // 总共访问多少次, 用于Top统计
     // @gotags: json:"total_access" 
     int64 total_access = 5;
+}
+
+// 用户收藏的资源
+message Favorite {
+    // 用户所处域
+    // @gotags: json:"domain" 
+    string domain = 1;
+    // 用户
+    // @gotags: json:"account" 
+    string account = 2;
+    // 资源Id
+    // @gotags: json:"resource_id" 
+    string resource_id = 3;
+    // 收藏时间
+    // @gotags: json:"add_at" 
+    int64 add_at = 4;
+}
+
+message UpdateFavoriteRequest {
+    // 用户所处域
+    // @gotags: json:"domain" 
+    string domain = 1;
+    // 用户
+    // @gotags: json:"account" 
+    string account = 2;
+    // 资源Id
+    // @gotags: json:"resource_id" 
+    string resource_id = 3;
+    // 更新动作
+    // @gotags: json:"action"
+    UpdateAction action = 4;
 }
