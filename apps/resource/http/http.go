@@ -41,7 +41,7 @@ func (h *handler) Registry(r router.SubRouter) {
 	rr.Handle("DELETE", "/resources/:id/tags", h.RemoveTag).AddLabel(label.Update)
 
 	// 资源发现
-	rr.Handle("DELETE", "/discovery/prometheus", h.DiscoveryPrometheus).AddLabel(label.List)
+	rr.Handle("GET", "/discovery/prometheus", h.DiscoveryPrometheus).DisableAuth()
 }
 
 func init() {
