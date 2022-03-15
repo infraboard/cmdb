@@ -159,6 +159,13 @@ func (s *ResourceSet) UpdateTag(tags []*Tag) {
 	}
 }
 
+func (s *ResourceSet) PrometheusFormat() (targets []*PrometheusTarget) {
+	for i := range s.Items {
+		targets = append(targets, s.Items[i].PrometheusTarget())
+	}
+	return
+}
+
 type AccountGetter struct {
 	accountId string
 }
