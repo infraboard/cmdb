@@ -37,7 +37,7 @@ func NewSearchRequestFromHTTP(r *http.Request) (*SearchRequest, error) {
 		Env:         qs.Get("env"),
 		Status:      qs.Get("status"),
 		SyncAccount: qs.Get("sync_account"),
-		WithTags:    qs.Get("with_tags") == "true",
+		WithTags:    true,
 	}
 
 	umStr := qs.Get("usage_mode")
@@ -58,13 +58,14 @@ func NewSearchRequestFromHTTP(r *http.Request) (*SearchRequest, error) {
 		req.Type = &rt
 	}
 
+	req.Tags = []*Tag{NewPrometheusScrapeTag()}
 	tgStr := qs.Get("tag")
 	if tgStr != "" {
 		tg, err := NewTagsFromString(tgStr)
 		if err != nil {
 			return nil, err
 		}
-		req.Tags = tg
+		req.AddTag(tg...)
 	}
 
 	return req, nil
@@ -91,8 +92,8 @@ func (req *SearchRequest) HasTag() bool {
 	return len(req.Tags) > 0
 }
 
-func (req *SearchRequest) AddTag(t *Tag) {
-	req.Tags = append(req.Tags, t)
+func (req *SearchRequest) AddTag(t ...*Tag) {
+	req.Tags = append(req.Tags, t...)
 }
 
 func NewDefaultResource() *Resource {
