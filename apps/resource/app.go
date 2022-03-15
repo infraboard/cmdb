@@ -9,6 +9,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/http/request"
+	"github.com/infraboard/mcube/logger/zap"
 )
 
 var (
@@ -90,6 +91,10 @@ func (req *SearchRequest) HasTag() bool {
 	return len(req.Tags) > 0
 }
 
+func (req *SearchRequest) AddTag(t *Tag) {
+	req.Tags = append(req.Tags, t)
+}
+
 func NewDefaultResource() *Resource {
 	return &Resource{
 		Base:        &Base{},
@@ -131,6 +136,17 @@ func (i *Information) Hash() string {
 	return utils.Hash(i)
 }
 
+func (r *Resource) GetTagValueOne(key string) string {
+	tags := r.Information.Tags
+	for i := range tags {
+		if tags[i].Key == key {
+			return tags[i].Value
+		}
+	}
+
+	return ""
+}
+
 func NewResourceSet() *ResourceSet {
 	return &ResourceSet{
 		Items: []*Resource{},
@@ -161,7 +177,15 @@ func (s *ResourceSet) UpdateTag(tags []*Tag) {
 
 func (s *ResourceSet) PrometheusFormat() (targets []*PrometheusTarget) {
 	for i := range s.Items {
-		targets = append(targets, s.Items[i].PrometheusTarget())
+		item := s.Items[i]
+		if item.GetTagValueOne(PROMETHEUS_SCRAPE) == "true" {
+			t, err := item.PrometheusTarget()
+			if err != nil {
+				zap.L().Errorf("new Prometheus Target errror, %s", err)
+				continue
+			}
+			targets = append(targets, t)
+		}
 	}
 	return
 }
