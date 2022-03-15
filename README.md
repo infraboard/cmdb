@@ -26,13 +26,13 @@ func main() {
 	conf.WithClientCredentials("xx", "xx")
 
     // 创建CMDB客户端
-	cmdb, err := client.NewClient(conf)
+	client, err := client.NewClientSet(conf)
 	if err != nil {
 		panic(err)
 	}
 
     // 服务调用
-	rs, err := cmdb.Resource().Search(context.Background(), resource.NewSearchRequest())
+	rs, err := client.Resource().Search(context.Background(), resource.NewSearchRequest())
 	if err != nil {
 		panic(err)
 	}

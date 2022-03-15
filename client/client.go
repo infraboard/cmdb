@@ -17,7 +17,7 @@ import (
 )
 
 // NewClient todo
-func NewClient(conf *Config) (*ClientSet, error) {
+func NewClientSet(conf *Config) (*ClientSet, error) {
 	zap.DevelopmentSetup()
 
 	dialOptions := []grpc.DialOption{
