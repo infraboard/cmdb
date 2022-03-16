@@ -38,7 +38,7 @@ func NewSearchRequestFromHTTP(r *http.Request) (*SearchRequest, error) {
 		Status:      qs.Get("status"),
 		SyncAccount: qs.Get("sync_account"),
 		WithTags:    qs.Get("with_tags") == "true",
-		Tags:        []*Tag{},
+		Tags:        []*TagSelector{},
 	}
 
 	umStr := qs.Get("usage_mode")
@@ -71,20 +71,6 @@ func NewSearchRequestFromHTTP(r *http.Request) (*SearchRequest, error) {
 	return req, nil
 }
 
-func (req *SearchRequest) GroupByKey() map[string][]*Tag {
-	gt := map[string][]*Tag{}
-	for i := range req.Tags {
-		t := req.Tags[i]
-		if _, ok := gt[t.Key]; !ok {
-			gt[t.Key] = []*Tag{}
-		}
-
-		gt[t.Key] = append(gt[t.Key], t)
-	}
-
-	return gt
-}
-
 func (req *SearchRequest) HasTag() bool {
 	if req.Tags == nil {
 		return false
@@ -92,7 +78,7 @@ func (req *SearchRequest) HasTag() bool {
 	return len(req.Tags) > 0
 }
 
-func (req *SearchRequest) AddTag(t ...*Tag) {
+func (req *SearchRequest) AddTag(t ...*TagSelector) {
 	req.Tags = append(req.Tags, t...)
 }
 
@@ -243,14 +229,14 @@ const (
 	Operator_NOT_LIKE_EQUAL = "!~"
 )
 
-func ParExpr(str string) (*Tag, error) {
+func ParExpr(str string) (*TagSelector, error) {
 	var (
 		op = ""
 		kv = []string{}
 	)
 
 	if strings.Contains(str, Operator_LIKE_EQUAL) {
-		op = "LIKE"
+		op = Operator_LIKE_EQUAL
 		kv = strings.Split(str, Operator_LIKE_EQUAL)
 	} else if strings.Contains(str, Operator_NOT_LIKE_EQUAL) {
 		op = "NOT LIKE"
@@ -269,20 +255,27 @@ func ParExpr(str string) (*Tag, error) {
 		return nil, fmt.Errorf("key,value format error, requred key=value")
 	}
 
-	return &Tag{
-		Key:      kv[0],
-		Describe: op,
-		Value:    kv[1],
-	}, nil
+	selector := &TagSelector{
+		Key:     kv[0],
+		Opertor: op,
+		Values:  []string{},
+	}
+
+	// 如果Value等于*表示只匹配key
+	if kv[1] != "*" {
+		selector.Values = strings.Split(kv[1], ",")
+	}
+
+	return selector, nil
 }
 
-// key=v1,key=~value
-func NewTagsFromString(tagStr string) (tags []*Tag, err error) {
+// key1=v1,v2,v3&key2=~v1,v2,v3
+func NewTagsFromString(tagStr string) (tags []*TagSelector, err error) {
 	if tagStr == "" {
 		return
 	}
 
-	items := strings.Split(tagStr, ",")
+	items := strings.Split(tagStr, "&")
 	for _, v := range items {
 		t, err := ParExpr(v)
 		if err != nil {
@@ -292,6 +285,17 @@ func NewTagsFromString(tagStr string) (tags []*Tag, err error) {
 	}
 
 	return
+}
+
+func (s *TagSelector) RelationShip() string {
+	switch s.Opertor {
+	case Operator_EQUAL, Operator_LIKE_EQUAL:
+		return " OR "
+	case Operator_NOT_EQUAL, Operator_NOT_LIKE_EQUAL:
+		return " AND "
+	default:
+		return " OR "
+	}
 }
 
 func NewTagSet() *TagSet {

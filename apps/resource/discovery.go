@@ -3,15 +3,15 @@ package resource
 import "fmt"
 
 const (
-	PROMETHEUS_SCRAPE = "prometheus.io/scrape"
-	PROMETHEUS_PORT   = "prometheus.io/port"
-	PROMETHEUS_PATH   = "prometheus.io/path"
+	PROMETHEUS_SCRAPE = "prometheus.io/%/enabled"
+	PROMETHEUS_PORT   = "prometheus.io/%s/port"
+	PROMETHEUS_PATH   = "prometheus.io/%s/path"
 )
 
-func NewPrometheusScrapeTag() *Tag {
-	return &Tag{
-		Key:   PROMETHEUS_SCRAPE,
-		Value: "true",
+func NewPrometheusScrapeTag() *TagSelector {
+	return &TagSelector{
+		Key:    PROMETHEUS_SCRAPE,
+		Values: []string{},
 	}
 }
 

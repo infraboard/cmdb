@@ -145,24 +145,27 @@ func (s *service) buildQuery(query *sqlbuilder.Query, req *resource.SearchReques
 	}
 
 	// Tag过滤
-	for k, v := range req.GroupByKey() {
-		if len(v) == 0 {
+	for i := range req.Tags {
+		selector := req.Tags[i]
+		if selector.Key == "" {
 			continue
 		}
+
 		// 添加Key过滤条件
-		query.Where("t.t_key LIKE ?", k)
+		query.Where("t.t_key LIKE ?", selector.Key)
 
 		// 添加Value过滤条件
 		condtions := []string{}
 		args := []interface{}{}
-		for i := range v {
-			condtions = append(condtions, fmt.Sprintf("t.t_value %s ?", v[i].Describe))
-			args = append(args, v[i].Value)
+		for v := range selector.Values {
+			condtions = append(condtions, fmt.Sprintf("t.t_value %s ?", selector.Opertor))
+			args = append(args, v)
 		}
 
-		vwhere := fmt.Sprintf("( %s )", strings.Join(condtions, " OR "))
+		vwhere := fmt.Sprintf("( %s )", strings.Join(condtions, selector.RelationShip()))
 		query.Where(vwhere, args...)
 	}
+
 }
 
 func (s *service) UpdateTag(ctx context.Context, req *resource.UpdateTagRequest) (

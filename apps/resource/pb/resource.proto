@@ -250,7 +250,7 @@ message SearchRequest {
     string status = 9;
     // 资源标签
     // @gotags: json:"tags"
-    repeated Tag tags = 10;
+    repeated TagSelector tags = 10;
     // 是否返回资源的标签
     // @gotags: json:"with_tags"
     bool with_tags = 11;
@@ -260,7 +260,18 @@ message SearchRequest {
     // 是否精确匹配
     // @gotags: json:"exact_match"
     bool exact_match = 15;
-    
+}
+
+message TagSelector {
+    // 匹配的key, 支持LIKE匹配
+    // @gotags: json:"key"
+    string key = 1;
+    // 匹配符
+    // @gotags: json:"opertor"
+    string opertor = 2;
+    // 匹配的值
+    // @gotags: json:"values"
+    repeated string values = 3;
 }
 
 enum UpdateAction {
