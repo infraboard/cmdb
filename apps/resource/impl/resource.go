@@ -146,14 +146,22 @@ func (s *service) buildQuery(query *sqlbuilder.Query, req *resource.SearchReques
 
 	// Tag过滤
 	for k, v := range req.GroupByKey() {
-		inset := []string{}
 		if len(v) == 0 {
 			continue
 		}
+		// 添加Key过滤条件
+		query.Where("t.t_key LIKE ?", k)
+
+		// 添加Value过滤条件
+		condtions := []string{}
+		args := []interface{}{}
 		for i := range v {
-			inset = append(inset, fmt.Sprintf("'%s'", v[i].Value))
+			condtions = append(condtions, fmt.Sprintf("t.t_value %s ?", v[i].Describe))
+			args = append(args, v[i].Value)
 		}
-		query.Where(fmt.Sprintf("t.t_key=? AND t.t_value IN (%s)", strings.Join(inset, ",")), k)
+
+		vwhere := fmt.Sprintf("( %s )", strings.Join(condtions, " OR "))
+		query.Where(vwhere, args...)
 	}
 }
 

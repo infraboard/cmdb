@@ -234,7 +234,49 @@ func (req *UpdateTagRequest) Validate() error {
 	return validate.Struct(req)
 }
 
-// key=value,key=value
+type Operator string
+
+const (
+	Operator_EQUAL          = "="
+	Operator_NOT_EQUAL      = "!="
+	Operator_LIKE_EQUAL     = "=~"
+	Operator_NOT_LIKE_EQUAL = "!~"
+)
+
+func ParExpr(str string) (*Tag, error) {
+	var (
+		op = ""
+		kv = []string{}
+	)
+
+	if strings.Contains(str, Operator_LIKE_EQUAL) {
+		op = "LIKE"
+		kv = strings.Split(str, Operator_LIKE_EQUAL)
+	} else if strings.Contains(str, Operator_NOT_LIKE_EQUAL) {
+		op = "NOT LIKE"
+		kv = strings.Split(str, Operator_NOT_LIKE_EQUAL)
+	} else if strings.Contains(str, Operator_NOT_EQUAL) {
+		op = "!="
+		kv = strings.Split(str, Operator_NOT_EQUAL)
+	} else if strings.Contains(str, Operator_EQUAL) {
+		op = "="
+		kv = strings.Split(str, Operator_EQUAL)
+	} else {
+		return nil, fmt.Errorf("no support operator [=, =~, !=, !~]")
+	}
+
+	if len(kv) != 2 {
+		return nil, fmt.Errorf("key,value format error, requred key=value")
+	}
+
+	return &Tag{
+		Key:      kv[0],
+		Describe: op,
+		Value:    kv[1],
+	}, nil
+}
+
+// key=v1,key=~value
 func NewTagsFromString(tagStr string) (tags []*Tag, err error) {
 	if tagStr == "" {
 		return
@@ -242,15 +284,11 @@ func NewTagsFromString(tagStr string) (tags []*Tag, err error) {
 
 	items := strings.Split(tagStr, ",")
 	for _, v := range items {
-		kv := strings.Split(v, "=")
-		if len(kv) != 2 {
-			err = fmt.Errorf("key,value format error, requred key=value")
-			return
+		t, err := ParExpr(v)
+		if err != nil {
+			return nil, err
 		}
-		tags = append(tags, &Tag{
-			Key:   kv[0],
-			Value: kv[1],
-		})
+		tags = append(tags, t)
 	}
 
 	return

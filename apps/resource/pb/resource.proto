@@ -194,10 +194,10 @@ message Tag {
     // @gotags: json:"type"
     TagType type = 2;
     // 标签的Key
-    // @gotags: json:"key" validate:"required"
+    // @gotags: json:"key" validate:"lte=255,required"
     string key = 3;
     // 标签的值
-    // @gotags: json:"value" validate:"required"
+    // @gotags: json:"value" validate:"lte=255,required"
     string value = 4;
     // 标签的值的描述, 通常用于展示
     // @gotags: json:"describe"

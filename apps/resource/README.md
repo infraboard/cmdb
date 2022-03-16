@@ -10,12 +10,16 @@
 
 ### prometheus 自动发现
 
-我们使用3个标签:
-+ prometheus.io/scrape = "true" 
-+ prometheus.io/port = "9100"
-+ prometheus.io/path = "/metrics"
+我们使用2个标签:
++ prometheus.io/node/enabled = "true"
++ prometheus.io/node/endpoint = "9100:/metrics"
++ prometheus.io/node/endpoint = "9200:/metrics"
 
-比如搜索 prometheus.io/scrape = "true"
++ prometheus.io/appv1/enabled = "true"
++ prometheus.io/appv1/endpoint = "9100:/metrics"
++ prometheus.io/appv1/endpoint = "9200:/metrics"
+
+比如搜索 prometheus.io/%/enabled = "true"
 
 ```json
 [
