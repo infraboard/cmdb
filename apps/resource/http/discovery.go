@@ -15,6 +15,10 @@ func (h *handler) DiscoveryPrometheus(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// 补充必须的标签
+	query.AddTag(resource.NewPrometheusScrapeTag())
+	query.WithTags = true
+
 	set, err := h.service.Search(r.Context(), query)
 	if err != nil {
 		response.Failed(w, err)

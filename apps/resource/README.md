@@ -10,9 +10,10 @@
 
 ### prometheus 自动发现
 
-我们使用2个标签:
+我们使用3个标签:
 + prometheus.io/scrape = "true" 
 + prometheus.io/port = "9100"
++ prometheus.io/path = "/metrics"
 
 比如搜索 prometheus.io/scrape = "true"
 

@@ -15,7 +15,7 @@ func TestClient(t *testing.T) {
 	conf := client.NewConfig("localhost:18060")
 	conf.WithClientCredentials("nHerVBlrKIDurviMGUXVOQHC", "l5FB38Mw2JmxHgGm8rUcich2ZrGRVrl7")
 
-	c, err := client.NewClient(conf)
+	c, err := client.NewClientSet(conf)
 	if should.NoError(err) {
 		rs, err := c.Resource().Search(context.Background(), resource.NewSearchRequest())
 		should.NoError(err)

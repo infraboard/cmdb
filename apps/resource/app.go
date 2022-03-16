@@ -37,7 +37,8 @@ func NewSearchRequestFromHTTP(r *http.Request) (*SearchRequest, error) {
 		Env:         qs.Get("env"),
 		Status:      qs.Get("status"),
 		SyncAccount: qs.Get("sync_account"),
-		WithTags:    true,
+		WithTags:    qs.Get("with_tags") == "true",
+		Tags:        []*Tag{},
 	}
 
 	umStr := qs.Get("usage_mode")
@@ -58,7 +59,6 @@ func NewSearchRequestFromHTTP(r *http.Request) (*SearchRequest, error) {
 		req.Type = &rt
 	}
 
-	req.Tags = []*Tag{NewPrometheusScrapeTag()}
 	tgStr := qs.Get("tag")
 	if tgStr != "" {
 		tg, err := NewTagsFromString(tgStr)
