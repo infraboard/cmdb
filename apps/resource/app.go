@@ -236,7 +236,7 @@ func ParExpr(str string) (*TagSelector, error) {
 	)
 
 	if strings.Contains(str, Operator_LIKE_EQUAL) {
-		op = Operator_LIKE_EQUAL
+		op = "LIKE"
 		kv = strings.Split(str, Operator_LIKE_EQUAL)
 	} else if strings.Contains(str, Operator_NOT_LIKE_EQUAL) {
 		op = "NOT LIKE"

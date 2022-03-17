@@ -49,7 +49,7 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 		Desc().
 		Limit(req.Page.ComputeOffset(), uint(req.Page.PageSize)).
 		BuildQuery()
-	s.log.Debugf("sql: %s", querySQL)
+	s.log.Debugf("sql: %s, args: %v", querySQL, args)
 
 	queryStmt, err := s.db.Prepare(querySQL)
 	if err != nil {
@@ -152,14 +152,14 @@ func (s *service) buildQuery(query *sqlbuilder.Query, req *resource.SearchReques
 		}
 
 		// 添加Key过滤条件
-		query.Where("t.t_key LIKE ?", selector.Key)
+		query.Where("t.t_key LIKE ?", strings.ReplaceAll(selector.Key, ".*", "%"))
 
 		// 添加Value过滤条件
 		condtions := []string{}
 		args := []interface{}{}
-		for v := range selector.Values {
+		for _, v := range selector.Values {
 			condtions = append(condtions, fmt.Sprintf("t.t_value %s ?", selector.Opertor))
-			args = append(args, v)
+			args = append(args, strings.ReplaceAll(v, ".*", "%"))
 		}
 
 		vwhere := fmt.Sprintf("( %s )", strings.Join(condtions, selector.RelationShip()))

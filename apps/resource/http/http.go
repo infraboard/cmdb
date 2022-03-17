@@ -31,7 +31,7 @@ func (h *handler) Name() string {
 
 func (h *handler) Registry(r router.SubRouter) {
 	rr := r.ResourceRouter("resource")
-	rr.Handle("GET", "/search", h.SearchResource).AddLabel(label.List)
+	rr.Handle("GET", "/search", h.SearchResource).DisableAuth().AddLabel(label.List)
 	rr.Handle("GET", "/vendors", h.ListVendor).DisablePermission()
 	rr.Handle("GET", "/regions", h.ListVendorRegion).DisablePermission()
 	rr.Handle("GET", "/resource_types", h.ListResourceType).DisablePermission()
