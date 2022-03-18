@@ -15,8 +15,10 @@ enum Type {
     ACCOUNT = 3;
     // 基于地域的总账单
     REGION = 4;
+    // 基于资源类型的总账单
+    RESOURCE_TYPE = 5;
     // 基于环境的总账单
-    ENV = 5;
+    ENV = 6;
 }
 
 // 用于成本聚合统计的单元

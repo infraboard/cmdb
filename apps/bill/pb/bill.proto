@@ -20,76 +20,79 @@ service Service {
 message Bill {
     // 本次账单同步关联的任务Id
     // @gotags: json:"task_id"
-    string task_id = 26;
+    string task_id = 1;
     // 厂商
     // @gotags: json:"vendor"
-    infraboard.cmdb.resource.Vendor vendor = 1;
+    infraboard.cmdb.resource.Vendor vendor = 2;
+    // 资源类型
+    // @gotags: json:"type"
+    infraboard.cmdb.resource.Type type = 3;
     // 账单的月份
     // @gotags: json:"month"
-    string month = 2;
+    string month = 4;
     // 账号Id
     // @gotags: json:"owner_id"
-    string owner_id = 3;
+    string owner_id = 5;
     // 账号名称
     // @gotags: json:"owner_name"
-    string owner_name = 4;
+    string owner_name = 6;
     // 产品类型
     // @gotags: json:"product_type"
-    string product_type = 5;
+    string product_type = 7;
     // 产品编码
     // @gotags: json:"product_code"
-    string product_code = 6;
+    string product_code = 8;
     // 产品明细
     // @gotags: json:"product_detail"
-    string product_detail = 7;
+    string product_detail = 9;
     // 计费方式，比如：月95，日均峰值
     // @gotags: json:"pay_mode"
-    string pay_mode = 8;
+    string pay_mode = 10;
     // 计费方式详情  云服务器ECS-按量付费
     // @gotags: json:"pay_mode_detail"
-    string pay_mode_detail = 9;
+    string pay_mode_detail = 11;
     // 订单/账单ID
     // @gotags: json:"order_id"
-    string order_id = 10;
+    string order_id = 12;
     // 实例ID
     // @gotags: json:"instance_id"
-    string instance_id = 11;
+    string instance_id = 13;
     // 实例名称
     // @gotags: json:"instance_name"
-    string instance_name = 12;
+    string instance_name = 14;
     // 公网Ip
     // @gotags: json:"public_ip"
-    string public_ip = 13;
+    string public_ip = 15;
     // 内网Ip
     // @gotags: json:"private_ip"
-    string private_ip = 14;
+    string private_ip = 16;
     // 实例配置信息
     // @gotags: json:"instance_config"
-    string instance_config = 15;
+    string instance_config = 17;
     // 地域Id
     // @gotags: json:"region_code"
-    string region_code = 16;
+    string region_code = 18;
     // 地域名称
     // @gotags: json:"region_name"
-    string region_name = 17;
+    string region_name = 19;
     // 实例所属域
     // @gotags: json:"domain"
-    string domain = 32;
+    string domain = 20;
     // 实例所属空间
     // @gotags: json:"namespace"
-    string namespace = 28;
+    string namespace = 21;
     // 资源所属环境
     // @gotags: json:"env"
-    string env = 29;
+    string env = 22;
     // 该资产的基于Tag的分摊
     // @gotags: json:"share_units"
-    repeated ShareUnit share_units = 27;
+    repeated ShareUnit share_units = 23;
     // 具体费用
     // @gotags: json:"cost"
-    Cost cost = 30;
+    Cost cost = 24;
     // 是否已经按照实例聚合
     // @gotags: json:"is_merged"
-    bool is_merged = 31;
+    bool is_merged = 25;
     // 额外的无法通用的一些属性, 比如只有腾讯云独有的一些属性
     // @gotags: json:"extra"
     map<string, string> extra = 35;

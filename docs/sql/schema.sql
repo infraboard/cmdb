@@ -213,3 +213,41 @@ CREATE TABLE `tag` (
   KEY `idx_value` (`t_value`) USING BTREE,
   KEY `idx_resource_id` (`resource_id`) USING HASH
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COMMENT='资源标签'
+
+CREATE TABLE `metric` (
+  `name` varchar(255) NOT NULL COMMENT '指标名称',
+  `resource_type` tinyint(4) NOT NULL COMMENT '适于那种资源',
+  `group` varchar(255) NOT NULL COMMENT '分组描述',
+  `description` text NOT NULL COMMENT '指标描述',
+  `expr_temp` varchar(255) NOT NULL COMMENT '表达式模版',
+  `unit` varchar(64) NOT NULL COMMENT '指标单位',
+  `create_at` bigint(20) NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`name`),
+  KEY `idx_rt` (`resource_type`) USING BTREE,
+  KEY `idx_group` (`group`) USING BTREE,
+  KEY `idx_expr` (`expr_temp`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+
+CREATE TABLE `daily_metric` (
+  `resource_id` varchar(64) NOT NULL COMMENT '资源Id',
+  `metric_name` varchar(255) NOT NULL COMMENT '资源指标名称, 比如P99',
+  `day` varchar(255) NOT NULL COMMENT '那天的数据, 比如 2022-10-8',
+  `value` float(10,2) NOT NULL COMMENT '具体的值',
+  `time` bigint(20) NOT NULL COMMENT '指标入库时间',
+  UNIQUE KEY `idx_id` (`resource_id`,`metric_name`,`day`) USING BTREE,
+  KEY `idx_resource_id` (`resource_id`) USING HASH,
+  KEY `idx_metric` (`metric_name`) USING BTREE,
+  KEY `idx_day` (`day`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+
+CREATE TABLE `month_metric` (
+  `resource_id` varchar(64) NOT NULL COMMENT '资源Id',
+  `metric_name` varchar(255) NOT NULL COMMENT '资源指标名称, 比如P99',
+  `month` varchar(255) NOT NULL COMMENT '那月的数据, 比如 2022-10-8',
+  `value` float(10,2) NOT NULL COMMENT '具体的值',
+  `time` bigint(20) NOT NULL COMMENT '指标入库时间',
+  UNIQUE KEY `idx_id` (`resource_id`,`metric_name`,`month`) USING BTREE COMMENT '月主键',
+  KEY `idx_resource_id` (`resource_id`) USING BTREE,
+  KEY `idx_metric` (`metric_name`) USING BTREE,
+  KEY `idx_month` (`month`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4

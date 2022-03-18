@@ -17,7 +17,7 @@ account
 
 1月   2月   3月   4月
 
-namesapce|vendor|account|env
+namesapce|vendor|account|env|resource_type
 
 ---------
 ns1  xxxx  +192(200%)   
