@@ -19,6 +19,8 @@ import (
 	"github.com/infraboard/mcube/http/middleware/recovery"
 	"github.com/infraboard/mcube/http/router"
 	"github.com/infraboard/mcube/http/router/httprouter"
+
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 // NewHTTPService 构建函数
@@ -71,8 +73,12 @@ func (s *HTTPService) Addr() string {
 
 // Start 启动服务
 func (s *HTTPService) Start() error {
+
 	// 装置子服务路由
 	app.LoadHttpApp(s.Addr(), s.r)
+
+	// 开启应用监控
+	s.EnableAPM()
 
 	// 注册路由条目
 	s.RegistryEndpoint()
@@ -98,6 +104,11 @@ func (s *HTTPService) Stop() error {
 		s.l.Errorf("graceful shutdown timeout, force exit")
 	}
 	return nil
+}
+
+// 开启
+func (s *HTTPService) EnableAPM() {
+	s.r.Handle("GET", "/metrics", promhttp.Handler().ServeHTTP).DisableAuth()
 }
 
 func (s *HTTPService) RegistryEndpoint() {
