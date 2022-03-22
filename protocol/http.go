@@ -78,7 +78,7 @@ func (s *HTTPService) Start() error {
 	app.LoadHttpApp(s.Addr(), s.r)
 
 	// 开启应用监控
-	s.EnableAPM()
+	s.EnableMetricExpoter()
 
 	// 注册路由条目
 	s.RegistryEndpoint()
@@ -107,7 +107,7 @@ func (s *HTTPService) Stop() error {
 }
 
 // 开启
-func (s *HTTPService) EnableAPM() {
+func (s *HTTPService) EnableMetricExpoter() {
 	s.r.Handle("GET", "/metrics", promhttp.Handler().ServeHTTP).DisableAuth()
 }
 
