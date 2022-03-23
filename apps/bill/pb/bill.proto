@@ -98,19 +98,23 @@ message Bill {
     map<string, string> extra = 35;
 }
 
+// 资源月账单分摊单元
 message ShareUnit {
+    // 账单的月份
+    // @gotags: json:"month"
+    string month = 1;
     // 账单月当时标签
     // @gotags: json:"tag"
-    infraboard.cmdb.resource.Tag tag = 1;
+    infraboard.cmdb.resource.Tag tag = 2;
     // 该成本单元的总权重, 用于计算分摊比例
     // @gotags: json:"total_weight"
-    int64 total_weight = 2;
+    int64 total_weight = 3;
     // 分摊逻辑描述, 比如 instance_cost * percent 
     // @gotags: json:"share_describe"
-    string share_describe = 3;
+    string share_describe = 4;
     // 具体分摊额度, 具体金额根据标签权重进行计算
     // @gotags: json:"cost"
-    Cost cost = 4;
+    Cost cost = 5;
 }
 
 message BillSet {
