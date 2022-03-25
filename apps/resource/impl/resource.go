@@ -27,13 +27,14 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 	countSQL, args := query.BuildCountWith("COUNT(DISTINCT r.id)")
 	countStmt, err := s.db.Prepare(countSQL)
 	if err != nil {
-		return nil, exception.NewInternalServerError(err.Error())
+		s.log.Debugf("count sql, %s, %v", countSQL, args)
+		return nil, exception.NewInternalServerError("prepare count sql error, %s", err)
 	}
 
 	defer countStmt.Close()
 	err = countStmt.QueryRow(args...).Scan(&set.Total)
 	if err != nil {
-		return nil, exception.NewInternalServerError(err.Error())
+		return nil, exception.NewInternalServerError("scan count value error, %s", err)
 	}
 
 	// tag查询时，以tag时间排序
@@ -161,9 +162,10 @@ func (s *service) buildQuery(query *sqlbuilder.Query, req *resource.SearchReques
 			condtions = append(condtions, fmt.Sprintf("t.t_value %s ?", selector.Opertor))
 			args = append(args, strings.ReplaceAll(v, ".*", "%"))
 		}
-
-		vwhere := fmt.Sprintf("( %s )", strings.Join(condtions, selector.RelationShip()))
-		query.Where(vwhere, args...)
+		if len(condtions) > 0 {
+			vwhere := fmt.Sprintf("( %s )", strings.Join(condtions, selector.RelationShip()))
+			query.Where(vwhere, args...)
+		}
 	}
 
 }
