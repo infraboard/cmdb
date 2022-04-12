@@ -12,6 +12,7 @@ import (
 	rds_region "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/rds/v3/region"
 
 	iam_model "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/iam/v3/model"
+	iam_region "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/iam/v3/region"
 )
 
 // NewHuaweiCloudClient client
@@ -121,7 +122,7 @@ func (c *HuaweiCloudClient) IamClient() (*iam.IamClient, error) {
 		return c.iamConn, nil
 	}
 	client := iam.IamClientBuilder().
-		WithRegion(ecs_region.ValueOf(c.Region)).
+		WithRegion(iam_region.ValueOf(c.Region)).
 		WithCredential(c.GlobalCredentials()).
 		Build()
 
