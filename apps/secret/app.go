@@ -9,6 +9,7 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/infraboard/cmdb/conf"
+	"github.com/infraboard/keyauth/apps/token"
 	"github.com/infraboard/mcube/crypto/cbc"
 	"github.com/infraboard/mcube/http/request"
 	"github.com/rs/xid"
@@ -141,6 +142,11 @@ func NewCreateSecretRequest() *CreateSecretRequest {
 	}
 }
 
+func (req *CreateSecretRequest) SetOwner(tk *token.Token) {
+	req.Domain = tk.Domain
+	req.Namespace = tk.NamespaceName
+}
+
 func (req *CreateSecretRequest) Validate() error {
 	if len(req.AllowRegions) == 0 {
 		return fmt.Errorf("required less one allow_regions")
@@ -162,6 +168,9 @@ func NewQuerySecretRequest() *QuerySecretRequest {
 		Page:     request.NewDefaultPageRequest(),
 		Keywords: "",
 	}
+}
+
+func (req *QuerySecretRequest) WithNamespace(tk *token.Token) {
 }
 
 func NewDescribeSecretRequest(id string) *DescribeSecretRequest {

@@ -15,7 +15,7 @@ func (o *Ec2Operater) Query(ctx context.Context, req *ec2.DescribeInstancesInput
 		return nil, err
 	}
 	// 设置Next Page token
-	req.NextToken = req.NextToken
+	req.NextToken = result.NextToken
 	set.Items = o.transferSet(result.Reservations).Items
 	return set, nil
 }

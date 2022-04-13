@@ -3,6 +3,7 @@ package impl
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/cmdb/apps/resource"
@@ -140,8 +141,11 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 
 // Host主机数据入库
 func (s *service) doSyncHost(ctx context.Context, ins *host.Host, t *task.Task) {
+	// 添加Host
+	ins.Base.SyncAt = time.Now().UnixMilli()
 	h, err := s.host.SyncHost(ctx, ins)
 
+	// 添加同步详情
 	var detail *task.Record
 	if err != nil {
 		s.log.Warnf("save host error, %s", err)

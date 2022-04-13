@@ -11,7 +11,7 @@ const (
 func NewPrometheusScrapeTag() *TagSelector {
 	return &TagSelector{
 		Key:    PROMETHEUS_SCRAPE,
-		Values: []string{},
+		Values: []string{"true"},
 	}
 }
 
@@ -21,7 +21,6 @@ func (r *Resource) PrometheusEndpont() (string, error) {
 	}
 
 	ip := r.Information.PrivateIp[0]
-
 	port := r.GetTagValueOne(PROMETHEUS_PORT)
 	if port == "" {
 		switch r.Base.ResourceType {

@@ -3,6 +3,7 @@ package http
 import (
 	"net/http"
 
+	"github.com/infraboard/keyauth/apps/token"
 	"github.com/infraboard/mcube/http/context"
 	"github.com/infraboard/mcube/http/request"
 	"github.com/infraboard/mcube/http/response"
@@ -11,7 +12,9 @@ import (
 )
 
 func (h *handler) QuerySecret(w http.ResponseWriter, r *http.Request) {
+	ctx := context.GetContext(r)
 	req := secret.NewQuerySecretRequestFromHTTP(r)
+	req.WithNamespace(ctx.AuthInfo.(*token.Token))
 	set, err := h.service.QuerySecret(r.Context(), req)
 	if err != nil {
 		response.Failed(w, err)
@@ -21,7 +24,9 @@ func (h *handler) QuerySecret(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *handler) CreateSecret(w http.ResponseWriter, r *http.Request) {
+	ctx := context.GetContext(r)
 	req := secret.NewCreateSecretRequest()
+	req.SetOwner(ctx.AuthInfo.(*token.Token))
 	if err := request.GetDataFromRequest(r, req); err != nil {
 		response.Failed(w, err)
 		return
@@ -38,6 +43,7 @@ func (h *handler) CreateSecret(w http.ResponseWriter, r *http.Request) {
 
 func (h *handler) DescribeSecret(w http.ResponseWriter, r *http.Request) {
 	ctx := context.GetContext(r)
+
 	req := secret.NewDescribeSecretRequest(ctx.PS.ByName("id"))
 	ins, err := h.service.DescribeSecret(r.Context(), req)
 	if err != nil {
