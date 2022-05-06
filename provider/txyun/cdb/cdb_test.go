@@ -3,10 +3,7 @@ package cdb_test
 import (
 	"context"
 	"fmt"
-	"os"
 	"testing"
-
-	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/regions"
 
 	"github.com/infraboard/cmdb/apps/rds"
 	op "github.com/infraboard/cmdb/provider/txyun/cdb"
@@ -30,15 +27,16 @@ func TestQuery(t *testing.T) {
 }
 
 func init() {
-	var secretID, secretKey string
-	if secretID = os.Getenv("TX_CLOUD_SECRET_ID"); secretID == "" {
-		panic("empty TX_CLOUD_SECRET_ID")
+	err := connectivity.LoadClientFromEnv()
+	if err != nil {
+		panic(err)
 	}
 
-	if secretKey = os.Getenv("TX_CLOUD_SECRET_KEY"); secretKey == "" {
-		panic("empty TX_CLOUD_SECRET_KEY")
+	client := connectivity.C()
+	err = client.Check()
+	if err != nil {
+		panic(err)
 	}
 
-	client := connectivity.NewTencentCloudClient(secretID, secretKey, regions.Shanghai)
 	operater = op.NewCDBOperater(client.CDBClient())
 }

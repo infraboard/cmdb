@@ -1,22 +1,17 @@
 package connectivity_test
 
 import (
-	"os"
 	"testing"
 
 	"github.com/infraboard/cmdb/provider/aliyun/connectivity"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestClient(t *testing.T) {
-	var secretID, secretKey string
-	if secretID = os.Getenv("AL_CLOUD_ACCESS_KEY"); secretID == "" {
-		t.Fatal("empty AL_CLOUD_ACCESS_KEY")
-	}
+	should := assert.New(t)
 
-	if secretKey = os.Getenv("AL_CLOUD_ACCESS_SECRET"); secretKey == "" {
-		t.Fatal("empty AL_CLOUD_ACCESS_SECRET")
+	err := connectivity.LoadClientFromEnv()
+	if should.NoError(err) {
+		connectivity.C().EcsClient()
 	}
-
-	client := connectivity.NewAliCloudClient(secretID, secretKey, "cn-hangzhou")
-	client.EcsClient()
 }

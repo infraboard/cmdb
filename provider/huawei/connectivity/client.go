@@ -1,6 +1,7 @@
 package connectivity
 
 import (
+	"github.com/caarlos0/env/v6"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/auth/basic"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/auth/global"
 	bss "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/bss/v2"
@@ -15,6 +16,26 @@ import (
 	iam_region "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/iam/v3/region"
 )
 
+var (
+	client *HuaweiCloudClient
+)
+
+func C() *HuaweiCloudClient {
+	if client == nil {
+		panic("please load config first")
+	}
+	return client
+}
+
+func LoadClientFromEnv() error {
+	client = &HuaweiCloudClient{}
+	if err := env.Parse(client); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // NewHuaweiCloudClient client
 func NewHuaweiCloudClient(ak, sk, region string) *HuaweiCloudClient {
 	return &HuaweiCloudClient{
@@ -25,16 +46,17 @@ func NewHuaweiCloudClient(ak, sk, region string) *HuaweiCloudClient {
 }
 
 type HuaweiCloudClient struct {
-	Region       string
-	AccessKey    string
-	AccessSecret string
-	accountId    string
-	userId       string
-	ecsConn      *ecs.EcsClient
-	rdsConn      *rds.RdsClient
-	dcsConn      *dcs.DcsClient
-	bssConn      *bss.BssClient
-	iamConn      *iam.IamClient
+	Region       string `env:"HW_CLOUD_REGION"`
+	AccessKey    string `env:"HW_CLOUD_ACCESS_KEY"`
+	AccessSecret string `env:"HW_CLOUD_ACCESS_SECRET"`
+
+	accountId string
+	userId    string
+	ecsConn   *ecs.EcsClient
+	rdsConn   *rds.RdsClient
+	dcsConn   *dcs.DcsClient
+	bssConn   *bss.BssClient
+	iamConn   *iam.IamClient
 }
 
 func (c *HuaweiCloudClient) Credentials() basic.Credentials {

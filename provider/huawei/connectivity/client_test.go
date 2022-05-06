@@ -2,23 +2,20 @@ package connectivity_test
 
 import (
 	"fmt"
-	"os"
 	"testing"
 
 	"github.com/infraboard/cmdb/provider/huawei/connectivity"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestClient(t *testing.T) {
-	var secretID, secretKey string
-	if secretID = os.Getenv("HW_CLOUD_ACCESS_KEY"); secretID == "" {
-		t.Fatal("empty HW_CLOUD_ACCESS_KEY")
-	}
+	should := assert.New(t)
 
-	if secretKey = os.Getenv("HW_CLOUD_ACCESS_SECRET"); secretKey == "" {
-		t.Fatal("empty HW_CLOUD_ACCESS_SECRET")
+	err := connectivity.LoadClientFromEnv()
+	if should.NoError(err) {
+		c := connectivity.C()
+		fmt.Println(c.Region)
+		fmt.Println(c.Check())
+		fmt.Println(c.AccountID())
 	}
-
-	client := connectivity.NewHuaweiCloudClient(secretID, secretKey, "cn-north-4")
-	fmt.Println(client.Check())
-	fmt.Println(client.AccountID())
 }

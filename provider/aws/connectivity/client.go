@@ -6,14 +6,36 @@ import (
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
+	"github.com/caarlos0/env/v6"
 )
+
+var (
+	client *AwsCloudClient
+)
+
+func C() *AwsCloudClient {
+	if client == nil {
+		panic("please load config first")
+	}
+	return client
+}
+
+func LoadClientFromEnv() error {
+	client = &AwsCloudClient{}
+	if err := env.Parse(client); err != nil {
+		return err
+	}
+
+	return nil
+}
 
 // AwsCloudClient client for all Amazon Cloud service
 type AwsCloudClient struct {
-	Region       string
-	AccessKey    string
-	AccessSecret string
-	ec2Conn      *ec2.Client
+	AccessKey    string `env:"AWS_ACCESS_KEY"`
+	AccessSecret string `env:"AWS_ACCESS_SECRET"`
+	Region       string `env:"AWS_CLOUD_REGION"`
+
+	ec2Conn *ec2.Client
 }
 
 // NewAwsCloudClient client

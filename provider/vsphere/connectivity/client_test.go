@@ -2,30 +2,21 @@ package connectivity_test
 
 import (
 	"fmt"
-	"os"
 	"testing"
 
 	"github.com/infraboard/cmdb/provider/vsphere/connectivity"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestClient(t *testing.T) {
-	var host, username, password string
-	if host = os.Getenv("VS_HOST"); host == "" {
-		t.Fatal("empty VS_HOST")
-	}
+	should := assert.New(t)
 
-	if username = os.Getenv("VS_USERNAME"); username == "" {
-		t.Fatal("empty VS_USERNAME")
+	err := connectivity.LoadClientFromEnv()
+	if should.NoError(err) {
+		vim, err := connectivity.C().VimClient()
+		if err != nil {
+			t.Fatal(err)
+		}
+		fmt.Println(vim.Client.URL().Host)
 	}
-
-	if password = os.Getenv("VS_PASSWORD"); password == "" {
-		t.Fatal("empty VS_PASSWORD")
-	}
-
-	client := connectivity.NewVsphereClient(host, username, password)
-	vim, err := client.VimClient()
-	if err != nil {
-		t.Fatal(err)
-	}
-	fmt.Println(vim.Client.URL().Host)
 }

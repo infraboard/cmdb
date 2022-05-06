@@ -171,6 +171,8 @@ func NewQuerySecretRequest() *QuerySecretRequest {
 }
 
 func (req *QuerySecretRequest) WithNamespace(tk *token.Token) {
+	req.Domain = tk.Domain
+	req.Namespace = tk.NamespaceName
 }
 
 func NewDescribeSecretRequest(id string) *DescribeSecretRequest {

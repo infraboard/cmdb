@@ -8,7 +8,28 @@ import (
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/rds"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/sts"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
+	"github.com/caarlos0/env/v6"
 )
+
+var (
+	client *AliCloudClient
+)
+
+func C() *AliCloudClient {
+	if client == nil {
+		panic("please load config first")
+	}
+	return client
+}
+
+func LoadClientFromEnv() error {
+	client = &AliCloudClient{}
+	if err := env.Parse(client); err != nil {
+		return err
+	}
+
+	return nil
+}
 
 // NewAliCloudClient client
 func NewAliCloudClient(ak, sk, region string) *AliCloudClient {
@@ -20,13 +41,14 @@ func NewAliCloudClient(ak, sk, region string) *AliCloudClient {
 }
 
 type AliCloudClient struct {
-	Region       string
-	AccessKey    string
-	AccessSecret string
-	accountId    string
-	ecsConn      *ecs.Client
-	rdsConn      *rds.Client
-	bssConn      *bssopenapi.Client
+	AccessKey    string `env:"AL_CLOUD_ACCESS_KEY"`
+	AccessSecret string `env:"AL_CLOUD_ACCESS_SECRET"`
+	Region       string `env:"AL_CLOUD_REGION"`
+
+	accountId string
+	ecsConn   *ecs.Client
+	rdsConn   *rds.Client
+	bssConn   *bssopenapi.Client
 }
 
 // EcsClient 客户端

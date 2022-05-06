@@ -3,6 +3,7 @@ package connectivity
 import (
 	"fmt"
 
+	"github.com/caarlos0/env/v6"
 	"github.com/infraboard/cmdb/utils"
 	billing "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/billing/v20180709"
 	cdb "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cdb/v20170320"
@@ -11,6 +12,26 @@ import (
 	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 	sts "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sts/v20180813"
 )
+
+var (
+	client *TencentCloudClient
+)
+
+func C() *TencentCloudClient {
+	if client == nil {
+		panic("please load config first")
+	}
+	return client
+}
+
+func LoadClientFromEnv() error {
+	client = &TencentCloudClient{}
+	if err := env.Parse(client); err != nil {
+		return err
+	}
+
+	return nil
+}
 
 // NewTencentCloudClient client
 func NewTencentCloudClient(secretID, secretKey, region string) *TencentCloudClient {
@@ -23,9 +44,10 @@ func NewTencentCloudClient(secretID, secretKey, region string) *TencentCloudClie
 
 // TencentCloudClient client for all TencentCloud service
 type TencentCloudClient struct {
-	Region    string
-	SecretID  string
-	SecretKey string
+	Region    string `env:"TX_CLOUD_REGION"`
+	SecretID  string `env:"TX_CLOUD_SECRET_ID"`
+	SecretKey string `env:"TX_CLOUD_SECRET_KEY"`
+
 	accountId string
 	cvmConn   *cvm.Client
 	cdbConn   *cdb.Client

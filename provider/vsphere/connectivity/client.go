@@ -5,10 +5,31 @@ import (
 	"fmt"
 	"net/url"
 
+	"github.com/caarlos0/env/v6"
 	"github.com/go-playground/validator/v10"
 	"github.com/vmware/govmomi/session/cache"
 	"github.com/vmware/govmomi/vim25"
 )
+
+var (
+	client *VsphereClient
+)
+
+func C() *VsphereClient {
+	if client == nil {
+		panic("please load config first")
+	}
+	return client
+}
+
+func LoadClientFromEnv() error {
+	client = &VsphereClient{}
+	if err := env.Parse(client); err != nil {
+		return err
+	}
+
+	return nil
+}
 
 // use a single instance of Validate, it caches struct info
 var (
@@ -26,9 +47,9 @@ func NewVsphereClient(host, username, password string) *VsphereClient {
 }
 
 type VsphereClient struct {
-	Host     string `validate:"required"`
-	Username string `validate:"required"`
-	Password string `validate:"required"`
+	Host     string `validate:"required" env:"VS_HOST"`
+	Username string `validate:"required" env:"VS_USERNAME"`
+	Password string `validate:"required" env:"VS_PASSWORD"`
 	Insecure bool
 
 	client *vim25.Client

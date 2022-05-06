@@ -3,11 +3,11 @@ package rds_test
 import (
 	"context"
 	"fmt"
-	"os"
 	"testing"
 
 	"github.com/infraboard/cmdb/apps/rds"
 	"github.com/infraboard/cmdb/provider/aliyun/connectivity"
+	"github.com/infraboard/mcube/logger/zap"
 
 	op "github.com/infraboard/cmdb/provider/aliyun/rds"
 )
@@ -30,18 +30,13 @@ func TestQuery(t *testing.T) {
 }
 
 func init() {
-	var ak, sk string
-	if ak = os.Getenv("AL_CLOUD_ACCESS_KEY"); ak == "" {
-		panic("empty AL_CLOUD_ACCESS_KEY")
+	zap.DevelopmentSetup()
+	err := connectivity.LoadClientFromEnv()
+	if err != nil {
+		panic(err)
 	}
 
-	if sk = os.Getenv("AL_CLOUD_ACCESS_SECRET"); sk == "" {
-		panic("empty AL_CLOUD_ACCESS_SECRET")
-	}
-
-	client := connectivity.NewAliCloudClient(ak, sk, "cn-hangzhou")
-
-	ec, err := client.RdsClient()
+	ec, err := connectivity.C().RdsClient()
 	if err != nil {
 		panic(err)
 	}

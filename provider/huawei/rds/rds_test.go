@@ -3,11 +3,11 @@ package rds_test
 import (
 	"context"
 	"fmt"
-	"os"
 	"testing"
 
 	"github.com/infraboard/cmdb/apps/rds"
 	"github.com/infraboard/cmdb/provider/huawei/connectivity"
+	"github.com/infraboard/mcube/logger/zap"
 
 	op "github.com/infraboard/cmdb/provider/huawei/rds"
 )
@@ -29,18 +29,13 @@ func TestQuery(t *testing.T) {
 }
 
 func init() {
-	var secretID, secretKey string
-	if secretID = os.Getenv("HW_CLOUD_ACCESS_KEY"); secretID == "" {
-		panic("empty HW_CLOUD_ACCESS_KEY")
+	zap.DevelopmentSetup()
+	err := connectivity.LoadClientFromEnv()
+	if err != nil {
+		panic(err)
 	}
 
-	if secretKey = os.Getenv("HW_CLOUD_ACCESS_SECRET"); secretKey == "" {
-		panic("empty HW_CLOUD_ACCESS_SECRET")
-	}
-
-	client := connectivity.NewHuaweiCloudClient(secretID, secretKey, "cn-north-4")
-
-	ec, err := client.RdsClient()
+	ec, err := connectivity.C().RdsClient()
 	if err != nil {
 		panic(err)
 	}

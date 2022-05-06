@@ -2,27 +2,19 @@ package connectivity_test
 
 import (
 	"fmt"
-	"os"
 	"testing"
 
-	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/regions"
-
 	"github.com/infraboard/cmdb/provider/txyun/connectivity"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestClient(t *testing.T) {
-	var secretID, secretKey string
-	if secretID = os.Getenv("TX_CLOUD_SECRET_ID"); secretID == "" {
-		t.Fatal("empty TX_CLOUD_SECRET_ID")
+	should := assert.New(t)
+
+	err := connectivity.LoadClientFromEnv()
+	if should.NoError(err) {
+		c := connectivity.C()
+		c.Check()
+		fmt.Println(c.AccountID())
 	}
-
-	if secretKey = os.Getenv("TX_CLOUD_SECRET_KEY"); secretKey == "" {
-		t.Fatal("empty TX_CLOUD_SECRET_KEY")
-	}
-
-	client := connectivity.NewTencentCloudClient(secretID, secretKey, regions.Shanghai)
-	client.Check()
-	fmt.Println(client.AccountID())
-
-	client.CvmClient()
 }

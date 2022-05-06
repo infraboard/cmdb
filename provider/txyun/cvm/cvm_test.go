@@ -3,11 +3,9 @@ package cvm_test
 import (
 	"context"
 	"fmt"
-	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/regions"
 
 	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/cmdb/provider/txyun/connectivity"
@@ -61,17 +59,13 @@ func TestCreate(t *testing.T) {
 
 func init() {
 	zap.DevelopmentSetup()
-	var secretID, secretKey string
-	if secretID = os.Getenv("TX_CLOUD_SECRET_ID"); secretID == "" {
-		panic("empty TX_CLOUD_SECRET_ID")
+	err := connectivity.LoadClientFromEnv()
+	if err != nil {
+		panic(err)
 	}
 
-	if secretKey = os.Getenv("TX_CLOUD_SECRET_KEY"); secretKey == "" {
-		panic("empty TX_CLOUD_SECRET_KEY")
-	}
-
-	client := connectivity.NewTencentCloudClient(secretID, secretKey, regions.Shanghai)
-	err := client.Check()
+	client := connectivity.C()
+	err = client.Check()
 	if err != nil {
 		panic(err)
 	}

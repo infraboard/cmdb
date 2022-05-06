@@ -3,7 +3,6 @@ package ecs_test
 import (
 	"context"
 	"fmt"
-	"os"
 	"testing"
 
 	"github.com/infraboard/cmdb/apps/host"
@@ -31,18 +30,12 @@ func TestQuery(t *testing.T) {
 
 func init() {
 	zap.DevelopmentSetup()
-	var ak, sk string
-	if ak = os.Getenv("AL_CLOUD_ACCESS_KEY"); ak == "" {
-		panic("empty AL_CLOUD_ACCESS_KEY")
+	err := connectivity.LoadClientFromEnv()
+	if err != nil {
+		panic(err)
 	}
 
-	if sk = os.Getenv("AL_CLOUD_ACCESS_SECRET"); sk == "" {
-		panic("empty AL_CLOUD_ACCESS_SECRET")
-	}
-
-	client := connectivity.NewAliCloudClient(ak, sk, "cn-hangzhou")
-
-	ec, err := client.EcsClient()
+	ec, err := connectivity.C().EcsClient()
 	if err != nil {
 		panic(err)
 	}
