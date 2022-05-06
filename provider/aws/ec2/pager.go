@@ -41,25 +41,16 @@ type pager struct {
 	timeout  time.Duration
 }
 
-func (p *pager) Next() *host.PagerResult {
-	result := host.NewPagerResult()
-
-	ctx, cancel := context.WithTimeout(context.Background(), p.timeout)
-	defer cancel()
-
+func (p *pager) Scan(ctx context.Context, set *host.HostSet) error {
 	resp, err := p.operater.Query(ctx, p.nextReq())
 	if err != nil {
-		result.Err = err
-		return result
+		return err
 	}
-
+	set.Add(resp.Items...)
 	p.total = int64(resp.Total)
 
-	result.Data = resp
-	result.HasNext = p.HasNext()
-
 	p.number++
-	return result
+	return nil
 }
 
 func (p *pager) WithLogger(log logger.Logger) {
@@ -74,7 +65,7 @@ func (p *pager) nextReq() *ec2.DescribeInstancesInput {
 	return p.req
 }
 
-func (p *pager) HasNext() bool {
+func (p *pager) Next() bool {
 	if p.total == -1 {
 		return true
 	}

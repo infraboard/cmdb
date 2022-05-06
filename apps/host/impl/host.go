@@ -58,7 +58,7 @@ func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 	set := host.NewHostSet()
 
 	// 获取total SELECT COUNT(*) FROMT t Where ....
-	countSQL, args := query.BuildCountWith("COUNT(DISTINCT r.id)")
+	countSQL, args := query.BuildFromNewBase("COUNT(DISTINCT r.id)")
 	countStmt, err := s.db.Prepare(countSQL)
 	s.log.Debugf("count sql: %s", countSQL)
 	if err != nil {

@@ -24,7 +24,7 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 	set := resource.NewResourceSet()
 
 	// 获取total SELECT COUNT(*) FROMT t Where ....
-	countSQL, args := query.BuildCountWith("COUNT(DISTINCT r.id)")
+	countSQL, args := query.BuildFromNewBase("COUNT(DISTINCT r.id)")
 	countStmt, err := s.db.Prepare(countSQL)
 	if err != nil {
 		s.log.Debugf("count sql, %s, %v", countSQL, args)
@@ -39,15 +39,14 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 
 	// tag查询时，以tag时间排序
 	if req.HasTag() {
-		query.Order("t.create_at")
+		query.Order("t.create_at").Desc()
 	} else {
-		query.Order("r.create_at")
+		query.Order("r.create_at").Desc()
 	}
 
 	// 获取分页数据
 	querySQL, args := query.
 		GroupBy("r.id").
-		Desc().
 		Limit(req.Page.ComputeOffset(), uint(req.Page.PageSize)).
 		BuildQuery()
 	s.log.Debugf("sql: %s, args: %v", querySQL, args)
@@ -99,7 +98,7 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 	return set, nil
 }
 
-func (s *service) buildQuery(query *sqlbuilder.Query, req *resource.SearchRequest) {
+func (s *service) buildQuery(query *sqlbuilder.Builder, req *resource.SearchRequest) {
 	if req.Keywords != "" {
 		if req.ExactMatch {
 			// 精确匹配

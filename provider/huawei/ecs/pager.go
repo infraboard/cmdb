@@ -1,6 +1,8 @@
 package ecs
 
 import (
+	"context"
+
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ecs/v2/model"
 
 	"github.com/infraboard/mcube/logger"
@@ -33,21 +35,17 @@ type pager struct {
 	log      logger.Logger
 }
 
-func (p *pager) Next() *host.PagerResult {
-	result := host.NewPagerResult()
-
+func (p *pager) Scan(ctx context.Context, set *host.HostSet) error {
 	resp, err := p.operater.Query(p.nextReq())
 	if err != nil {
-		result.Err = err
-		return result
+		return err
 	}
+
+	set.Add(resp.Items...)
 	p.total = resp.Total
 
-	result.Data = resp
-	result.HasNext = p.HasNext()
-
 	p.number++
-	return result
+	return nil
 }
 
 func (p *pager) nextReq() *model.ListServersDetailsRequest {
@@ -58,7 +56,7 @@ func (p *pager) nextReq() *model.ListServersDetailsRequest {
 	return p.req
 }
 
-func (p *pager) HasNext() bool {
+func (p *pager) Next() bool {
 	if p.total == -1 {
 		return true
 	}

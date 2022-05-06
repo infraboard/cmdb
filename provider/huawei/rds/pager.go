@@ -1,6 +1,8 @@
 package rds
 
 import (
+	"context"
+
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/rds/v3/model"
 
 	"github.com/infraboard/mcube/logger"
@@ -33,21 +35,16 @@ type pager struct {
 	log      logger.Logger
 }
 
-func (p *pager) Next() *rds.PagerResult {
-	result := rds.NewPagerResult()
-
+func (p *pager) Scan(ctx context.Context, set *rds.Set) error {
 	resp, err := p.operater.Query(p.nextReq())
 	if err != nil {
-		result.Err = err
-		return result
+		return err
 	}
+	set.Add(resp.Items...)
 	p.total = resp.Total
 
-	result.Data = resp
-	result.HasNext = p.HasNext()
-
 	p.number++
-	return result
+	return nil
 }
 
 func (p *pager) nextReq() *model.ListInstancesRequest {
@@ -58,7 +55,7 @@ func (p *pager) nextReq() *model.ListInstancesRequest {
 	return p.req
 }
 
-func (p *pager) HasNext() bool {
+func (p *pager) Next() bool {
 	if p.total == -1 {
 		return true
 	}

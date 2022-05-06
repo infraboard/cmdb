@@ -1,12 +1,14 @@
 package cdb_test
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"testing"
 
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/regions"
 
+	"github.com/infraboard/cmdb/apps/rds"
 	op "github.com/infraboard/cmdb/provider/txyun/cdb"
 	"github.com/infraboard/cmdb/provider/txyun/connectivity"
 )
@@ -18,12 +20,12 @@ var (
 func TestQuery(t *testing.T) {
 	pager := operater.PageQuery()
 
-	for pager.HasNext() {
-		p := pager.Next()
-		if p.Err != nil {
-			panic(p.Err)
+	for pager.Next() {
+		set := rds.NewSet()
+		if err := pager.Scan(context.Background(), set); err != nil {
+			panic(err)
 		}
-		fmt.Println(p.Data)
+		fmt.Println(set)
 	}
 }
 

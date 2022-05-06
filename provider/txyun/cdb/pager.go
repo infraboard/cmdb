@@ -1,6 +1,8 @@
 package cdb
 
 import (
+	"context"
+
 	cdb "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cdb/v20170320"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 
@@ -31,22 +33,17 @@ type pager struct {
 	log      logger.Logger
 }
 
-func (p *pager) Next() *rds.PagerResult {
-	result := rds.NewPagerResult()
-
-	resp, err := p.operater.Query(p.nextReq())
+func (p *pager) Scan(ctx context.Context, set *rds.Set) error {
+	resp, err := p.operater.Query(ctx, p.nextReq())
 	if err != nil {
-		result.Err = err
-		return result
+		return err
 	}
+	set.Add(resp.Items...)
 	p.total = resp.Total
 	p.log.Debugf("get %d hosts", len(resp.Items))
 
-	result.Data = resp
-	result.HasNext = p.HasNext()
-
 	p.number++
-	return result
+	return nil
 }
 
 func (p *pager) nextReq() *cdb.DescribeDBInstancesRequest {
@@ -55,7 +52,7 @@ func (p *pager) nextReq() *cdb.DescribeDBInstancesRequest {
 	return p.req
 }
 
-func (p *pager) HasNext() bool {
+func (p *pager) Next() bool {
 	if p.total == -1 {
 		return true
 	}

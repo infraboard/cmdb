@@ -121,16 +121,16 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 
 	// 分页查询数据
 	if pager != nil {
-		for pager.HasNext() {
-			p := pager.Next()
-			if p.Err != nil {
-				t.Failed(fmt.Sprintf("sync error, %s", p.Err))
+		for pager.Next() {
+			set := host.NewHostSet()
+			if err := pager.Scan(ctx, set); err != nil {
+				t.Failed(fmt.Sprintf("sync error, %s", err))
 				return
 			}
 
 			// 调用host服务保持数据
-			for i := range p.Data.Items {
-				target := p.Data.Items[i]
+			for i := range set.Items {
+				target := set.Items[i]
 				// 补充管理信息
 				target.Base.SecretId = secretIns.Id
 				s.doSyncHost(ctx, target, t)

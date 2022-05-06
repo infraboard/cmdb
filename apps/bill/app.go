@@ -1,6 +1,7 @@
 package bill
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 	"strings"
@@ -28,26 +29,14 @@ func NewBillSet() *BillSet {
 	}
 }
 
-func (s *BillSet) Add(item *Bill) {
-	s.Items = append(s.Items, item)
-}
-
-func NewPagerResult() *PagerResult {
-	return &PagerResult{
-		Data: NewBillSet(),
-	}
-}
-
-type PagerResult struct {
-	Data    *BillSet
-	Err     error
-	HasNext bool
+func (s *BillSet) Add(items ...*Bill) {
+	s.Items = append(s.Items, items...)
 }
 
 // 分页迭代器
 type Pager interface {
-	HasNext() bool
-	Next() *PagerResult
+	Next() bool
+	Scan(context.Context, *BillSet) error
 }
 
 func (b *Bill) YearMonth() (int, int) {

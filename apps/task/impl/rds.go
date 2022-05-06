@@ -66,16 +66,15 @@ func (s *service) syncRds(ctx context.Context, secretIns *secret.Secret, t *task
 
 	// 分页查询数据
 	if pager != nil {
-		for pager.HasNext() {
-			p := pager.Next()
-			if p.Err != nil {
-				t.Failed(fmt.Sprintf("sync error, %s", p.Err))
+		for pager.Next() {
+			set := rds.NewSet()
+			if err := pager.Scan(ctx, set); err != nil {
+				t.Failed(fmt.Sprintf("sync error, %s", err))
 				return
 			}
-
 			// 调用rds服务保持数据
-			for i := range p.Data.Items {
-				target := p.Data.Items[i]
+			for i := range set.Items {
+				target := set.Items[i]
 				target.Base.SecretId = secretIns.Id
 				s.SaveOrUpdateRds(ctx, target, t)
 			}

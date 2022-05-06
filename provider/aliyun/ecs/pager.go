@@ -1,6 +1,8 @@
 package ecs
 
 import (
+	"context"
+
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/ecs"
 	"github.com/infraboard/mcube/flowcontrol/tokenbucket"
@@ -36,22 +38,16 @@ type pager struct {
 	tb       *tokenbucket.Bucket
 }
 
-func (p *pager) Next() *host.PagerResult {
-	result := host.NewPagerResult()
-
+func (p *pager) Scan(ctx context.Context, set *host.HostSet) error {
 	resp, err := p.operater.Query(p.nextReq())
 	if err != nil {
-		result.Err = err
-		return result
+		return err
 	}
 
 	p.total = int64(resp.Total)
-
-	result.Data = resp
-	result.HasNext = p.HasNext()
-
+	set.Add(resp.Items...)
 	p.number++
-	return result
+	return nil
 }
 
 func (p *pager) WithLogger(log logger.Logger) {
@@ -67,7 +63,7 @@ func (p *pager) nextReq() *ecs.DescribeInstancesRequest {
 	return p.req
 }
 
-func (p *pager) HasNext() bool {
+func (p *pager) Next() bool {
 	if p.total == -1 {
 		return true
 	}

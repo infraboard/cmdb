@@ -1,14 +1,16 @@
 package billing
 
 import (
+	"context"
+
 	billing "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/billing/v20180709"
 
 	"github.com/infraboard/cmdb/apps/bill"
 	"github.com/infraboard/cmdb/utils"
 )
 
-func (o *BillingOperater) Query(req *billing.DescribeBillResourceSummaryRequest) (*bill.BillSet, error) {
-	resp, err := o.client.DescribeBillResourceSummary(req)
+func (o *BillingOperater) Query(ctx context.Context, req *billing.DescribeBillResourceSummaryRequest) (*bill.BillSet, error) {
+	resp, err := o.client.DescribeBillResourceSummaryWithContext(ctx, req)
 	if err != nil {
 		return nil, err
 	}

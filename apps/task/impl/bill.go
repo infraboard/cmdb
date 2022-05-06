@@ -70,15 +70,14 @@ func (s *service) syncBill(ctx context.Context, secretIns *secret.Secret, t *tas
 
 	// 分页查询数据
 	if pager != nil {
-		for pager.HasNext() {
-			p := pager.Next()
-			if p.Err != nil {
-				t.Failed(fmt.Sprintf("sync error, %s", p.Err))
+		for pager.Next() {
+			set := bill.NewBillSet()
+			if err := pager.Scan(ctx, set); err != nil {
+				t.Failed(fmt.Sprintf("sync error, %s", err))
 				return
 			}
-
-			for i := range p.Data.Items {
-				target := p.Data.Items[i]
+			for i := range set.Items {
+				target := set.Items[i]
 				target.TaskId = t.Id
 				s.doSyncBill(ctx, target, t)
 			}

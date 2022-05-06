@@ -1,10 +1,12 @@
 package ecs_test
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"testing"
 
+	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/cmdb/provider/huawei/connectivity"
 
 	op "github.com/infraboard/cmdb/provider/huawei/ecs"
@@ -17,14 +19,12 @@ var (
 func TestQuery(t *testing.T) {
 	pager := operater.PageQuery()
 
-	hasNext := true
-	for hasNext {
-		p := pager.Next()
-		if p.Err != nil {
-			panic(p.Err)
+	for pager.Next() {
+		set := host.NewHostSet()
+		if err := pager.Scan(context.Background(), set); err != nil {
+			panic(err)
 		}
-		hasNext = p.HasNext
-		fmt.Println(p.Data)
+		fmt.Println(set)
 	}
 }
 

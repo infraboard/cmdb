@@ -3,42 +3,42 @@ module github.com/infraboard/cmdb
 go 1.18
 
 require (
-	github.com/BurntSushi/toml v1.0.0
-	github.com/aliyun/alibaba-cloud-sdk-go v1.61.1453
-	github.com/aliyun/aliyun-oss-go-sdk v2.2.1+incompatible
-	github.com/aws/aws-sdk-go-v2/config v1.13.0
-	github.com/aws/aws-sdk-go-v2/credentials v1.8.0
-	github.com/aws/aws-sdk-go-v2/service/ec2 v1.28.0
+	github.com/BurntSushi/toml v1.1.0
+	github.com/aliyun/alibaba-cloud-sdk-go v1.61.1584
+	github.com/aliyun/aliyun-oss-go-sdk v2.2.2+incompatible
+	github.com/aws/aws-sdk-go-v2/config v1.15.4
+	github.com/aws/aws-sdk-go-v2/credentials v1.12.0
+	github.com/aws/aws-sdk-go-v2/service/ec2 v1.39.0
 	github.com/caarlos0/env/v6 v6.9.1
-	github.com/go-playground/validator/v10 v10.10.0
+	github.com/go-playground/validator/v10 v10.11.0
 	github.com/go-sql-driver/mysql v1.6.0
-	github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.0.75
+	github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.0.87
 	github.com/infraboard/keyauth v0.7.3
-	github.com/infraboard/mcube v1.7.1
-	github.com/prometheus/client_golang v1.4.0
-	github.com/rs/xid v1.3.0
-	github.com/spf13/cobra v1.3.0
-	github.com/stretchr/testify v1.7.0
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/billing v1.0.334
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cdb v1.0.334
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.334
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm v1.0.334
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sts v1.0.341
-	github.com/vmware/govmomi v0.27.2
-	google.golang.org/grpc v1.44.0
-	google.golang.org/protobuf v1.27.1
+	github.com/infraboard/mcube v1.7.9
+	github.com/prometheus/client_golang v1.12.1
+	github.com/rs/xid v1.4.0
+	github.com/spf13/cobra v1.4.0
+	github.com/stretchr/testify v1.7.1
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/billing v1.0.393
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cdb v1.0.393
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.393
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm v1.0.393
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sts v1.0.393
+	github.com/vmware/govmomi v0.28.0
+	google.golang.org/grpc v1.46.0
+	google.golang.org/protobuf v1.28.0
 )
 
 require (
-	github.com/aws/aws-sdk-go-v2 v1.13.0 // indirect
-	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.10.0 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/configsources v1.1.4 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.2.0 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/ini v1.3.4 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.7.0 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sso v1.9.0 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sts v1.14.0 // indirect
-	github.com/aws/smithy-go v1.10.0 // indirect
+	github.com/aws/aws-sdk-go-v2 v1.16.3 // indirect
+	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.12.4 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/configsources v1.1.10 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.4.4 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/ini v1.3.11 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.9.4 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sso v1.11.4 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sts v1.16.4 // indirect
+	github.com/aws/smithy-go v1.11.2 // indirect
 	github.com/baiyubin/aliyun-sts-go-sdk v0.0.0-20180326062324-cfa1a18b161f // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
@@ -62,8 +62,8 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/prometheus/client_model v0.2.0 // indirect
-	github.com/prometheus/common v0.9.1 // indirect
-	github.com/prometheus/procfs v0.0.8 // indirect
+	github.com/prometheus/common v0.32.1 // indirect
+	github.com/prometheus/procfs v0.7.3 // indirect
 	github.com/satori/go.uuid v1.2.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/ugorji/go/codec v1.2.6 // indirect

@@ -1,6 +1,7 @@
 package host
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -121,8 +122,8 @@ func NewHostSet() *HostSet {
 	}
 }
 
-func (s *HostSet) Add(item *Host) {
-	s.Items = append(s.Items, item)
+func (s *HostSet) Add(items ...*Host) {
+	s.Items = append(s.Items, items...)
 }
 
 func (s *HostSet) ResourceIds() (ids []string) {
@@ -197,20 +198,8 @@ func (req *UpdateHostRequest) Validate() error {
 	return validate.Struct(req)
 }
 
-func NewPagerResult() *PagerResult {
-	return &PagerResult{
-		Data: NewHostSet(),
-	}
-}
-
-type PagerResult struct {
-	Data    *HostSet
-	Err     error
-	HasNext bool
-}
-
 // 分页迭代器
 type Pager interface {
-	HasNext() bool
-	Next() *PagerResult
+	Next() bool
+	Scan(context.Context, *HostSet) error
 }

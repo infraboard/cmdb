@@ -1,6 +1,8 @@
 package billing
 
 import (
+	"context"
+
 	billing "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/billing/v20180709"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 
@@ -40,22 +42,17 @@ type pager struct {
 	tb       *tokenbucket.Bucket
 }
 
-func (p *pager) Next() *bill.PagerResult {
-	result := bill.NewPagerResult()
-
-	resp, err := p.operater.Query(p.nextReq())
+func (p *pager) Scan(ctx context.Context, set *bill.BillSet) error {
+	resp, err := p.operater.Query(ctx, p.nextReq())
 	if err != nil {
-		result.Err = err
-		return result
+		return err
 	}
+	set.Add(resp.Items...)
 	p.total = resp.Total
 	p.log.Debugf("get %d hosts", len(resp.Items))
 
-	result.Data = resp
-	result.HasNext = p.HasNext()
-
 	p.number++
-	return result
+	return nil
 }
 
 func (p *pager) nextReq() *billing.DescribeBillResourceSummaryRequest {
@@ -66,7 +63,7 @@ func (p *pager) nextReq() *billing.DescribeBillResourceSummaryRequest {
 	return p.req
 }
 
-func (p *pager) HasNext() bool {
+func (p *pager) Next() bool {
 	return int64(p.number*p.size) < p.total
 }
 

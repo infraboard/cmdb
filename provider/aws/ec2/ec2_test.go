@@ -1,10 +1,12 @@
 package ec2_test
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"testing"
 
+	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/cmdb/provider/aws/connectivity"
 	op "github.com/infraboard/cmdb/provider/aws/ec2"
 )
@@ -17,12 +19,12 @@ func TestQuery(t *testing.T) {
 	req := op.NewPageQueryRequest()
 	pager := operater.PageQuery(req)
 
-	for pager.HasNext() {
-		p := pager.Next()
-		if p.Err != nil {
-			panic(p.Err)
+	for pager.Next() {
+		set := host.NewHostSet()
+		if err := pager.Scan(context.Background(), set); err != nil {
+			panic(err)
 		}
-		fmt.Println(p.Data)
+		fmt.Println(set)
 	}
 }
 

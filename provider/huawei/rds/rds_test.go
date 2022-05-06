@@ -1,10 +1,12 @@
 package rds_test
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"testing"
 
+	"github.com/infraboard/cmdb/apps/rds"
 	"github.com/infraboard/cmdb/provider/huawei/connectivity"
 
 	op "github.com/infraboard/cmdb/provider/huawei/rds"
@@ -17,12 +19,12 @@ var (
 func TestQuery(t *testing.T) {
 	pager := operater.PageQuery()
 
-	for pager.HasNext() {
-		p := pager.Next()
-		if p.Err != nil {
-			panic(p.Err)
+	for pager.Next() {
+		set := rds.NewSet()
+		if err := pager.Scan(context.Background(), set); err != nil {
+			panic(err)
 		}
-		fmt.Println(p.Data)
+		fmt.Println(set)
 	}
 }
 

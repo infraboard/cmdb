@@ -1,10 +1,12 @@
 package bss_test
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"testing"
 
+	"github.com/infraboard/cmdb/apps/bill"
 	"github.com/infraboard/cmdb/provider/aliyun/connectivity"
 	"github.com/infraboard/mcube/logger/zap"
 
@@ -20,12 +22,12 @@ func TestQuery(t *testing.T) {
 	req.Month = "2021-10"
 
 	pager := operater.PageQuery(req)
-	for pager.HasNext() {
-		p := pager.Next()
-		if p.Err != nil {
-			panic(p.Err)
+	for pager.Next() {
+		set := bill.NewBillSet()
+		if err := pager.Scan(context.Background(), set); err != nil {
+			panic(err)
 		}
-		fmt.Println(p.Data)
+		fmt.Println(set)
 	}
 }
 

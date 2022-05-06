@@ -1,13 +1,15 @@
 package cdb
 
 import (
+	"context"
+
 	cdb "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cdb/v20170320"
 
 	"github.com/infraboard/cmdb/apps/rds"
 )
 
-func (o *CDBOperater) Query(req *cdb.DescribeDBInstancesRequest) (*rds.Set, error) {
-	resp, err := o.client.DescribeDBInstances(req)
+func (o *CDBOperater) Query(ctx context.Context, req *cdb.DescribeDBInstancesRequest) (*rds.Set, error) {
+	resp, err := o.client.DescribeDBInstancesWithContext(ctx, req)
 	if err != nil {
 		return nil, err
 	}

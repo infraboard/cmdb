@@ -1,6 +1,7 @@
 package cvm_test
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"testing"
@@ -8,6 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/regions"
 
+	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/cmdb/provider/txyun/connectivity"
 	op "github.com/infraboard/cmdb/provider/txyun/cvm"
 	"github.com/infraboard/cmdb/utils"
@@ -22,12 +24,12 @@ var (
 func TestQuery(t *testing.T) {
 	pager := operater.PageQuery(op.NewPageQueryRequest(5))
 
-	for pager.HasNext() {
-		p := pager.Next()
-		if p.Err != nil {
-			panic(p.Err)
+	for pager.Next() {
+		set := host.NewHostSet()
+		if err := pager.Scan(context.Background(), set); err != nil {
+			panic(err)
 		}
-		fmt.Println(p.Data)
+		fmt.Println(set)
 	}
 }
 
