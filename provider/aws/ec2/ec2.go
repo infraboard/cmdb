@@ -27,7 +27,7 @@ func NewEc2Operator(client *ec2.Client) *Ec2Operater {
 func (o *Ec2Operater) transferSet(items []types.Reservation) *host.HostSet {
 	set := host.NewHostSet()
 	for _, item := range items {
-		for i, _ := range item.Instances {
+		for i := range item.Instances {
 			set.Add(o.transferOne(item.Instances[i]))
 		}
 	}

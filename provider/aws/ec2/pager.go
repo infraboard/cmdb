@@ -2,7 +2,6 @@ package ec2
 
 import (
 	"context"
-	"time"
 
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 
@@ -38,7 +37,6 @@ type pager struct {
 	req      *ec2.DescribeInstancesInput
 	log      logger.Logger
 	tb       *tokenbucket.Bucket
-	timeout  time.Duration
 }
 
 func (p *pager) Scan(ctx context.Context, set *host.HostSet) error {
