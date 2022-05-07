@@ -24,7 +24,7 @@ func newPager(pageSize int, operater *BillingOperater, rate int, month string) *
 	return &pager{
 		size:     pageSize,
 		number:   1,
-		total:    -1,
+		hasNext:  true,
 		operater: operater,
 		req:      req,
 		log:      zap.L().Named("Pagger"),
@@ -35,7 +35,7 @@ func newPager(pageSize int, operater *BillingOperater, rate int, month string) *
 type pager struct {
 	size     int
 	number   int
-	total    int64
+	hasNext  bool
 	operater *BillingOperater
 	req      *billing.DescribeBillResourceSummaryRequest
 	log      logger.Logger
@@ -48,8 +48,12 @@ func (p *pager) Scan(ctx context.Context, set *bill.BillSet) error {
 		return err
 	}
 	set.Add(resp.Items...)
-	p.total = resp.Total
-	p.log.Debugf("get %d hosts", len(resp.Items))
+	p.log.Debugf("get %d hosts", resp.Length())
+
+	// 由于账单接口并没有返回Total总数量, 无法通过梳理判断是否数据已经拉起完成, 改而判断是否有数据
+	if resp.Length() == 0 {
+		p.hasNext = false
+	}
 
 	p.number++
 	return nil
@@ -64,10 +68,7 @@ func (p *pager) nextReq() *billing.DescribeBillResourceSummaryRequest {
 }
 
 func (p *pager) Next() bool {
-	if p.total == -1 {
-		return true
-	}
-	return int64(p.number*p.size) < p.total
+	return p.hasNext
 }
 
 func (p *pager) offset() int64 {

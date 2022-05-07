@@ -11,13 +11,13 @@ import (
 
 	"github.com/infraboard/cmdb/apps/bill"
 	_ "github.com/infraboard/cmdb/apps/bill/impl"
-	op "github.com/infraboard/cmdb/provider/huawei/bss"
-	"github.com/infraboard/cmdb/provider/huawei/connectivity"
+	op "github.com/infraboard/cmdb/provider/txyun/billing"
+	"github.com/infraboard/cmdb/provider/txyun/connectivity"
 )
 
 var (
 	svc      bill.ServiceServer
-	operater *op.BssOperater
+	operater *op.BillingOperater
 )
 
 func TestSyncBill(t *testing.T) {
@@ -60,10 +60,11 @@ func init() {
 		panic(err)
 	}
 
-	ec, err := connectivity.C().BssClient()
+	client := connectivity.C()
+	err = client.Check()
 	if err != nil {
 		panic(err)
 	}
 
-	operater = op.NewBssOperater(ec)
+	operater = op.NewBillingOperater(client.BillingClient())
 }

@@ -33,6 +33,10 @@ func (s *BillSet) Add(items ...*Bill) {
 	s.Items = append(s.Items, items...)
 }
 
+func (s *BillSet) Length() int64 {
+	return int64(len(s.Items))
+}
+
 // 分页迭代器
 type Pager interface {
 	Next() bool
@@ -45,7 +49,7 @@ func (b *Bill) YearMonth() (int, int) {
 	}
 
 	ym := strings.Split(b.Month, "-")
-	if len(ym) > 2 {
+	if len(ym) > 1 {
 		y, _ := strconv.Atoi(ym[0])
 		m, _ := strconv.Atoi(ym[1])
 		return y, m

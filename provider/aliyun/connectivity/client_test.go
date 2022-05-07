@@ -1,6 +1,7 @@
 package connectivity_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/infraboard/cmdb/provider/aliyun/connectivity"
@@ -12,6 +13,8 @@ func TestClient(t *testing.T) {
 
 	err := connectivity.LoadClientFromEnv()
 	if should.NoError(err) {
-		connectivity.C().EcsClient()
+		c := connectivity.C()
+		c.Check()
+		fmt.Println(c.AccountID())
 	}
 }
