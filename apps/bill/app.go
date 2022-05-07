@@ -45,7 +45,7 @@ func (b *Bill) YearMonth() (int, int) {
 	}
 
 	ym := strings.Split(b.Month, "-")
-	if len(ym) == 2 {
+	if len(ym) > 2 {
 		y, _ := strconv.Atoi(ym[0])
 		m, _ := strconv.Atoi(ym[1])
 		return y, m
