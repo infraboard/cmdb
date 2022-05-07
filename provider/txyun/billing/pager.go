@@ -64,6 +64,9 @@ func (p *pager) nextReq() *billing.DescribeBillResourceSummaryRequest {
 }
 
 func (p *pager) Next() bool {
+	if p.total == -1 {
+		return true
+	}
 	return int64(p.number*p.size) < p.total
 }
 

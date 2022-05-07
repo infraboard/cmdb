@@ -79,15 +79,15 @@ func newDefaultLog() *log {
 
 // MySQL todo
 type mySQL struct {
-	Host        string `toml:"host" env:"D_MYSQL_HOST"`
-	Port        string `toml:"port" env:"D_MYSQL_PORT"`
-	UserName    string `toml:"username" env:"D_MYSQL_USERNAME"`
-	Password    string `toml:"password" env:"D_MYSQL_PASSWORD"`
-	Database    string `toml:"database" env:"D_MYSQL_DATABASE"`
-	MaxOpenConn int    `toml:"max_open_conn" env:"D_MYSQL_MAX_OPEN_CONN"`
-	MaxIdleConn int    `toml:"max_idle_conn" env:"D_MYSQL_MAX_IDLE_CONN"`
-	MaxLifeTime int    `toml:"max_life_time" env:"D_MYSQL_MAX_LIFE_TIME"`
-	MaxIdleTime int    `toml:"max_idle_time" env:"D_MYSQL_MAX_idle_TIME"`
+	Host        string `toml:"host" env:"MYSQL_HOST"`
+	Port        string `toml:"port" env:"MYSQL_PORT"`
+	UserName    string `toml:"username" env:"MYSQL_USERNAME"`
+	Password    string `toml:"password" env:"MYSQL_PASSWORD"`
+	Database    string `toml:"database" env:"MYSQL_DATABASE"`
+	MaxOpenConn int    `toml:"max_open_conn" env:"MYSQL_MAX_OPEN_CONN"`
+	MaxIdleConn int    `toml:"max_idle_conn" env:"MYSQL_MAX_IDLE_CONN"`
+	MaxLifeTime int    `toml:"max_life_time" env:"MYSQL_MAX_LIFE_TIME"`
+	MaxIdleTime int    `toml:"max_idle_time" env:"MYSQL_MAX_idle_TIME"`
 
 	lock sync.Mutex
 }

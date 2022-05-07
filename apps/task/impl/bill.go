@@ -84,7 +84,7 @@ func (s *service) syncBill(ctx context.Context, secretIns *secret.Secret, t *tas
 		}
 	}
 
-	// 调用bill服务保持数据, 由于账单对象没有更新逻辑
+	// 调用bill服务保存数据, 由于账单对象没有更新逻辑
 	// 任务同步成功, 确认当前同步版本为正确版本, 删除之前的成本
 	// 任务同步失败, 删除当前同步的版本
 	if t.Status.Equal(task.Status_SUCCESS) {

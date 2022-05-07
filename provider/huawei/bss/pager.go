@@ -60,5 +60,8 @@ func (p *pager) nextReq() *model.ListCustomerselfResourceRecordsRequest {
 }
 
 func (p *pager) Next() bool {
+	if p.total == -1 {
+		return true
+	}
 	return int64(p.number*p.size) < p.total
 }

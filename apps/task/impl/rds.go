@@ -91,7 +91,7 @@ func (s *service) SaveOrUpdateRds(ctx context.Context, ins *rds.RDS, t *task.Tas
 		s.log.Warnf("save rds error, %s", err)
 		detail = task.NewSyncFailedRecord(t.Id, ins.Base.Id, ins.Information.Name, err.Error())
 	} else {
-		s.log.Debugf("save host %s to db", b.ShortDesc())
+		s.log.Debugf("save rds %s to db", b.ShortDesc())
 		detail = task.NewSyncSucceedRecord(t.Id, ins.Base.Id, ins.Information.Name)
 	}
 
