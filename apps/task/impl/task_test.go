@@ -2,7 +2,6 @@ package impl_test
 
 import (
 	"context"
-	"fmt"
 	"testing"
 	"time"
 
@@ -11,6 +10,7 @@ import (
 	"github.com/infraboard/cmdb/conf"
 	"github.com/infraboard/mcube/app"
 	"github.com/infraboard/mcube/logger/zap"
+	"github.com/stretchr/testify/assert"
 
 	_ "github.com/infraboard/cmdb/apps/all"
 )
@@ -20,16 +20,18 @@ var (
 )
 
 func TestSyncBill(t *testing.T) {
+	should := assert.New(t)
+
 	req := task.NewCreateTaskRequst()
 	req.Type = task.Type_RESOURCE_SYNC
 	req.ResourceType = resource.Type_BILL
 	req.SecretId = "c5pcffua0bro7e7a05j0"
+	req.Params["month"] = "2022-04"
 	ins, err := svc.CreatTask(context.Background(), req)
-	if err != nil {
-		t.Fatal(err)
+	if should.NoError(err) {
+		t.Log(ins.Status)
+		time.Sleep(10 * time.Second)
 	}
-	fmt.Println(ins)
-	time.Sleep(5 * time.Second)
 }
 
 func init() {

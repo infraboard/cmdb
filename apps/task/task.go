@@ -18,12 +18,8 @@ func NewTaskFromReq(req *CreateTaskRequst) (*Task, error) {
 	}
 
 	return &Task{
-		Id: xid.New().String(),
-		Data: &CreateTaskRequst{
-			Region:       req.Region,
-			ResourceType: req.ResourceType,
-			SecretId:     req.SecretId,
-		},
+		Id:     xid.New().String(),
+		Data:   req,
 		Status: &Status{},
 	}, nil
 }
