@@ -24,10 +24,7 @@ func (s *service) syncBill(ctx context.Context, secretIns *secret.Secret, t *tas
 
 	// 处理任务状态
 	t.Run()
-	defer func() {
-		t.Completed()
-		cb(t)
-	}()
+	defer s.syncBillDown(ctx, t, cb)
 
 	secret := secretIns.Data
 	switch secret.Vendor {
@@ -87,24 +84,6 @@ func (s *service) syncBill(ctx context.Context, secretIns *secret.Secret, t *tas
 		}
 	}
 
-	// 调用bill服务保存数据, 由于账单对象没有更新逻辑
-	// 任务同步成功, 确认当前同步版本为正确版本, 删除之前的成本
-	// 任务同步失败, 删除当前同步的版本
-	if t.Status.Stage.Equal(task.Stage_SUCCESS) {
-		resp, err := s.bill.ConfirmBill(ctx, bill.NewConfirmBillRequest(t.Id))
-		if err != nil {
-			s.log.Errorf("confirm bill error, %s", err)
-		} else {
-			s.log.Debugf("confirm bill success, total: %d bill", resp.Total)
-		}
-	} else {
-		resp, err := s.bill.DeleteBill(ctx, bill.NewDeleteBillRequest(t.Id))
-		if err != nil {
-			s.log.Errorf("delete bill error, %s", err)
-		} else {
-			s.log.Debugf("delete bill success, total: %d bill", resp.Total)
-		}
-	}
 }
 
 // 月底账单数据入库
@@ -123,5 +102,30 @@ func (s *service) doSyncBill(ctx context.Context, ins *bill.Bill, t *task.Task) 
 	t.AddDetail(detail)
 	if err := s.insertTaskDetail(ctx, detail); err != nil {
 		s.log.Errorf("update detail error, %s", err)
+	}
+}
+
+func (s *service) syncBillDown(ctx context.Context, t *task.Task, cb SyncTaskCallback) {
+	t.Completed()
+	cb(t)
+
+	s.log.Debugf("task status: %s", t.Status)
+	// 调用bill服务保存数据, 由于账单对象没有更新逻辑
+	// 任务同步成功, 确认当前同步版本为正确版本, 删除之前的成本
+	// 任务同步失败, 删除当前同步的版本
+	if t.Status.Stage.Equal(task.Stage_SUCCESS) {
+		resp, err := s.bill.ConfirmBill(ctx, bill.NewConfirmBillRequest(t.Id))
+		if err != nil {
+			s.log.Errorf("confirm bill error, %s", err)
+		} else {
+			s.log.Debugf("confirm bill success, total: %d bill", resp.Total)
+		}
+	} else {
+		resp, err := s.bill.DeleteBill(ctx, bill.NewDeleteBillRequest(t.Id))
+		if err != nil {
+			s.log.Errorf("delete bill error, %s", err)
+		} else {
+			s.log.Debugf("delete bill success, total: %d bill", resp.Total)
+		}
 	}
 }

@@ -19,6 +19,22 @@ var (
 	svc task.ServiceServer
 )
 
+func TestSyncHost(t *testing.T) {
+	should := assert.New(t)
+
+	req := task.NewCreateTaskRequst()
+	req.Type = task.Type_RESOURCE_SYNC
+	req.ResourceType = resource.Type_HOST
+	req.SecretId = "c5pcffua0bro7e7a05j0"
+	req.Region = "ap-shanghai"
+
+	ins, err := svc.CreatTask(context.Background(), req)
+	if should.NoError(err) {
+		t.Log(ins.Status)
+		time.Sleep(10 * time.Second)
+	}
+}
+
 func TestSyncBill(t *testing.T) {
 	should := assert.New(t)
 
