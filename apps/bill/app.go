@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	AppName = "Bill"
+	AppName = "bill"
 )
 
 var (

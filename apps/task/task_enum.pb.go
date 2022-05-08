@@ -9,24 +9,24 @@ import (
 	"strings"
 )
 
-// ParseStatusFromString Parse Status from string
-func ParseStatusFromString(str string) (Status, error) {
+// ParseStageFromString Parse Stage from string
+func ParseStageFromString(str string) (Stage, error) {
 	key := strings.Trim(string(str), `"`)
-	v, ok := Status_value[strings.ToUpper(key)]
+	v, ok := Stage_value[strings.ToUpper(key)]
 	if !ok {
-		return 0, fmt.Errorf("unknown Status: %s", str)
+		return 0, fmt.Errorf("unknown Stage: %s", str)
 	}
 
-	return Status(v), nil
+	return Stage(v), nil
 }
 
 // Equal type compare
-func (t Status) Equal(target Status) bool {
+func (t Stage) Equal(target Stage) bool {
 	return t == target
 }
 
 // IsIn todo
-func (t Status) IsIn(targets ...Status) bool {
+func (t Stage) IsIn(targets ...Stage) bool {
 	for _, target := range targets {
 		if t.Equal(target) {
 			return true
@@ -37,7 +37,7 @@ func (t Status) IsIn(targets ...Status) bool {
 }
 
 // MarshalJSON todo
-func (t Status) MarshalJSON() ([]byte, error) {
+func (t Stage) MarshalJSON() ([]byte, error) {
 	b := bytes.NewBufferString(`"`)
 	b.WriteString(strings.ToUpper(t.String()))
 	b.WriteString(`"`)
@@ -45,8 +45,8 @@ func (t Status) MarshalJSON() ([]byte, error) {
 }
 
 // UnmarshalJSON todo
-func (t *Status) UnmarshalJSON(b []byte) error {
-	ins, err := ParseStatusFromString(string(b))
+func (t *Stage) UnmarshalJSON(b []byte) error {
+	ins, err := ParseStageFromString(string(b))
 	if err != nil {
 		return err
 	}

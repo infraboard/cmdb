@@ -17,7 +17,7 @@ var (
 )
 
 const (
-	AppName = "Resource"
+	AppName = "resource"
 )
 
 func NewSearchRequest() *SearchRequest {

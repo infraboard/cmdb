@@ -99,9 +99,9 @@ func (s *service) QueryTask(ctx context.Context, req *task.QueryTaskRequest) (*t
 	for rows.Next() {
 		ins := task.NewDefaultTask()
 		err := rows.Scan(
-			&ins.Id, &ins.Region, &ins.ResourceType, &ins.SecretId, &ins.SecretDescription, &ins.Timeout,
-			&ins.Status, &ins.Message, &ins.StartAt, &ins.EndAt, &ins.TotalSucceed, &ins.TotalFailed,
-			&ins.Domain, &ins.Namespace,
+			&ins.Id, &ins.Data.Region, &ins.Data.ResourceType, &ins.Data.SecretId, &ins.SecretDescription, &ins.Data.Timeout,
+			&ins.Status.Stage, &ins.Status.Message, &ins.Status.StartAt, &ins.Status.EndAt, &ins.Status.TotalSucceed, &ins.Status.TotalFailed,
+			&ins.Data.Domain, &ins.Data.Namespace,
 		)
 		if err != nil {
 			return nil, exception.NewInternalServerError("query task error, %s", err.Error())
@@ -138,9 +138,9 @@ func (s *service) DescribeTask(ctx context.Context, req *task.DescribeTaskReques
 
 	ins := task.NewDefaultTask()
 	err = queryStmt.QueryRow(args...).Scan(
-		&ins.Id, &ins.Region, &ins.ResourceType, &ins.SecretId, &ins.SecretDescription, &ins.Timeout,
-		&ins.Status, &ins.Message, &ins.StartAt, &ins.EndAt, &ins.TotalSucceed, &ins.TotalFailed,
-		&ins.Domain, &ins.Namespace,
+		&ins.Id, &ins.Data.Region, &ins.Data.ResourceType, &ins.Data.SecretId, &ins.SecretDescription, &ins.Data.Timeout,
+		&ins.Status.Stage, &ins.Status.Message, &ins.Status.StartAt, &ins.Status.EndAt, &ins.Status.TotalSucceed, &ins.Status.TotalFailed,
+		&ins.Data.Domain, &ins.Data.Namespace,
 	)
 	if err != nil {
 		return nil, err

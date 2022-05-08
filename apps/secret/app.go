@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	AppName = "Secret"
+	AppName = "secret"
 )
 
 var (

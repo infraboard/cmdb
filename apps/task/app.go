@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	AppName = "Task"
+	AppName = "task"
 )
 
 var (
@@ -17,7 +17,9 @@ var (
 )
 
 func NewCreateTaskRequst() *CreateTaskRequst {
-	return &CreateTaskRequst{}
+	return &CreateTaskRequst{
+		Params: map[string]string{},
+	}
 }
 
 func (req *CreateTaskRequst) Validate() error {

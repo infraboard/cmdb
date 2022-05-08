@@ -18,16 +18,19 @@ func NewTaskFromReq(req *CreateTaskRequst) (*Task, error) {
 	}
 
 	return &Task{
-		Id:           xid.New().String(),
-		Region:       req.Region,
-		ResourceType: req.ResourceType,
-		SecretId:     req.SecretId,
+		Id: xid.New().String(),
+		Data: &CreateTaskRequst{
+			Region:       req.Region,
+			ResourceType: req.ResourceType,
+			SecretId:     req.SecretId,
+		},
+		Status: &Status{},
 	}, nil
 }
 
 func (s *Task) Run() {
-	s.StartAt = ftime.Now().Timestamp()
-	s.Status = Status_RUNNING
+	s.Status.StartAt = ftime.Now().Timestamp()
+	s.Status.Stage = Stage_RUNNING
 }
 
 func (s *Task) UpdateSecretDesc(desc string) {
@@ -35,27 +38,27 @@ func (s *Task) UpdateSecretDesc(desc string) {
 }
 
 func (s *Task) Completed() {
-	s.EndAt = ftime.Now().Timestamp()
-	if s.Status != Status_FAILED {
-		if s.TotalFailed == 0 {
-			s.Status = Status_SUCCESS
+	s.Status.EndAt = ftime.Now().Timestamp()
+	if s.Status.Stage != Stage_FAILED {
+		if s.Status.TotalFailed == 0 {
+			s.Status.Stage = Stage_SUCCESS
 		} else {
-			s.Status = Status_WARNING
+			s.Status.Stage = Stage_WARNING
 		}
 	}
 }
 
 func (s *Task) Failed(message string) {
-	s.EndAt = time.Now().UnixMilli()
-	s.Status = Status_FAILED
-	s.Message = message
+	s.Status.EndAt = time.Now().UnixMilli()
+	s.Status.Stage = Stage_FAILED
+	s.Status.Message = message
 }
 
 func (s *Task) AddDetail(d *Record) {
 	if d.IsSuccess {
-		s.TotalSucceed++
+		s.Status.TotalSucceed++
 	} else {
-		s.TotalFailed++
+		s.Status.TotalFailed++
 	}
 }
 

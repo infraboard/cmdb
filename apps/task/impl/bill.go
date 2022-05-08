@@ -33,7 +33,7 @@ func (s *service) syncBill(ctx context.Context, secretIns *secret.Secret, t *tas
 	switch secret.Vendor {
 	case resource.Vendor_ALIYUN:
 		s.log.Debugf("sync aliyun bill ...")
-		client := aliConn.NewAliCloudClient(secret.ApiKey, secret.ApiSecret, t.Region)
+		client := aliConn.NewAliCloudClient(secret.ApiKey, secret.ApiSecret, t.Data.Region)
 		bc, err := client.BssClient()
 		if err != nil {
 			t.Failed(err.Error())
@@ -43,17 +43,19 @@ func (s *service) syncBill(ctx context.Context, secretIns *secret.Secret, t *tas
 		operater := bssOp.NewBssOperater(bc)
 		req := bssOp.NewPageQueryRequest()
 		req.Rate = int(secret.RequestRate)
+		req.Month = t.Data.Params["month"]
 		pager = operater.PageQuery(req)
 	case resource.Vendor_TENCENT:
 		s.log.Debugf("sync txyun bill ...")
-		client := txConn.NewTencentCloudClient(secret.ApiKey, secret.ApiSecret, t.Region)
+		client := txConn.NewTencentCloudClient(secret.ApiKey, secret.ApiSecret, t.Data.Region)
 		operater := billOp.NewBillingOperater(client.BillingClient())
 		req := billOp.NewPageQueryRequest()
 		req.Rate = int(secret.RequestRate)
+		req.Month = t.Data.Params["month"]
 		pager = operater.PageQuery(req)
 	case resource.Vendor_HUAWEI:
 		s.log.Debugf("sync hwyun bill ...")
-		client := hwConn.NewHuaweiCloudClient(secret.ApiKey, secret.ApiSecret, t.Region)
+		client := hwConn.NewHuaweiCloudClient(secret.ApiKey, secret.ApiSecret, t.Data.Region)
 		bc, err := client.BssClient()
 		if err != nil {
 			t.Failed(err.Error())
@@ -62,6 +64,7 @@ func (s *service) syncBill(ctx context.Context, secretIns *secret.Secret, t *tas
 		operater := hwBssOp.NewBssOperater(bc)
 		req := hwBssOp.NewPageQueryRequest()
 		req.Rate = int(secret.RequestRate)
+		req.Month = t.Data.Params["month"]
 		pager = operater.PageQuery(req)
 	default:
 		t.Failed(fmt.Sprintf("unsuport bill syncing vendor %s", secret.Vendor))
@@ -87,7 +90,7 @@ func (s *service) syncBill(ctx context.Context, secretIns *secret.Secret, t *tas
 	// 调用bill服务保存数据, 由于账单对象没有更新逻辑
 	// 任务同步成功, 确认当前同步版本为正确版本, 删除之前的成本
 	// 任务同步失败, 删除当前同步的版本
-	if t.Status.Equal(task.Status_SUCCESS) {
+	if t.Status.Stage.Equal(task.Stage_SUCCESS) {
 		resp, err := s.bill.ConfirmBill(ctx, bill.NewConfirmBillRequest(t.Id))
 		if err != nil {
 			s.log.Errorf("confirm bill error, %s", err)

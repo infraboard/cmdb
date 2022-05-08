@@ -55,7 +55,7 @@ func (s *service) save(ctx context.Context, h *rds.RDS) error {
 		h.Base.Id, desc.Cpu,
 	)
 	if err != nil {
-		return fmt.Errorf("save host resource describe error, %s", err)
+		return fmt.Errorf("save rds resource describe error, %s", err)
 	}
 
 	return tx.Commit()

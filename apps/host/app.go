@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	AppName = "Host"
+	AppName = "host"
 )
 
 func NewDefaultHost() *Host {

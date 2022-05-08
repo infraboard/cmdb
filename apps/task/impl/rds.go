@@ -33,7 +33,7 @@ func (s *service) syncRds(ctx context.Context, secretIns *secret.Secret, t *task
 	switch secret.Vendor {
 	case resource.Vendor_ALIYUN:
 		s.log.Debugf("sync aliyun rds ...")
-		client := aliConn.NewAliCloudClient(secret.ApiKey, secret.ApiSecret, t.Region)
+		client := aliConn.NewAliCloudClient(secret.ApiKey, secret.ApiSecret, t.Data.Region)
 		bc, err := client.RdsClient()
 		if err != nil {
 			t.Failed(err.Error())
@@ -46,12 +46,12 @@ func (s *service) syncRds(ctx context.Context, secretIns *secret.Secret, t *task
 		pager = operater.PageQuery(req)
 	case resource.Vendor_TENCENT:
 		s.log.Debugf("sync txyun rds ...")
-		client := txConn.NewTencentCloudClient(secret.ApiKey, secret.ApiSecret, t.Region)
+		client := txConn.NewTencentCloudClient(secret.ApiKey, secret.ApiSecret, t.Data.Region)
 		operater := cdbOp.NewCDBOperater(client.CDBClient())
 		pager = operater.PageQuery()
 	case resource.Vendor_HUAWEI:
 		s.log.Debugf("sync hwyun rds ...")
-		client := hwConn.NewHuaweiCloudClient(secret.ApiKey, secret.ApiSecret, t.Region)
+		client := hwConn.NewHuaweiCloudClient(secret.ApiKey, secret.ApiSecret, t.Data.Region)
 		ec, err := client.RdsClient()
 		if err != nil {
 			t.Failed(err.Error())

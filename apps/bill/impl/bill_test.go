@@ -10,9 +10,10 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/infraboard/cmdb/apps/bill"
-	_ "github.com/infraboard/cmdb/apps/bill/impl"
 	op "github.com/infraboard/cmdb/provider/txyun/billing"
 	"github.com/infraboard/cmdb/provider/txyun/connectivity"
+
+	_ "github.com/infraboard/cmdb/apps/bill/impl"
 )
 
 var (

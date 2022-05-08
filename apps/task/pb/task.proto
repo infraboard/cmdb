@@ -7,13 +7,13 @@ import "github.com/infraboard/mcube/pb/page/page.proto";
 import "apps/resource/pb/resource.proto";
 
 service Service {
+    rpc CreatTask (CreateTaskRequst) returns (Task);
     rpc QueryTask (QueryTaskRequest) returns (TaskSet);
     rpc DescribeTask(DescribeTaskRequest) returns(Task);
     rpc QueryTaskRecord(QueryTaskRecordRequest) returns(RecordSet);
-    rpc CreatTask (CreateTaskRequst) returns (Task);
 }
 
-enum Status {
+enum Stage {
     PENDDING = 0;
     RUNNING = 1;
     SUCCESS = 2;
@@ -34,51 +34,36 @@ message Task {
     // 任务id
     // @gotags: json:"id"
     string id = 1;
-    // 任务类型
-    // @gotags: json:"type"
-    Type type = 13;
-    // 测试运行
-    // @gotags: json:"dry_run"
-    bool dry_run = 14;
-    // 同步的区域
-    // @gotags: json:"region"
-    string region = 2;
-    // 同步的资源
-    // @gotags: json:"resource_type"
-    infraboard.cmdb.resource.Type resource_type = 3;
-    // 关联secret
-    // @gotags: json:"secret_id"
-    string secret_id = 4;
-    // secret描述
+    // secret
     // @gotags: json:"secret_description"
-    string secret_description = 5;
-    // 任务超时时间
-    // @gotags: json:"timeout"
-    int32 timeout = 6;
+    string secret_description = 2;
+    // 任务描述
+    // @gotags: json:"data"
+    CreateTaskRequst data = 3;
     // 任务状态
     // @gotags: json:"status"
-    Status status = 7;
+    Status status = 4;
+}
+
+message Status {
+    // 任务状态
+    // @gotags: json:"stage"
+    Stage stage = 1;
     // 失败时的异常信息
     // @gotags: json:"message"
-    string message = 8;
+    string message = 2;
     // 开始同步的时间
     // @gotags: json:"start_at"
-    int64 start_at = 9;
+    int64 start_at = 3;
     // 同步结束时间
     // @gotags: json:"end_at"
-    int64 end_at = 10;
+    int64 end_at = 4;
     // 成功的条数
     // @gotags: json:"total_succeed"
-    int64 total_succeed = 11;
+    int64 total_succeed = 5;
     // 失败的条数
     // @gotags: json:"total_failed"
-    int64 total_failed = 12;
-    // 任务所属域
-    // @gotags: json:"domain"
-    string domain = 15;
-    // 任务所属空间
-    // @gotags: json:"namespace"
-    string namespace = 16;
+    int64 total_failed = 6;
 }
 
 message RecordSet {
@@ -143,15 +128,18 @@ message CreateTaskRequst {
     // 通知资源的Region
     // @gotags: json:"region"
     string region = 5;
+    // 额外的一些参数
+    // @gotags: json:"params"
+    map<string,string> params = 6;
     // 任务执行的超时时间
     // @gotags: json:"timeout"
-    int64 timeout = 6;
+    int64 timeout = 7;
     // 任务所属域
     // @gotags: json:"domain"
-    string domain = 7;
+    string domain = 8;
     // 任务所属空间
     // @gotags: json:"namespace"
-    string namespace = 8;
+    string namespace = 9;
 }
 
 message DescribeTaskRequest {

@@ -42,7 +42,7 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 	switch secret.Vendor {
 	case resource.Vendor_ALIYUN:
 		s.log.Debugf("sync aliyun ecs ...")
-		client := aliConn.NewAliCloudClient(secret.ApiKey, secret.ApiSecret, t.Region)
+		client := aliConn.NewAliCloudClient(secret.ApiKey, secret.ApiSecret, t.Data.Region)
 		if err := client.Check(); err != nil {
 			t.Failed(err.Error())
 			return
@@ -59,7 +59,7 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 		pager = operater.PageQuery(req)
 	case resource.Vendor_TENCENT:
 		s.log.Debugf("sync txyun cvm ...")
-		client := txConn.NewTencentCloudClient(secret.ApiKey, secret.ApiSecret, t.Region)
+		client := txConn.NewTencentCloudClient(secret.ApiKey, secret.ApiSecret, t.Data.Region)
 		if err := client.Check(); err != nil {
 			t.Failed(err.Error())
 			return
@@ -70,7 +70,7 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 		pager = operater.PageQuery(req)
 	case resource.Vendor_HUAWEI:
 		s.log.Debugf("sync hwyun ecs ...")
-		client := hwConn.NewHuaweiCloudClient(secret.ApiKey, secret.ApiSecret, t.Region)
+		client := hwConn.NewHuaweiCloudClient(secret.ApiKey, secret.ApiSecret, t.Data.Region)
 		if err := client.Check(); err != nil {
 			t.Failed(err.Error())
 			return
@@ -85,7 +85,7 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 		pager = operater.PageQuery()
 	case resource.Vendor_AMAZON:
 		s.log.Debugf("sync aws ec2 ...")
-		client := awsConn.NewAwsCloudClient(secret.ApiKey, secret.ApiSecret, t.Region)
+		client := awsConn.NewAwsCloudClient(secret.ApiKey, secret.ApiSecret, t.Data.Region)
 		ec, err := client.Ec2Client()
 		if err != nil {
 			t.Failed(err.Error())
