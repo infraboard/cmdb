@@ -25,7 +25,7 @@ func newPager(pageSize int, operater *BssOperater, rate int, month string) *page
 		operater: operater,
 		req:      req,
 		total:    -1,
-		log:      zap.L().Named("Pagger"),
+		log:      zap.L().Named("ali.bss"),
 		tb:       tokenbucket.NewBucketWithRate(rateFloat, 1),
 	}
 }

@@ -13,7 +13,6 @@ import (
 
 var (
 	// Service 服务实例
-
 	svr = &service{}
 )
 

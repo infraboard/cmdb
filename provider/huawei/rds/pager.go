@@ -21,15 +21,15 @@ func newPager(pageSize int, operater *RdsOperater) *pager {
 		number:   1,
 		operater: operater,
 		req:      req,
-		total:    -1,
-		log:      zap.L().Named("Pagger"),
+		hasNext:  true,
+		log:      zap.L().Named("huawei.rds"),
 	}
 }
 
 type pager struct {
 	size     int
 	number   int
-	total    int64
+	hasNext  bool
 	operater *RdsOperater
 	req      *model.ListInstancesRequest
 	log      logger.Logger
@@ -41,7 +41,11 @@ func (p *pager) Scan(ctx context.Context, set *rds.Set) error {
 		return err
 	}
 	set.Add(resp.Items...)
-	p.total = resp.Total
+
+	if set.Length() == 0 {
+		p.log.Infof("sync complete")
+		p.hasNext = false
+	}
 
 	p.number++
 	return nil
@@ -56,8 +60,5 @@ func (p *pager) nextReq() *model.ListInstancesRequest {
 }
 
 func (p *pager) Next() bool {
-	if p.total == -1 {
-		return true
-	}
-	return int64(p.number*p.size) < p.total
+	return p.hasNext
 }

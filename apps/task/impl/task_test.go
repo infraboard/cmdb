@@ -50,6 +50,22 @@ func TestSyncBill(t *testing.T) {
 	}
 }
 
+func TestSyncRds(t *testing.T) {
+	should := assert.New(t)
+
+	req := task.NewCreateTaskRequst()
+	req.Type = task.Type_RESOURCE_SYNC
+	req.ResourceType = resource.Type_RDS
+	req.SecretId = "c9rse891eqlk2nabpb10"
+	req.Region = "ap-shanghai"
+
+	ins, err := svc.CreatTask(context.Background(), req)
+	if should.NoError(err) {
+		t.Log(ins.Status)
+		time.Sleep(10 * time.Second)
+	}
+}
+
 func init() {
 	zap.DevelopmentSetup()
 	if err := conf.LoadConfigFromEnv(); err != nil {

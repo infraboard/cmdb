@@ -22,7 +22,7 @@ func newPager(pageSize int, operater *CVMOperater, reqPs int) *pager {
 		operater: operater,
 		req:      req,
 		total:    -1,
-		log:      zap.L().Named("Pagger"),
+		log:      zap.L().Named("tx.cvm"),
 		tb:       tokenbucket.NewBucketWithRate(1/float64(reqPs), 1),
 	}
 }

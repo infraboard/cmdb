@@ -13,6 +13,8 @@ func (o *RdsOperater) Query(req *model.ListInstancesRequest) (*rds.Set, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	// 华为云返回的TotalCount不准确
 	set.Total = int64(*resp.TotalCount)
 	set.Items = o.transferSet(resp.Instances).Items
 

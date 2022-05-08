@@ -23,7 +23,7 @@ func newPager(pageSize int, operater *RdsOperater, rate int) *pager {
 		operater: operater,
 		total:    -1,
 		req:      req,
-		log:      zap.L().Named("Pagger"),
+		log:      zap.L().Named("ali.rds"),
 		tb:       tokenbucket.NewBucketWithRate(rateFloat, 1),
 	}
 }
@@ -56,7 +56,7 @@ func (p *pager) WithLogger(log logger.Logger) {
 }
 
 func (p *pager) nextReq() *rds.DescribeDBInstancesRequest {
-	p.log.Debug("请求第%d页数据", p.number)
+	p.log.Debugf("请求第%d页数据", p.number)
 	p.req.PageNumber = requests.NewInteger(p.number)
 	return p.req
 }

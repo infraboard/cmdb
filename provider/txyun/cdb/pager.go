@@ -18,16 +18,17 @@ func newPager(pageSize int, operater *CDBOperater) *pager {
 	return &pager{
 		size:     pageSize,
 		number:   1,
+		hasNext:  true,
 		operater: operater,
 		req:      req,
-		log:      zap.L().Named("Pagger"),
+		log:      zap.L().Named("tx.cdb"),
 	}
 }
 
 type pager struct {
 	size     int
 	number   int
-	total    int64
+	hasNext  bool
 	operater *CDBOperater
 	req      *cdb.DescribeDBInstancesRequest
 	log      logger.Logger
@@ -39,8 +40,12 @@ func (p *pager) Scan(ctx context.Context, set *rds.Set) error {
 		return err
 	}
 	set.Add(resp.Items...)
-	p.total = resp.Total
 	p.log.Debugf("get %d hosts", len(resp.Items))
+
+	if set.Length() == 0 {
+		p.log.Info("sync complete")
+		p.hasNext = false
+	}
 
 	p.number++
 	return nil
@@ -53,10 +58,7 @@ func (p *pager) nextReq() *cdb.DescribeDBInstancesRequest {
 }
 
 func (p *pager) Next() bool {
-	if p.total == -1 {
-		return true
-	}
-	return int64(p.number*p.size) < p.total
+	return p.hasNext
 }
 
 func (p *pager) offset() int64 {

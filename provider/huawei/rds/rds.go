@@ -78,7 +78,7 @@ func (o *RdsOperater) parseTime(t string) int64 {
 		return 0
 	}
 
-	ts, err := time.Parse("2006-01-02T15:04:05Z", t)
+	ts, err := time.Parse("2006-01-02T15:04:05+0000", t)
 	if err != nil {
 		o.log.Errorf("parse time %s error, %s", t, err)
 		return 0

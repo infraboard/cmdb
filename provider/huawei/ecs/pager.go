@@ -22,7 +22,7 @@ func newPager(pageSize int, operater *EcsOperater) *pager {
 		total:    -1,
 		operater: operater,
 		req:      req,
-		log:      zap.L().Named("Pagger"),
+		log:      zap.L().Named("huawei.ecs"),
 	}
 }
 

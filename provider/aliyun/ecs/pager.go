@@ -22,7 +22,7 @@ func newPager(pageSize int, operater *EcsOperater, rate int) *pager {
 		number:   1,
 		operater: operater,
 		req:      req,
-		log:      zap.L().Named("Pagger"),
+		log:      zap.L().Named("ali.ecs"),
 		tb:       tokenbucket.NewBucketWithRate(rateFloat, 1),
 		total:    -1,
 	}

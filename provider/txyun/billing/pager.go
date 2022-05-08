@@ -27,7 +27,7 @@ func newPager(pageSize int, operater *BillingOperater, rate int, month string) *
 		hasNext:  true,
 		operater: operater,
 		req:      req,
-		log:      zap.L().Named("Pagger"),
+		log:      zap.L().Named("tx.billing"),
 		tb:       tokenbucket.NewBucketWithRate(rateFloat, 1),
 	}
 }

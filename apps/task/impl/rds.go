@@ -39,7 +39,6 @@ func (s *service) syncRds(ctx context.Context, secretIns *secret.Secret, t *task
 			t.Failed(err.Error())
 			return
 		}
-
 		operater := rdsOp.NewRdsOperater(bc)
 		req := rdsOp.NewPageQueryRequest()
 		req.Rate = int(secret.RequestRate)

@@ -55,21 +55,43 @@ func (o *CDBOperater) transferOne(ins *cdb.InstanceInfo) *rds.RDS {
 	desc := r.Describe
 	desc.EngineType = "MySQL"
 	desc.EngineVersion = utils.PtrStrV(ins.EngineVersion)
-	// desc.InstanceClass = ins.DBInstanceClass
+	desc.InstanceClass = o.ParseInstanceType(ins.InstanceType)
 	// desc.ClassType = ins.DBInstanceClass
 	// desc.ExportType = ins.DBInstanceNetType
 	// desc.NetworkType = ins.InstanceNetworkType
 	// desc.Type = ins.DBInstanceType
+	desc.Cpu = int32(utils.PtrInt64(ins.Cpu))
+	desc.Memory = utils.PtrInt64(ins.Memory)
+	desc.StorageCapacity = utils.PtrInt64(ins.Volume)
+	desc.Port = utils.PtrInt64(ins.WanPort)
 
 	return r
 }
 
 func (o *CDBOperater) parseTime(t string) int64 {
-	ts, err := time.Parse("2006-01-02T15:04:05Z", t)
+	ts, err := time.Parse("2006-01-02 15:04:05", t)
 	if err != nil {
 		o.log.Errorf("parse time %s error, %s", t, err)
 		return 0
 	}
 
 	return ts.UnixNano() / 1000000
+}
+
+// 实例类型，可能的返回值：1-主实例；2-灾备实例；3-只读实例
+func (o *CDBOperater) ParseInstanceType(id *int64) string {
+	if id == nil {
+		return ""
+	}
+
+	switch *id {
+	case 1:
+		return "主实例"
+	case 2:
+		return "灾备实例"
+	case 3:
+		return "只读实例"
+	}
+
+	return ""
 }

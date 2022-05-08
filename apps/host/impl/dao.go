@@ -34,8 +34,13 @@ func (s *service) save(ctx context.Context, h *host.Host) error {
 	// 如果出错，则可以使用sql.Tx中的Rollback()方法回滚事务，保持数据的一致性
 	defer func() {
 		if err != nil {
-			tx.Rollback()
-			return
+			if err := tx.Rollback(); err != nil {
+				s.log.Errorf("rollback error, %s", err)
+			}
+		} else {
+			if err := tx.Commit(); err != nil {
+				s.log.Errorf("commit error, %s", err)
+			}
 		}
 	}()
 
@@ -67,7 +72,7 @@ func (s *service) save(ctx context.Context, h *host.Host) error {
 		return fmt.Errorf("save host resource describe error, %s", err)
 	}
 
-	return tx.Commit()
+	return err
 }
 
 func (s *service) update(ctx context.Context, ins *host.Host) error {
