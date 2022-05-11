@@ -92,7 +92,7 @@ func (s *service) removeTag(ctx context.Context, resourceId string, tags []*reso
 		tx.Commit()
 	}()
 
-	stmt, err = tx.Prepare(sqlDeleteResourceTag)
+	stmt, err = tx.PrepareContext(ctx, sqlDeleteResourceTag)
 	if err != nil {
 		err = fmt.Errorf("prepare delete tag sql error, %s", err)
 		return
@@ -100,7 +100,7 @@ func (s *service) removeTag(ctx context.Context, resourceId string, tags []*reso
 	defer stmt.Close()
 
 	for i := range tags {
-		if _, err = stmt.Exec(resourceId, tags[i].Key, tags[i].Value); err != nil {
+		if _, err = stmt.ExecContext(ctx, resourceId, tags[i].Key, tags[i].Value); err != nil {
 			err = fmt.Errorf("save resource tag error, %s", err)
 			return
 		}

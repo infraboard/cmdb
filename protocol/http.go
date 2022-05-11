@@ -88,11 +88,6 @@ func (s *HTTPService) Start() error {
 	// 注册路由条目
 	s.RegistryEndpoint()
 
-	apis := s.r.RegisteredWebServices()
-	for i := range apis {
-		fmt.Println(apis[i].Routes())
-	}
-
 	// 启动 HTTP服务
 	s.l.Infof("HTTP服务启动成功, 监听地址: %s", s.server.Addr)
 	if err := s.server.ListenAndServe(); err != nil {
