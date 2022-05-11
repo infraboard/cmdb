@@ -1,8 +1,7 @@
 package api
 
 import (
-	"net/http"
-
+	"github.com/emicklei/go-restful/v3"
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/http/response"
@@ -13,7 +12,7 @@ import (
 	tx_region "github.com/infraboard/cmdb/provider/txyun/region"
 )
 
-func (h *handler) ListVendor(w http.ResponseWriter, r *http.Request) {
+func (h *handler) ListVendor(r *restful.Request, w *restful.Response) {
 	resp := []utils.EnumDescribe{
 		{Value: resource.Vendor_ALIYUN.String(), Describe: "阿里云"},
 		{Value: resource.Vendor_TENCENT.String(), Describe: "腾讯云"},
@@ -24,7 +23,7 @@ func (h *handler) ListVendor(w http.ResponseWriter, r *http.Request) {
 	response.Success(w, resp)
 }
 
-func (h *handler) ListResourceType(w http.ResponseWriter, r *http.Request) {
+func (h *handler) ListResourceType(r *restful.Request, w *restful.Response) {
 	resp := map[string][]utils.EnumDescribe{
 		resource.Vendor_ALIYUN.String(): {
 			{Name: "主机", Value: resource.Type_HOST.String(), Describe: "ECS", Meta: utils.ParamType("region")},
@@ -51,7 +50,7 @@ func (h *handler) ListResourceType(w http.ResponseWriter, r *http.Request) {
 	response.Success(w, resp)
 }
 
-func (h *handler) ListVendorRegion(w http.ResponseWriter, r *http.Request) {
+func (h *handler) ListVendorRegion(r *restful.Request, w *restful.Response) {
 	resp := map[string][]utils.EnumDescribe{
 		resource.Vendor_ALIYUN.String():  ali_region.Regions,
 		resource.Vendor_TENCENT.String(): tx_region.Regions,

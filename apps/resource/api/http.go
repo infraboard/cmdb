@@ -1,12 +1,14 @@
 package api
 
 import (
-	"github.com/infraboard/mcube/http/label"
-	"github.com/infraboard/mcube/http/router"
+	restfulspec "github.com/emicklei/go-restful-openapi"
+	"github.com/emicklei/go-restful/v3"
+	"github.com/infraboard/mcube/http/response"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 
 	"github.com/infraboard/cmdb/apps/resource"
+	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/app"
 )
 
@@ -29,21 +31,59 @@ func (h *handler) Name() string {
 	return resource.AppName
 }
 
-func (h *handler) Registry(r router.SubRouter) {
-	rr := r.ResourceRouter("resource")
-	rr.Handle("GET", "/search", h.SearchResource).DisableAuth().AddLabel(label.List)
-	rr.Handle("GET", "/vendors", h.ListVendor).DisablePermission()
-	rr.Handle("GET", "/regions", h.ListVendorRegion).DisablePermission()
-	rr.Handle("GET", "/resource_types", h.ListResourceType).DisablePermission()
+func (h *handler) Version() string {
+	return "v1"
+}
 
-	// 资源标签管理
-	rr.Handle("POST", "/resources/:id/tags", h.AddTag).AddLabel(label.Update)
-	rr.Handle("DELETE", "/resources/:id/tags", h.RemoveTag).AddLabel(label.Update)
+func (h *handler) Registry(ws *restful.WebService) {
+	tags := []string{h.Name()}
 
-	// 资源发现
-	rr.Handle("GET", "/discovery/prometheus", h.DiscoveryPrometheus).DisableAuth()
+	ws.Route(ws.GET("/search").To(h.SearchResource).
+		Doc("get all resources").
+		Metadata(restfulspec.KeyOpenAPITags, tags).
+		Reads(resource.SearchRequest{}).
+		Writes(response.NewData(resource.ResourceSet{})).
+		Returns(200, "OK", resource.ResourceSet{}))
+
+	ws.Route(ws.GET("/vendors").To(h.ListVendor).
+		Doc("get all vendors").
+		Metadata(restfulspec.KeyOpenAPITags, tags).
+		Writes(response.NewData([]utils.EnumDescribe{})).
+		Returns(200, "OK", []utils.EnumDescribe{}))
+
+	ws.Route(ws.GET("/regions").To(h.ListVendorRegion).
+		Doc("get all regions").
+		Metadata(restfulspec.KeyOpenAPITags, tags).
+		Writes(response.NewData(map[string][]utils.EnumDescribe{})).
+		Returns(200, "OK", map[string][]utils.EnumDescribe{}))
+
+	ws.Route(ws.GET("/types").To(h.ListResourceType).
+		Doc("get all resource types").
+		Metadata(restfulspec.KeyOpenAPITags, tags).
+		Writes(response.NewData(map[string][]utils.EnumDescribe{})).
+		Returns(200, "OK", map[string][]utils.EnumDescribe{}))
+
+	// // 资源标签管理
+	ws.Route(ws.POST("/").To(h.AddTag).
+		Doc("add resource tags").
+		Metadata(restfulspec.KeyOpenAPITags, tags).
+		Reads([]*resource.Tag{}).
+		Writes(response.NewData(resource.Resource{})))
+	ws.Route(ws.DELETE("/").To(h.RemoveTag).
+		Doc("remove resource tags").
+		Metadata(restfulspec.KeyOpenAPITags, tags).
+		Reads([]*resource.Tag{}).
+		Writes(response.NewData(resource.Resource{})))
+
+	// // 资源发现
+	ws.Route(ws.GET("/discovery/prometheus").To(h.DiscoveryPrometheus).
+		Doc("discovery resoruce for prometheus").
+		Metadata(restfulspec.KeyOpenAPITags, tags).
+		Reads(resource.SearchRequest{}).
+		Writes(response.NewData(resource.ResourceSet{})).
+		Returns(200, "OK", resource.ResourceSet{}))
 }
 
 func init() {
-	app.RegistryHttpApp(h)
+	app.RegistryRESTfulApp(h)
 }

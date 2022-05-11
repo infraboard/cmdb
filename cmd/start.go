@@ -83,7 +83,7 @@ type service struct {
 
 func (s *service) start() error {
 	s.log.Infof("loaded grpc app: %s", app.LoadedGrpcApp())
-	s.log.Infof("loaded http app: %s", app.LoadedHttpApp())
+	s.log.Infof("loaded http app: %s", app.LoadedRESTfulApp())
 	s.log.Infof("loaded internal app: %s", app.LoadedInternalApp())
 
 	go s.grpc.Start()

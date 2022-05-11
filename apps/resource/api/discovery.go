@@ -1,15 +1,14 @@
 package api
 
 import (
-	"net/http"
-
+	"github.com/emicklei/go-restful/v3"
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/http/response"
 )
 
-func (h *handler) DiscoveryPrometheus(w http.ResponseWriter, r *http.Request) {
-	query, err := resource.NewSearchRequestFromHTTP(r)
+func (h *handler) DiscoveryPrometheus(r *restful.Request, w *restful.Response) {
+	query, err := resource.NewSearchRequestFromHTTP(r.Request)
 	if err != nil {
 		response.Failed(w, exception.NewBadRequest("new request error, %s", err))
 		return
@@ -19,7 +18,7 @@ func (h *handler) DiscoveryPrometheus(w http.ResponseWriter, r *http.Request) {
 	query.AddTag(resource.NewPrometheusScrapeTag())
 	query.WithTags = true
 
-	set, err := h.service.Search(r.Context(), query)
+	set, err := h.service.Search(r.Request.Context(), query)
 	if err != nil {
 		response.Failed(w, err)
 		return

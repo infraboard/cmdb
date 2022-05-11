@@ -1,9 +1,7 @@
 package api
 
 import (
-	"net/http"
-
-	"github.com/infraboard/mcube/http/context"
+	"github.com/emicklei/go-restful/v3"
 	"github.com/infraboard/mcube/http/request"
 	"github.com/infraboard/mcube/http/response"
 	pb_request "github.com/infraboard/mcube/pb/request"
@@ -11,9 +9,9 @@ import (
 	"github.com/infraboard/cmdb/apps/host"
 )
 
-func (h *handler) QueryHost(w http.ResponseWriter, r *http.Request) {
-	query := host.NewQueryHostRequestFromHTTP(r)
-	set, err := h.service.QueryHost(r.Context(), query)
+func (h *handler) QueryHost(r *restful.Request, w *restful.Response) {
+	query := host.NewQueryHostRequestFromHTTP(r.Request)
+	set, err := h.service.QueryHost(r.Request.Context(), query)
 	if err != nil {
 		response.Failed(w, err)
 		return
@@ -21,14 +19,14 @@ func (h *handler) QueryHost(w http.ResponseWriter, r *http.Request) {
 	response.Success(w, set)
 }
 
-func (h *handler) CreateHost(w http.ResponseWriter, r *http.Request) {
+func (h *handler) CreateHost(r *restful.Request, w *restful.Response) {
 	ins := host.NewDefaultHost()
-	if err := request.GetDataFromRequest(r, ins); err != nil {
+	if err := request.GetDataFromRequest(r.Request, ins); err != nil {
 		response.Failed(w, err)
 		return
 	}
 
-	ins, err := h.service.SyncHost(r.Context(), ins)
+	ins, err := h.service.SyncHost(r.Request.Context(), ins)
 	if err != nil {
 		response.Failed(w, err)
 		return
@@ -37,10 +35,9 @@ func (h *handler) CreateHost(w http.ResponseWriter, r *http.Request) {
 	response.Success(w, ins)
 }
 
-func (h *handler) DescribeHost(w http.ResponseWriter, r *http.Request) {
-	ctx := context.GetContext(r)
-	req := host.NewDescribeHostRequestWithID(ctx.PS.ByName("id"))
-	set, err := h.service.DescribeHost(r.Context(), req)
+func (h *handler) DescribeHost(r *restful.Request, w *restful.Response) {
+	req := host.NewDescribeHostRequestWithID(r.PathParameter("id"))
+	set, err := h.service.DescribeHost(r.Request.Context(), req)
 	if err != nil {
 		response.Failed(w, err)
 		return
@@ -48,10 +45,9 @@ func (h *handler) DescribeHost(w http.ResponseWriter, r *http.Request) {
 	response.Success(w, set)
 }
 
-func (h *handler) DeleteHost(w http.ResponseWriter, r *http.Request) {
-	ctx := context.GetContext(r)
-	req := host.NewDeleteHostRequestWithID(ctx.PS.ByName("id"))
-	set, err := h.service.ReleaseHost(r.Context(), req)
+func (h *handler) DeleteHost(r *restful.Request, w *restful.Response) {
+	req := host.NewDeleteHostRequestWithID(r.PathParameter("id"))
+	set, err := h.service.ReleaseHost(r.Request.Context(), req)
 	if err != nil {
 		response.Failed(w, err)
 		return
@@ -59,16 +55,15 @@ func (h *handler) DeleteHost(w http.ResponseWriter, r *http.Request) {
 	response.Success(w, set)
 }
 
-func (h *handler) PutHost(w http.ResponseWriter, r *http.Request) {
-	ctx := context.GetContext(r)
-	req := host.NewUpdateHostRequest(ctx.PS.ByName("id"))
+func (h *handler) UpdateHost(r *restful.Request, w *restful.Response) {
+	req := host.NewUpdateHostRequest(r.PathParameter("id"))
 
-	if err := request.GetDataFromRequest(r, req.UpdateHostData); err != nil {
+	if err := request.GetDataFromRequest(r.Request, req.UpdateHostData); err != nil {
 		response.Failed(w, err)
 		return
 	}
 
-	ins, err := h.service.UpdateHost(r.Context(), req)
+	ins, err := h.service.UpdateHost(r.Request.Context(), req)
 	if err != nil {
 		response.Failed(w, err)
 		return
@@ -77,17 +72,16 @@ func (h *handler) PutHost(w http.ResponseWriter, r *http.Request) {
 	response.Success(w, ins)
 }
 
-func (h *handler) PatchHost(w http.ResponseWriter, r *http.Request) {
-	ctx := context.GetContext(r)
-	req := host.NewUpdateHostRequest(ctx.PS.ByName("id"))
+func (h *handler) PatchHost(r *restful.Request, w *restful.Response) {
+	req := host.NewUpdateHostRequest(r.PathParameter("id"))
 	req.UpdateMode = pb_request.UpdateMode_PATCH
 
-	if err := request.GetDataFromRequest(r, req.UpdateHostData); err != nil {
+	if err := request.GetDataFromRequest(r.Request, req.UpdateHostData); err != nil {
 		response.Failed(w, err)
 		return
 	}
 
-	ins, err := h.service.UpdateHost(r.Context(), req)
+	ins, err := h.service.UpdateHost(r.Request.Context(), req)
 	if err != nil {
 		response.Failed(w, err)
 		return

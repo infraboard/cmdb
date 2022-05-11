@@ -1,21 +1,17 @@
 package api
 
 import (
-	"net/http"
-
-	"github.com/infraboard/keyauth/apps/token"
-	"github.com/infraboard/mcube/http/context"
+	"github.com/emicklei/go-restful/v3"
 	"github.com/infraboard/mcube/http/request"
 	"github.com/infraboard/mcube/http/response"
 
 	"github.com/infraboard/cmdb/apps/secret"
 )
 
-func (h *handler) QuerySecret(w http.ResponseWriter, r *http.Request) {
-	ctx := context.GetContext(r)
-	req := secret.NewQuerySecretRequestFromHTTP(r)
-	req.WithNamespace(ctx.AuthInfo.(*token.Token))
-	set, err := h.service.QuerySecret(r.Context(), req)
+func (h *handler) QuerySecret(r *restful.Request, w *restful.Response) {
+	req := secret.NewQuerySecretRequestFromHTTP(r.Request)
+	// req.WithNamespace(ctx.AuthInfo.(*token.Token))
+	set, err := h.service.QuerySecret(r.Request.Context(), req)
 	if err != nil {
 		response.Failed(w, err)
 		return
@@ -23,16 +19,15 @@ func (h *handler) QuerySecret(w http.ResponseWriter, r *http.Request) {
 	response.Success(w, set)
 }
 
-func (h *handler) CreateSecret(w http.ResponseWriter, r *http.Request) {
-	ctx := context.GetContext(r)
+func (h *handler) CreateSecret(r *restful.Request, w *restful.Response) {
 	req := secret.NewCreateSecretRequest()
-	req.SetOwner(ctx.AuthInfo.(*token.Token))
-	if err := request.GetDataFromRequest(r, req); err != nil {
+	// req.SetOwner(ctx.AuthInfo.(*token.Token))
+	if err := request.GetDataFromRequest(r.Request, req); err != nil {
 		response.Failed(w, err)
 		return
 	}
 
-	ins, err := h.service.CreateSecret(r.Context(), req)
+	ins, err := h.service.CreateSecret(r.Request.Context(), req)
 	if err != nil {
 		response.Failed(w, err)
 		return
@@ -41,11 +36,9 @@ func (h *handler) CreateSecret(w http.ResponseWriter, r *http.Request) {
 	response.Success(w, ins)
 }
 
-func (h *handler) DescribeSecret(w http.ResponseWriter, r *http.Request) {
-	ctx := context.GetContext(r)
-
-	req := secret.NewDescribeSecretRequest(ctx.PS.ByName("id"))
-	ins, err := h.service.DescribeSecret(r.Context(), req)
+func (h *handler) DescribeSecret(r *restful.Request, w *restful.Response) {
+	req := secret.NewDescribeSecretRequest(r.PathParameter("id"))
+	ins, err := h.service.DescribeSecret(r.Request.Context(), req)
 	if err != nil {
 		response.Failed(w, err)
 		return
@@ -55,10 +48,9 @@ func (h *handler) DescribeSecret(w http.ResponseWriter, r *http.Request) {
 	response.Success(w, ins)
 }
 
-func (h *handler) DeleteSecret(w http.ResponseWriter, r *http.Request) {
-	ctx := context.GetContext(r)
-	req := secret.NewDeleteSecretRequestWithID(ctx.PS.ByName("id"))
-	set, err := h.service.DeleteSecret(r.Context(), req)
+func (h *handler) DeleteSecret(r *restful.Request, w *restful.Response) {
+	req := secret.NewDeleteSecretRequestWithID(r.PathParameter("id"))
+	set, err := h.service.DeleteSecret(r.Request.Context(), req)
 	if err != nil {
 		response.Failed(w, err)
 		return

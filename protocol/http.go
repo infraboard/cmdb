@@ -6,21 +6,16 @@ import (
 	"net/http"
 	"time"
 
+	restfulspec "github.com/emicklei/go-restful-openapi/v2"
+	"github.com/emicklei/go-restful/v3"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 
 	"github.com/infraboard/cmdb/conf"
+	"github.com/infraboard/cmdb/swagger"
 	"github.com/infraboard/keyauth/apps/endpoint"
-	"github.com/infraboard/keyauth/client/interceptor"
 	"github.com/infraboard/keyauth/version"
 	"github.com/infraboard/mcube/app"
-	"github.com/infraboard/mcube/http/middleware/accesslog"
-	"github.com/infraboard/mcube/http/middleware/cors"
-	"github.com/infraboard/mcube/http/middleware/recovery"
-	"github.com/infraboard/mcube/http/router"
-	"github.com/infraboard/mcube/http/router/httprouter"
-
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 // NewHTTPService 构建函数
@@ -29,15 +24,20 @@ func NewHTTPService() *HTTPService {
 	if err != nil {
 		panic(err)
 	}
-	auther := interceptor.NewHTTPAuther(c)
 
-	r := httprouter.New()
-	r.Use(recovery.NewWithLogger(zap.L().Named("Recovery")))
-	r.Use(accesslog.NewWithLogger(zap.L().Named("AccessLog")))
-	r.Use(cors.AllowAll())
-	r.EnableAPIRoot()
-	r.SetAuther(auther)
-	r.Auth(true)
+	r := restful.DefaultContainer
+	// Optionally, you can install the Swagger Service which provides a nice Web UI on your REST API
+	// You need to download the Swagger HTML5 assets and change the FilePath location in the config below.
+	// Open http://localhost:8080/apidocs/?url=http://localhost:8080/apidocs.json
+	// http.Handle("/apidocs/", http.StripPrefix("/apidocs/", http.FileServer(http.Dir("/Users/emicklei/Projects/swagger-ui/dist"))))
+
+	// Optionally, you may need to enable CORS for the UI to work.
+	cors := restful.CrossOriginResourceSharing{
+		AllowedHeaders: []string{"*"},
+		AllowedMethods: []string{"*"},
+		CookiesAllowed: false,
+		Container:      r}
+	r.Filter(cors.Filter)
 
 	server := &http.Server{
 		ReadHeaderTimeout: 60 * time.Second,
@@ -46,8 +46,9 @@ func NewHTTPService() *HTTPService {
 		IdleTimeout:       60 * time.Second,
 		MaxHeaderBytes:    1 << 20, // 1M
 		Addr:              conf.C().App.HTTPAddr(),
-		Handler:           cors.AllowAll().Handler(r),
+		Handler:           r,
 	}
+
 	return &HTTPService{
 		r:        r,
 		server:   server,
@@ -59,7 +60,7 @@ func NewHTTPService() *HTTPService {
 
 // HTTPService http服务
 type HTTPService struct {
-	r      router.Router
+	r      *restful.Container
 	l      logger.Logger
 	c      *conf.Config
 	server *http.Server
@@ -67,21 +68,30 @@ type HTTPService struct {
 	endpoint endpoint.ServiceClient
 }
 
-func (s *HTTPService) Addr() string {
-	return fmt.Sprintf("%s/api/v1", s.c.App.Name)
+func (s *HTTPService) PathPrefix() string {
+	return fmt.Sprintf("/%s/api", s.c.App.Name)
 }
 
 // Start 启动服务
 func (s *HTTPService) Start() error {
-
 	// 装置子服务路由
-	app.LoadHttpApp(s.Addr(), s.r)
+	app.LoadRESTfulApp(s.PathPrefix(), s.r)
 
-	// 开启应用监控
-	s.EnableMetricExpoter()
+	// API Doc
+	config := restfulspec.Config{
+		WebServices:                   restful.RegisteredWebServices(), // you control what services are visible
+		APIPath:                       "/apidocs.json",
+		PostBuildSwaggerObjectHandler: swagger.Docs}
+	s.r.Add(restfulspec.NewOpenAPIService(config))
+	s.l.Infof("Get the API using http://%s%s", s.c.App.HTTPAddr(), config.APIPath)
 
 	// 注册路由条目
 	s.RegistryEndpoint()
+
+	apis := s.r.RegisteredWebServices()
+	for i := range apis {
+		fmt.Println(apis[i].Routes())
+	}
 
 	// 启动 HTTP服务
 	s.l.Infof("HTTP服务启动成功, 监听地址: %s", s.server.Addr)
@@ -106,16 +116,11 @@ func (s *HTTPService) Stop() error {
 	return nil
 }
 
-// 开启
-func (s *HTTPService) EnableMetricExpoter() {
-	s.r.Handle("GET", "/metrics", promhttp.Handler().ServeHTTP).DisableAuth()
-}
-
 func (s *HTTPService) RegistryEndpoint() {
 	// 注册服务权限条目
 	s.l.Info("start registry endpoints ...")
 
-	req := endpoint.NewRegistryRequest(version.Short(), s.r.GetEndpoints().UniquePathEntry())
+	req := endpoint.NewRegistryRequest(version.Short(), nil)
 	_, err := s.endpoint.RegistryEndpoint(context.Background(), req)
 	if err != nil {
 		s.l.Warnf("registry endpoints error, %s", err)

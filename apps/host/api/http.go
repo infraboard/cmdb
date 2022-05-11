@@ -1,8 +1,9 @@
 package api
 
 import (
-	"github.com/infraboard/mcube/http/label"
-	"github.com/infraboard/mcube/http/router"
+	restfulspec "github.com/emicklei/go-restful-openapi"
+	"github.com/emicklei/go-restful/v3"
+	"github.com/infraboard/mcube/http/response"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 
@@ -29,17 +30,53 @@ func (h *handler) Name() string {
 	return host.AppName
 }
 
-func (h *handler) Registry(r router.SubRouter) {
-	hr := r.ResourceRouter("host")
-	hr.Permission(true)
-	hr.Handle("GET", "/hosts", h.QueryHost).AddLabel(label.List)
-	hr.Handle("POST", "/hosts", h.CreateHost).AddLabel(label.Create)
-	hr.Handle("GET", "/hosts/:id", h.DescribeHost).AddLabel(label.Get)
-	hr.Handle("DELETE", "/hosts/:id", h.DeleteHost).AddLabel(label.Delete)
-	hr.Handle("PUT", "/hosts/:id", h.PutHost).AddLabel(label.Update)
-	hr.Handle("PATCH", "/hosts/:id", h.PatchHost).AddLabel(label.Update)
+func (h *handler) Version() string {
+	return "v1"
+}
+
+func (h *handler) Registry(ws *restful.WebService) {
+	tags := []string{h.Name()}
+
+	ws.Route(ws.POST("/").To(h.CreateHost).
+		Doc("create a host").
+		Metadata(restfulspec.KeyOpenAPITags, tags).
+		Reads(host.Host{}).
+		Writes(response.NewData(host.Host{})))
+
+	ws.Route(ws.GET("/").To(h.QueryHost).
+		Doc("get all hosts").
+		Metadata(restfulspec.KeyOpenAPITags, tags).
+		Metadata("action", "list").
+		Reads(host.QueryHostRequest{}).
+		Writes(response.NewData(host.HostSet{})).
+		Returns(200, "OK", host.HostSet{}))
+
+	ws.Route(ws.GET("/{id}").To(h.DescribeHost).
+		Doc("describe an host").
+		Param(ws.PathParameter("id", "identifier of the host").DataType("integer").DefaultValue("1")).
+		Metadata(restfulspec.KeyOpenAPITags, tags).
+		Writes(response.NewData(host.Host{})).
+		Returns(200, "OK", response.NewData(host.Host{})).
+		Returns(404, "Not Found", nil))
+
+	ws.Route(ws.PUT("/{id}").To(h.UpdateHost).
+		Doc("update a host").
+		Param(ws.PathParameter("id", "identifier of the host").DataType("string")).
+		Metadata(restfulspec.KeyOpenAPITags, tags).
+		Reads(host.UpdateHostData{}))
+
+	ws.Route(ws.PATCH("/{id}").To(h.PatchHost).
+		Doc("patch a host").
+		Param(ws.PathParameter("id", "identifier of the host").DataType("string")).
+		Metadata(restfulspec.KeyOpenAPITags, tags).
+		Reads(host.UpdateHostData{}))
+
+	ws.Route(ws.DELETE("/{id}").To(h.DeleteHost).
+		Doc("delete a host").
+		Metadata(restfulspec.KeyOpenAPITags, tags).
+		Param(ws.PathParameter("id", "identifier of the host").DataType("string")))
 }
 
 func init() {
-	app.RegistryHttpApp(h)
+	app.RegistryRESTfulApp(h)
 }
