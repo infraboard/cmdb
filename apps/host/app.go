@@ -133,6 +133,10 @@ func (s *HostSet) ResourceIds() (ids []string) {
 	return
 }
 
+func (s *HostSet) Length() int {
+	return len(s.Items)
+}
+
 func (s *HostSet) ToJsonString() string {
 	b, _ := json.Marshal(s)
 	return string(b)

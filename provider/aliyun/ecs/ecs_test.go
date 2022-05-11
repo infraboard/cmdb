@@ -28,6 +28,14 @@ func TestQuery(t *testing.T) {
 	}
 }
 
+func TestDescribe(t *testing.T) {
+	ins, err := operater.Describe(&op.DescribeRequest{Id: "i-bp1f6d1sbq8s9mm59jeu"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(ins)
+}
+
 func init() {
 	zap.DevelopmentSetup()
 	err := connectivity.LoadClientFromEnv()

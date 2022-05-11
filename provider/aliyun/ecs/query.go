@@ -4,6 +4,7 @@ import (
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/ecs"
 
 	"github.com/infraboard/cmdb/apps/host"
+	"github.com/infraboard/mcube/exception"
 )
 
 func (o *EcsOperater) Query(req *ecs.DescribeInstancesRequest) (*host.HostSet, error) {
@@ -32,4 +33,22 @@ type PageQueryRequest struct {
 
 func (o *EcsOperater) PageQuery(req *PageQueryRequest) host.Pager {
 	return newPager(20, o, req.Rate)
+}
+
+type DescribeRequest struct {
+	Id string `json:"id"`
+}
+
+func (o *EcsOperater) Describe(req *DescribeRequest) (*host.Host, error) {
+	r := ecs.CreateDescribeInstancesRequest()
+	r.InstanceIds = `["` + req.Id + `"]`
+	hs, err := o.Query(r)
+	if err != nil {
+		return nil, err
+	}
+	if hs.Length() == 0 {
+		return nil, exception.NewNotFound("instance %s not found", err)
+	}
+
+	return hs.Items[0], nil
 }
