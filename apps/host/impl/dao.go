@@ -50,20 +50,20 @@ func (s *service) save(ctx context.Context, h *host.Host) error {
 	}
 
 	// 保存资源基础信息
-	err = impl.SaveResource(tx, h.Base, h.Information)
+	err = impl.SaveResource(ctx, tx, h.Base, h.Information)
 	if err != nil {
 		return err
 	}
 
 	// 避免SQL注入, 请使用Prepare
-	stmt, err = tx.Prepare(insertHostSQL)
+	stmt, err = tx.PrepareContext(ctx, insertHostSQL)
 	if err != nil {
 		return fmt.Errorf("prepare insert host sql error, %s", err)
 	}
 	defer stmt.Close()
 
 	desc := h.Describe
-	_, err = stmt.Exec(
+	_, err = stmt.ExecContext(ctx,
 		h.Base.Id, desc.Cpu, desc.Memory, desc.GpuAmount, desc.GpuSpec, desc.OsType, desc.OsName,
 		desc.SerialNumber, desc.ImageId, desc.InternetMaxBandwidthOut,
 		desc.InternetMaxBandwidthIn, desc.KeyPairNameToString(), desc.SecurityGroupsToString(),
@@ -95,7 +95,7 @@ func (s *service) update(ctx context.Context, ins *host.Host) error {
 
 	// 更新资源基本信息
 	if ins.Base.ResourceHashChanged {
-		if err := impl.UpdateResource(tx, ins.Base, ins.Information); err != nil {
+		if err := impl.UpdateResource(ctx, tx, ins.Base, ins.Information); err != nil {
 			return err
 		}
 	} else {
@@ -104,7 +104,7 @@ func (s *service) update(ctx context.Context, ins *host.Host) error {
 
 	// 更新实例信息
 	if ins.Base.DescribeHashChanged {
-		stmt, err = tx.Prepare(updateHostSQL)
+		stmt, err = tx.PrepareContext(ctx, updateHostSQL)
 		if err != nil {
 			return fmt.Errorf("prepare update host sql error, %s", err)
 		}
@@ -112,7 +112,7 @@ func (s *service) update(ctx context.Context, ins *host.Host) error {
 
 		base := ins.Base
 		desc := ins.Describe
-		_, err = stmt.Exec(
+		_, err = stmt.ExecContext(ctx,
 			desc.Cpu, desc.Memory, desc.GpuAmount, desc.GpuSpec, desc.OsType, desc.OsName,
 			desc.ImageId, desc.InternetMaxBandwidthOut,
 			desc.InternetMaxBandwidthIn, desc.KeyPairNameToString(), desc.SecurityGroupsToString(),
@@ -152,18 +152,18 @@ func (s *service) delete(ctx context.Context, req *host.ReleaseHostRequest) erro
 		}
 	}()
 
-	stmt, err = tx.Prepare(deleteHostSQL)
+	stmt, err = tx.PrepareContext(ctx, deleteHostSQL)
 	if err != nil {
 		return err
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(req.Id)
+	_, err = stmt.ExecContext(ctx, req.Id)
 	if err != nil {
 		return err
 	}
 
-	if err := impl.DeleteResource(tx, req.Id); err != nil {
+	if err := impl.DeleteResource(ctx, tx, req.Id); err != nil {
 		return err
 	}
 

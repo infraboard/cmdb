@@ -30,13 +30,13 @@ func QueryTag(ctx context.Context, db *sql.DB, resourceIds []string) (
 	querySQL, args := query.BuildQuery()
 	zap.L().Debugf("sql: %s", querySQL)
 
-	queryStmt, err := db.Prepare(querySQL)
+	queryStmt, err := db.PrepareContext(ctx, querySQL)
 	if err != nil {
 		return nil, exception.NewInternalServerError("prepare query resource tag error, %s", err.Error())
 	}
 	defer queryStmt.Close()
 
-	rows, err := queryStmt.Query(args...)
+	rows, err := queryStmt.QueryContext(ctx, args...)
 	if err != nil {
 		return nil, exception.NewInternalServerError(err.Error())
 	}
@@ -70,7 +70,7 @@ func (s *service) addTag(ctx context.Context, resourceId string, tags []*resourc
 		tx.Commit()
 	}()
 
-	err = updateResourceTag(tx, resourceId, tags)
+	err = updateResourceTag(ctx, tx, resourceId, tags)
 	return
 }
 

@@ -11,7 +11,7 @@ import (
 
 func (s *service) SyncBill(ctx context.Context, req *bill.Bill) (
 	*bill.Bill, error) {
-	stmt, err := s.db.Prepare(insertBillSQL)
+	stmt, err := s.db.PrepareContext(ctx, insertBillSQL)
 	if err != nil {
 		return nil, err
 	}
@@ -19,7 +19,7 @@ func (s *service) SyncBill(ctx context.Context, req *bill.Bill) (
 
 	y, m := req.YearMonth()
 
-	_, err = stmt.Exec(
+	_, err = stmt.ExecContext(ctx,
 		req.Vendor, y, m, req.OwnerId, req.OwnerName, req.ProductType, req.ProductCode, req.ProductDetail,
 		req.PayMode, req.OrderId, req.InstanceId, req.InstanceName, req.PublicIp, req.PrivateIp, req.InstanceConfig,
 		req.RegionCode, req.RegionName, req.Cost.SalePrice, req.Cost.SaveCost, req.Cost.RealCost, req.Cost.CreditPay,
@@ -57,13 +57,13 @@ func (s *service) DeleteBill(ctx context.Context, req *bill.DeleteBillRequest) (
 	}
 
 	set := bill.NewBillSet()
-	stmt, err := s.db.Prepare(deleteBillSQL)
+	stmt, err := s.db.PrepareContext(ctx, deleteBillSQL)
 	if err != nil {
 		return set, err
 	}
 	defer stmt.Close()
 
-	ret, err := stmt.Exec(req.TaskId)
+	ret, err := stmt.ExecContext(ctx, req.TaskId)
 	if err != nil {
 		return set, err
 	}

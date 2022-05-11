@@ -18,7 +18,7 @@ func (s *service) CreateSecret(ctx context.Context, req *secret.CreateSecretRequ
 		return nil, exception.NewBadRequest("validate create secret error, %s", err)
 	}
 
-	stmt, err := s.db.Prepare(insertSecretSQL)
+	stmt, err := s.db.PrepareContext(ctx, insertSecretSQL)
 	if err != nil {
 		return nil, err
 	}
@@ -29,7 +29,7 @@ func (s *service) CreateSecret(ctx context.Context, req *secret.CreateSecretRequ
 		s.log.Warnf("encrypt api key error, %s", err)
 	}
 
-	_, err = stmt.Exec(
+	_, err = stmt.ExecContext(ctx,
 		ins.Id, ins.CreateAt, ins.Data.Description, ins.Data.Vendor, ins.Data.Address,
 		ins.Data.AllowRegionString(), ins.Data.CrendentialType, ins.Data.ApiKey, ins.Data.ApiSecret,
 		ins.Data.RequestRate, ins.Data.Domain, ins.Data.Namespace,
@@ -55,13 +55,13 @@ func (s *service) QuerySecret(ctx context.Context, req *secret.QuerySecretReques
 	querySQL, args := query.Order("create_at").Desc().Limit(req.Page.ComputeOffset(), uint(req.Page.PageSize)).BuildQuery()
 	s.log.Debugf("sql: %s, args: %v", querySQL, args)
 
-	queryStmt, err := s.db.Prepare(querySQL)
+	queryStmt, err := s.db.PrepareContext(ctx, querySQL)
 	if err != nil {
 		return nil, exception.NewInternalServerError("prepare query secret error, %s", err.Error())
 	}
 	defer queryStmt.Close()
 
-	rows, err := queryStmt.Query(args...)
+	rows, err := queryStmt.QueryContext(ctx, args...)
 	if err != nil {
 		return nil, exception.NewInternalServerError(err.Error())
 	}
@@ -86,13 +86,13 @@ func (s *service) QuerySecret(ctx context.Context, req *secret.QuerySecretReques
 
 	// 获取total SELECT COUNT(*) FROMT t Where ....
 	countSQL, args := query.BuildCount()
-	countStmt, err := s.db.Prepare(countSQL)
+	countStmt, err := s.db.PrepareContext(ctx, countSQL)
 	if err != nil {
 		return nil, exception.NewInternalServerError(err.Error())
 	}
 
 	defer countStmt.Close()
-	err = countStmt.QueryRow(args...).Scan(&set.Total)
+	err = countStmt.QueryRowContext(ctx, args...).Scan(&set.Total)
 	if err != nil {
 		return nil, exception.NewInternalServerError(err.Error())
 	}
@@ -106,7 +106,7 @@ func (s *service) DescribeSecret(ctx context.Context, req *secret.DescribeSecret
 	querySQL, args := query.Where("id = ?", req.Id).BuildQuery()
 	s.log.Debugf("sql: %s", querySQL)
 
-	queryStmt, err := s.db.Prepare(querySQL)
+	queryStmt, err := s.db.PrepareContext(ctx, querySQL)
 	if err != nil {
 		return nil, exception.NewInternalServerError("prepare query secret error, %s", err.Error())
 	}
@@ -114,7 +114,7 @@ func (s *service) DescribeSecret(ctx context.Context, req *secret.DescribeSecret
 
 	ins := secret.NewDefaultSecret()
 	allowRegions := ""
-	err = queryStmt.QueryRow(args...).Scan(
+	err = queryStmt.QueryRowContext(ctx, args...).Scan(
 		&ins.Id, &ins.CreateAt, &ins.Data.Description, &ins.Data.Vendor, &ins.Data.Address,
 		&allowRegions, &ins.Data.CrendentialType, &ins.Data.ApiKey, &ins.Data.ApiSecret,
 		&ins.Data.RequestRate, &ins.Data.Domain, &ins.Data.Namespace,

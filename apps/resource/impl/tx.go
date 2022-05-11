@@ -1,6 +1,7 @@
 package impl
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"time"
@@ -8,7 +9,7 @@ import (
 	"github.com/infraboard/cmdb/apps/resource"
 )
 
-func SaveResource(tx *sql.Tx, base *resource.Base, info *resource.Information) error {
+func SaveResource(ctx context.Context, tx *sql.Tx, base *resource.Base, info *resource.Information) error {
 	// 避免SQL注入, 请使用Prepare
 	stmt, err := tx.Prepare(sqlInsertResource)
 	if err != nil {
@@ -27,14 +28,14 @@ func SaveResource(tx *sql.Tx, base *resource.Base, info *resource.Information) e
 		return fmt.Errorf("save host resource info error, %s", err)
 	}
 
-	if err := updateResourceTag(tx, base.Id, info.Tags); err != nil {
+	if err := updateResourceTag(ctx, tx, base.Id, info.Tags); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func UpdateResource(tx *sql.Tx, base *resource.Base, info *resource.Information) error {
+func UpdateResource(ctx context.Context, tx *sql.Tx, base *resource.Base, info *resource.Information) error {
 	// 避免SQL注入, 请使用Prepare
 	stmt, err := tx.Prepare(sqlUpdateResource)
 	if err != nil {
@@ -53,15 +54,15 @@ func UpdateResource(tx *sql.Tx, base *resource.Base, info *resource.Information)
 		return fmt.Errorf("update resource base info error, %s", err)
 	}
 
-	if err := updateResourceTag(tx, base.Id, info.Tags); err != nil {
+	if err := updateResourceTag(ctx, tx, base.Id, info.Tags); err != nil {
 		return fmt.Errorf("update resource tag error, %s", err)
 	}
 
 	return nil
 }
 
-func DeleteResource(tx *sql.Tx, id string) error {
-	stmt, err := tx.Prepare(sqlDeleteResource)
+func DeleteResource(ctx context.Context, tx *sql.Tx, id string) error {
+	stmt, err := tx.PrepareContext(ctx, sqlDeleteResource)
 	if err != nil {
 		return err
 	}
@@ -72,13 +73,13 @@ func DeleteResource(tx *sql.Tx, id string) error {
 		return err
 	}
 
-	stmt, err = tx.Prepare(sqlDeleteResourceTag)
+	stmt, err = tx.PrepareContext(ctx, sqlDeleteResourceTag)
 	if err != nil {
 		return err
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(id)
+	_, err = stmt.ExecContext(ctx, id)
 	if err != nil {
 		return err
 	}
@@ -86,9 +87,9 @@ func DeleteResource(tx *sql.Tx, id string) error {
 	return nil
 }
 
-func updateResourceTag(tx *sql.Tx, resourceId string, tags []*resource.Tag) error {
+func updateResourceTag(ctx context.Context, tx *sql.Tx, resourceId string, tags []*resource.Tag) error {
 	// 保存资源标签
-	stmt, err := tx.Prepare(sqlInsertOrUpdateResourceTag)
+	stmt, err := tx.PrepareContext(ctx, sqlInsertOrUpdateResourceTag)
 	if err != nil {
 		return fmt.Errorf("prepare update resource tag error, %s", err)
 	}
@@ -99,7 +100,7 @@ func updateResourceTag(tx *sql.Tx, resourceId string, tags []*resource.Tag) erro
 		if t.Weight == 0 {
 			t.Weight = 1
 		}
-		_, err = stmt.Exec(
+		_, err = stmt.ExecContext(ctx,
 			t.Type, t.Key, t.Value, t.Describe, resourceId, t.Weight, time.Now().UnixMilli(),
 			t.Describe, t.Weight,
 		)

@@ -19,6 +19,7 @@ func NewEcsOperater(client *ecs.Client) *EcsOperater {
 	}
 }
 
+// https://next.api.aliyun.com/api/Ecs/2014-05-26/CreateInstance?lang=GO&params={}
 type EcsOperater struct {
 	client *ecs.Client
 	log    logger.Logger

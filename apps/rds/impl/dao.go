@@ -37,7 +37,7 @@ func (s *service) save(ctx context.Context, h *rds.RDS) error {
 		return err
 	}
 
-	err = impl.SaveResource(tx, h.Base, h.Information)
+	err = impl.SaveResource(ctx, tx, h.Base, h.Information)
 	if err != nil {
 		return err
 	}

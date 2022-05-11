@@ -59,14 +59,14 @@ func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 
 	// 获取total SELECT COUNT(*) FROMT t Where ....
 	countSQL, args := query.BuildFromNewBase("COUNT(DISTINCT r.id)")
-	countStmt, err := s.db.Prepare(countSQL)
+	countStmt, err := s.db.PrepareContext(ctx, countSQL)
 	s.log.Debugf("count sql: %s", countSQL)
 	if err != nil {
 		return nil, exception.NewInternalServerError(err.Error())
 	}
 
 	defer countStmt.Close()
-	err = countStmt.QueryRow(args...).Scan(&set.Total)
+	err = countStmt.QueryRowContext(ctx, args...).Scan(&set.Total)
 	if err != nil {
 		return nil, exception.NewInternalServerError(err.Error())
 	}
@@ -80,13 +80,13 @@ func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 		BuildQuery()
 	s.log.Debugf("query sql: %s", querySQL)
 
-	queryStmt, err := s.db.Prepare(querySQL)
+	queryStmt, err := s.db.PrepareContext(ctx, querySQL)
 	if err != nil {
 		return nil, exception.NewInternalServerError("prepare query host error, %s", err.Error())
 	}
 	defer queryStmt.Close()
 
-	rows, err := queryStmt.Query(args...)
+	rows, err := queryStmt.QueryContext(ctx, args...)
 	if err != nil {
 		return nil, exception.NewInternalServerError(err.Error())
 	}
@@ -137,7 +137,7 @@ func (s *service) DescribeHost(ctx context.Context, req *host.DescribeHostReques
 	querySQL, args := query.Where(cond, val).BuildQuery()
 	s.log.Debugf("sql: %s", querySQL)
 
-	queryStmt, err := s.db.Prepare(querySQL)
+	queryStmt, err := s.db.PrepareContext(ctx, querySQL)
 	if err != nil {
 		return nil, exception.NewInternalServerError("prepare describe host error, %s", err.Error())
 	}
@@ -150,7 +150,7 @@ func (s *service) DescribeHost(ctx context.Context, req *host.DescribeHostReques
 	base := ins.Base
 	info := ins.Information
 	desc := ins.Describe
-	err = queryStmt.QueryRow(args...).Scan(
+	err = queryStmt.QueryRowContext(ctx, args...).Scan(
 		&base.Id, &base.ResourceType, &base.Vendor, &base.Region, &base.Zone, &base.CreateAt, &info.ExpireAt,
 		&info.Category, &info.Type, &info.Name, &info.Description,
 		&info.Status, &info.UpdateAt, &base.SyncAt, &info.SyncAccount,
