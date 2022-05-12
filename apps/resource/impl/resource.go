@@ -24,15 +24,15 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 	set := resource.NewResourceSet()
 
 	// 获取total SELECT COUNT(*) FROMT t Where ....
-	countSQL, args := query.BuildFromNewBase("COUNT(DISTINCT r.id)")
-	countStmt, err := s.db.Prepare(countSQL)
+	countSQL, args := query.BuildFromNewBase(fmt.Sprintf(sqlCountResource, join))
+	countStmt, err := s.db.PrepareContext(ctx, countSQL)
 	if err != nil {
 		s.log.Debugf("count sql, %s, %v", countSQL, args)
 		return nil, exception.NewInternalServerError("prepare count sql error, %s", err)
 	}
 
 	defer countStmt.Close()
-	err = countStmt.QueryRow(args...).Scan(&set.Total)
+	err = countStmt.QueryRowContext(ctx, args...).Scan(&set.Total)
 	if err != nil {
 		return nil, exception.NewInternalServerError("scan count value error, %s", err)
 	}
@@ -51,13 +51,13 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 		BuildQuery()
 	s.log.Debugf("sql: %s, args: %v", querySQL, args)
 
-	queryStmt, err := s.db.Prepare(querySQL)
+	queryStmt, err := s.db.PrepareContext(ctx, querySQL)
 	if err != nil {
 		return nil, exception.NewInternalServerError("prepare query resource error, %s", err.Error())
 	}
 	defer queryStmt.Close()
 
-	rows, err := queryStmt.Query(args...)
+	rows, err := queryStmt.QueryContext(ctx, args...)
 	if err != nil {
 		return nil, exception.NewInternalServerError(err.Error())
 	}

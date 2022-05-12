@@ -11,14 +11,14 @@ import (
 
 func SaveResource(ctx context.Context, tx *sql.Tx, base *resource.Base, info *resource.Information) error {
 	// 避免SQL注入, 请使用Prepare
-	stmt, err := tx.Prepare(sqlInsertResource)
+	stmt, err := tx.PrepareContext(ctx, sqlInsertResource)
 	if err != nil {
 		return fmt.Errorf("prepare insert resource error, %s", err)
 	}
 	defer stmt.Close()
 
 	// 保存资源数据
-	_, err = stmt.Exec(
+	_, err = stmt.ExecContext(ctx,
 		base.Id, base.ResourceType, base.Vendor, base.Region, base.Zone, base.CreateAt, info.ExpireAt, info.Category, info.Type,
 		info.Name, info.Description, info.Status, info.UpdateAt, base.SyncAt, info.SyncAccount, info.PublicIPToString(),
 		info.PrivateIPToString(), info.PayType, base.DescribeHash, base.ResourceHash, base.SecretId,
@@ -37,13 +37,13 @@ func SaveResource(ctx context.Context, tx *sql.Tx, base *resource.Base, info *re
 
 func UpdateResource(ctx context.Context, tx *sql.Tx, base *resource.Base, info *resource.Information) error {
 	// 避免SQL注入, 请使用Prepare
-	stmt, err := tx.Prepare(sqlUpdateResource)
+	stmt, err := tx.PrepareContext(ctx, sqlUpdateResource)
 	if err != nil {
 		return fmt.Errorf("prepare update reousrce sql error, %s", err)
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(
+	_, err = stmt.ExecContext(ctx,
 		info.ExpireAt, info.Category, info.Type, info.Name, info.Description,
 		info.Status, info.UpdateAt, base.SyncAt, info.SyncAccount,
 		info.PublicIPToString(), info.PrivateIPToString(), info.PayType, base.DescribeHash, base.ResourceHash,
@@ -68,7 +68,7 @@ func DeleteResource(ctx context.Context, tx *sql.Tx, id string) error {
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(id)
+	_, err = stmt.ExecContext(ctx, id)
 	if err != nil {
 		return err
 	}
