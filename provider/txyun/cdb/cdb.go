@@ -13,19 +13,19 @@ import (
 	"github.com/infraboard/mcube/logger/zap"
 )
 
-func NewCDBOperater(client *cdb.Client) *CDBOperater {
-	return &CDBOperater{
+func NewCDBOperator(client *cdb.Client) *CDBOperator {
+	return &CDBOperator{
 		client: client,
 		log:    zap.L().Named("Tx CDB"),
 	}
 }
 
-type CDBOperater struct {
+type CDBOperator struct {
 	client *cdb.Client
 	log    logger.Logger
 }
 
-func (o *CDBOperater) transferSet(items []*cdb.InstanceInfo) *rds.Set {
+func (o *CDBOperator) transferSet(items []*cdb.InstanceInfo) *rds.Set {
 	set := rds.NewSet()
 	for i := range items {
 		set.Add(o.transferOne(items[i]))
@@ -33,7 +33,7 @@ func (o *CDBOperater) transferSet(items []*cdb.InstanceInfo) *rds.Set {
 	return set
 }
 
-func (o *CDBOperater) transferOne(ins *cdb.InstanceInfo) *rds.RDS {
+func (o *CDBOperator) transferOne(ins *cdb.InstanceInfo) *rds.RDS {
 	r := cmdbRds.NewDefaultRDS()
 
 	b := r.Base
@@ -68,7 +68,7 @@ func (o *CDBOperater) transferOne(ins *cdb.InstanceInfo) *rds.RDS {
 	return r
 }
 
-func (o *CDBOperater) parseTime(t string) int64 {
+func (o *CDBOperator) parseTime(t string) int64 {
 	ts, err := time.Parse("2006-01-02 15:04:05", t)
 	if err != nil {
 		o.log.Errorf("parse time %s error, %s", t, err)
@@ -79,7 +79,7 @@ func (o *CDBOperater) parseTime(t string) int64 {
 }
 
 // 实例类型，可能的返回值：1-主实例；2-灾备实例；3-只读实例
-func (o *CDBOperater) ParseInstanceType(id *int64) string {
+func (o *CDBOperator) ParseInstanceType(id *int64) string {
 	if id == nil {
 		return ""
 	}

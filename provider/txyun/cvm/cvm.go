@@ -12,21 +12,21 @@ import (
 	"github.com/infraboard/mcube/logger/zap"
 )
 
-func NewCVMOperater(client *cvm.Client) *CVMOperater {
-	return &CVMOperater{
+func NewCVMOperator(client *cvm.Client) *CVMOperator {
+	return &CVMOperator{
 		client:        client,
 		log:           zap.L().Named("Tx CVM"),
 		AccountGetter: &resource.AccountGetter{},
 	}
 }
 
-type CVMOperater struct {
+type CVMOperator struct {
 	client *cvm.Client
 	log    logger.Logger
 	*resource.AccountGetter
 }
 
-func (o *CVMOperater) transferSet(items []*cvm.Instance) *host.HostSet {
+func (o *CVMOperator) transferSet(items []*cvm.Instance) *host.HostSet {
 	set := host.NewHostSet()
 	for i := range items {
 		set.Add(o.transferOne(items[i]))
@@ -34,7 +34,7 @@ func (o *CVMOperater) transferSet(items []*cvm.Instance) *host.HostSet {
 	return set
 }
 
-func (o *CVMOperater) transferOne(ins *cvm.Instance) *host.Host {
+func (o *CVMOperator) transferOne(ins *cvm.Instance) *host.Host {
 	h := host.NewDefaultHost()
 	h.Base.Vendor = resource.Vendor_TENCENT
 	h.Base.Region = o.client.GetRegion()
@@ -75,7 +75,7 @@ func transferTags(tags []*cvm.Tag) (ret []*resource.Tag) {
 	return
 }
 
-func (o *CVMOperater) parseTime(t string) int64 {
+func (o *CVMOperator) parseTime(t string) int64 {
 	if t == "" {
 		return 0
 	}

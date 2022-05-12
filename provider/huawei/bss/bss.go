@@ -13,19 +13,19 @@ import (
 	"github.com/infraboard/mcube/logger/zap"
 )
 
-func NewBssOperater(client *v2.BssClient) *BssOperater {
-	return &BssOperater{
+func NewBssOperator(client *v2.BssClient) *BssOperator {
+	return &BssOperator{
 		client: client,
 		log:    zap.L().Named("Huawei BSS"),
 	}
 }
 
-type BssOperater struct {
+type BssOperator struct {
 	client *v2.BssClient
 	log    logger.Logger
 }
 
-func (o *BssOperater) transferSet(list *[]model.ResFeeRecordV2) *bill.BillSet {
+func (o *BssOperator) transferSet(list *[]model.ResFeeRecordV2) *bill.BillSet {
 	set := bill.NewBillSet()
 	items := *list
 	for i := range items {
@@ -34,7 +34,7 @@ func (o *BssOperater) transferSet(list *[]model.ResFeeRecordV2) *bill.BillSet {
 	return set
 }
 
-func (o *BssOperater) transferOne(ins model.ResFeeRecordV2) *bill.Bill {
+func (o *BssOperator) transferOne(ins model.ResFeeRecordV2) *bill.Bill {
 	b := bill.NewDefaultBill()
 	b.Vendor = resource.Vendor_HUAWEI
 	b.Month = utils.PtrStrV(ins.BillDate)

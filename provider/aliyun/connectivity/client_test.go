@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/caarlos0/env/v6"
 	"github.com/infraboard/cmdb/provider/aliyun/connectivity"
 	"github.com/stretchr/testify/assert"
 )
@@ -11,10 +12,12 @@ import (
 func TestClient(t *testing.T) {
 	should := assert.New(t)
 
-	err := connectivity.LoadClientFromEnv()
-	if should.NoError(err) {
-		c := connectivity.C()
-		c.Check()
-		fmt.Println(c.AccountID())
+	client := &connectivity.AliCloudClient{}
+	if err := env.Parse(client); err != nil {
+		if should.NoError(err) {
+			client.Check()
+			fmt.Println(client.AccountID())
+		}
 	}
+
 }

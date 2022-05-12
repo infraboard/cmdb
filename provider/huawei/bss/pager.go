@@ -12,7 +12,7 @@ import (
 	"github.com/infraboard/mcube/logger/zap"
 )
 
-func newPager(pageSize int, operater *BssOperater, rate int, month string) *pager {
+func newPager(pageSize int, operater *BssOperator, rate int, month string) *pager {
 	req := &model.ListCustomerselfResourceRecordsRequest{}
 	req.Cycle = month
 	req.Limit = utils.Int32Ptr(int32(pageSize))
@@ -33,7 +33,7 @@ type pager struct {
 	size     int
 	number   int
 	total    int64
-	operater *BssOperater
+	operater *BssOperator
 	req      *model.ListCustomerselfResourceRecordsRequest
 	log      logger.Logger
 	tb       *tokenbucket.Bucket

@@ -13,8 +13,8 @@ import (
 	"github.com/vmware/govmomi/find"
 )
 
-func NewVmOperater(client *vim25.Client) *VMOperater {
-	return &VMOperater{
+func NewVMOperator(client *vim25.Client) *VMOperator {
+	return &VMOperator{
 		client:  client,
 		finder:  find.NewFinder(client, false),
 		log:     zap.L().Named("Vsphere VM"),
@@ -22,14 +22,14 @@ func NewVmOperater(client *vim25.Client) *VMOperater {
 	}
 }
 
-type VMOperater struct {
+type VMOperator struct {
 	client  *vim25.Client
 	log     logger.Logger
 	finder  *find.Finder
 	Timeout time.Duration
 }
 
-func (o *VMOperater) transferOne(ins *mo.VirtualMachine, dcName string) *host.Host {
+func (o *VMOperator) transferOne(ins *mo.VirtualMachine, dcName string) *host.Host {
 	h := host.NewDefaultHost()
 	h.Base.Vendor = resource.Vendor_VSPHERE
 	h.Base.Region = o.client.URL().Host

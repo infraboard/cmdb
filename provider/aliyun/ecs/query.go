@@ -7,7 +7,7 @@ import (
 	"github.com/infraboard/mcube/exception"
 )
 
-func (o *EcsOperater) Query(req *ecs.DescribeInstancesRequest) (*host.HostSet, error) {
+func (o *EcsOperator) Query(req *ecs.DescribeInstancesRequest) (*host.HostSet, error) {
 	set := host.NewHostSet()
 
 	resp, err := o.client.DescribeInstances(req)
@@ -31,7 +31,7 @@ type PageQueryRequest struct {
 	Rate int
 }
 
-func (o *EcsOperater) PageQuery(req *PageQueryRequest) host.Pager {
+func (o *EcsOperator) PageQuery(req *PageQueryRequest) host.Pager {
 	return newPager(20, o, req.Rate)
 }
 
@@ -39,7 +39,7 @@ type DescribeRequest struct {
 	Id string `json:"id"`
 }
 
-func (o *EcsOperater) Describe(req *DescribeRequest) (*host.Host, error) {
+func (o *EcsOperator) Describe(req *DescribeRequest) (*host.Host, error) {
 	r := ecs.CreateDescribeInstancesRequest()
 	r.InstanceIds = `["` + req.Id + `"]`
 	hs, err := o.Query(r)

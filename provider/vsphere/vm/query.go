@@ -11,7 +11,7 @@ import (
 
 type QueryCallback func(*host.Host)
 
-func (o *VMOperater) Query(cb QueryCallback) error {
+func (o *VMOperator) Query(cb QueryCallback) error {
 	// 查询DC
 	dcs, err := o.finder.DatacenterList(context.Background(), "*")
 	if err != nil {
@@ -35,7 +35,7 @@ func (o *VMOperater) Query(cb QueryCallback) error {
 	return nil
 }
 
-func (o *VMOperater) queryVM(dc *object.Datacenter, cb QueryCallback) error {
+func (o *VMOperator) queryVM(dc *object.Datacenter, cb QueryCallback) error {
 	dcFinder := o.finder.SetDatacenter(dc)
 
 	ctx, cancel := context.WithTimeout(context.Background(), o.Timeout)
@@ -63,7 +63,7 @@ func (o *VMOperater) queryVM(dc *object.Datacenter, cb QueryCallback) error {
 
 // Properties is a convenience method that wraps fetching the
 // VirtualMachine MO from its higher-level object.
-func (o *VMOperater) properties(vm *object.VirtualMachine) (*mo.VirtualMachine, error) {
+func (o *VMOperator) properties(vm *object.VirtualMachine) (*mo.VirtualMachine, error) {
 	o.log.Debugf("Fetching properties for VM %q", vm.InventoryPath)
 	ctx, cancel := context.WithTimeout(context.Background(), o.Timeout)
 	defer cancel()

@@ -16,7 +16,7 @@ import (
 )
 
 var (
-	operater *op.CVMOperater
+	operater *op.CVMOperator
 )
 
 func TestQuery(t *testing.T) {
@@ -69,6 +69,6 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	operater = op.NewCVMOperater(client.CvmClient())
+	operater = op.NewCVMOperator(client.CvmClient())
 	operater.WithAccountId(client.AccountID())
 }

@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	operater *op.BssOperater
+	operater *op.BssOperator
 )
 
 func TestQuery(t *testing.T) {
@@ -42,5 +42,5 @@ func init() {
 		panic(err)
 	}
 
-	operater = op.NewBssOperater(ec)
+	operater = op.NewBssOperator(ec)
 }

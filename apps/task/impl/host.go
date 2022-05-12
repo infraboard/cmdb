@@ -52,7 +52,7 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 			t.Failed(err.Error())
 			return
 		}
-		operater := ecsOp.NewEcsOperater(ec)
+		operater := ecsOp.NewEcsOperator(ec)
 		operater.WithAccountId(client.AccountID())
 		req := ecsOp.NewPageQueryRequest()
 		req.Rate = int(secret.RequestRate)
@@ -64,7 +64,7 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 			t.Failed(err.Error())
 			return
 		}
-		operater := cvmOp.NewCVMOperater(client.CvmClient())
+		operater := cvmOp.NewCVMOperator(client.CvmClient())
 		operater.WithAccountId(client.AccountID())
 		req := cvmOp.NewPageQueryRequest(int(secret.RequestRate))
 		pager = operater.PageQuery(req)
@@ -80,7 +80,7 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 			t.Failed(err.Error())
 			return
 		}
-		operater := hwEcsOp.NewEcsOperater(ec)
+		operater := hwEcsOp.NewEcsOperator(ec)
 		operater.WithAccountId(client.AccountID())
 		pager = operater.PageQuery()
 	case resource.Vendor_AMAZON:
@@ -103,7 +103,7 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 			t.Failed(err.Error())
 			return
 		}
-		operater := vmOp.NewVmOperater(ec)
+		operater := vmOp.NewVMOperator(ec)
 		// 通过回调直接保存
 		err = operater.Query(func(h *host.Host) {
 			// 补充管理信息

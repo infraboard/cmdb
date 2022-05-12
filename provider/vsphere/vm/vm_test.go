@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	operater *op.VMOperater
+	operater *op.VMOperator
 )
 
 func TestQuery(t *testing.T) {
@@ -37,5 +37,5 @@ func init() {
 		panic(err)
 	}
 
-	operater = op.NewVmOperater(vim)
+	operater = op.NewVMOperator(vim)
 }

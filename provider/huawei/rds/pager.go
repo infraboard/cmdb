@@ -12,7 +12,7 @@ import (
 	"github.com/infraboard/cmdb/utils"
 )
 
-func newPager(pageSize int, operater *RdsOperater) *pager {
+func newPager(pageSize int, operater *RdsOperator) *pager {
 	req := &model.ListInstancesRequest{}
 	req.Limit = utils.Int32Ptr(int32(pageSize))
 
@@ -30,7 +30,7 @@ type pager struct {
 	size     int
 	number   int
 	hasNext  bool
-	operater *RdsOperater
+	operater *RdsOperator
 	req      *model.ListInstancesRequest
 	log      logger.Logger
 }

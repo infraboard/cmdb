@@ -6,7 +6,7 @@ import (
 	cmdbRds "github.com/infraboard/cmdb/apps/rds"
 )
 
-func (o *RdsOperater) Query(req *rds.DescribeDBInstancesRequest) (*cmdbRds.Set, error) {
+func (o *RdsOperator) Query(req *rds.DescribeDBInstancesRequest) (*cmdbRds.Set, error) {
 	resp, err := o.client.DescribeDBInstances(req)
 	if err != nil {
 		return nil, err
@@ -40,6 +40,6 @@ type PageQueryRequest struct {
 	Rate int
 }
 
-func (o *RdsOperater) PageQuery(req *PageQueryRequest) cmdbRds.Pager {
+func (o *RdsOperator) PageQuery(req *PageQueryRequest) cmdbRds.Pager {
 	return newPager(20, o, req.Rate)
 }

@@ -8,7 +8,7 @@ import (
 	"github.com/infraboard/cmdb/apps/rds"
 )
 
-func (o *CDBOperater) Query(ctx context.Context, req *cdb.DescribeDBInstancesRequest) (*rds.Set, error) {
+func (o *CDBOperator) Query(ctx context.Context, req *cdb.DescribeDBInstancesRequest) (*rds.Set, error) {
 	resp, err := o.client.DescribeDBInstancesWithContext(ctx, req)
 	if err != nil {
 		return nil, err
@@ -17,6 +17,6 @@ func (o *CDBOperater) Query(ctx context.Context, req *cdb.DescribeDBInstancesReq
 	return o.transferSet(resp.Response.Items), nil
 }
 
-func (o *CDBOperater) PageQuery() rds.Pager {
+func (o *CDBOperator) PageQuery() rds.Pager {
 	return newPager(20, o)
 }

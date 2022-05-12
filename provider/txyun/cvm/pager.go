@@ -12,7 +12,7 @@ import (
 	"github.com/infraboard/mcube/logger/zap"
 )
 
-func newPager(pageSize int, operater *CVMOperater, reqPs int) *pager {
+func newPager(pageSize int, operater *CVMOperator, reqPs int) *pager {
 	req := cvm.NewDescribeInstancesRequest()
 	req.Limit = common.Int64Ptr(int64(pageSize))
 
@@ -31,7 +31,7 @@ type pager struct {
 	size     int
 	number   int
 	total    int64
-	operater *CVMOperater
+	operater *CVMOperator
 	req      *cvm.DescribeInstancesRequest
 	log      logger.Logger
 	tb       *tokenbucket.Bucket

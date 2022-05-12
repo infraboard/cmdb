@@ -13,19 +13,19 @@ import (
 	"github.com/infraboard/mcube/logger/zap"
 )
 
-func NewRdsOperater(client *rds.Client) *RdsOperater {
-	return &RdsOperater{
+func NewRdsOperator(client *rds.Client) *RdsOperator {
+	return &RdsOperator{
 		client: client,
 		log:    zap.L().Named("ALI RDS"),
 	}
 }
 
-type RdsOperater struct {
+type RdsOperator struct {
 	client *rds.Client
 	log    logger.Logger
 }
 
-func (o *RdsOperater) transferSet(items []rds.DBInstanceAttribute) *cmdbRds.Set {
+func (o *RdsOperator) transferSet(items []rds.DBInstanceAttribute) *cmdbRds.Set {
 	set := cmdbRds.NewSet()
 	for i := range items {
 		set.Add(o.transferOne(items[i]))
@@ -33,7 +33,7 @@ func (o *RdsOperater) transferSet(items []rds.DBInstanceAttribute) *cmdbRds.Set 
 	return set
 }
 
-func (o *RdsOperater) transferOne(ins rds.DBInstanceAttribute) *cmdbRds.RDS {
+func (o *RdsOperator) transferOne(ins rds.DBInstanceAttribute) *cmdbRds.RDS {
 	r := cmdbRds.NewDefaultRDS()
 
 	b := r.Base
@@ -83,7 +83,7 @@ func (o *RdsOperater) transferOne(ins rds.DBInstanceAttribute) *cmdbRds.RDS {
 	return r
 }
 
-func (o *RdsOperater) parseTime(t string) int64 {
+func (o *RdsOperator) parseTime(t string) int64 {
 	ts, err := time.Parse("2006-01-02T15:04:05Z", t)
 	if err != nil {
 		o.log.Errorf("parse time %s error, %s", t, err)

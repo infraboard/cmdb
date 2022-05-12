@@ -6,7 +6,7 @@ import (
 	"github.com/infraboard/cmdb/apps/rds"
 )
 
-func (o *RdsOperater) Query(req *model.ListInstancesRequest) (*rds.Set, error) {
+func (o *RdsOperator) Query(req *model.ListInstancesRequest) (*rds.Set, error) {
 	set := rds.NewSet()
 
 	resp, err := o.client.ListInstances(req)
@@ -21,6 +21,6 @@ func (o *RdsOperater) Query(req *model.ListInstancesRequest) (*rds.Set, error) {
 	return set, nil
 }
 
-func (o *RdsOperater) PageQuery() rds.Pager {
+func (o *RdsOperator) PageQuery() rds.Pager {
 	return newPager(20, o)
 }

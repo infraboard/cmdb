@@ -9,19 +9,19 @@ import (
 	"github.com/infraboard/mcube/logger/zap"
 )
 
-func NewBssOperater(client *bssopenapi.Client) *BssOperater {
-	return &BssOperater{
+func NewBssOperator(client *bssopenapi.Client) *BssOperator {
+	return &BssOperator{
 		client: client,
 		log:    zap.L().Named("ALI BSS"),
 	}
 }
 
-type BssOperater struct {
+type BssOperator struct {
 	client *bssopenapi.Client
 	log    logger.Logger
 }
 
-func (o *BssOperater) transferSet(list bssopenapi.DataInQueryInstanceBill) *bill.BillSet {
+func (o *BssOperator) transferSet(list bssopenapi.DataInQueryInstanceBill) *bill.BillSet {
 	set := bill.NewBillSet()
 	items := list.Items.Item
 	for i := range items {
@@ -33,7 +33,7 @@ func (o *BssOperater) transferSet(list bssopenapi.DataInQueryInstanceBill) *bill
 	return set
 }
 
-func (o *BssOperater) transferOne(ins bssopenapi.Item) *bill.Bill {
+func (o *BssOperator) transferOne(ins bssopenapi.Item) *bill.Bill {
 	b := bill.NewDefaultBill()
 	b.OwnerId = ins.OwnerID
 	b.OwnerName = ins.OwnerName

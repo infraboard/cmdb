@@ -6,7 +6,7 @@ import (
 	"github.com/infraboard/cmdb/apps/host"
 )
 
-func (o *EcsOperater) Query(req *model.ListServersDetailsRequest) (*host.HostSet, error) {
+func (o *EcsOperator) Query(req *model.ListServersDetailsRequest) (*host.HostSet, error) {
 	set := host.NewHostSet()
 
 	resp, err := o.client.ListServersDetails(req)
@@ -19,6 +19,6 @@ func (o *EcsOperater) Query(req *model.ListServersDetailsRequest) (*host.HostSet
 	return set, nil
 }
 
-func (o *EcsOperater) PageQuery() host.Pager {
+func (o *EcsOperator) PageQuery() host.Pager {
 	return newPager(20, o)
 }

@@ -37,7 +37,7 @@ func (s *service) syncBill(ctx context.Context, secretIns *secret.Secret, t *tas
 			return
 		}
 
-		operater := bssOp.NewBssOperater(bc)
+		operater := bssOp.NewBssOperator(bc)
 		req := bssOp.NewPageQueryRequest()
 		req.Rate = int(secret.RequestRate)
 		req.Month = t.Data.Params["month"]
@@ -58,7 +58,7 @@ func (s *service) syncBill(ctx context.Context, secretIns *secret.Secret, t *tas
 			t.Failed(err.Error())
 			return
 		}
-		operater := hwBssOp.NewBssOperater(bc)
+		operater := hwBssOp.NewBssOperator(bc)
 		req := hwBssOp.NewPageQueryRequest()
 		req.Rate = int(secret.RequestRate)
 		req.Month = t.Data.Params["month"]

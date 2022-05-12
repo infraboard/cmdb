@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	operater *op.CDBOperater
+	operater *op.CDBOperator
 )
 
 func TestQuery(t *testing.T) {
@@ -40,5 +40,5 @@ func init() {
 		panic(err)
 	}
 
-	operater = op.NewCDBOperater(client.CDBClient())
+	operater = op.NewCDBOperator(client.CDBClient())
 }

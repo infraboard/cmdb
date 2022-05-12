@@ -12,7 +12,7 @@ import (
 	"github.com/infraboard/cmdb/apps/host"
 )
 
-func newPager(pageSize int, operater *EcsOperater, rate int) *pager {
+func newPager(pageSize int, operater *EcsOperator, rate int) *pager {
 	req := ecs.CreateDescribeInstancesRequest()
 	req.PageSize = requests.NewInteger(pageSize)
 	rateFloat := 1 / float64(rate)
@@ -32,7 +32,7 @@ type pager struct {
 	size     int
 	number   int
 	total    int64
-	operater *EcsOperater
+	operater *EcsOperator
 	req      *ecs.DescribeInstancesRequest
 	log      logger.Logger
 	tb       *tokenbucket.Bucket

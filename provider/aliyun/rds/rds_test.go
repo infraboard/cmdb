@@ -6,14 +6,14 @@ import (
 	"testing"
 
 	"github.com/infraboard/cmdb/apps/rds"
-	"github.com/infraboard/cmdb/provider/aliyun/connectivity"
+	"github.com/infraboard/cmdb/provider/aliyun"
 	"github.com/infraboard/mcube/logger/zap"
 
 	op "github.com/infraboard/cmdb/provider/aliyun/rds"
 )
 
 var (
-	operater *op.RdsOperater
+	operater *op.RdsOperator
 )
 
 func TestQuery(t *testing.T) {
@@ -31,14 +31,10 @@ func TestQuery(t *testing.T) {
 
 func init() {
 	zap.DevelopmentSetup()
-	err := connectivity.LoadClientFromEnv()
+	zap.DevelopmentSetup()
+	err := aliyun.LoadOperatorFromEnv()
 	if err != nil {
 		panic(err)
 	}
-
-	ec, err := connectivity.C().RdsClient()
-	if err != nil {
-		panic(err)
-	}
-	operater = op.NewRdsOperater(ec)
+	operater = aliyun.O().RdsOperator()
 }

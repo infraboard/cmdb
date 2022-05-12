@@ -12,7 +12,7 @@ import (
 	cmdbRds "github.com/infraboard/cmdb/apps/rds"
 )
 
-func newPager(pageSize int, operater *RdsOperater, rate int) *pager {
+func newPager(pageSize int, operater *RdsOperator, rate int) *pager {
 	req := rds.CreateDescribeDBInstancesRequest()
 	req.PageSize = requests.NewInteger(pageSize)
 	rateFloat := 1 / float64(rate)
@@ -32,7 +32,7 @@ type pager struct {
 	size     int
 	number   int
 	total    int64
-	operater *RdsOperater
+	operater *RdsOperator
 	req      *rds.DescribeDBInstancesRequest
 	log      logger.Logger
 	tb       *tokenbucket.Bucket

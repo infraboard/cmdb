@@ -11,8 +11,8 @@ import (
 	"github.com/infraboard/mcube/logger/zap"
 )
 
-func NewEcsOperater(client *ecs.Client) *EcsOperater {
-	return &EcsOperater{
+func NewEcsOperator(client *ecs.Client) *EcsOperator {
+	return &EcsOperator{
 		client:        client,
 		log:           zap.L().Named("ALI ECS"),
 		AccountGetter: &resource.AccountGetter{},
@@ -20,13 +20,13 @@ func NewEcsOperater(client *ecs.Client) *EcsOperater {
 }
 
 // https://next.api.aliyun.com/api/Ecs/2014-05-26/CreateInstance?lang=GO&params={}
-type EcsOperater struct {
+type EcsOperator struct {
 	client *ecs.Client
 	log    logger.Logger
 	*resource.AccountGetter
 }
 
-func (o *EcsOperater) transferSet(items []ecs.Instance) *host.HostSet {
+func (o *EcsOperator) transferSet(items []ecs.Instance) *host.HostSet {
 	set := host.NewHostSet()
 	for i := range items {
 		set.Add(o.transferOne(items[i]))
@@ -34,7 +34,7 @@ func (o *EcsOperater) transferSet(items []ecs.Instance) *host.HostSet {
 	return set
 }
 
-func (o *EcsOperater) transferOne(ins ecs.Instance) *host.Host {
+func (o *EcsOperator) transferOne(ins ecs.Instance) *host.Host {
 	h := host.NewDefaultHost()
 	h.Base.Vendor = resource.Vendor_ALIYUN
 	h.Base.Region = ins.RegionId
@@ -69,7 +69,7 @@ func (o *EcsOperater) transferOne(ins ecs.Instance) *host.Host {
 	return h
 }
 
-func (o *EcsOperater) transferTags(tags []ecs.Tag) (ret []*resource.Tag) {
+func (o *EcsOperator) transferTags(tags []ecs.Tag) (ret []*resource.Tag) {
 	for i := range tags {
 		ret = append(ret, resource.NewThirdTag(
 			tags[i].Key,
@@ -79,7 +79,7 @@ func (o *EcsOperater) transferTags(tags []ecs.Tag) (ret []*resource.Tag) {
 	return
 }
 
-func (o *EcsOperater) parseTime(t string) int64 {
+func (o *EcsOperator) parseTime(t string) int64 {
 	ts, err := time.Parse("2006-01-02T15:04Z", t)
 	if err != nil {
 		o.log.Errorf("parse time %s error, %s", t, err)

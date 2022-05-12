@@ -10,7 +10,7 @@ import (
 )
 
 // 创建实例: https://cloud.tencent.com/document/api/213/15730
-func (o *CVMOperater) Create(req *cvm.DescribeInstancesRequest) (*host.HostSet, error) {
+func (o *CVMOperator) Create(req *cvm.DescribeInstancesRequest) (*host.HostSet, error) {
 	resp, err := o.client.DescribeInstances(req)
 	if err != nil {
 		return nil, err
@@ -23,7 +23,7 @@ func (o *CVMOperater) Create(req *cvm.DescribeInstancesRequest) (*host.HostSet, 
 }
 
 // 创建实例询价 https://cloud.tencent.com/document/api/213/15726
-func (o *CVMOperater) InquiryPrice(req *cvm.InquiryPriceRunInstancesRequest) error {
+func (o *CVMOperator) InquiryPrice(req *cvm.InquiryPriceRunInstancesRequest) error {
 	resp, err := o.client.InquiryPriceRunInstances(req)
 	if err != nil {
 		return err
@@ -35,7 +35,7 @@ func (o *CVMOperater) InquiryPrice(req *cvm.InquiryPriceRunInstancesRequest) err
 }
 
 // 查询可用区列表: https://cloud.tencent.com/document/product/213/15707
-func (o *CVMOperater) DescribeZones() error {
+func (o *CVMOperator) DescribeZones() error {
 	req := cvm.NewDescribeZonesRequest()
 	resp, err := o.client.DescribeZones(req)
 	if err != nil {
@@ -51,7 +51,7 @@ func (o *CVMOperater) DescribeZones() error {
 
 // 查询实例机型列表: https://cloud.tencent.com/document/api/213/15749
 // 实例规格说明文档: https://cloud.tencent.com/document/product/213/11518
-func (o *CVMOperater) DescribeInstanceType() error {
+func (o *CVMOperator) DescribeInstanceType() error {
 	req := cvm.NewDescribeInstanceTypeConfigsRequest()
 	resp, err := o.client.DescribeInstanceTypeConfigs(req)
 	if err != nil {

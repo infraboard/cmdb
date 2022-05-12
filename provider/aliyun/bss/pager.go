@@ -12,7 +12,7 @@ import (
 	"github.com/infraboard/mcube/logger/zap"
 )
 
-func newPager(pageSize int, operater *BssOperater, rate int, month string) *pager {
+func newPager(pageSize int, operater *BssOperator, rate int, month string) *pager {
 	req := bssopenapi.CreateQueryInstanceBillRequest()
 	req.IsHideZeroCharge = requests.NewBoolean(true)
 	req.PageSize = requests.NewInteger(pageSize)
@@ -34,7 +34,7 @@ type pager struct {
 	size     int
 	number   int
 	total    int64
-	operater *BssOperater
+	operater *BssOperator
 	req      *bssopenapi.QueryInstanceBillRequest
 	log      logger.Logger
 	tb       *tokenbucket.Bucket

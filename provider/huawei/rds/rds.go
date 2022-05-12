@@ -16,19 +16,19 @@ import (
 	"github.com/infraboard/mcube/logger/zap"
 )
 
-func NewEcsOperater(client *hw_rds.RdsClient) *RdsOperater {
-	return &RdsOperater{
+func NewEcsOperator(client *hw_rds.RdsClient) *RdsOperator {
+	return &RdsOperator{
 		client: client,
 		log:    zap.L().Named("Huawei Rds"),
 	}
 }
 
-type RdsOperater struct {
+type RdsOperator struct {
 	client *hw_rds.RdsClient
 	log    logger.Logger
 }
 
-func (o *RdsOperater) transferSet(list *[]model.InstanceResponse) *rds.Set {
+func (o *RdsOperator) transferSet(list *[]model.InstanceResponse) *rds.Set {
 	set := rds.NewSet()
 	items := *list
 	for i := range items {
@@ -37,7 +37,7 @@ func (o *RdsOperater) transferSet(list *[]model.InstanceResponse) *rds.Set {
 	return set
 }
 
-func (o *RdsOperater) transferOne(ins model.InstanceResponse) *rds.RDS {
+func (o *RdsOperator) transferOne(ins model.InstanceResponse) *rds.RDS {
 	h := rds.NewDefaultRDS()
 	b := h.Base
 	b.Vendor = resource.Vendor_HUAWEI
@@ -73,7 +73,7 @@ func (o *RdsOperater) transferOne(ins model.InstanceResponse) *rds.RDS {
 	return h
 }
 
-func (o *RdsOperater) parseTime(t string) int64 {
+func (o *RdsOperator) parseTime(t string) int64 {
 	if t == "" {
 		return 0
 	}
@@ -87,11 +87,11 @@ func (o *RdsOperater) parseTime(t string) int64 {
 	return ts.UnixNano() / 1000000
 }
 
-func (o *RdsOperater) transferTags(tags []model.TagResponse) []*resource.Tag {
+func (o *RdsOperator) transferTags(tags []model.TagResponse) []*resource.Tag {
 	return nil
 }
 
-func (o *RdsOperater) getEnumValue(m json.Marshaler) string {
+func (o *RdsOperator) getEnumValue(m json.Marshaler) string {
 	vb, err := m.MarshalJSON()
 	if err != nil {
 		o.log.Errorf("marshal enum error, %s", err)

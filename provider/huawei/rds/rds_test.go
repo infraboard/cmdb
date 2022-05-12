@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	operater *op.RdsOperater
+	operater *op.RdsOperator
 )
 
 func TestQuery(t *testing.T) {
@@ -39,5 +39,5 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	operater = op.NewEcsOperater(ec)
+	operater = op.NewEcsOperator(ec)
 }

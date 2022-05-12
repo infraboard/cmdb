@@ -9,7 +9,7 @@ import (
 )
 
 // 查看实例列表: https://cloud.tencent.com/document/api/213/15728
-func (o *CVMOperater) Query(ctx context.Context, req *cvm.DescribeInstancesRequest) (*host.HostSet, error) {
+func (o *CVMOperator) Query(ctx context.Context, req *cvm.DescribeInstancesRequest) (*host.HostSet, error) {
 	resp, err := o.client.DescribeInstancesWithContext(ctx, req)
 	if err != nil {
 		return nil, err
@@ -31,6 +31,6 @@ type PageQueryRequest struct {
 	ReqPerSecond int
 }
 
-func (o *CVMOperater) PageQuery(req *PageQueryRequest) host.Pager {
+func (o *CVMOperator) PageQuery(req *PageQueryRequest) host.Pager {
 	return newPager(20, o, req.ReqPerSecond)
 }

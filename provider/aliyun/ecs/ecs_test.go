@@ -6,18 +6,18 @@ import (
 	"testing"
 
 	"github.com/infraboard/cmdb/apps/host"
-	"github.com/infraboard/cmdb/provider/aliyun/connectivity"
 	"github.com/infraboard/mcube/logger/zap"
 
-	op "github.com/infraboard/cmdb/provider/aliyun/ecs"
+	"github.com/infraboard/cmdb/provider/aliyun"
+	"github.com/infraboard/cmdb/provider/aliyun/ecs"
 )
 
 var (
-	operater *op.EcsOperater
+	operater *ecs.EcsOperator
 )
 
 func TestQuery(t *testing.T) {
-	req := op.NewPageQueryRequest()
+	req := ecs.NewPageQueryRequest()
 	pager := operater.PageQuery(req)
 	for pager.Next() {
 		set := host.NewHostSet()
@@ -29,7 +29,7 @@ func TestQuery(t *testing.T) {
 }
 
 func TestDescribe(t *testing.T) {
-	ins, err := operater.Describe(&op.DescribeRequest{Id: "i-bp1f6d1sbq8s9mm59jeu"})
+	ins, err := operater.Describe(&ecs.DescribeRequest{Id: "i-bp1f6d1sbq8s9mm59jeu"})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -38,14 +38,9 @@ func TestDescribe(t *testing.T) {
 
 func init() {
 	zap.DevelopmentSetup()
-	err := connectivity.LoadClientFromEnv()
+	err := aliyun.LoadOperatorFromEnv()
 	if err != nil {
 		panic(err)
 	}
-
-	ec, err := connectivity.C().EcsClient()
-	if err != nil {
-		panic(err)
-	}
-	operater = op.NewEcsOperater(ec)
+	operater = aliyun.O().EcsOperator()
 }

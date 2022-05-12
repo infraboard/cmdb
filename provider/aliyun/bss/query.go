@@ -7,7 +7,7 @@ import (
 	"github.com/infraboard/cmdb/apps/bill"
 )
 
-func (o *BssOperater) Query(req *bssopenapi.QueryInstanceBillRequest) (*bill.BillSet, error) {
+func (o *BssOperator) Query(req *bssopenapi.QueryInstanceBillRequest) (*bill.BillSet, error) {
 	set := bill.NewBillSet()
 	resp, err := o.client.QueryInstanceBill(req)
 	if err != nil {
@@ -30,6 +30,6 @@ type PageQueryRequest struct {
 	Month string
 }
 
-func (o *BssOperater) PageQuery(req *PageQueryRequest) bill.Pager {
+func (o *BssOperator) PageQuery(req *PageQueryRequest) bill.Pager {
 	return newPager(20, o, req.Rate, req.Month)
 }

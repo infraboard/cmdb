@@ -6,14 +6,14 @@ import (
 	"testing"
 
 	"github.com/infraboard/cmdb/apps/bill"
-	"github.com/infraboard/cmdb/provider/aliyun/connectivity"
 	"github.com/infraboard/mcube/logger/zap"
 
+	"github.com/infraboard/cmdb/provider/aliyun"
 	op "github.com/infraboard/cmdb/provider/aliyun/bss"
 )
 
 var (
-	operater *op.BssOperater
+	operater *op.BssOperator
 )
 
 func TestQuery(t *testing.T) {
@@ -33,14 +33,9 @@ func TestQuery(t *testing.T) {
 func init() {
 	zap.DevelopmentSetup()
 
-	err := connectivity.LoadClientFromEnv()
+	err := aliyun.LoadOperatorFromEnv()
 	if err != nil {
 		panic(err)
 	}
-
-	ec, err := connectivity.C().BssClient()
-	if err != nil {
-		panic(err)
-	}
-	operater = op.NewBssOperater(ec)
+	operater = aliyun.O().BssOperator()
 }

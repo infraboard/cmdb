@@ -14,21 +14,21 @@ import (
 	"github.com/infraboard/mcube/logger/zap"
 )
 
-func NewEcsOperater(client *ecs.EcsClient) *EcsOperater {
-	return &EcsOperater{
+func NewEcsOperator(client *ecs.EcsClient) *EcsOperator {
+	return &EcsOperator{
 		client:        client,
 		log:           zap.L().Named("Huawei ECS"),
 		AccountGetter: &resource.AccountGetter{},
 	}
 }
 
-type EcsOperater struct {
+type EcsOperator struct {
 	client *ecs.EcsClient
 	log    logger.Logger
 	*resource.AccountGetter
 }
 
-func (o *EcsOperater) transferSet(list *[]model.ServerDetail) *host.HostSet {
+func (o *EcsOperator) transferSet(list *[]model.ServerDetail) *host.HostSet {
 	set := host.NewHostSet()
 	items := *list
 	for i := range items {
@@ -37,7 +37,7 @@ func (o *EcsOperater) transferSet(list *[]model.ServerDetail) *host.HostSet {
 	return set
 }
 
-func (o *EcsOperater) transferOne(ins model.ServerDetail) *host.Host {
+func (o *EcsOperator) transferOne(ins model.ServerDetail) *host.Host {
 	h := host.NewDefaultHost()
 	h.Base.Vendor = resource.Vendor_HUAWEI
 	h.Base.Zone = ins.OSEXTAZavailabilityZone
@@ -64,7 +64,7 @@ func (o *EcsOperater) transferOne(ins model.ServerDetail) *host.Host {
 	return h
 }
 
-func (o *EcsOperater) transferTags(tags *[]string) (ret []*resource.Tag) {
+func (o *EcsOperator) transferTags(tags *[]string) (ret []*resource.Tag) {
 	if tags == nil {
 		return
 	}
@@ -78,7 +78,7 @@ func (o *EcsOperater) transferTags(tags *[]string) (ret []*resource.Tag) {
 	return
 }
 
-func (o *EcsOperater) parseTime(t string) int64 {
+func (o *EcsOperator) parseTime(t string) int64 {
 	if t == "" {
 		return 0
 	}
@@ -92,7 +92,7 @@ func (o *EcsOperater) parseTime(t string) int64 {
 	return ts.UnixNano() / 1000000
 }
 
-func (o *EcsOperater) parseIp(address map[string][]model.ServerAddress) (privateIps []string, publicIps []string) {
+func (o *EcsOperator) parseIp(address map[string][]model.ServerAddress) (privateIps []string, publicIps []string) {
 	for _, addrs := range address {
 		for i := range addrs {
 			switch *addrs[i].OSEXTIPStype {
