@@ -3,6 +3,7 @@ package api
 import (
 	restfulspec "github.com/emicklei/go-restful-openapi"
 	"github.com/emicklei/go-restful/v3"
+	"github.com/infraboard/mcube/http/label"
 	"github.com/infraboard/mcube/http/response"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
@@ -40,13 +41,20 @@ func (h *handler) Registry(ws *restful.WebService) {
 	ws.Route(ws.POST("/").To(h.CreateSecret).
 		Doc("create a secret").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
+		Metadata(label.ResourceLableKey, h.Name()).
+		Metadata(label.ActionLableKey, label.Create.Value()).
+		Metadata(label.AuthLabelKey, label.Enable).
+		Metadata(label.PermissionLabelKey, label.Enable).
 		Reads(secret.CreateSecretRequest{}).
 		Writes(response.NewData(secret.Secret{})))
 
 	ws.Route(ws.GET("/").To(h.QuerySecret).
 		Doc("get all secret").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
-		Metadata("action", "list").
+		Metadata(label.ResourceLableKey, h.Name()).
+		Metadata(label.ActionLableKey, label.List.Value()).
+		Metadata(label.AuthLabelKey, label.Enable).
+		Metadata(label.PermissionLabelKey, label.Enable).
 		Reads(secret.QuerySecretRequest{}).
 		Writes(response.NewData(secret.SecretSet{})).
 		Returns(200, "OK", secret.SecretSet{}))
@@ -55,6 +63,10 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Doc("describe an secret").
 		Param(ws.PathParameter("id", "identifier of the secret").DataType("integer").DefaultValue("1")).
 		Metadata(restfulspec.KeyOpenAPITags, tags).
+		Metadata(label.ResourceLableKey, h.Name()).
+		Metadata(label.ActionLableKey, label.Get.Value()).
+		Metadata(label.AuthLabelKey, label.Enable).
+		Metadata(label.PermissionLabelKey, label.Enable).
 		Writes(response.NewData(secret.Secret{})).
 		Returns(200, "OK", response.NewData(secret.Secret{})).
 		Returns(404, "Not Found", nil))
@@ -62,6 +74,11 @@ func (h *handler) Registry(ws *restful.WebService) {
 	ws.Route(ws.DELETE("/{id}").To(h.DeleteSecret).
 		Doc("delete a secret").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
+		Metadata(restfulspec.KeyOpenAPITags, tags).
+		Metadata(label.ResourceLableKey, h.Name()).
+		Metadata(label.ActionLableKey, label.Delete.Value()).
+		Metadata(label.AuthLabelKey, label.Enable).
+		Metadata(label.PermissionLabelKey, label.Enable).
 		Param(ws.PathParameter("id", "identifier of the secret").DataType("string")))
 
 	// sr.Handle("GET", "/crendential_types", h.ListCrendentialType).DisablePermission()

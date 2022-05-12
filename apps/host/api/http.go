@@ -3,6 +3,7 @@ package api
 import (
 	restfulspec "github.com/emicklei/go-restful-openapi"
 	"github.com/emicklei/go-restful/v3"
+	"github.com/infraboard/mcube/http/label"
 	"github.com/infraboard/mcube/http/response"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
@@ -40,13 +41,16 @@ func (h *handler) Registry(ws *restful.WebService) {
 	ws.Route(ws.POST("/").To(h.CreateHost).
 		Doc("create a host").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
+		Metadata(label.ResourceLableKey, h.Name()).
+		Metadata(label.ActionLableKey, label.Create.Value()).
 		Reads(host.Host{}).
 		Writes(response.NewData(host.Host{})))
 
 	ws.Route(ws.GET("/").To(h.QueryHost).
 		Doc("get all hosts").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
-		Metadata("action", "list").
+		Metadata(label.ResourceLableKey, h.Name()).
+		Metadata(label.ActionLableKey, label.List.Value()).
 		Reads(host.QueryHostRequest{}).
 		Writes(response.NewData(host.HostSet{})).
 		Returns(200, "OK", host.HostSet{}))
@@ -55,6 +59,8 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Doc("describe an host").
 		Param(ws.PathParameter("id", "identifier of the host").DataType("integer").DefaultValue("1")).
 		Metadata(restfulspec.KeyOpenAPITags, tags).
+		Metadata(label.ResourceLableKey, h.Name()).
+		Metadata(label.ActionLableKey, label.Get.Value()).
 		Writes(response.NewData(host.Host{})).
 		Returns(200, "OK", response.NewData(host.Host{})).
 		Returns(404, "Not Found", nil))
@@ -63,17 +69,23 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Doc("update a host").
 		Param(ws.PathParameter("id", "identifier of the host").DataType("string")).
 		Metadata(restfulspec.KeyOpenAPITags, tags).
+		Metadata(label.ResourceLableKey, h.Name()).
+		Metadata(label.ActionLableKey, label.Update.Value()).
 		Reads(host.UpdateHostData{}))
 
 	ws.Route(ws.PATCH("/{id}").To(h.PatchHost).
 		Doc("patch a host").
 		Param(ws.PathParameter("id", "identifier of the host").DataType("string")).
 		Metadata(restfulspec.KeyOpenAPITags, tags).
+		Metadata(label.ResourceLableKey, h.Name()).
+		Metadata(label.ActionLableKey, label.Update.Value()).
 		Reads(host.UpdateHostData{}))
 
 	ws.Route(ws.DELETE("/{id}").To(h.DeleteHost).
 		Doc("delete a host").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
+		Metadata(label.ResourceLableKey, h.Name()).
+		Metadata(label.ActionLableKey, label.Delete.Value()).
 		Param(ws.PathParameter("id", "identifier of the host").DataType("string")))
 }
 

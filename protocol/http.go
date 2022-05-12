@@ -125,7 +125,7 @@ func (s *HTTPService) RegistryEndpoint() {
 			m := label.Meta(r.Metadata)
 			entries = append(entries, &httpb.Entry{
 				FunctionName:     r.Operation,
-				Path:             r.Path,
+				Path:             fmt.Sprintf("%s.%s", r.Method, r.Path),
 				Method:           r.Method,
 				Resource:         m.Resource(),
 				AuthEnable:       m.AuthEnable(),
