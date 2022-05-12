@@ -1,9 +1,9 @@
-package vsphere
+package aws
 
 import (
 	"github.com/caarlos0/env/v6"
-	"github.com/infraboard/cmdb/provider/vsphere/connectivity"
-	"github.com/infraboard/cmdb/provider/vsphere/vm"
+	"github.com/infraboard/cmdb/provider/aws/connectivity"
+	"github.com/infraboard/cmdb/provider/aws/ec2"
 )
 
 var (
@@ -18,7 +18,7 @@ func O() *Operator {
 }
 
 func LoadOperatorFromEnv() error {
-	client := &connectivity.VsphereClient{}
+	client := &connectivity.AwsCloudClient{}
 	if err := env.Parse(client); err != nil {
 		return err
 	}
@@ -26,20 +26,20 @@ func LoadOperatorFromEnv() error {
 	return nil
 }
 
-func NewOperator(client *connectivity.VsphereClient) *Operator {
+func NewOperator(client *connectivity.AwsCloudClient) *Operator {
 	return &Operator{
 		client: client,
 	}
 }
 
 type Operator struct {
-	client *connectivity.VsphereClient
+	client *connectivity.AwsCloudClient
 }
 
-func (o *Operator) VmOperator() *vm.VMOperator {
-	c, err := o.client.VimClient()
+func (o *Operator) EcsOperator() *ec2.Ec2Operater {
+	c, err := o.client.Ec2Client()
 	if err != nil {
 		panic(err)
 	}
-	return vm.NewVMOperator(c)
+	return ec2.NewEc2Operator(c)
 }

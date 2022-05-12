@@ -16,7 +16,7 @@ import (
 	"github.com/infraboard/mcube/logger/zap"
 )
 
-func NewEcsOperator(client *hw_rds.RdsClient) *RdsOperator {
+func NewRdsOperator(client *hw_rds.RdsClient) *RdsOperator {
 	return &RdsOperator{
 		client: client,
 		log:    zap.L().Named("Huawei Rds"),

@@ -39,5 +39,5 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	operater = op.NewEcsOperator(ec)
+	operater = op.NewRdsOperator(ec)
 }
