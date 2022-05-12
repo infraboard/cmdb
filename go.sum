@@ -341,8 +341,8 @@ github.com/inconshreveable/mousetrap v1.0.0/go.mod h1:PxqpIevigyE2G7u3NXJIT2ANyt
 github.com/infraboard/keyauth v0.7.3 h1:4FVOi352YuUY6O4C4ylS3xOfXx5U7DfOVqArbhJXRMg=
 github.com/infraboard/keyauth v0.7.3/go.mod h1:9X4xEyT4zPO3Az7tWRboIqjsPSWfybJsDfDqeNvRcxU=
 github.com/infraboard/mcube v1.6.8/go.mod h1:s4efXz0bP8mQoasagux33tP6hFAOjoJ5kOKyDxYpuQE=
-github.com/infraboard/mcube v1.8.1 h1:pyYyFyjThP3oEYuuPep91AN2juodUZhN9/vISfLFsBM=
-github.com/infraboard/mcube v1.8.1/go.mod h1:Cym2MnzvUh7oMegBvIe1zKTSX4tLwRuINAWExxudq0o=
+github.com/infraboard/mcube v1.8.3 h1:U4hRKYV3Nxamuhqun9cVcuRrp+5ykhC3JMinqyTN0Ps=
+github.com/infraboard/mcube v1.8.3/go.mod h1:Cym2MnzvUh7oMegBvIe1zKTSX4tLwRuINAWExxudq0o=
 github.com/jmespath/go-jmespath v0.0.0-20180206201540-c2b33e8439af/go.mod h1:Nht3zPeWKUH0NzdCt2Blrr5ys8VGpn0CEB0cQHVjt7k=
 github.com/jmespath/go-jmespath v0.4.0 h1:BEgLn5cpjn8UN1mAw4NjwDrS35OdebyEtFe+9YPoQUg=
 github.com/jmespath/go-jmespath v0.4.0/go.mod h1:T8mJZnbsbmF+m6zOOFylbeCJqk5+pHWvzYPziyZiYoo=

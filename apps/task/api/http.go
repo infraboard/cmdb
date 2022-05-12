@@ -3,6 +3,7 @@ package api
 import (
 	restfulspec "github.com/emicklei/go-restful-openapi"
 	"github.com/emicklei/go-restful/v3"
+	"github.com/infraboard/mcube/http/label"
 	"github.com/infraboard/mcube/http/response"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
@@ -40,12 +41,16 @@ func (h *handler) Registry(ws *restful.WebService) {
 	ws.Route(ws.POST("/").To(h.CreatTask).
 		Doc("create a task").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
+		Metadata(label.ResourceLableKey, "task").
+		Metadata(label.ActionLableKey, label.Create.Value()).
 		Reads(task.CreateTaskRequst{}).
 		Writes(response.NewData(task.Task{})))
 
 	ws.Route(ws.GET("/").To(h.QueryTask).
 		Doc("get all task").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
+		Metadata(label.ResourceLableKey, "task").
+		Metadata(label.ActionLableKey, label.List.Value()).
 		Reads(task.QueryTaskRecordRequest{}).
 		Writes(response.NewData(task.TaskSet{})).
 		Returns(200, "OK", task.TaskSet{}))
@@ -54,6 +59,8 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Doc("describe an task").
 		Param(ws.PathParameter("id", "identifier of the task").DataType("integer").DefaultValue("1")).
 		Metadata(restfulspec.KeyOpenAPITags, tags).
+		Metadata(label.ResourceLableKey, "task").
+		Metadata(label.ActionLableKey, label.Get.Value()).
 		Writes(response.NewData(task.Task{})).
 		Returns(200, "OK", response.NewData(task.Task{})).
 		Returns(404, "Not Found", nil))
@@ -61,6 +68,8 @@ func (h *handler) Registry(ws *restful.WebService) {
 	ws.Route(ws.GET("/{id}/records").To(h.DescribeTaskRecord).
 		Doc("get task records").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
+		Metadata(label.ResourceLableKey, "task_records").
+		Metadata(label.ActionLableKey, label.List.Value()).
 		Reads(task.QueryTaskRecordRequest{}).
 		Writes(response.NewData(task.RecordSet{})).
 		Returns(200, "OK", task.RecordSet{}))

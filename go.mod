@@ -13,11 +13,12 @@ require (
 	github.com/emicklei/go-restful-openapi v1.4.1
 	github.com/emicklei/go-restful-openapi/v2 v2.9.0
 	github.com/emicklei/go-restful/v3 v3.7.4
+	github.com/go-openapi/spec v0.20.4
 	github.com/go-playground/validator/v10 v10.11.0
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.0.87
 	github.com/infraboard/keyauth v0.7.3
-	github.com/infraboard/mcube v1.8.1
+	github.com/infraboard/mcube v1.8.3
 	github.com/rs/xid v1.4.0
 	github.com/spf13/cobra v1.4.0
 	github.com/stretchr/testify v1.7.1
@@ -50,7 +51,6 @@ require (
 	github.com/gin-gonic/gin v1.7.7 // indirect
 	github.com/go-openapi/jsonpointer v0.19.5 // indirect
 	github.com/go-openapi/jsonreference v0.19.6 // indirect
-	github.com/go-openapi/spec v0.20.4 // indirect
 	github.com/go-openapi/swag v0.19.15 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect

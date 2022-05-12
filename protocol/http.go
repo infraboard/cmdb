@@ -8,8 +8,10 @@ import (
 
 	restfulspec "github.com/emicklei/go-restful-openapi/v2"
 	"github.com/emicklei/go-restful/v3"
+	"github.com/infraboard/mcube/http/label"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
+	httpb "github.com/infraboard/mcube/pb/http"
 
 	"github.com/infraboard/cmdb/conf"
 	"github.com/infraboard/cmdb/swagger"
@@ -115,7 +117,22 @@ func (s *HTTPService) RegistryEndpoint() {
 	// 注册服务权限条目
 	s.l.Info("start registry endpoints ...")
 
-	req := endpoint.NewRegistryRequest(version.Short(), nil)
+	entries := []*httpb.Entry{}
+	wss := s.r.RegisteredWebServices()
+	for i := range wss {
+		for _, r := range wss[i].Routes() {
+			entries = append(entries, &httpb.Entry{
+				FunctionName: r.Operation,
+				Path:         r.Path,
+				Method:       r.Method,
+				Resource:     r.Metadata[label.ResourceLableKey].(string),
+				Labels:       map[string]string{label.ActionLableKey: r.Metadata[label.ActionLableKey].(string)},
+			})
+			fmt.Println(r.Path, r.Operation)
+		}
+	}
+
+	req := endpoint.NewRegistryRequest(version.Short(), entries)
 	_, err := s.endpoint.RegistryEndpoint(context.Background(), req)
 	if err != nil {
 		s.l.Warnf("registry endpoints error, %s", err)

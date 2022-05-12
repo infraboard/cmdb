@@ -56,7 +56,7 @@ func (s *service) syncRds(ctx context.Context, secretIns *secret.Secret, t *task
 			t.Failed(err.Error())
 			return
 		}
-		operater := hwRdsOp.NewEcsOperator(ec)
+		operater := hwRdsOp.NewRdsOperator(ec)
 		pager = operater.PageQuery()
 	default:
 		t.Failed(fmt.Sprintf("unsuport bill syncing vendor %s", secret.Vendor))
