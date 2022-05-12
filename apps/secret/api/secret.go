@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/emicklei/go-restful/v3"
+	"github.com/infraboard/keyauth/apps/token"
 	"github.com/infraboard/mcube/http/request"
 	"github.com/infraboard/mcube/http/response"
 
@@ -10,7 +11,7 @@ import (
 
 func (h *handler) QuerySecret(r *restful.Request, w *restful.Response) {
 	req := secret.NewQuerySecretRequestFromHTTP(r.Request)
-	// req.WithNamespace(ctx.AuthInfo.(*token.Token))
+	req.WithNamespace(r.Attribute("token").(*token.Token))
 	set, err := h.service.QuerySecret(r.Request.Context(), req)
 	if err != nil {
 		response.Failed(w, err)
@@ -21,7 +22,7 @@ func (h *handler) QuerySecret(r *restful.Request, w *restful.Response) {
 
 func (h *handler) CreateSecret(r *restful.Request, w *restful.Response) {
 	req := secret.NewCreateSecretRequest()
-	// req.SetOwner(ctx.AuthInfo.(*token.Token))
+	req.SetOwner(r.Attribute("token").(*token.Token))
 	if err := request.GetDataFromRequest(r.Request, req); err != nil {
 		response.Failed(w, err)
 		return

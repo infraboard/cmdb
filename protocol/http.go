@@ -8,6 +8,7 @@ import (
 
 	restfulspec "github.com/emicklei/go-restful-openapi/v2"
 	"github.com/emicklei/go-restful/v3"
+	"github.com/infraboard/keyauth/client/interceptor"
 	"github.com/infraboard/mcube/http/label"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
@@ -40,6 +41,7 @@ func NewHTTPService() *HTTPService {
 		CookiesAllowed: false,
 		Container:      r}
 	r.Filter(cors.Filter)
+	r.Filter(interceptor.NewHTTPAuther(c).RestfulAuthHandlerFunc)
 
 	server := &http.Server{
 		ReadHeaderTimeout: 60 * time.Second,
@@ -86,7 +88,6 @@ func (s *HTTPService) Start() error {
 		PostBuildSwaggerObjectHandler: swagger.Docs}
 	s.r.Add(restfulspec.NewOpenAPIService(config))
 	s.l.Infof("Get the API using http://%s%s", s.c.App.HTTPAddr(), config.APIPath)
-
 	// 注册路由条目
 	s.RegistryEndpoint()
 
@@ -121,14 +122,20 @@ func (s *HTTPService) RegistryEndpoint() {
 	wss := s.r.RegisteredWebServices()
 	for i := range wss {
 		for _, r := range wss[i].Routes() {
+			m := label.Meta(r.Metadata)
 			entries = append(entries, &httpb.Entry{
-				FunctionName: r.Operation,
-				Path:         r.Path,
-				Method:       r.Method,
-				Resource:     r.Metadata[label.ResourceLableKey].(string),
-				Labels:       map[string]string{label.ActionLableKey: r.Metadata[label.ActionLableKey].(string)},
+				FunctionName:     r.Operation,
+				Path:             r.Path,
+				Method:           r.Method,
+				Resource:         m.Resource(),
+				AuthEnable:       m.AuthEnable(),
+				PermissionEnable: m.PermissionEnable(),
+				Allow:            m.Allow(),
+				AuditLog:         m.AuditEnable(),
+				Labels: map[string]string{
+					label.ActionLableKey: m.Action(),
+				},
 			})
-			fmt.Println(r.Path, r.Operation)
 		}
 	}
 

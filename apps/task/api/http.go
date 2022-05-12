@@ -43,6 +43,8 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.ResourceLableKey, "task").
 		Metadata(label.ActionLableKey, label.Create.Value()).
+		Metadata(label.AuthLabelKey, label.Enable).
+		Metadata(label.PermissionLabelKey, label.Enable).
 		Reads(task.CreateTaskRequst{}).
 		Writes(response.NewData(task.Task{})))
 
@@ -51,6 +53,8 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.ResourceLableKey, "task").
 		Metadata(label.ActionLableKey, label.List.Value()).
+		Metadata(label.AuthLabelKey, label.Enable).
+		Metadata(label.PermissionLabelKey, label.Enable).
 		Reads(task.QueryTaskRecordRequest{}).
 		Writes(response.NewData(task.TaskSet{})).
 		Returns(200, "OK", task.TaskSet{}))
@@ -61,6 +65,8 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.ResourceLableKey, "task").
 		Metadata(label.ActionLableKey, label.Get.Value()).
+		Metadata(label.AuthLabelKey, label.Enable).
+		Metadata(label.PermissionLabelKey, label.Enable).
 		Writes(response.NewData(task.Task{})).
 		Returns(200, "OK", response.NewData(task.Task{})).
 		Returns(404, "Not Found", nil))
@@ -70,6 +76,8 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.ResourceLableKey, "task_records").
 		Metadata(label.ActionLableKey, label.List.Value()).
+		Metadata(label.AuthLabelKey, label.Enable).
+		Metadata(label.PermissionLabelKey, label.Enable).
 		Reads(task.QueryTaskRecordRequest{}).
 		Writes(response.NewData(task.RecordSet{})).
 		Returns(200, "OK", task.RecordSet{}))
