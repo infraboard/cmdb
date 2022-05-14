@@ -39,7 +39,7 @@ func (h *handler) Registry(ws *restful.WebService) {
 	ws.Route(ws.GET("/crendential_types").To(h.CrendentialType).
 		Doc("get all secret").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
-		Metadata(label.ResourceLableKey, h.Name()).
+		Metadata(label.ResourceLableKey, "crendential_types").
 		Metadata(label.ActionLableKey, label.List.Value()).
 		Writes(response.NewData(dict.CrendentialTypes)).
 		Returns(200, "OK", dict.CrendentialTypes))
