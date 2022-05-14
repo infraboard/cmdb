@@ -10,14 +10,14 @@ func (h *handler) CrendentialType(r *restful.Request, w *restful.Response) {
 	response.Success(w, dict.CrendentialTypes)
 }
 
-func (h *handler) ListVendor(r *restful.Request, w *restful.Response) {
+func (h *handler) Vendor(r *restful.Request, w *restful.Response) {
 	response.Success(w, dict.Vendors)
 }
 
-func (h *handler) ListResourceType(r *restful.Request, w *restful.Response) {
+func (h *handler) ResourceType(r *restful.Request, w *restful.Response) {
 	response.Success(w, dict.ResourceTypes)
 }
 
-func (h *handler) ListVendorRegion(r *restful.Request, w *restful.Response) {
+func (h *handler) VendorRegion(r *restful.Request, w *restful.Response) {
 	response.Success(w, dict.Regions)
 }

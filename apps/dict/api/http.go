@@ -4,7 +4,6 @@ import (
 	restfulspec "github.com/emicklei/go-restful-openapi"
 	"github.com/emicklei/go-restful/v3"
 	"github.com/infraboard/cmdb/apps/dict"
-	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/http/label"
 	"github.com/infraboard/mcube/http/response"
 	"github.com/infraboard/mcube/logger"
@@ -42,31 +41,31 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.ResourceLableKey, h.Name()).
 		Metadata(label.ActionLableKey, label.List.Value()).
-		Writes(response.NewData([]utils.EnumDescribe{})).
-		Returns(200, "OK", []utils.EnumDescribe{}))
-	ws.Route(ws.GET("/vendors").To(h.ListVendor).
+		Writes(response.NewData(dict.CrendentialTypes)).
+		Returns(200, "OK", dict.CrendentialTypes))
+	ws.Route(ws.GET("/vendors").To(h.Vendor).
 		Doc("get all vendors").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.ResourceLableKey, "vendord").
 		Metadata(label.ActionLableKey, label.List.Value()).
-		Writes(response.NewData([]utils.EnumDescribe{})).
-		Returns(200, "OK", []utils.EnumDescribe{}))
+		Writes(response.NewData(dict.Vendors)).
+		Returns(200, "OK", dict.Vendors))
 
-	ws.Route(ws.GET("/regions").To(h.ListVendorRegion).
+	ws.Route(ws.GET("/regions").To(h.VendorRegion).
 		Doc("get all regions").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.ResourceLableKey, "regions").
 		Metadata(label.ActionLableKey, label.List.Value()).
-		Writes(response.NewData(map[string][]utils.EnumDescribe{})).
-		Returns(200, "OK", map[string][]utils.EnumDescribe{}))
+		Writes(response.NewData(dict.Regions)).
+		Returns(200, "OK", dict.Regions))
 
-	ws.Route(ws.GET("/types").To(h.ListResourceType).
+	ws.Route(ws.GET("/resource_types").To(h.ResourceType).
 		Doc("get all resource types").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.ResourceLableKey, "types").
 		Metadata(label.ActionLableKey, label.List.Value()).
-		Writes(response.NewData(map[string][]utils.EnumDescribe{})).
-		Returns(200, "OK", map[string][]utils.EnumDescribe{}))
+		Writes(response.NewData(dict.ResourceTypes)).
+		Returns(200, "OK", dict.ResourceTypes))
 }
 
 func init() {
