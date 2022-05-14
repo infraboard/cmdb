@@ -80,8 +80,6 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Metadata(label.AuthLabelKey, label.Enable).
 		Metadata(label.PermissionLabelKey, label.Enable).
 		Param(ws.PathParameter("id", "identifier of the secret").DataType("string")))
-
-	// sr.Handle("GET", "/crendential_types", h.ListCrendentialType).DisablePermission()
 }
 
 func init() {

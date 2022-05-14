@@ -9,7 +9,10 @@ import (
 )
 
 func NewDefaultTask() *Task {
-	return &Task{}
+	return &Task{
+		Data:   &CreateTaskRequst{},
+		Status: &Status{},
+	}
 }
 
 func NewTaskFromReq(req *CreateTaskRequst) (*Task, error) {

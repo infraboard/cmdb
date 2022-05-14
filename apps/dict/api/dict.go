@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/emicklei/go-restful/v3"
 	"github.com/infraboard/cmdb/apps/resource"
+	"github.com/infraboard/cmdb/apps/secret"
 	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/http/response"
 
@@ -11,6 +12,14 @@ import (
 	hw_region "github.com/infraboard/cmdb/provider/huawei/region"
 	tx_region "github.com/infraboard/cmdb/provider/txyun/region"
 )
+
+func (h *handler) CrendentialType(r *restful.Request, w *restful.Response) {
+	resp := []utils.EnumDescribe{
+		{Value: secret.Type_API_KEY.String(), Describe: "API凭证"},
+		{Value: secret.Type_PASSWORD.String(), Describe: "用户名密码"},
+	}
+	response.Success(w, resp)
+}
 
 func (h *handler) ListVendor(r *restful.Request, w *restful.Response) {
 	resp := []utils.EnumDescribe{

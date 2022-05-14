@@ -43,7 +43,7 @@ func (s *service) SyncHost(ctx context.Context, ins *host.Host) (
 
 func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 	*host.HostSet, error) {
-	query := sqlbuilder.NewQuery(queryHostSQL).Order("sync_at").Desc()
+	query := sqlbuilder.NewQuery(queryHostSQL)
 
 	if req.Keywords != "" {
 		query.Where("r.name LIKE ? OR r.id = ? OR r.instance_id = ? OR r.private_ip LIKE ? OR r.public_ip LIKE ?",
@@ -58,7 +58,7 @@ func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 	set := host.NewHostSet()
 
 	// 获取total SELECT COUNT(*) FROMT t Where ....
-	countSQL, args := query.BuildFromNewBase("COUNT(DISTINCT r.id)")
+	countSQL, args := query.BuildFromNewBase(countHostSQL)
 	countStmt, err := s.db.PrepareContext(ctx, countSQL)
 	s.log.Debugf("count sql: %s", countSQL)
 	if err != nil {

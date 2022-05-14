@@ -9,7 +9,6 @@ import (
 	"github.com/infraboard/mcube/logger/zap"
 
 	"github.com/infraboard/cmdb/apps/resource"
-	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/app"
 )
 
@@ -48,30 +47,6 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Reads(resource.SearchRequest{}).
 		Writes(response.NewData(resource.ResourceSet{})).
 		Returns(200, "OK", resource.ResourceSet{}))
-
-	ws.Route(ws.GET("/vendors").To(h.ListVendor).
-		Doc("get all vendors").
-		Metadata(restfulspec.KeyOpenAPITags, tags).
-		Metadata(label.ResourceLableKey, "vendord").
-		Metadata(label.ActionLableKey, label.List.Value()).
-		Writes(response.NewData([]utils.EnumDescribe{})).
-		Returns(200, "OK", []utils.EnumDescribe{}))
-
-	ws.Route(ws.GET("/regions").To(h.ListVendorRegion).
-		Doc("get all regions").
-		Metadata(restfulspec.KeyOpenAPITags, tags).
-		Metadata(label.ResourceLableKey, "regions").
-		Metadata(label.ActionLableKey, label.List.Value()).
-		Writes(response.NewData(map[string][]utils.EnumDescribe{})).
-		Returns(200, "OK", map[string][]utils.EnumDescribe{}))
-
-	ws.Route(ws.GET("/types").To(h.ListResourceType).
-		Doc("get all resource types").
-		Metadata(restfulspec.KeyOpenAPITags, tags).
-		Metadata(label.ResourceLableKey, "types").
-		Metadata(label.ActionLableKey, label.List.Value()).
-		Writes(response.NewData(map[string][]utils.EnumDescribe{})).
-		Returns(200, "OK", map[string][]utils.EnumDescribe{}))
 
 	// 资源标签管理
 	ws.Route(ws.POST("/").To(h.AddTag).
