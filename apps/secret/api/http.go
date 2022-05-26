@@ -41,20 +41,20 @@ func (h *handler) Registry(ws *restful.WebService) {
 	ws.Route(ws.POST("/").To(h.CreateSecret).
 		Doc("create a secret").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
-		Metadata(label.ResourceLableKey, h.Name()).
-		Metadata(label.ActionLableKey, label.Create.Value()).
-		Metadata(label.AuthLabelKey, label.Enable).
-		Metadata(label.PermissionLabelKey, label.Enable).
+		Metadata(label.Resource, h.Name()).
+		Metadata(label.Action, label.Create.Value()).
+		Metadata(label.Auth, label.Enable).
+		Metadata(label.Permission, label.Enable).
 		Reads(secret.CreateSecretRequest{}).
 		Writes(response.NewData(secret.Secret{})))
 
 	ws.Route(ws.GET("/").To(h.QuerySecret).
 		Doc("get all secret").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
-		Metadata(label.ResourceLableKey, h.Name()).
-		Metadata(label.ActionLableKey, label.List.Value()).
-		Metadata(label.AuthLabelKey, label.Enable).
-		Metadata(label.PermissionLabelKey, label.Enable).
+		Metadata(label.Resource, h.Name()).
+		Metadata(label.Action, label.List.Value()).
+		Metadata(label.Auth, label.Enable).
+		Metadata(label.Permission, label.Enable).
 		Reads(secret.QuerySecretRequest{}).
 		Writes(response.NewData(secret.SecretSet{})).
 		Returns(200, "OK", secret.SecretSet{}))
@@ -63,10 +63,10 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Doc("describe an secret").
 		Param(ws.PathParameter("id", "identifier of the secret").DataType("integer").DefaultValue("1")).
 		Metadata(restfulspec.KeyOpenAPITags, tags).
-		Metadata(label.ResourceLableKey, h.Name()).
-		Metadata(label.ActionLableKey, label.Get.Value()).
-		Metadata(label.AuthLabelKey, label.Enable).
-		Metadata(label.PermissionLabelKey, label.Enable).
+		Metadata(label.Resource, h.Name()).
+		Metadata(label.Action, label.Get.Value()).
+		Metadata(label.Auth, label.Enable).
+		Metadata(label.Permission, label.Enable).
 		Writes(response.NewData(secret.Secret{})).
 		Returns(200, "OK", response.NewData(secret.Secret{})).
 		Returns(404, "Not Found", nil))
@@ -75,10 +75,10 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Doc("delete a secret").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(restfulspec.KeyOpenAPITags, tags).
-		Metadata(label.ResourceLableKey, h.Name()).
-		Metadata(label.ActionLableKey, label.Delete.Value()).
-		Metadata(label.AuthLabelKey, label.Enable).
-		Metadata(label.PermissionLabelKey, label.Enable).
+		Metadata(label.Resource, h.Name()).
+		Metadata(label.Action, label.Delete.Value()).
+		Metadata(label.Auth, label.Enable).
+		Metadata(label.Permission, label.Enable).
 		Param(ws.PathParameter("id", "identifier of the secret").DataType("string")))
 }
 

@@ -41,20 +41,20 @@ func (h *handler) Registry(ws *restful.WebService) {
 	ws.Route(ws.POST("/").To(h.CreatTask).
 		Doc("create a task").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
-		Metadata(label.ResourceLableKey, "task").
-		Metadata(label.ActionLableKey, label.Create.Value()).
-		Metadata(label.AuthLabelKey, label.Enable).
-		Metadata(label.PermissionLabelKey, label.Enable).
+		Metadata(label.Resource, "task").
+		Metadata(label.Action, label.Create.Value()).
+		Metadata(label.Auth, label.Enable).
+		Metadata(label.Permission, label.Enable).
 		Reads(task.CreateTaskRequst{}).
 		Writes(response.NewData(task.Task{})))
 
 	ws.Route(ws.GET("/").To(h.QueryTask).
 		Doc("get all task").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
-		Metadata(label.ResourceLableKey, "task").
-		Metadata(label.ActionLableKey, label.List.Value()).
-		Metadata(label.AuthLabelKey, label.Enable).
-		Metadata(label.PermissionLabelKey, label.Enable).
+		Metadata(label.Resource, "task").
+		Metadata(label.Action, label.List.Value()).
+		Metadata(label.Auth, label.Enable).
+		Metadata(label.Permission, label.Enable).
 		Reads(task.QueryTaskRecordRequest{}).
 		Writes(response.NewData(task.TaskSet{})).
 		Returns(200, "OK", task.TaskSet{}))
@@ -63,10 +63,10 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Doc("describe an task").
 		Param(ws.PathParameter("id", "identifier of the task").DataType("integer").DefaultValue("1")).
 		Metadata(restfulspec.KeyOpenAPITags, tags).
-		Metadata(label.ResourceLableKey, "task").
-		Metadata(label.ActionLableKey, label.Get.Value()).
-		Metadata(label.AuthLabelKey, label.Enable).
-		Metadata(label.PermissionLabelKey, label.Enable).
+		Metadata(label.Resource, "task").
+		Metadata(label.Action, label.Get.Value()).
+		Metadata(label.Auth, label.Enable).
+		Metadata(label.Permission, label.Enable).
 		Writes(response.NewData(task.Task{})).
 		Returns(200, "OK", response.NewData(task.Task{})).
 		Returns(404, "Not Found", nil))
@@ -74,10 +74,10 @@ func (h *handler) Registry(ws *restful.WebService) {
 	ws.Route(ws.GET("/{id}/records").To(h.DescribeTaskRecord).
 		Doc("get task records").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
-		Metadata(label.ResourceLableKey, "task_records").
-		Metadata(label.ActionLableKey, label.List.Value()).
-		Metadata(label.AuthLabelKey, label.Enable).
-		Metadata(label.PermissionLabelKey, label.Enable).
+		Metadata(label.Resource, "task_records").
+		Metadata(label.Action, label.List.Value()).
+		Metadata(label.Auth, label.Enable).
+		Metadata(label.Permission, label.Enable).
 		Reads(task.QueryTaskRecordRequest{}).
 		Writes(response.NewData(task.RecordSet{})).
 		Returns(200, "OK", task.RecordSet{}))

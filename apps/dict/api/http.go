@@ -39,31 +39,31 @@ func (h *handler) Registry(ws *restful.WebService) {
 	ws.Route(ws.GET("/crendential_types").To(h.CrendentialType).
 		Doc("get all secret").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
-		Metadata(label.ResourceLableKey, "crendential_types").
-		Metadata(label.ActionLableKey, label.List.Value()).
+		Metadata(label.Resource, "crendential_types").
+		Metadata(label.Action, label.List.Value()).
 		Writes(response.NewData(dict.CrendentialTypes)).
 		Returns(200, "OK", dict.CrendentialTypes))
 	ws.Route(ws.GET("/vendors").To(h.Vendor).
 		Doc("get all vendors").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
-		Metadata(label.ResourceLableKey, "vendord").
-		Metadata(label.ActionLableKey, label.List.Value()).
+		Metadata(label.Resource, "vendord").
+		Metadata(label.Action, label.List.Value()).
 		Writes(response.NewData(dict.Vendors)).
 		Returns(200, "OK", dict.Vendors))
 
 	ws.Route(ws.GET("/regions").To(h.VendorRegion).
 		Doc("get all regions").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
-		Metadata(label.ResourceLableKey, "regions").
-		Metadata(label.ActionLableKey, label.List.Value()).
+		Metadata(label.Resource, "regions").
+		Metadata(label.Action, label.List.Value()).
 		Writes(response.NewData(dict.Regions)).
 		Returns(200, "OK", dict.Regions))
 
 	ws.Route(ws.GET("/resource_types").To(h.ResourceType).
 		Doc("get all resource types").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
-		Metadata(label.ResourceLableKey, "types").
-		Metadata(label.ActionLableKey, label.List.Value()).
+		Metadata(label.Resource, "types").
+		Metadata(label.Action, label.List.Value()).
 		Writes(response.NewData(dict.ResourceTypes)).
 		Returns(200, "OK", dict.ResourceTypes))
 }

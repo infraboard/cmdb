@@ -41,9 +41,9 @@ func (h *handler) Registry(ws *restful.WebService) {
 	ws.Route(ws.GET("/search").To(h.SearchResource).
 		Doc("get all resources").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
-		Metadata(label.ResourceLableKey, h.Name()).
-		Metadata(label.ActionLableKey, label.List.Value()).
-		Metadata(label.AuthLabelKey, label.Enable).
+		Metadata(label.Resource, h.Name()).
+		Metadata(label.Action, label.List.Value()).
+		Metadata(label.Auth, label.Enable).
 		Reads(resource.SearchRequest{}).
 		Writes(response.NewData(resource.ResourceSet{})).
 		Returns(200, "OK", resource.ResourceSet{}))
@@ -52,17 +52,17 @@ func (h *handler) Registry(ws *restful.WebService) {
 	ws.Route(ws.POST("/").To(h.AddTag).
 		Doc("add resource tags").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
-		Metadata(label.ResourceLableKey, "tags").
-		Metadata(label.ActionLableKey, label.Create.Value()).
-		Metadata(label.AuthLabelKey, label.Enable).
+		Metadata(label.Resource, "tags").
+		Metadata(label.Action, label.Create.Value()).
+		Metadata(label.Auth, label.Enable).
 		Reads([]*resource.Tag{}).
 		Writes(response.NewData(resource.Resource{})))
 	ws.Route(ws.DELETE("/").To(h.RemoveTag).
 		Doc("remove resource tags").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
-		Metadata(label.ResourceLableKey, "tags").
-		Metadata(label.ActionLableKey, label.Delete.Value()).
-		Metadata(label.AuthLabelKey, label.Enable).
+		Metadata(label.Resource, "tags").
+		Metadata(label.Action, label.Delete.Value()).
+		Metadata(label.Auth, label.Enable).
 		Reads([]*resource.Tag{}).
 		Writes(response.NewData(resource.Resource{})))
 
@@ -70,8 +70,8 @@ func (h *handler) Registry(ws *restful.WebService) {
 	ws.Route(ws.GET("/discovery/prometheus").To(h.DiscoveryPrometheus).
 		Doc("discovery resoruce for prometheus").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
-		Metadata(label.ResourceLableKey, "prometheus_resource").
-		Metadata(label.ActionLableKey, label.List.Value()).
+		Metadata(label.Resource, "prometheus_resource").
+		Metadata(label.Action, label.List.Value()).
 		Reads(resource.SearchRequest{}).
 		Writes(response.NewData(resource.ResourceSet{})).
 		Returns(200, "OK", resource.ResourceSet{}))
