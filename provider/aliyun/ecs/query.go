@@ -7,6 +7,7 @@ import (
 	"github.com/infraboard/mcube/exception"
 )
 
+// 阿里云ECS实例字段描述: https://next.api.aliyun.com/document/Ecs/2014-05-26/DescribeInstances
 func (o *EcsOperator) Query(req *ecs.DescribeInstancesRequest) (*host.HostSet, error) {
 	set := host.NewHostSet()
 
