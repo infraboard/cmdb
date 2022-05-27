@@ -50,7 +50,7 @@ func (o *EcsOperator) transferOne(ins ecs.Instance) *host.Host {
 	h.Information.Status = ins.Status
 	h.Information.Tags = o.transferTags(ins.Tags.Tag)
 	h.Information.PublicIp = ins.PublicIpAddress.IpAddress
-	h.Information.PrivateIp = ins.InnerIpAddress.IpAddress
+	h.Information.PrivateIp = o.parsePrivateIp(ins)
 	h.Information.PayType = ins.InstanceChargeType
 	h.Information.SyncAccount = o.GetAccountId()
 
@@ -67,6 +67,29 @@ func (o *EcsOperator) transferOne(ins ecs.Instance) *host.Host {
 	h.Describe.KeyPairName = []string{ins.KeyPairName}
 	h.Describe.SecurityGroups = ins.SecurityGroupIds.SecurityGroupId
 	return h
+}
+
+func (o *EcsOperator) parsePrivateIp(ins ecs.Instance) []string {
+	ips := []string{}
+	// 优先通过网卡查询主私网IP地址
+	for _, nc := range ins.NetworkInterfaces.NetworkInterface {
+		for _, ip := range nc.PrivateIpSets.PrivateIpSet {
+			if ip.Primary {
+				ips = append(ips, ip.PrivateIpAddress)
+			}
+		}
+	}
+	if len(ips) > 0 {
+		return ips
+	}
+
+	// 查询InnerIpAddress属性
+	if len(ins.InnerIpAddress.IpAddress) > 0 {
+		return ins.InnerIpAddress.IpAddress
+	}
+
+	// 通过专有网络VPC属性查询内网Ip
+	return ins.VpcAttributes.PrivateIpAddress.IpAddress
 }
 
 func (o *EcsOperator) transferTags(tags []ecs.Tag) (ret []*resource.Tag) {
