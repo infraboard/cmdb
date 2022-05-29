@@ -36,7 +36,7 @@ type Operator struct {
 	client *connectivity.AwsCloudClient
 }
 
-func (o *Operator) EcsOperator() *ec2.Ec2Operater {
+func (o *Operator) EcsOperator() *ec2.Ec2operator {
 	c, err := o.client.Ec2Client()
 	if err != nil {
 		panic(err)

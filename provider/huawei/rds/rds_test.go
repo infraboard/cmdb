@@ -13,11 +13,11 @@ import (
 )
 
 var (
-	operater *op.RdsOperator
+	operator *op.RdsOperator
 )
 
 func TestQuery(t *testing.T) {
-	pager := operater.PageQuery()
+	pager := operator.PageQuery()
 
 	for pager.Next() {
 		set := rds.NewSet()
@@ -39,5 +39,5 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	operater = op.NewRdsOperator(ec)
+	operator = op.NewRdsOperator(ec)
 }

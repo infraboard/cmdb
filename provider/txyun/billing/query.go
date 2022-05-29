@@ -9,7 +9,7 @@ import (
 	"github.com/infraboard/cmdb/utils"
 )
 
-func (o *BillingOperater) Query(ctx context.Context, req *billing.DescribeBillResourceSummaryRequest) (*bill.BillSet, error) {
+func (o *Billingoperator) Query(ctx context.Context, req *billing.DescribeBillResourceSummaryRequest) (*bill.BillSet, error) {
 	resp, err := o.client.DescribeBillResourceSummaryWithContext(ctx, req)
 	if err != nil {
 		return nil, err
@@ -32,6 +32,6 @@ type PageQueryRequest struct {
 	Month string
 }
 
-func (o *BillingOperater) PageQuery(req *PageQueryRequest) bill.Pager {
+func (o *Billingoperator) PageQuery(req *PageQueryRequest) bill.Pager {
 	return newPager(20, o, req.Rate, req.Month)
 }

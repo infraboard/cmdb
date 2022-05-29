@@ -13,11 +13,11 @@ import (
 )
 
 var (
-	operater *op.EcsOperator
+	operator *op.EcsOperator
 )
 
 func TestQuery(t *testing.T) {
-	pager := operater.PageQuery()
+	pager := operator.PageQuery(op.NewPageQueryRequest())
 
 	for pager.Next() {
 		set := host.NewHostSet()
@@ -39,5 +39,5 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	operater = op.NewEcsOperator(ec)
+	operator = op.NewEcsOperator(ec)
 }

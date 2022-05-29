@@ -46,6 +46,6 @@ func (o *Operator) CdbOperator() *cdb.CDBOperator {
 	return cdb.NewCDBOperator(o.client.CDBClient())
 }
 
-func (o *Operator) BillOperator() *billing.BillingOperater {
-	return billing.NewBillingOperater(o.client.BillingClient())
+func (o *Operator) BillOperator() *billing.Billingoperator {
+	return billing.NewBillingoperator(o.client.BillingClient())
 }

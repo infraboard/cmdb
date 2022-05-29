@@ -12,7 +12,7 @@ import (
 	"github.com/infraboard/mcube/logger/zap"
 )
 
-func newPager(pageSize int, operater *BssOperator, rate int, month string) *pager {
+func newPager(pageSize int, operator *BssOperator, rate int, month string) *pager {
 	req := &model.ListCustomerselfResourceRecordsRequest{}
 	req.Cycle = month
 	req.Limit = utils.Int32Ptr(int32(pageSize))
@@ -22,7 +22,7 @@ func newPager(pageSize int, operater *BssOperator, rate int, month string) *page
 		size:     pageSize,
 		number:   1,
 		total:    -1,
-		operater: operater,
+		operator: operator,
 		req:      req,
 		log:      zap.L().Named("huawei.bss"),
 		tb:       tokenbucket.NewBucketWithRate(rateFloat, 1),
@@ -33,14 +33,14 @@ type pager struct {
 	size     int
 	number   int
 	total    int64
-	operater *BssOperator
+	operator *BssOperator
 	req      *model.ListCustomerselfResourceRecordsRequest
 	log      logger.Logger
 	tb       *tokenbucket.Bucket
 }
 
 func (p *pager) Scan(ctx context.Context, set *bill.BillSet) error {
-	resp, err := p.operater.Query(p.nextReq())
+	resp, err := p.operator.Query(p.nextReq())
 	if err != nil {
 		return err
 	}

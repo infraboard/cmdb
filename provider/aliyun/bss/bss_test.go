@@ -13,14 +13,14 @@ import (
 )
 
 var (
-	operater *op.BssOperator
+	operator *op.BssOperator
 )
 
 func TestQuery(t *testing.T) {
 	req := op.NewPageQueryRequest()
 	req.Month = "2022-4"
 
-	pager := operater.PageQuery(req)
+	pager := operator.PageQuery(req)
 	for pager.Next() {
 		set := bill.NewBillSet()
 		if err := pager.Scan(context.Background(), set); err != nil {
@@ -37,5 +37,5 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	operater = aliyun.O().BssOperator()
+	operator = aliyun.O().BssOperator()
 }

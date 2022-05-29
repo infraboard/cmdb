@@ -11,7 +11,7 @@ import (
 	"github.com/infraboard/mcube/logger/zap"
 )
 
-func newPager(pageSize int, operater *CDBOperator) *pager {
+func newPager(pageSize int, operator *CDBOperator) *pager {
 	req := cdb.NewDescribeDBInstancesRequest()
 	req.Limit = common.Uint64Ptr(uint64(pageSize))
 
@@ -19,7 +19,7 @@ func newPager(pageSize int, operater *CDBOperator) *pager {
 		size:     pageSize,
 		number:   1,
 		hasNext:  true,
-		operater: operater,
+		operator: operator,
 		req:      req,
 		log:      zap.L().Named("tx.cdb"),
 	}
@@ -29,13 +29,13 @@ type pager struct {
 	size     int
 	number   int
 	hasNext  bool
-	operater *CDBOperator
+	operator *CDBOperator
 	req      *cdb.DescribeDBInstancesRequest
 	log      logger.Logger
 }
 
 func (p *pager) Scan(ctx context.Context, set *rds.Set) error {
-	resp, err := p.operater.Query(ctx, p.nextReq())
+	resp, err := p.operator.Query(ctx, p.nextReq())
 	if err != nil {
 		return err
 	}

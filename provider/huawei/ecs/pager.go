@@ -7,58 +7,49 @@ import (
 
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
+	"github.com/infraboard/mcube/pager"
 
-	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/cmdb/utils"
 )
 
-func newPager(pageSize int, operater *EcsOperator) *pager {
+func newPager(operator *EcsOperator) pager.Pager {
 	req := &model.ListServersDetailsRequest{}
-	req.Limit = utils.Int32Ptr(int32(pageSize))
 
-	return &pager{
-		size:     pageSize,
-		number:   1,
-		total:    -1,
-		operater: operater,
-		req:      req,
-		log:      zap.L().Named("huawei.ecs"),
+	return &ecsPager{
+		BasePager: pager.NewBasePager(),
+		operator:  operator,
+		req:       req,
+		log:       zap.L().Named("huawei.ecs"),
 	}
 }
 
-type pager struct {
-	size     int
-	number   int
-	total    int64
-	operater *EcsOperator
+type ecsPager struct {
+	*pager.BasePager
+	operator *EcsOperator
 	req      *model.ListServersDetailsRequest
 	log      logger.Logger
 }
 
-func (p *pager) Scan(ctx context.Context, set *host.HostSet) error {
-	resp, err := p.operater.Query(p.nextReq())
+func (p *ecsPager) Scan(ctx context.Context, set pager.Set) error {
+	resp, err := p.operator.Query(p.nextReq())
 	if err != nil {
 		return err
 	}
+	set.Add(resp.ToAny()...)
 
-	set.Add(resp.Items...)
-	p.total = resp.Total
+	if int64(resp.Length()) < p.PageSize {
+		p.HasNext = false
+	}
 
-	p.number++
+	p.PageNumber++
 	return nil
 }
 
-func (p *pager) nextReq() *model.ListServersDetailsRequest {
-	p.log.Debugf("请求第%d页数据", p.number)
+func (p *ecsPager) nextReq() *model.ListServersDetailsRequest {
+	p.log.Debugf("请求第%d页数据", p.PageNumber)
 
 	// 注意: 华为云的Offse表示的是页码
-	p.req.Offset = utils.Int32Ptr(int32(p.number))
+	p.req.Offset = utils.Int32Ptr(int32(p.PageNumber))
+	p.req.Limit = utils.Int32Ptr(int32(p.PageSize))
 	return p.req
-}
-
-func (p *pager) Next() bool {
-	if p.total == -1 {
-		return true
-	}
-	return int64(p.number*p.size) < p.total
 }

@@ -12,7 +12,7 @@ import (
 	cmdbRds "github.com/infraboard/cmdb/apps/rds"
 )
 
-func newPager(pageSize int, operater *RdsOperator, rate int) *pager {
+func newPager(pageSize int, operator *RdsOperator, rate int) *pager {
 	req := rds.CreateDescribeDBInstancesRequest()
 	req.PageSize = requests.NewInteger(pageSize)
 	rateFloat := 1 / float64(rate)
@@ -20,7 +20,7 @@ func newPager(pageSize int, operater *RdsOperator, rate int) *pager {
 	return &pager{
 		size:     pageSize,
 		number:   1,
-		operater: operater,
+		operator: operator,
 		total:    -1,
 		req:      req,
 		log:      zap.L().Named("ali.rds"),
@@ -32,14 +32,14 @@ type pager struct {
 	size     int
 	number   int
 	total    int64
-	operater *RdsOperator
+	operator *RdsOperator
 	req      *rds.DescribeDBInstancesRequest
 	log      logger.Logger
 	tb       *tokenbucket.Bucket
 }
 
 func (p *pager) Scan(ctx context.Context, set *cmdbRds.Set) error {
-	resp, err := p.operater.Query(p.nextReq())
+	resp, err := p.operator.Query(p.nextReq())
 	if err != nil {
 		return err
 	}

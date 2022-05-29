@@ -4,6 +4,7 @@ import (
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ecs/v2/model"
 
 	"github.com/infraboard/cmdb/apps/host"
+	"github.com/infraboard/mcube/pager"
 )
 
 func (o *EcsOperator) Query(req *model.ListServersDetailsRequest) (*host.HostSet, error) {
@@ -19,6 +20,18 @@ func (o *EcsOperator) Query(req *model.ListServersDetailsRequest) (*host.HostSet
 	return set, nil
 }
 
-func (o *EcsOperator) PageQuery() host.Pager {
-	return newPager(20, o)
+func NewPageQueryRequest() *PageQueryRequest {
+	return &PageQueryRequest{
+		Rate: 1,
+	}
+}
+
+type PageQueryRequest struct {
+	Rate float64
+}
+
+func (o *EcsOperator) PageQuery(req *PageQueryRequest) pager.Pager {
+	p := newPager(o)
+	p.SetRate(req.Rate)
+	return p
 }

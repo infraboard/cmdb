@@ -13,12 +13,13 @@ import (
 )
 
 var (
-	operater *ecs.EcsOperator
+	operator *ecs.EcsOperator
 )
 
 func TestQuery(t *testing.T) {
 	req := ecs.NewPageQueryRequest()
-	pager := operater.PageQuery(req)
+	req.Rate = 0.1
+	pager := operator.PageQuery(req)
 	for pager.Next() {
 		set := host.NewHostSet()
 		if err := pager.Scan(context.Background(), set); err != nil {
@@ -29,7 +30,7 @@ func TestQuery(t *testing.T) {
 }
 
 func TestDescribe(t *testing.T) {
-	ins, err := operater.Describe(&ecs.DescribeRequest{Id: "i-bp1f6d1sbq8s9mm59jeu"})
+	ins, err := operator.Describe(&ecs.DescribeRequest{Id: "i-bp1f6d1sbq8s9mm59jeu"})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -42,5 +43,5 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	operater = aliyun.O().EcsOperator()
+	operator = aliyun.O().EcsOperator()
 }

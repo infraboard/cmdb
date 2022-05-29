@@ -12,7 +12,7 @@ import (
 	"github.com/infraboard/mcube/logger/zap"
 )
 
-func newPager(pageSize int, operater *BssOperator, rate int, month string) *pager {
+func newPager(pageSize int, operator *BssOperator, rate int, month string) *pager {
 	req := bssopenapi.CreateQueryInstanceBillRequest()
 	req.IsHideZeroCharge = requests.NewBoolean(true)
 	req.PageSize = requests.NewInteger(pageSize)
@@ -22,7 +22,7 @@ func newPager(pageSize int, operater *BssOperator, rate int, month string) *page
 	return &pager{
 		size:     pageSize,
 		number:   1,
-		operater: operater,
+		operator: operator,
 		req:      req,
 		total:    -1,
 		log:      zap.L().Named("ali.bss"),
@@ -34,14 +34,14 @@ type pager struct {
 	size     int
 	number   int
 	total    int64
-	operater *BssOperator
+	operator *BssOperator
 	req      *bssopenapi.QueryInstanceBillRequest
 	log      logger.Logger
 	tb       *tokenbucket.Bucket
 }
 
 func (p *pager) Scan(ctx context.Context, set *bill.BillSet) error {
-	resp, err := p.operater.Query(p.nextReq())
+	resp, err := p.operator.Query(p.nextReq())
 	if err != nil {
 		return err
 	}

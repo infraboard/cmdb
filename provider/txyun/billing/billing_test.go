@@ -13,14 +13,14 @@ import (
 )
 
 var (
-	operater *op.BillingOperater
+	operator *op.Billingoperator
 )
 
 func TestQuery(t *testing.T) {
 	req := op.NewPageQueryRequest()
 	req.Month = "2022-04"
 
-	pager := operater.PageQuery(req)
+	pager := operator.PageQuery(req)
 	for pager.Next() {
 		set := bill.NewBillSet()
 		if err := pager.Scan(context.Background(), set); err != nil {
@@ -44,5 +44,5 @@ func init() {
 		panic(err)
 	}
 
-	operater = op.NewBillingOperater(client.BillingClient())
+	operator = op.NewBillingoperator(client.BillingClient())
 }

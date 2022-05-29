@@ -11,20 +11,20 @@ import (
 	"github.com/infraboard/cmdb/apps/resource"
 )
 
-type Ec2Operater struct {
+type Ec2operator struct {
 	client *ec2.Client
 	log    logger.Logger
 }
 
 // NewEc2Operator Ec2Operator
-func NewEc2Operator(client *ec2.Client) *Ec2Operater {
-	return &Ec2Operater{
+func NewEc2Operator(client *ec2.Client) *Ec2operator {
+	return &Ec2operator{
 		client: client,
 		log:    zap.L().Named("AWS EC2"),
 	}
 }
 
-func (o *Ec2Operater) transferSet(items []types.Reservation) *host.HostSet {
+func (o *Ec2operator) transferSet(items []types.Reservation) *host.HostSet {
 	set := host.NewHostSet()
 	for _, item := range items {
 		for i := range item.Instances {
@@ -34,7 +34,7 @@ func (o *Ec2Operater) transferSet(items []types.Reservation) *host.HostSet {
 	return set
 }
 
-func (o *Ec2Operater) transferOne(ins types.Instance) *host.Host {
+func (o *Ec2operator) transferOne(ins types.Instance) *host.Host {
 	h := host.NewDefaultHost()
 	h.Base.Vendor = resource.Vendor_AMAZON
 	h.Base.Zone = *ins.Placement.AvailabilityZone

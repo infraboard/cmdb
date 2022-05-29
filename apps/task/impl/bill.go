@@ -37,19 +37,19 @@ func (s *service) syncBill(ctx context.Context, secretIns *secret.Secret, t *tas
 			return
 		}
 
-		operater := bssOp.NewBssOperator(bc)
+		operator := bssOp.NewBssOperator(bc)
 		req := bssOp.NewPageQueryRequest()
 		req.Rate = int(secret.RequestRate)
 		req.Month = t.Data.Params["month"]
-		pager = operater.PageQuery(req)
+		pager = operator.PageQuery(req)
 	case resource.Vendor_TENCENT:
 		s.log.Debugf("sync txyun bill ...")
 		client := txConn.NewTencentCloudClient(secret.ApiKey, secret.ApiSecret, t.Data.Region)
-		operater := billOp.NewBillingOperater(client.BillingClient())
+		operator := billOp.NewBillingoperator(client.BillingClient())
 		req := billOp.NewPageQueryRequest()
 		req.Rate = int(secret.RequestRate)
 		req.Month = t.Data.Params["month"]
-		pager = operater.PageQuery(req)
+		pager = operator.PageQuery(req)
 	case resource.Vendor_HUAWEI:
 		s.log.Debugf("sync hwyun bill ...")
 		client := hwConn.NewHuaweiCloudClient(secret.ApiKey, secret.ApiSecret, t.Data.Region)
@@ -58,11 +58,11 @@ func (s *service) syncBill(ctx context.Context, secretIns *secret.Secret, t *tas
 			t.Failed(err.Error())
 			return
 		}
-		operater := hwBssOp.NewBssOperator(bc)
+		operator := hwBssOp.NewBssOperator(bc)
 		req := hwBssOp.NewPageQueryRequest()
 		req.Rate = int(secret.RequestRate)
 		req.Month = t.Data.Params["month"]
-		pager = operater.PageQuery(req)
+		pager = operator.PageQuery(req)
 	default:
 		t.Failed(fmt.Sprintf("unsuport bill syncing vendor %s", secret.Vendor))
 		return

@@ -5,6 +5,7 @@ import (
 
 	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/cmdb/utils"
+	"github.com/infraboard/mcube/pager"
 	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 )
 
@@ -21,16 +22,18 @@ func (o *CVMOperator) Query(ctx context.Context, req *cvm.DescribeInstancesReque
 	return set, nil
 }
 
-func NewPageQueryRequest(reqPerSecond int) *PageQueryRequest {
+func NewPageQueryRequest(rate float64) *PageQueryRequest {
 	return &PageQueryRequest{
-		ReqPerSecond: reqPerSecond,
+		Rate: rate,
 	}
 }
 
 type PageQueryRequest struct {
-	ReqPerSecond int
+	Rate float64
 }
 
-func (o *CVMOperator) PageQuery(req *PageQueryRequest) host.Pager {
-	return newPager(20, o, req.ReqPerSecond)
+func (o *CVMOperator) PageQuery(req *PageQueryRequest) pager.Pager {
+	p := newPager(o)
+	p.SetRate(req.Rate)
+	return p
 }

@@ -12,14 +12,14 @@ import (
 	"github.com/infraboard/cmdb/utils"
 )
 
-func newPager(pageSize int, operater *RdsOperator) *pager {
+func newPager(pageSize int, operator *RdsOperator) *pager {
 	req := &model.ListInstancesRequest{}
 	req.Limit = utils.Int32Ptr(int32(pageSize))
 
 	return &pager{
 		size:     pageSize,
 		number:   1,
-		operater: operater,
+		operator: operator,
 		req:      req,
 		hasNext:  true,
 		log:      zap.L().Named("huawei.rds"),
@@ -30,13 +30,13 @@ type pager struct {
 	size     int
 	number   int
 	hasNext  bool
-	operater *RdsOperator
+	operator *RdsOperator
 	req      *model.ListInstancesRequest
 	log      logger.Logger
 }
 
 func (p *pager) Scan(ctx context.Context, set *rds.Set) error {
-	resp, err := p.operater.Query(p.nextReq())
+	resp, err := p.operator.Query(p.nextReq())
 	if err != nil {
 		return err
 	}

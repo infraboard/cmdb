@@ -5,6 +5,7 @@ import (
 
 	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/mcube/exception"
+	"github.com/infraboard/mcube/pager"
 )
 
 // 阿里云ECS实例字段描述: https://next.api.aliyun.com/document/Ecs/2014-05-26/DescribeInstances
@@ -29,11 +30,13 @@ func NewPageQueryRequest() *PageQueryRequest {
 }
 
 type PageQueryRequest struct {
-	Rate int
+	Rate float64
 }
 
-func (o *EcsOperator) PageQuery(req *PageQueryRequest) host.Pager {
-	return newPager(20, o, req.Rate)
+func (o *EcsOperator) PageQuery(req *PageQueryRequest) pager.Pager {
+	p := newPager(o)
+	p.SetRate(req.Rate)
+	return p
 }
 
 type DescribeRequest struct {

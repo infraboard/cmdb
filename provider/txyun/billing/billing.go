@@ -13,19 +13,19 @@ import (
 	"github.com/infraboard/mcube/logger/zap"
 )
 
-func NewBillingOperater(client *billing.Client) *BillingOperater {
-	return &BillingOperater{
+func NewBillingoperator(client *billing.Client) *Billingoperator {
+	return &Billingoperator{
 		client: client,
 		log:    zap.L().Named("Tx Billing"),
 	}
 }
 
-type BillingOperater struct {
+type Billingoperator struct {
 	client *billing.Client
 	log    logger.Logger
 }
 
-func (o *BillingOperater) transferSet(items []*billing.BillResourceSummary, month string) *bill.BillSet {
+func (o *Billingoperator) transferSet(items []*billing.BillResourceSummary, month string) *bill.BillSet {
 	set := bill.NewBillSet()
 	for i := range items {
 		ins := o.transferOne(items[i])
@@ -36,7 +36,7 @@ func (o *BillingOperater) transferSet(items []*billing.BillResourceSummary, mont
 	return set
 }
 
-func (o *BillingOperater) transferOne(ins *billing.BillResourceSummary) *bill.Bill {
+func (o *Billingoperator) transferOne(ins *billing.BillResourceSummary) *bill.Bill {
 	b := bill.NewDefaultBill()
 	b.OwnerId = utils.PtrStrV(ins.OwnerUin)
 	b.ProductCode = utils.PtrStrV(ins.ProductCode)

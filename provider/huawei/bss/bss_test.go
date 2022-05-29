@@ -13,14 +13,14 @@ import (
 )
 
 var (
-	operater *op.BssOperator
+	operator *op.BssOperator
 )
 
 func TestQuery(t *testing.T) {
 	req := op.NewPageQueryRequest()
 	req.Month = "2022-04"
 
-	pager := operater.PageQuery(req)
+	pager := operator.PageQuery(req)
 	for pager.Next() {
 		set := bill.NewBillSet()
 		if err := pager.Scan(context.Background(), set); err != nil {
@@ -42,5 +42,5 @@ func init() {
 		panic(err)
 	}
 
-	operater = op.NewBssOperator(ec)
+	operator = op.NewBssOperator(ec)
 }

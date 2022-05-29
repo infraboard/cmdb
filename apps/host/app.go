@@ -1,7 +1,6 @@
 package host
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -122,8 +121,10 @@ func NewHostSet() *HostSet {
 	}
 }
 
-func (s *HostSet) Add(items ...*Host) {
-	s.Items = append(s.Items, items...)
+func (s *HostSet) Add(items ...any) {
+	for i := range items {
+		s.Items = append(s.Items, items[i].(*Host))
+	}
 }
 
 func (s *HostSet) ResourceIds() (ids []string) {
@@ -133,8 +134,15 @@ func (s *HostSet) ResourceIds() (ids []string) {
 	return
 }
 
-func (s *HostSet) Length() int {
-	return len(s.Items)
+func (s *HostSet) Length() int64 {
+	return int64(len(s.Items))
+}
+
+func (s *HostSet) ToAny() (items []any) {
+	for i := range s.Items {
+		items = append(items, s.Items[i])
+	}
+	return
 }
 
 func (s *HostSet) ToJsonString() string {
@@ -200,10 +208,4 @@ func NewUpdateHostRequest(id string) *UpdateHostRequest {
 
 func (req *UpdateHostRequest) Validate() error {
 	return validate.Struct(req)
-}
-
-// 分页迭代器
-type Pager interface {
-	Next() bool
-	Scan(context.Context, *HostSet) error
 }

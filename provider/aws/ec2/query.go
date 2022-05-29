@@ -5,9 +5,10 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/infraboard/cmdb/apps/host"
+	"github.com/infraboard/mcube/pager"
 )
 
-func (o *Ec2Operater) Query(ctx context.Context, req *ec2.DescribeInstancesInput) (*host.HostSet, error) {
+func (o *Ec2operator) Query(ctx context.Context, req *ec2.DescribeInstancesInput) (*host.HostSet, error) {
 	set := host.NewHostSet()
 	result, err := o.client.DescribeInstances(ctx, req)
 	if err != nil {
@@ -27,9 +28,11 @@ func NewPageQueryRequest() *PageQueryRequest {
 }
 
 type PageQueryRequest struct {
-	Rate int
+	Rate float64
 }
 
-func (o *Ec2Operater) PageQuery(req *PageQueryRequest) host.Pager {
-	return newPager(20, o, req.Rate)
+func (o *Ec2operator) PageQuery(req *PageQueryRequest) pager.Pager {
+	p := newPager(o)
+	p.SetRate(req.Rate)
+	return p
 }

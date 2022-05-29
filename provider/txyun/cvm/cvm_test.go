@@ -16,11 +16,11 @@ import (
 )
 
 var (
-	operater *op.CVMOperator
+	operator *op.CVMOperator
 )
 
 func TestQuery(t *testing.T) {
-	pager := operater.PageQuery(op.NewPageQueryRequest(5))
+	pager := operator.PageQuery(op.NewPageQueryRequest(5))
 
 	for pager.Next() {
 		set := host.NewHostSet()
@@ -41,17 +41,16 @@ func TestInquiryPrice(t *testing.T) {
 	req.ImageId = utils.StringPtr("img-l5eqiljn")
 	req.InstanceType = utils.StringPtr("S4.SMALL1")
 	req.InstanceChargeType = utils.StringPtr("SPOTPAID")
-	err := operater.InquiryPrice(req)
+	err := operator.InquiryPrice(req)
 	should.NoError(err)
-
 }
 
 func TestDescribeZones(t *testing.T) {
-	operater.DescribeZones()
+	operator.DescribeZones()
 }
 
 func TestDescribeInstanceType(t *testing.T) {
-	operater.DescribeInstanceType()
+	operator.DescribeInstanceType()
 }
 
 func TestCreate(t *testing.T) {
@@ -69,6 +68,6 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	operater = op.NewCVMOperator(client.CvmClient())
-	operater.WithAccountId(client.AccountID())
+	operator = op.NewCVMOperator(client.CvmClient())
+	operator.WithAccountId(client.AccountID())
 }

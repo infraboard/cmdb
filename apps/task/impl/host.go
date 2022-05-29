@@ -52,11 +52,11 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 			t.Failed(err.Error())
 			return
 		}
-		operater := ecsOp.NewEcsOperator(ec)
-		operater.WithAccountId(client.AccountID())
+		operator := ecsOp.NewEcsOperator(ec)
+		operator.WithAccountId(client.AccountID())
 		req := ecsOp.NewPageQueryRequest()
 		req.Rate = int(secret.RequestRate)
-		pager = operater.PageQuery(req)
+		pager = operator.PageQuery(req)
 	case resource.Vendor_TENCENT:
 		s.log.Debugf("sync txyun cvm ...")
 		client := txConn.NewTencentCloudClient(secret.ApiKey, secret.ApiSecret, t.Data.Region)
@@ -64,10 +64,10 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 			t.Failed(err.Error())
 			return
 		}
-		operater := cvmOp.NewCVMOperator(client.CvmClient())
-		operater.WithAccountId(client.AccountID())
+		operator := cvmOp.NewCVMOperator(client.CvmClient())
+		operator.WithAccountId(client.AccountID())
 		req := cvmOp.NewPageQueryRequest(int(secret.RequestRate))
-		pager = operater.PageQuery(req)
+		pager = operator.PageQuery(req)
 	case resource.Vendor_HUAWEI:
 		s.log.Debugf("sync hwyun ecs ...")
 		client := hwConn.NewHuaweiCloudClient(secret.ApiKey, secret.ApiSecret, t.Data.Region)
@@ -80,9 +80,9 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 			t.Failed(err.Error())
 			return
 		}
-		operater := hwEcsOp.NewEcsOperator(ec)
-		operater.WithAccountId(client.AccountID())
-		pager = operater.PageQuery()
+		operator := hwEcsOp.NewEcsOperator(ec)
+		operator.WithAccountId(client.AccountID())
+		pager = operator.PageQuery()
 	case resource.Vendor_AMAZON:
 		s.log.Debugf("sync aws ec2 ...")
 		client := awsConn.NewAwsCloudClient(secret.ApiKey, secret.ApiSecret, t.Data.Region)
@@ -91,10 +91,10 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 			t.Failed(err.Error())
 			return
 		}
-		operater := ec2Op.NewEc2Operator(ec)
+		operator := ec2Op.NewEc2Operator(ec)
 		req := ec2Op.NewPageQueryRequest()
 		req.Rate = int(secret.RequestRate)
-		pager = operater.PageQuery(req)
+		pager = operator.PageQuery(req)
 	case resource.Vendor_VSPHERE:
 		s.log.Debugf("sync vshpere vm ...")
 		client := vsConn.NewVsphereClient(secret.Address, secret.ApiKey, secret.ApiSecret)
@@ -103,9 +103,9 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 			t.Failed(err.Error())
 			return
 		}
-		operater := vmOp.NewVMOperator(ec)
+		operator := vmOp.NewVMOperator(ec)
 		// 通过回调直接保存
-		err = operater.Query(func(h *host.Host) {
+		err = operator.Query(func(h *host.Host) {
 			// 补充管理信息
 			h.Base.SecretId = secretIns.Id
 			s.doSyncHost(ctx, h, t)

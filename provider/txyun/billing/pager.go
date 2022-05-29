@@ -15,7 +15,7 @@ import (
 // 周期类型，byUsedTime按计费周期/byPayTime按扣费周期。需要与费用中心该月份账单的周期保持一致。
 // 您可前往[账单概览](https://console.cloud.tencent.com/expense/bill/overview)
 // 页面顶部查看确认您的账单统计周期类型。
-func newPager(pageSize int, operater *BillingOperater, rate int, month string) *pager {
+func newPager(pageSize int, operator *Billingoperator, rate int, month string) *pager {
 	req := billing.NewDescribeBillResourceSummaryRequest()
 	req.Month = common.StringPtr(month)
 	req.Limit = common.Uint64Ptr(uint64(pageSize))
@@ -25,7 +25,7 @@ func newPager(pageSize int, operater *BillingOperater, rate int, month string) *
 		size:     pageSize,
 		number:   1,
 		hasNext:  true,
-		operater: operater,
+		operator: operator,
 		req:      req,
 		log:      zap.L().Named("tx.billing"),
 		tb:       tokenbucket.NewBucketWithRate(rateFloat, 1),
@@ -36,14 +36,14 @@ type pager struct {
 	size     int
 	number   int
 	hasNext  bool
-	operater *BillingOperater
+	operator *Billingoperator
 	req      *billing.DescribeBillResourceSummaryRequest
 	log      logger.Logger
 	tb       *tokenbucket.Bucket
 }
 
 func (p *pager) Scan(ctx context.Context, set *bill.BillSet) error {
-	resp, err := p.operater.Query(ctx, p.nextReq())
+	resp, err := p.operator.Query(ctx, p.nextReq())
 	if err != nil {
 		return err
 	}

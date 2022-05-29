@@ -18,7 +18,7 @@ import (
 
 var (
 	svc      bill.ServiceServer
-	operater *op.BillingOperater
+	operator *op.Billingoperator
 )
 
 func TestSyncBill(t *testing.T) {
@@ -27,7 +27,7 @@ func TestSyncBill(t *testing.T) {
 	req := op.NewPageQueryRequest()
 	req.Month = "2022-04"
 
-	pager := operater.PageQuery(req)
+	pager := operator.PageQuery(req)
 
 	ctx := context.Background()
 	for pager.Next() {
@@ -67,5 +67,5 @@ func init() {
 		panic(err)
 	}
 
-	operater = op.NewBillingOperater(client.BillingClient())
+	operator = op.NewBillingoperator(client.BillingClient())
 }

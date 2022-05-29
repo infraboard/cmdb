@@ -12,11 +12,11 @@ import (
 )
 
 var (
-	operater *op.CDBOperator
+	operator *op.CDBOperator
 )
 
 func TestQuery(t *testing.T) {
-	pager := operater.PageQuery()
+	pager := operator.PageQuery()
 
 	for pager.Next() {
 		set := rds.NewSet()
@@ -40,5 +40,5 @@ func init() {
 		panic(err)
 	}
 
-	operater = op.NewCDBOperator(client.CDBClient())
+	operator = op.NewCDBOperator(client.CDBClient())
 }

@@ -39,15 +39,15 @@ func (s *service) syncRds(ctx context.Context, secretIns *secret.Secret, t *task
 			t.Failed(err.Error())
 			return
 		}
-		operater := rdsOp.NewRdsOperator(bc)
+		operator := rdsOp.NewRdsOperator(bc)
 		req := rdsOp.NewPageQueryRequest()
 		req.Rate = int(secret.RequestRate)
-		pager = operater.PageQuery(req)
+		pager = operator.PageQuery(req)
 	case resource.Vendor_TENCENT:
 		s.log.Debugf("sync txyun rds ...")
 		client := txConn.NewTencentCloudClient(secret.ApiKey, secret.ApiSecret, t.Data.Region)
-		operater := cdbOp.NewCDBOperator(client.CDBClient())
-		pager = operater.PageQuery()
+		operator := cdbOp.NewCDBOperator(client.CDBClient())
+		pager = operator.PageQuery()
 	case resource.Vendor_HUAWEI:
 		s.log.Debugf("sync hwyun rds ...")
 		client := hwConn.NewHuaweiCloudClient(secret.ApiKey, secret.ApiSecret, t.Data.Region)
@@ -56,8 +56,8 @@ func (s *service) syncRds(ctx context.Context, secretIns *secret.Secret, t *task
 			t.Failed(err.Error())
 			return
 		}
-		operater := hwRdsOp.NewRdsOperator(ec)
-		pager = operater.PageQuery()
+		operator := hwRdsOp.NewRdsOperator(ec)
+		pager = operator.PageQuery()
 	default:
 		t.Failed(fmt.Sprintf("unsuport bill syncing vendor %s", secret.Vendor))
 		return
