@@ -9,6 +9,7 @@ import (
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/apps/secret"
 	"github.com/infraboard/cmdb/apps/task"
+	"github.com/infraboard/mcube/pager"
 
 	aliConn "github.com/infraboard/cmdb/provider/aliyun/connectivity"
 	ecsOp "github.com/infraboard/cmdb/provider/aliyun/ecs"
@@ -24,7 +25,7 @@ import (
 
 func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *task.Task, cb SyncTaskCallback) {
 	var (
-		pager host.Pager
+		pager pager.Pager
 	)
 
 	// 处理任务状态
@@ -55,7 +56,7 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 		operator := ecsOp.NewEcsOperator(ec)
 		operator.WithAccountId(client.AccountID())
 		req := ecsOp.NewPageQueryRequest()
-		req.Rate = int(secret.RequestRate)
+		req.Rate = float64(secret.RequestRate)
 		pager = operator.PageQuery(req)
 	case resource.Vendor_TENCENT:
 		s.log.Debugf("sync txyun cvm ...")
@@ -66,7 +67,7 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 		}
 		operator := cvmOp.NewCVMOperator(client.CvmClient())
 		operator.WithAccountId(client.AccountID())
-		req := cvmOp.NewPageQueryRequest(int(secret.RequestRate))
+		req := cvmOp.NewPageQueryRequest(float64(secret.RequestRate))
 		pager = operator.PageQuery(req)
 	case resource.Vendor_HUAWEI:
 		s.log.Debugf("sync hwyun ecs ...")
@@ -82,7 +83,8 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 		}
 		operator := hwEcsOp.NewEcsOperator(ec)
 		operator.WithAccountId(client.AccountID())
-		pager = operator.PageQuery()
+		req := hwEcsOp.NewPageQueryRequest(float64(secret.RequestRate))
+		pager = operator.PageQuery(req)
 	case resource.Vendor_AMAZON:
 		s.log.Debugf("sync aws ec2 ...")
 		client := awsConn.NewAwsCloudClient(secret.ApiKey, secret.ApiSecret, t.Data.Region)
@@ -93,7 +95,7 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 		}
 		operator := ec2Op.NewEc2Operator(ec)
 		req := ec2Op.NewPageQueryRequest()
-		req.Rate = int(secret.RequestRate)
+		req.Rate = float64(secret.RequestRate)
 		pager = operator.PageQuery(req)
 	case resource.Vendor_VSPHERE:
 		s.log.Debugf("sync vshpere vm ...")

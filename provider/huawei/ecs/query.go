@@ -20,9 +20,9 @@ func (o *EcsOperator) Query(req *model.ListServersDetailsRequest) (*host.HostSet
 	return set, nil
 }
 
-func NewPageQueryRequest() *PageQueryRequest {
+func NewPageQueryRequest(rate float64) *PageQueryRequest {
 	return &PageQueryRequest{
-		Rate: 1,
+		Rate: rate,
 	}
 }
 
