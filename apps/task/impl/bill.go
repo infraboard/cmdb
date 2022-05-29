@@ -8,6 +8,7 @@ import (
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/apps/secret"
 	"github.com/infraboard/cmdb/apps/task"
+	"github.com/infraboard/mcube/pager"
 
 	bssOp "github.com/infraboard/cmdb/provider/aliyun/bss"
 	aliConn "github.com/infraboard/cmdb/provider/aliyun/connectivity"
@@ -19,7 +20,7 @@ import (
 
 func (s *service) syncBill(ctx context.Context, secretIns *secret.Secret, t *task.Task, cb SyncTaskCallback) {
 	var (
-		pager bill.Pager
+		pager pager.Pager
 	)
 
 	// 处理任务状态
@@ -39,7 +40,7 @@ func (s *service) syncBill(ctx context.Context, secretIns *secret.Secret, t *tas
 
 		operator := bssOp.NewBssOperator(bc)
 		req := bssOp.NewPageQueryRequest()
-		req.Rate = int(secret.RequestRate)
+		req.Rate = float64(secret.RequestRate)
 		req.Month = t.Data.Params["month"]
 		pager = operator.PageQuery(req)
 	case resource.Vendor_TENCENT:
@@ -47,7 +48,7 @@ func (s *service) syncBill(ctx context.Context, secretIns *secret.Secret, t *tas
 		client := txConn.NewTencentCloudClient(secret.ApiKey, secret.ApiSecret, t.Data.Region)
 		operator := billOp.NewBillingoperator(client.BillingClient())
 		req := billOp.NewPageQueryRequest()
-		req.Rate = int(secret.RequestRate)
+		req.Rate = float64(secret.RequestRate)
 		req.Month = t.Data.Params["month"]
 		pager = operator.PageQuery(req)
 	case resource.Vendor_HUAWEI:
@@ -60,7 +61,7 @@ func (s *service) syncBill(ctx context.Context, secretIns *secret.Secret, t *tas
 		}
 		operator := hwBssOp.NewBssOperator(bc)
 		req := hwBssOp.NewPageQueryRequest()
-		req.Rate = int(secret.RequestRate)
+		req.Rate = float64(secret.RequestRate)
 		req.Month = t.Data.Params["month"]
 		pager = operator.PageQuery(req)
 	default:

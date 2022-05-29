@@ -33,22 +33,15 @@ func (p *ecsPager) Scan(ctx context.Context, set pager.Set) error {
 	if err != nil {
 		return err
 	}
-
-	if int64(resp.Length()) < p.PageSize {
-		p.HasNext = false
-	}
-
 	set.Add(resp.ToAny()...)
-	p.PageNumber++
+
+	p.CheckHasNext(set)
 	return nil
 }
 
 func (p *ecsPager) nextReq() *ecs.DescribeInstancesRequest {
-	// 等待一个可用token
-	p.TokenBucket.Wait(1)
-
-	p.log.Debugf("请求第%d页数据", p.PageNumber)
-	p.req.PageNumber = requests.NewInteger(int(p.PageNumber))
-	p.req.PageSize = requests.NewInteger(int(p.PageSize))
+	p.log.Debugf("请求第%d页数据", p.PageNumber())
+	p.req.PageNumber = requests.NewInteger(int(p.PageNumber()))
+	p.req.PageSize = requests.NewInteger(int(p.PageSize()))
 	return p.req
 }

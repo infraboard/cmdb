@@ -6,6 +6,7 @@ import (
 	cdb "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cdb/v20170320"
 
 	"github.com/infraboard/cmdb/apps/rds"
+	"github.com/infraboard/mcube/pager"
 )
 
 func (o *CDBOperator) Query(ctx context.Context, req *cdb.DescribeDBInstancesRequest) (*rds.Set, error) {
@@ -17,6 +18,6 @@ func (o *CDBOperator) Query(ctx context.Context, req *cdb.DescribeDBInstancesReq
 	return o.transferSet(resp.Response.Items), nil
 }
 
-func (o *CDBOperator) PageQuery() rds.Pager {
+func (o *CDBOperator) PageQuery() pager.Pager {
 	return newPager(20, o)
 }

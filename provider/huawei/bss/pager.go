@@ -4,64 +4,48 @@ import (
 	"context"
 
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/bss/v2/model"
-	"github.com/infraboard/cmdb/apps/bill"
 	"github.com/infraboard/cmdb/utils"
 
-	"github.com/infraboard/mcube/flowcontrol/tokenbucket"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
+	"github.com/infraboard/mcube/pager"
 )
 
-func newPager(pageSize int, operator *BssOperator, rate int, month string) *pager {
+func newPager(operator *BssOperator, month string) pager.Pager {
 	req := &model.ListCustomerselfResourceRecordsRequest{}
 	req.Cycle = month
-	req.Limit = utils.Int32Ptr(int32(pageSize))
-	rateFloat := 1 / float64(rate)
 
-	return &pager{
-		size:     pageSize,
-		number:   1,
-		total:    -1,
-		operator: operator,
-		req:      req,
-		log:      zap.L().Named("huawei.bss"),
-		tb:       tokenbucket.NewBucketWithRate(rateFloat, 1),
+	return &bssPager{
+		BasePager: pager.NewBasePager(),
+		operator:  operator,
+		req:       req,
+		log:       zap.L().Named("huawei.bss"),
 	}
 }
 
-type pager struct {
-	size     int
-	number   int
-	total    int64
+type bssPager struct {
+	*pager.BasePager
 	operator *BssOperator
 	req      *model.ListCustomerselfResourceRecordsRequest
 	log      logger.Logger
-	tb       *tokenbucket.Bucket
 }
 
-func (p *pager) Scan(ctx context.Context, set *bill.BillSet) error {
+func (p *bssPager) Scan(ctx context.Context, set pager.Set) error {
 	resp, err := p.operator.Query(p.nextReq())
 	if err != nil {
 		return err
 	}
-	set.Add(resp.Items...)
-	p.total = resp.Total
+	set.Add(resp.ToAny()...)
 
-	p.number++
+	p.CheckHasNext(set)
 	return nil
 }
 
-func (p *pager) nextReq() *model.ListCustomerselfResourceRecordsRequest {
-	p.log.Debugf("请求第%d页数据", p.number)
+func (p *bssPager) nextReq() *model.ListCustomerselfResourceRecordsRequest {
+	p.log.Debugf("请求第%d页数据", p.PageNumber())
 
 	// 注意: 华为云的Offse表示的是页码
-	p.req.Offset = utils.Int32Ptr(int32(p.number))
+	p.req.Offset = utils.Int32Ptr(int32(p.PageNumber()))
+	p.req.Limit = utils.Int32Ptr(int32(p.PageSize()))
 	return p.req
-}
-
-func (p *pager) Next() bool {
-	if p.total == -1 {
-		return true
-	}
-	return int64(p.number*p.size) < p.total
 }

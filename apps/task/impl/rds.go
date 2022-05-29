@@ -8,6 +8,7 @@ import (
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/apps/secret"
 	"github.com/infraboard/cmdb/apps/task"
+	"github.com/infraboard/mcube/pager"
 
 	aliConn "github.com/infraboard/cmdb/provider/aliyun/connectivity"
 	rdsOp "github.com/infraboard/cmdb/provider/aliyun/rds"
@@ -19,7 +20,7 @@ import (
 
 func (s *service) syncRds(ctx context.Context, secretIns *secret.Secret, t *task.Task, cb SyncTaskCallback) {
 	var (
-		pager rds.Pager
+		pager pager.Pager
 	)
 
 	// 处理任务状态

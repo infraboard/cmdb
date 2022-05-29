@@ -5,65 +5,45 @@ import (
 
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/rds"
-	"github.com/infraboard/mcube/flowcontrol/tokenbucket"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
-
-	cmdbRds "github.com/infraboard/cmdb/apps/rds"
+	"github.com/infraboard/mcube/pager"
 )
 
-func newPager(pageSize int, operator *RdsOperator, rate int) *pager {
-	req := rds.CreateDescribeDBInstancesRequest()
-	req.PageSize = requests.NewInteger(pageSize)
-	rateFloat := 1 / float64(rate)
-
-	return &pager{
-		size:     pageSize,
-		number:   1,
-		operator: operator,
-		total:    -1,
-		req:      req,
-		log:      zap.L().Named("ali.rds"),
-		tb:       tokenbucket.NewBucketWithRate(rateFloat, 1),
+func newPager(operator *RdsOperator) pager.Pager {
+	return &rdsPager{
+		BasePager: pager.NewBasePager(),
+		operator:  operator,
+		req:       rds.CreateDescribeDBInstancesRequest(),
+		log:       zap.L().Named("ali.rds"),
 	}
 }
 
-type pager struct {
-	size     int
-	number   int
-	total    int64
+type rdsPager struct {
+	*pager.BasePager
 	operator *RdsOperator
 	req      *rds.DescribeDBInstancesRequest
 	log      logger.Logger
-	tb       *tokenbucket.Bucket
 }
 
-func (p *pager) Scan(ctx context.Context, set *cmdbRds.Set) error {
+func (p *rdsPager) Scan(ctx context.Context, set pager.Set) error {
 	resp, err := p.operator.Query(p.nextReq())
 	if err != nil {
 		return err
 	}
+	set.Add(resp.ToAny()...)
 
-	set.Add(resp.Items...)
-	p.total = int64(resp.Total)
-
-	p.number++
+	p.CheckHasNext(set)
 	return nil
 }
 
-func (p *pager) WithLogger(log logger.Logger) {
+func (p *rdsPager) WithLogger(log logger.Logger) {
 	p.log = log
 }
 
-func (p *pager) nextReq() *rds.DescribeDBInstancesRequest {
-	p.log.Debugf("请求第%d页数据", p.number)
-	p.req.PageNumber = requests.NewInteger(p.number)
+func (p *rdsPager) nextReq() *rds.DescribeDBInstancesRequest {
+	p.log.Debugf("请求第%d页数据", p.PageNumber())
+	p.req.PageNumber = requests.NewInteger(int(p.PageNumber()))
+	p.req.PageSize = requests.NewInteger(int(p.PageSize()))
 	return p.req
-}
-
-func (p *pager) Next() bool {
-	if p.total == -1 {
-		return true
-	}
-	return int64(p.number*p.size) < p.total
 }

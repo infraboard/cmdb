@@ -5,6 +5,7 @@ import (
 
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/bssopenapi"
 	"github.com/infraboard/cmdb/apps/bill"
+	"github.com/infraboard/mcube/pager"
 )
 
 func (o *BssOperator) Query(req *bssopenapi.QueryInstanceBillRequest) (*bill.BillSet, error) {
@@ -26,10 +27,12 @@ func NewPageQueryRequest() *PageQueryRequest {
 }
 
 type PageQueryRequest struct {
-	Rate  int
+	Rate  float64
 	Month string
 }
 
-func (o *BssOperator) PageQuery(req *PageQueryRequest) bill.Pager {
-	return newPager(20, o, req.Rate, req.Month)
+func (o *BssOperator) PageQuery(req *PageQueryRequest) pager.Pager {
+	p := newPager(o, req.Month)
+	p.SetRate(req.Rate)
+	return p
 }

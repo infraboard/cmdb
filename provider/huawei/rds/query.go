@@ -4,6 +4,7 @@ import (
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/rds/v3/model"
 
 	"github.com/infraboard/cmdb/apps/rds"
+	"github.com/infraboard/mcube/pager"
 )
 
 func (o *RdsOperator) Query(req *model.ListInstancesRequest) (*rds.Set, error) {
@@ -21,6 +22,6 @@ func (o *RdsOperator) Query(req *model.ListInstancesRequest) (*rds.Set, error) {
 	return set, nil
 }
 
-func (o *RdsOperator) PageQuery() rds.Pager {
-	return newPager(20, o)
+func (o *RdsOperator) PageQuery() pager.Pager {
+	return newPager(o)
 }

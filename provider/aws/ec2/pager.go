@@ -37,11 +37,7 @@ func (p *ec2Pager) Scan(ctx context.Context, set pager.Set) error {
 	}
 	set.Add(resp.ToAny()...)
 
-	if int64(resp.Length()) < p.PageSize {
-		p.HasNext = false
-	}
-
-	p.PageNumber++
+	p.CheckHasNext(set)
 	return nil
 }
 
@@ -50,10 +46,7 @@ func (p *ec2Pager) WithLogger(log logger.Logger) {
 }
 
 func (p *ec2Pager) nextReq() *ec2.DescribeInstancesInput {
-	// 等待一个可用token
-	p.TokenBucket.Wait(1)
-
-	p.req.MaxResults = utils.Int32Ptr(int32(p.PageSize))
-	p.log.Debugf("请求第%d页数据", p.PageNumber)
+	p.req.MaxResults = utils.Int32Ptr(int32(p.PageSize()))
+	p.log.Debugf("请求第%d页数据", p.PageNumber())
 	return p.req
 }

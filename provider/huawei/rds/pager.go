@@ -7,58 +7,43 @@ import (
 
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
+	"github.com/infraboard/mcube/pager"
 
-	"github.com/infraboard/cmdb/apps/rds"
 	"github.com/infraboard/cmdb/utils"
 )
 
-func newPager(pageSize int, operator *RdsOperator) *pager {
-	req := &model.ListInstancesRequest{}
-	req.Limit = utils.Int32Ptr(int32(pageSize))
-
-	return &pager{
-		size:     pageSize,
-		number:   1,
-		operator: operator,
-		req:      req,
-		hasNext:  true,
-		log:      zap.L().Named("huawei.rds"),
+func newPager(operator *RdsOperator) pager.Pager {
+	return &rdsPager{
+		BasePager: pager.NewBasePager(),
+		operator:  operator,
+		req:       &model.ListInstancesRequest{},
+		log:       zap.L().Named("huawei.rds"),
 	}
 }
 
-type pager struct {
-	size     int
-	number   int
-	hasNext  bool
+type rdsPager struct {
+	*pager.BasePager
 	operator *RdsOperator
 	req      *model.ListInstancesRequest
 	log      logger.Logger
 }
 
-func (p *pager) Scan(ctx context.Context, set *rds.Set) error {
+func (p *rdsPager) Scan(ctx context.Context, set pager.Set) error {
 	resp, err := p.operator.Query(p.nextReq())
 	if err != nil {
 		return err
 	}
-	set.Add(resp.Items...)
+	set.Add(resp.ToAny()...)
 
-	if set.Length() == 0 {
-		p.log.Infof("sync complete")
-		p.hasNext = false
-	}
-
-	p.number++
+	p.CheckHasNext(set)
 	return nil
 }
 
-func (p *pager) nextReq() *model.ListInstancesRequest {
-	p.log.Debugf("请求第%d页数据", p.number)
+func (p *rdsPager) nextReq() *model.ListInstancesRequest {
+	p.log.Debugf("请求第%d页数据", p.PageNumber())
 
 	// 注意: 华为云的Offse表示的是页码
-	p.req.Offset = utils.Int32Ptr(int32(p.number))
+	p.req.Offset = utils.Int32Ptr(int32(p.PageNumber()))
+	p.req.Limit = utils.Int32Ptr(int32(p.PageSize()))
 	return p.req
-}
-
-func (p *pager) Next() bool {
-	return p.hasNext
 }

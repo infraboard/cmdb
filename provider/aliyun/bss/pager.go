@@ -6,69 +6,48 @@ import (
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/bssopenapi"
 
-	"github.com/infraboard/cmdb/apps/bill"
-	"github.com/infraboard/mcube/flowcontrol/tokenbucket"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
+	"github.com/infraboard/mcube/pager"
 )
 
-func newPager(pageSize int, operator *BssOperator, rate int, month string) *pager {
+func newPager(operator *BssOperator, month string) pager.Pager {
 	req := bssopenapi.CreateQueryInstanceBillRequest()
-	req.IsHideZeroCharge = requests.NewBoolean(true)
-	req.PageSize = requests.NewInteger(pageSize)
 	req.BillingCycle = month
-	rateFloat := 1 / float64(rate)
 
-	return &pager{
-		size:     pageSize,
-		number:   1,
-		operator: operator,
-		req:      req,
-		total:    -1,
-		log:      zap.L().Named("ali.bss"),
-		tb:       tokenbucket.NewBucketWithRate(rateFloat, 1),
+	return &bssPager{
+		BasePager: pager.NewBasePager(),
+		operator:  operator,
+		req:       req,
+		log:       zap.L().Named("ali.bss"),
 	}
 }
 
-type pager struct {
-	size     int
-	number   int
-	total    int64
+type bssPager struct {
+	*pager.BasePager
 	operator *BssOperator
 	req      *bssopenapi.QueryInstanceBillRequest
 	log      logger.Logger
-	tb       *tokenbucket.Bucket
 }
 
-func (p *pager) Scan(ctx context.Context, set *bill.BillSet) error {
+func (p *bssPager) Scan(ctx context.Context, set pager.Set) error {
 	resp, err := p.operator.Query(p.nextReq())
 	if err != nil {
 		return err
 	}
+	set.Add(resp.ToAny()...)
 
-	set.Add(resp.Items...)
-	p.total = int64(resp.Total)
-
-	p.number++
+	p.CheckHasNext(set)
 	return nil
 }
 
-func (p *pager) WithLogger(log logger.Logger) {
+func (p *bssPager) WithLogger(log logger.Logger) {
 	p.log = log
 }
 
-func (p *pager) nextReq() *bssopenapi.QueryInstanceBillRequest {
-	// 等待一个可用token
-	p.tb.Wait(1)
-
-	p.log.Debugf("请求第%d页数据", p.number)
-	p.req.PageNum = requests.NewInteger(p.number)
+func (p *bssPager) nextReq() *bssopenapi.QueryInstanceBillRequest {
+	p.log.Debugf("请求第%d页数据", p.PageNumber())
+	p.req.PageNum = requests.NewInteger(int(p.PageNumber()))
+	p.req.PageSize = requests.NewInteger(int(p.PageSize()))
 	return p.req
-}
-
-func (p *pager) Next() bool {
-	if p.total == -1 {
-		return true
-	}
-	return int64(p.number*p.size) < p.total
 }

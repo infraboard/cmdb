@@ -2,7 +2,7 @@ package swagger
 
 import (
 	"github.com/go-openapi/spec"
-	"github.com/infraboard/keyauth/version"
+	"github.com/infraboard/cmdb/version"
 )
 
 func Docs(swo *spec.Swagger) {

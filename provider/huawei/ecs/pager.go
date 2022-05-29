@@ -37,19 +37,15 @@ func (p *ecsPager) Scan(ctx context.Context, set pager.Set) error {
 	}
 	set.Add(resp.ToAny()...)
 
-	if int64(resp.Length()) < p.PageSize {
-		p.HasNext = false
-	}
-
-	p.PageNumber++
+	p.CheckHasNext(set)
 	return nil
 }
 
 func (p *ecsPager) nextReq() *model.ListServersDetailsRequest {
-	p.log.Debugf("请求第%d页数据", p.PageNumber)
+	p.log.Debugf("请求第%d页数据", p.PageNumber())
 
 	// 注意: 华为云的Offse表示的是页码
-	p.req.Offset = utils.Int32Ptr(int32(p.PageNumber))
-	p.req.Limit = utils.Int32Ptr(int32(p.PageSize))
+	p.req.Offset = utils.Int32Ptr(int32(p.PageNumber()))
+	p.req.Limit = utils.Int32Ptr(int32(p.PageSize()))
 	return p.req
 }

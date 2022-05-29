@@ -1,7 +1,6 @@
 package rds
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -21,16 +20,25 @@ func NewSet() *Set {
 	}
 }
 
-func (s *Set) Add(items ...*RDS) {
-	s.Items = append(s.Items, items...)
+func (s *Set) ToAny() (items []any) {
+	for i := range s.Items {
+		items = append(items, s.Items[i])
+	}
+	return
+}
+
+func (s *Set) Add(items ...any) {
+	for i := range items {
+		s.Items = append(s.Items, items[i].(*RDS))
+	}
 }
 
 func (s *Set) AddSet(set *Set) {
 	s.Items = append(s.Items, set.Items...)
 }
 
-func (s *Set) Length() int {
-	return len(s.Items)
+func (s *Set) Length() int64 {
+	return int64(len(s.Items))
 }
 
 func NewDefaultRDS() *RDS {
@@ -67,10 +75,4 @@ func (d *Describe) ExtraToJson() string {
 
 func (d *Describe) SecurityIpListToString() string {
 	return strings.Join(d.SecurityIpList, ",")
-}
-
-// 分页迭代器
-type Pager interface {
-	Next() bool
-	Scan(context.Context, *Set) error
 }

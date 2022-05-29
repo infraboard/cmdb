@@ -1,7 +1,6 @@
 package bill
 
 import (
-	"context"
 	"fmt"
 	"strconv"
 	"strings"
@@ -29,18 +28,22 @@ func NewBillSet() *BillSet {
 	}
 }
 
-func (s *BillSet) Add(items ...*Bill) {
-	s.Items = append(s.Items, items...)
+func (s *BillSet) ToAny() (items []any) {
+	for i := range s.Items {
+		items = append(items, s.Items[i])
+	}
+
+	return
+}
+
+func (s *BillSet) Add(items ...any) {
+	for i := range items {
+		s.Items = append(s.Items, items[i].(*Bill))
+	}
 }
 
 func (s *BillSet) Length() int64 {
 	return int64(len(s.Items))
-}
-
-// 分页迭代器
-type Pager interface {
-	Next() bool
-	Scan(context.Context, *BillSet) error
 }
 
 func (b *Bill) YearMonth() (int, int) {

@@ -7,6 +7,7 @@ import (
 
 	"github.com/infraboard/cmdb/apps/bill"
 	"github.com/infraboard/cmdb/utils"
+	"github.com/infraboard/mcube/pager"
 )
 
 func (o *Billingoperator) Query(ctx context.Context, req *billing.DescribeBillResourceSummaryRequest) (*bill.BillSet, error) {
@@ -28,10 +29,12 @@ func NewPageQueryRequest() *PageQueryRequest {
 }
 
 type PageQueryRequest struct {
-	Rate  int
+	Rate  float64
 	Month string
 }
 
-func (o *Billingoperator) PageQuery(req *PageQueryRequest) bill.Pager {
-	return newPager(20, o, req.Rate, req.Month)
+func (o *Billingoperator) PageQuery(req *PageQueryRequest) pager.Pager {
+	p := newPager(o, req.Month)
+	p.SetRate(req.Rate)
+	return p
 }

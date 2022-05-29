@@ -37,20 +37,13 @@ func (p *cvmPager) Scan(ctx context.Context, set pager.Set) error {
 	set.Add(resp.ToAny()...)
 	p.log.Debugf("get %d hosts", len(resp.Items))
 
-	if int64(resp.Length()) < p.PageSize {
-		p.HasNext = false
-	}
-
-	p.PageNumber++
+	p.CheckHasNext(set)
 	return nil
 }
 
 func (p *cvmPager) nextReq() *cvm.DescribeInstancesRequest {
-	// 生成请求的时候, 现获取速率令牌, 等待一个可用的令牌
-	p.TokenBucket.Wait(1)
-
-	p.log.Debugf("请求第%d页数据", p.PageNumber)
+	p.log.Debugf("请求第%d页数据", p.PageNumber())
 	p.req.Offset = common.Int64Ptr(p.Offset())
-	p.req.Limit = common.Int64Ptr(int64(p.PageSize))
+	p.req.Limit = common.Int64Ptr(int64(p.PageSize()))
 	return p.req
 }

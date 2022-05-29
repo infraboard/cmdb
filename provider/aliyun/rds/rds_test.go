@@ -31,7 +31,6 @@ func TestQuery(t *testing.T) {
 
 func init() {
 	zap.DevelopmentSetup()
-	zap.DevelopmentSetup()
 	err := aliyun.LoadOperatorFromEnv()
 	if err != nil {
 		panic(err)

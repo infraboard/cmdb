@@ -18,7 +18,6 @@ var (
 
 func TestQuery(t *testing.T) {
 	req := ecs.NewPageQueryRequest()
-	req.Rate = 0.1
 	pager := operator.PageQuery(req)
 	for pager.Next() {
 		set := host.NewHostSet()
