@@ -25,7 +25,7 @@ func TestSyncBill(t *testing.T) {
 	should := assert.New(t)
 
 	req := op.NewPageQueryRequest()
-	req.Month = "2022-04"
+	req.Month = "2022-05"
 
 	pager := operator.PageQuery(req)
 

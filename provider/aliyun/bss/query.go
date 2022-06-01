@@ -27,12 +27,13 @@ func NewPageQueryRequest() *PageQueryRequest {
 }
 
 type PageQueryRequest struct {
-	Rate  float64
-	Month string
+	Rate        float64
+	Month       string
+	ProductCode string
 }
 
 func (o *BssOperator) PageQuery(req *PageQueryRequest) pager.Pager {
-	p := newPager(o, req.Month)
+	p := newPager(o, req)
 	p.SetRate(req.Rate)
 	return p
 }

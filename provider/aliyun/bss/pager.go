@@ -11,9 +11,10 @@ import (
 	"github.com/infraboard/mcube/pager"
 )
 
-func newPager(operator *BssOperator, month string) pager.Pager {
+func newPager(operator *BssOperator, r *PageQueryRequest) pager.Pager {
 	req := bssopenapi.CreateQueryInstanceBillRequest()
-	req.BillingCycle = month
+	req.BillingCycle = r.Month
+	req.ProductCode = r.ProductCode
 
 	return &bssPager{
 		BasePager: pager.NewBasePager(),

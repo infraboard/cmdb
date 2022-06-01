@@ -18,7 +18,8 @@ var (
 
 func TestQuery(t *testing.T) {
 	req := op.NewPageQueryRequest()
-	req.Month = "2022-4"
+	req.Month = "2022-05"
+	req.ProductCode = "dysms"
 
 	pager := operator.PageQuery(req)
 	for pager.Next() {
