@@ -1,4 +1,4 @@
-package client_test
+package rpc_test
 
 import (
 	"context"
@@ -6,19 +6,29 @@ import (
 	"testing"
 
 	"github.com/infraboard/cmdb/apps/resource"
-	"github.com/infraboard/cmdb/client"
+	"github.com/infraboard/cmdb/client/rpc"
+	"github.com/infraboard/cmdb/conf"
+	"github.com/infraboard/mcube/logger/zap"
+
 	"github.com/stretchr/testify/assert"
 )
 
 func TestClient(t *testing.T) {
 	should := assert.New(t)
-	conf := client.NewConfig("localhost:18060")
-	conf.WithClientCredentials("nHerVBlrKIDurviMGUXVOQHC", "l5FB38Mw2JmxHgGm8rUcich2ZrGRVrl7")
 
-	c, err := client.NewClientSet(conf)
+	c, err := rpc.NewClientSet(conf.C().Mcenter)
 	if should.NoError(err) {
 		rs, err := c.Resource().Search(context.Background(), resource.NewSearchRequest())
 		should.NoError(err)
 		fmt.Println(rs)
+	}
+}
+
+func init() {
+	if err := zap.DevelopmentSetup(); err != nil {
+		panic(err)
+	}
+	if err := conf.LoadConfigFromEnv(); err != nil {
+		panic(err)
 	}
 }

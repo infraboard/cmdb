@@ -1,10 +1,14 @@
-package client
+package rpc
 
 import (
-	"crypto/tls"
+	"context"
+	"fmt"
+	"time"
 
+	"github.com/infraboard/mcenter/client/rpc"
+	"github.com/infraboard/mcenter/client/rpc/auth"
+	"github.com/infraboard/mcenter/client/rpc/resolver"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/credentials/insecure"
 
 	"github.com/infraboard/cmdb/apps/bill"
@@ -17,24 +21,21 @@ import (
 )
 
 // NewClient todo
-func NewClientSet(conf *Config) (*ClientSet, error) {
+func NewClientSet(conf *rpc.Config) (*ClientSet, error) {
 	zap.DevelopmentSetup()
 
-	dialOptions := []grpc.DialOption{
-		grpc.WithPerRPCCredentials(conf.Authentication),
-	}
-	if !conf.enableTLS {
-		dialOptions = append(dialOptions, grpc.WithTransportCredentials(insecure.NewCredentials()))
-	} else {
-		dialOptions = append(dialOptions, grpc.WithTransportCredentials(credentials.NewTLS(&tls.Config{})))
-	}
-	conn, err := grpc.Dial(
-		conf.address,
-		dialOptions...,
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+
+	// 连接到服务
+	conn, err := grpc.DialContext(
+		ctx,
+		fmt.Sprintf("%s://%s", resolver.Scheme, "cmdb"), // Dial to "mcenter://cmdb"
+		grpc.WithPerRPCCredentials(auth.NewAuthentication(conf.ClientID, conf.ClientSecret)),
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy":"round_robin"}`),
+		grpc.WithBlock(),
 	)
-	if err != nil {
-		return nil, err
-	}
 
 	if err != nil {
 		return nil, err
@@ -49,7 +50,7 @@ func NewClientSet(conf *Config) (*ClientSet, error) {
 
 // Client 客户端
 type ClientSet struct {
-	conf *Config
+	conf *rpc.Config
 	conn *grpc.ClientConn
 	log  logger.Logger
 }
