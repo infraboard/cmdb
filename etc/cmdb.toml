@@ -13,10 +13,9 @@ username = "cmdb"
 password = "xxxx"
 database = "cmdb"
 
-[keyauth]
-host = "127.0.0.1"
-port = "18050"
-client_id = "xx"
+[mcenter]
+address = "127.0.0.1"
+client_id = "xxx"
 client_secret = "xxx"
 
 [log]

@@ -9,7 +9,7 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 
-	kc "github.com/infraboard/keyauth/client"
+	"github.com/infraboard/mcenter/client/rpc"
 	"github.com/infraboard/mcube/logger/zap"
 )
 
@@ -22,15 +22,28 @@ func newConfig() *Config {
 		App:     newDefaultAPP(),
 		Log:     newDefaultLog(),
 		MySQL:   newDefaultMySQL(),
-		Keyauth: newDefaultKeyauth(),
+		Mcenter: rpc.NewDefaultConfig(),
 	}
 }
 
 type Config struct {
-	App     *app     `toml:"app"`
-	Log     *log     `toml:"log"`
-	MySQL   *mySQL   `toml:"mysql"`
-	Keyauth *keyauth `toml:"keyauth"`
+	App     *app        `toml:"app"`
+	Log     *log        `toml:"log"`
+	MySQL   *mySQL      `toml:"mysql"`
+	Mcenter *rpc.Config `toml:"mcenter"`
+}
+
+// InitGloabl 注入全局变量
+func (c *Config) InitGloabl() error {
+	// 加载全局配置单例
+	global = c
+
+	// 提前加载好 mcenter客户端
+	err := rpc.LoadClientFromConfig(c.Mcenter)
+	if err != nil {
+		panic("load mcenter client from config error: " + err.Error())
+	}
+	return nil
 }
 
 type app struct {
@@ -141,36 +154,4 @@ func newDefaultMySQL() *mySQL {
 		MaxLifeTime: 1800,
 		MaxIdleTime: 600,
 	}
-}
-
-// Auth auth 配置
-type keyauth struct {
-	Host         string `toml:"host" env:"KEYAUTH_HOST"`
-	Port         string `toml:"port" env:"KEYAUTH_PORT"`
-	ClientID     string `toml:"client_id" env:"KEYAUTH_CLIENT_ID"`
-	ClientSecret string `toml:"client_secret" env:"KEYAUTH_CLIENT_SECRET"`
-}
-
-func (a *keyauth) Addr() string {
-	return a.Host + ":" + a.Port
-}
-
-func (a *keyauth) Client() (*kc.Client, error) {
-	if kc.C() == nil {
-		conf := kc.NewDefaultConfig()
-		conf.SetAddress(a.Addr())
-		zap.L().Infof("connect to keyauth: %s", a.Addr())
-		conf.SetClientCredentials(a.ClientID, a.ClientSecret)
-		client, err := kc.NewClient(conf)
-		if err != nil {
-			return nil, err
-		}
-		kc.SetGlobal(client)
-	}
-
-	return kc.C(), nil
-}
-
-func newDefaultKeyauth() *keyauth {
-	return &keyauth{}
 }

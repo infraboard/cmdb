@@ -8,7 +8,8 @@ import (
 
 	restfulspec "github.com/emicklei/go-restful-openapi/v2"
 	"github.com/emicklei/go-restful/v3"
-	"github.com/infraboard/keyauth/client/interceptor"
+	"github.com/infraboard/keyauth/client/rest/auth"
+	"github.com/infraboard/keyauth/client/rpc"
 	"github.com/infraboard/mcube/http/label"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
@@ -23,7 +24,7 @@ import (
 
 // NewHTTPService 构建函数
 func NewHTTPService() *HTTPService {
-	c, err := conf.C().Keyauth.Client()
+	c, err := rpc.NewClient(conf.C().Mcenter)
 	if err != nil {
 		panic(err)
 	}
@@ -41,7 +42,7 @@ func NewHTTPService() *HTTPService {
 		CookiesAllowed: false,
 		Container:      r}
 	r.Filter(cors.Filter)
-	r.Filter(interceptor.NewHTTPAuther(c).RestfulAuthHandlerFunc)
+	r.Filter(auth.NewAutherFromGRPC(c).RestfulAuthHandlerFunc)
 
 	server := &http.Server{
 		ReadHeaderTimeout: 60 * time.Second,
