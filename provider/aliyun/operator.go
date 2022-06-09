@@ -2,6 +2,7 @@ package aliyun
 
 import (
 	"github.com/caarlos0/env/v6"
+	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/cmdb/provider/aliyun/bss"
 	"github.com/infraboard/cmdb/provider/aliyun/connectivity"
 	"github.com/infraboard/cmdb/provider/aliyun/ecs"
@@ -38,7 +39,7 @@ type Operator struct {
 	client *connectivity.AliCloudClient
 }
 
-func (o *Operator) EcsOperator() *ecs.EcsOperator {
+func (o *Operator) HostOperator() provider.HostOperator {
 	c, err := o.client.EcsClient()
 	if err != nil {
 		panic(err)

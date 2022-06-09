@@ -4,6 +4,7 @@ import (
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/ecs"
 
 	"github.com/infraboard/cmdb/apps/host"
+	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/pager"
 )
@@ -23,27 +24,13 @@ func (o *EcsOperator) Query(req *ecs.DescribeInstancesRequest) (*host.HostSet, e
 	return set, nil
 }
 
-func NewPageQueryRequest() *PageQueryRequest {
-	return &PageQueryRequest{
-		Rate: 1,
-	}
-}
-
-type PageQueryRequest struct {
-	Rate float64
-}
-
-func (o *EcsOperator) PageQuery(req *PageQueryRequest) pager.Pager {
+func (o *EcsOperator) PageQuery(req *provider.PageQueryRequest) pager.Pager {
 	p := newPager(o)
 	p.SetRate(req.Rate)
 	return p
 }
 
-type DescribeRequest struct {
-	Id string `json:"id"`
-}
-
-func (o *EcsOperator) Describe(req *DescribeRequest) (*host.Host, error) {
+func (o *EcsOperator) Describe(req *provider.DescribeRequest) (*host.Host, error) {
 	r := ecs.CreateDescribeInstancesRequest()
 	r.InstanceIds = `["` + req.Id + `"]`
 	hs, err := o.Query(r)
