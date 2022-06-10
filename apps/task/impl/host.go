@@ -9,6 +9,7 @@ import (
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/apps/secret"
 	"github.com/infraboard/cmdb/apps/task"
+	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/mcube/pager"
 
 	aliConn "github.com/infraboard/cmdb/provider/aliyun/connectivity"
@@ -55,7 +56,7 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 		}
 		operator := ecsOp.NewEcsOperator(ec)
 		operator.WithAccountId(client.AccountID())
-		req := ecsOp.NewPageQueryRequest()
+		req := provider.NewPageQueryRequest()
 		req.Rate = float64(secret.RequestRate)
 		pager = operator.PageQuery(req)
 	case resource.Vendor_TENCENT:

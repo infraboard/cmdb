@@ -22,7 +22,7 @@ func NewGRPCService() *GRPCService {
 	rc := recovery.NewInterceptor(recovery.NewZapRecoveryHandler())
 	grpcServer := grpc.NewServer(grpc.ChainUnaryInterceptor(
 		rc.UnaryServerInterceptor(),
-		auth.GrpcAuthUnaryServerInterceptor(rpc.C().Application()),
+		auth.GrpcAuthUnaryServerInterceptor(rpc.C().Service()),
 	))
 
 	return &GRPCService{
