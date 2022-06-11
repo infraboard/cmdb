@@ -12,13 +12,13 @@ require (
 	github.com/caarlos0/env/v6 v6.9.2
 	github.com/emicklei/go-restful-openapi v1.4.1
 	github.com/emicklei/go-restful-openapi/v2 v2.9.0
-	github.com/emicklei/go-restful/v3 v3.7.4
+	github.com/emicklei/go-restful/v3 v3.8.0
 	github.com/go-openapi/spec v0.20.6
 	github.com/go-playground/validator/v10 v10.11.0
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.0.87
 	github.com/infraboard/keyauth v0.8.0
-	github.com/infraboard/mcenter v0.0.4
+	github.com/infraboard/mcenter v0.0.5
 	github.com/infraboard/mcube v1.9.0
 	github.com/rs/xid v1.4.0
 	github.com/spf13/cobra v1.4.0

@@ -148,8 +148,9 @@ github.com/emicklei/go-restful-openapi v1.4.1/go.mod h1:kWQ8rQMVQ6G6lePwjDveJ00K
 github.com/emicklei/go-restful-openapi/v2 v2.9.0 h1:djsWqjhI0EVYfkLCCX6jZxUkLmYUq2q9tt09ZbixfyE=
 github.com/emicklei/go-restful-openapi/v2 v2.9.0/go.mod h1:VKNgZyYviM1hnyrjD9RDzP2RuE94xTXxV+u6MGN4v4k=
 github.com/emicklei/go-restful/v3 v3.7.3/go.mod h1:6n3XBCmQQb25CM2LCACGz8ukIrRry+4bhvbpWn3mrbc=
-github.com/emicklei/go-restful/v3 v3.7.4 h1:PVGUqKvvMzQYiO89TdXrH9EMks+okTaRIMQ3jgMdZ30=
 github.com/emicklei/go-restful/v3 v3.7.4/go.mod h1:6n3XBCmQQb25CM2LCACGz8ukIrRry+4bhvbpWn3mrbc=
+github.com/emicklei/go-restful/v3 v3.8.0 h1:eCZ8ulSerjdAiaNpF7GxXIE7ZCMo1moN1qX+S609eVw=
+github.com/emicklei/go-restful/v3 v3.8.0/go.mod h1:6n3XBCmQQb25CM2LCACGz8ukIrRry+4bhvbpWn3mrbc=
 github.com/envoyproxy/go-control-plane v0.9.0/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymFceY/DCBVvsKhRF0iEA4=
 github.com/envoyproxy/go-control-plane v0.9.1-0.20191026205805-5f8ba28d4473/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymFceY/DCBVvsKhRF0iEA4=
 github.com/envoyproxy/go-control-plane v0.9.4/go.mod h1:6rpuAdCZL397s3pYoYcLgu1mIlRU8Am5FuJP05cCM98=
@@ -344,8 +345,8 @@ github.com/infraboard/keyauth v0.7.9/go.mod h1:vt7S1SMZTPy4aD/kYIvpQKh8gL8iRHdle
 github.com/infraboard/keyauth v0.8.0 h1:oQbXNmCB5YTbdX0h0MGWS3arKFUaxtK/+2MrZ9BxLp8=
 github.com/infraboard/keyauth v0.8.0/go.mod h1:A/M75Dsuf7fpKLsjkXroX2jOw30RiOy4d6wUAT7TWvU=
 github.com/infraboard/mcenter v0.0.3/go.mod h1:bRmxRK46NdDYNJwUspS00NDHImC68N0EhslSDt2uXD0=
-github.com/infraboard/mcenter v0.0.4 h1:VJzBjTym7p445Jy906ntvz8ggdW+eVNCyAO/pkRvSZg=
-github.com/infraboard/mcenter v0.0.4/go.mod h1:bRmxRK46NdDYNJwUspS00NDHImC68N0EhslSDt2uXD0=
+github.com/infraboard/mcenter v0.0.5 h1:C3fDhaIe0Dt8UYplMObMslByio7/C1ea7niluU6vqMk=
+github.com/infraboard/mcenter v0.0.5/go.mod h1:cJoDYV1ZhA9tatnLXvAXj0XxvC0Q5+CLOcXRF8i06xU=
 github.com/infraboard/mcube v1.8.11/go.mod h1:2z/ARQRRgITOZGAO7FFRcQCOOZTJBJixRb6vINzGE6Y=
 github.com/infraboard/mcube v1.9.0 h1:a2qtMHP68sEwHRf6Emq3FC679WGlb/od+68AeDbjyZ8=
 github.com/infraboard/mcube v1.9.0/go.mod h1:2z/ARQRRgITOZGAO7FFRcQCOOZTJBJixRb6vINzGE6Y=
