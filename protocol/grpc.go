@@ -3,6 +3,7 @@ package protocol
 import (
 	"context"
 	"net"
+	"time"
 
 	"google.golang.org/grpc"
 
@@ -64,6 +65,8 @@ func (s *GRPCService) Start() {
 		s.l.Errorf("listen grpc tcp conn error, %s", err)
 		return
 	}
+
+	time.AfterFunc(1*time.Second, s.registry)
 
 	s.l.Infof("GRPC 服务监听地址: %s", s.c.App.GRPCAddr())
 	if err := s.svr.Serve(lis); err != nil {
