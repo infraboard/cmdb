@@ -80,8 +80,6 @@ func (s *GRPCService) Start() {
 }
 
 func (s *GRPCService) registry() {
-	//1. 获取 mcenter sdk 实例
-	// sdk 提供注册方法
 	req := instance.NewRegistryRequest()
 	req.Address = s.c.App.GRPCAddr()
 	lf, err := rpc.C().Registry(s.ctx, req)
@@ -91,8 +89,6 @@ func (s *GRPCService) registry() {
 	}
 
 	s.l.Infof("registry to mcenter success")
-
-	// 注销时需要使用
 	s.lf = lf
 }
 
