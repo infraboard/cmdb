@@ -49,7 +49,7 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Returns(200, "OK", resource.ResourceSet{}))
 
 	// 资源标签管理
-	ws.Route(ws.POST("/").To(h.AddTag).
+	ws.Route(ws.POST("/tags").To(h.AddTag).
 		Doc("add resource tags").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.Resource, "tags").
@@ -57,7 +57,7 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Metadata(label.Auth, label.Enable).
 		Reads([]*resource.Tag{}).
 		Writes(response.NewData(resource.Resource{})))
-	ws.Route(ws.DELETE("/").To(h.RemoveTag).
+	ws.Route(ws.DELETE("/tags").To(h.RemoveTag).
 		Doc("remove resource tags").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.Resource, "tags").
