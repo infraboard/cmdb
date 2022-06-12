@@ -1,25 +1,33 @@
 package provider
 
 import (
+	"context"
+
 	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/mcube/pager"
 )
 
 type HostOperator interface {
-	PageQuery(req *PageQueryRequest) pager.Pager
-	Describe(req *DescribeRequest) (*host.Host, error)
+	QueryHost(req *QueryHostRequest) pager.Pager
+	DescribeHost(ctx context.Context, req *DescribeHostRequest) (*host.Host, error)
 }
 
-func NewPageQueryRequest() *PageQueryRequest {
-	return &PageQueryRequest{
-		Rate: 1,
+func NewQueryHostRequest() *QueryHostRequest {
+	return &QueryHostRequest{
+		Rate: 5,
 	}
 }
 
-type PageQueryRequest struct {
-	Rate float64
+func NewQueryHostRequestWithRate(rate int32) *QueryHostRequest {
+	return &QueryHostRequest{
+		Rate: float64(rate),
+	}
 }
 
-type DescribeRequest struct {
+type QueryHostRequest struct {
+	Rate float64 `json:"rate"`
+}
+
+type DescribeHostRequest struct {
 	Id string `json:"id"`
 }

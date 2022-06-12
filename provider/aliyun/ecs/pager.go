@@ -29,7 +29,7 @@ type ecsPager struct {
 }
 
 func (p *ecsPager) Scan(ctx context.Context, set pager.Set) error {
-	resp, err := p.operator.Query(p.nextReq())
+	resp, err := p.operator.query(p.nextReq())
 	if err != nil {
 		return err
 	}

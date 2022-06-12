@@ -62,10 +62,5 @@ func init() {
 	}
 
 	client := connectivity.C()
-	err = client.Check()
-	if err != nil {
-		panic(err)
-	}
-
 	operator = op.NewBillingoperator(client.BillingClient())
 }

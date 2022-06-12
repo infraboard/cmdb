@@ -48,10 +48,9 @@ type TencentCloudClient struct {
 	SecretID  string `env:"TX_CLOUD_SECRET_ID"`
 	SecretKey string `env:"TX_CLOUD_SECRET_KEY"`
 
-	accountId string
-	cvmConn   *cvm.Client
-	cdbConn   *cdb.Client
-	billConn  *billing.Client
+	cvmConn  *cvm.Client
+	cdbConn  *cdb.Client
+	billConn *billing.Client
 }
 
 // UseCvmClient cvm
@@ -118,7 +117,7 @@ func (me *TencentCloudClient) CDBClient() *cdb.Client {
 }
 
 // 获取客户端账号ID
-func (me *TencentCloudClient) Check() error {
+func (me *TencentCloudClient) Account() (string, error) {
 	credential := common.NewCredential(
 		me.SecretID,
 		me.SecretKey,
@@ -135,13 +134,8 @@ func (me *TencentCloudClient) Check() error {
 
 	resp, err := stsConn.GetCallerIdentity(req)
 	if err != nil {
-		return fmt.Errorf("unable to initialize the STS client: %#v", err)
+		return "", fmt.Errorf("unable to initialize the STS client: %#v", err)
 	}
 
-	me.accountId = utils.PtrStrV(resp.Response.AccountId)
-	return nil
-}
-
-func (me *TencentCloudClient) AccountID() string {
-	return me.accountId
+	return utils.PtrStrV(resp.Response.AccountId), nil
 }

@@ -2,8 +2,10 @@ package cvm
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/infraboard/cmdb/apps/host"
+	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/pager"
 	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
@@ -22,18 +24,12 @@ func (o *CVMOperator) Query(ctx context.Context, req *cvm.DescribeInstancesReque
 	return set, nil
 }
 
-func NewPageQueryRequest(rate float64) *PageQueryRequest {
-	return &PageQueryRequest{
-		Rate: rate,
-	}
-}
-
-type PageQueryRequest struct {
-	Rate float64
-}
-
-func (o *CVMOperator) PageQuery(req *PageQueryRequest) pager.Pager {
+func (o *CVMOperator) QueryHost(req *provider.QueryHostRequest) pager.Pager {
 	p := newPager(o)
 	p.SetRate(req.Rate)
 	return p
+}
+
+func (o *CVMOperator) DescribeHost(ctx context.Context, req *provider.DescribeHostRequest) (*host.Host, error) {
+	return nil, fmt.Errorf("not impl")
 }

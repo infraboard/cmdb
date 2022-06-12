@@ -14,7 +14,6 @@ func TestClient(t *testing.T) {
 	err := connectivity.LoadClientFromEnv()
 	if should.NoError(err) {
 		c := connectivity.C()
-		c.Check()
-		fmt.Println(c.AccountID())
+		fmt.Println(c.Account())
 	}
 }

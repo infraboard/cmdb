@@ -2,6 +2,7 @@ package huawei
 
 import (
 	"github.com/caarlos0/env/v6"
+	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/cmdb/provider/huawei/bss"
 	"github.com/infraboard/cmdb/provider/huawei/connectivity"
 	"github.com/infraboard/cmdb/provider/huawei/ecs"
@@ -20,25 +21,30 @@ func O() *Operator {
 }
 
 func LoadOperatorFromEnv() error {
-	client := &connectivity.HuaweiCloudClient{}
-	if err := env.Parse(client); err != nil {
+	conf := &connectivity.HuaweiCloudClient{}
+	if err := env.Parse(conf); err != nil {
 		return err
 	}
-	operator = NewOperator(client)
+	op, err := NewOperator(conf.AccessKey, conf.AccessSecret, conf.Region)
+	if err != nil {
+		return err
+	}
+	operator = op
 	return nil
 }
 
-func NewOperator(client *connectivity.HuaweiCloudClient) *Operator {
+func NewOperator(ak, sk, region string) (*Operator, error) {
+	client := connectivity.NewHuaweiCloudClient(ak, sk, region)
 	return &Operator{
 		client: client,
-	}
+	}, nil
 }
 
 type Operator struct {
 	client *connectivity.HuaweiCloudClient
 }
 
-func (o *Operator) EcsOperator() *ecs.EcsOperator {
+func (o *Operator) HostOperator() provider.HostOperator {
 	c, err := o.client.EcsClient()
 	if err != nil {
 		panic(err)

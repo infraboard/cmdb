@@ -2,6 +2,7 @@ package txyun
 
 import (
 	"github.com/caarlos0/env/v6"
+	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/cmdb/provider/txyun/billing"
 	"github.com/infraboard/cmdb/provider/txyun/cdb"
 	"github.com/infraboard/cmdb/provider/txyun/connectivity"
@@ -20,26 +21,41 @@ func O() *Operator {
 }
 
 func LoadOperatorFromEnv() error {
-	client := &connectivity.TencentCloudClient{}
-	if err := env.Parse(client); err != nil {
+	conf := &connectivity.TencentCloudClient{}
+	if err := env.Parse(conf); err != nil {
 		return err
 	}
-	operator = NewOperator(client)
+	op, err := NewOperator(conf.SecretID, conf.SecretKey, conf.Region)
+	if err != nil {
+		return err
+	}
+	operator = op
 	return nil
 }
 
-func NewOperator(client *connectivity.TencentCloudClient) *Operator {
-	return &Operator{
-		client: client,
+func NewOperator(secretID, secretKey, region string) (*Operator, error) {
+	client := connectivity.NewTencentCloudClient(secretID, secretKey, region)
+
+	account, err := client.Account()
+	if err != nil {
+		return nil, err
 	}
+
+	return &Operator{
+		account: account,
+		client:  client,
+	}, nil
 }
 
 type Operator struct {
-	client *connectivity.TencentCloudClient
+	account string
+	client  *connectivity.TencentCloudClient
 }
 
-func (o *Operator) CvmOperator() *cvm.CVMOperator {
-	return cvm.NewCVMOperator(o.client.CvmClient())
+func (o *Operator) HostOperator() provider.HostOperator {
+	op := cvm.NewCVMOperator(o.client.CvmClient())
+	op.WithAccountId(o.account)
+	return op
 }
 
 func (o *Operator) CdbOperator() *cdb.CDBOperator {

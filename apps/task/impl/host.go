@@ -12,14 +12,10 @@ import (
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/mcube/pager"
 
-	aliConn "github.com/infraboard/cmdb/provider/aliyun/connectivity"
-	ecsOp "github.com/infraboard/cmdb/provider/aliyun/ecs"
-	awsConn "github.com/infraboard/cmdb/provider/aws/connectivity"
-	ec2Op "github.com/infraboard/cmdb/provider/aws/ec2"
-	hwConn "github.com/infraboard/cmdb/provider/huawei/connectivity"
-	hwEcsOp "github.com/infraboard/cmdb/provider/huawei/ecs"
-	txConn "github.com/infraboard/cmdb/provider/txyun/connectivity"
-	cvmOp "github.com/infraboard/cmdb/provider/txyun/cvm"
+	"github.com/infraboard/cmdb/provider/aliyun"
+	"github.com/infraboard/cmdb/provider/aws"
+	"github.com/infraboard/cmdb/provider/huawei"
+	"github.com/infraboard/cmdb/provider/txyun"
 	vsConn "github.com/infraboard/cmdb/provider/vsphere/connectivity"
 	vmOp "github.com/infraboard/cmdb/provider/vsphere/vm"
 )
@@ -44,60 +40,37 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 	switch secret.Vendor {
 	case resource.Vendor_ALIYUN:
 		s.log.Debugf("sync aliyun ecs ...")
-		client := aliConn.NewAliCloudClient(secret.ApiKey, secret.ApiSecret, t.Data.Region)
-		if err := client.Check(); err != nil {
-			t.Failed(err.Error())
-			return
-		}
-		ec, err := client.EcsClient()
+		op, err := aliyun.NewOperator(secret.ApiKey, secret.ApiSecret, t.Data.Region)
 		if err != nil {
 			t.Failed(err.Error())
 			return
 		}
-		operator := ecsOp.NewEcsOperator(ec)
-		operator.WithAccountId(client.AccountID())
-		req := provider.NewPageQueryRequest()
-		req.Rate = float64(secret.RequestRate)
-		pager = operator.PageQuery(req)
+		req := provider.NewQueryHostRequestWithRate(secret.RequestRate)
+		pager = op.HostOperator().QueryHost(req)
 	case resource.Vendor_TENCENT:
 		s.log.Debugf("sync txyun cvm ...")
-		client := txConn.NewTencentCloudClient(secret.ApiKey, secret.ApiSecret, t.Data.Region)
-		if err := client.Check(); err != nil {
+		op, err := txyun.NewOperator(secret.ApiKey, secret.ApiSecret, t.Data.Region)
+		if err != nil {
 			t.Failed(err.Error())
 			return
 		}
-		operator := cvmOp.NewCVMOperator(client.CvmClient())
-		operator.WithAccountId(client.AccountID())
-		req := cvmOp.NewPageQueryRequest(float64(secret.RequestRate))
-		pager = operator.PageQuery(req)
+
+		req := provider.NewQueryHostRequestWithRate(secret.RequestRate)
+		pager = op.HostOperator().QueryHost(req)
 	case resource.Vendor_HUAWEI:
 		s.log.Debugf("sync hwyun ecs ...")
-		client := hwConn.NewHuaweiCloudClient(secret.ApiKey, secret.ApiSecret, t.Data.Region)
-		if err := client.Check(); err != nil {
-			t.Failed(err.Error())
-			return
-		}
-		ec, err := client.EcsClient()
+		op, err := huawei.NewOperator(secret.ApiKey, secret.ApiSecret, t.Data.Region)
 		if err != nil {
 			t.Failed(err.Error())
 			return
 		}
-		operator := hwEcsOp.NewEcsOperator(ec)
-		operator.WithAccountId(client.AccountID())
-		req := hwEcsOp.NewPageQueryRequest(float64(secret.RequestRate))
-		pager = operator.PageQuery(req)
+		req := provider.NewQueryHostRequestWithRate(secret.RequestRate)
+		pager = op.HostOperator().QueryHost(req)
 	case resource.Vendor_AMAZON:
 		s.log.Debugf("sync aws ec2 ...")
-		client := awsConn.NewAwsCloudClient(secret.ApiKey, secret.ApiSecret, t.Data.Region)
-		ec, err := client.Ec2Client()
-		if err != nil {
-			t.Failed(err.Error())
-			return
-		}
-		operator := ec2Op.NewEc2Operator(ec)
-		req := ec2Op.NewPageQueryRequest()
-		req.Rate = float64(secret.RequestRate)
-		pager = operator.PageQuery(req)
+		op := aws.NewOperator(secret.ApiKey, secret.ApiSecret, t.Data.Region)
+		req := provider.NewQueryHostRequestWithRate(secret.RequestRate)
+		pager = op.HostOperator().QueryHost(req)
 	case resource.Vendor_VSPHERE:
 		s.log.Debugf("sync vshpere vm ...")
 		client := vsConn.NewVsphereClient(secret.Address, secret.ApiKey, secret.ApiSecret)
@@ -108,7 +81,7 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 		}
 		operator := vmOp.NewVMOperator(ec)
 		// 通过回调直接保存
-		err = operator.Query(func(h *host.Host) {
+		err = operator.QueryHost(func(h *host.Host) {
 			// 补充管理信息
 			h.Base.SecretId = secretIns.Id
 			s.doSyncHost(ctx, h, t)

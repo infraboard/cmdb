@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/infraboard/cmdb/apps/host"
+	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/cmdb/provider/txyun/connectivity"
 	op "github.com/infraboard/cmdb/provider/txyun/cvm"
 	"github.com/infraboard/cmdb/utils"
@@ -20,7 +21,7 @@ var (
 )
 
 func TestQuery(t *testing.T) {
-	pager := operator.PageQuery(op.NewPageQueryRequest(5))
+	pager := operator.QueryHost(provider.NewQueryHostRequest())
 
 	for pager.Next() {
 		set := host.NewHostSet()
@@ -64,10 +65,5 @@ func init() {
 	}
 
 	client := connectivity.C()
-	err = client.Check()
-	if err != nil {
-		panic(err)
-	}
 	operator = op.NewCVMOperator(client.CvmClient())
-	operator.WithAccountId(client.AccountID())
 }

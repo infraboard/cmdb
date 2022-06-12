@@ -50,13 +50,11 @@ type HuaweiCloudClient struct {
 	AccessKey    string `env:"HW_CLOUD_ACCESS_KEY"`
 	AccessSecret string `env:"HW_CLOUD_ACCESS_SECRET"`
 
-	accountId string
-	userId    string
-	ecsConn   *ecs.EcsClient
-	rdsConn   *rds.RdsClient
-	dcsConn   *dcs.DcsClient
-	bssConn   *bss.BssClient
-	iamConn   *iam.IamClient
+	ecsConn *ecs.EcsClient
+	rdsConn *rds.RdsClient
+	dcsConn *dcs.DcsClient
+	bssConn *bss.BssClient
+	iamConn *iam.IamClient
 }
 
 func (c *HuaweiCloudClient) Credentials() basic.Credentials {
@@ -153,23 +151,17 @@ func (c *HuaweiCloudClient) IamClient() (*iam.IamClient, error) {
 }
 
 // IamClient 客户端
-func (c *HuaweiCloudClient) Check() error {
+func (c *HuaweiCloudClient) Account() (string, error) {
 	iamConn, err := c.IamClient()
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	req := &iam_model.ShowUserRequest{}
 	resp, err := iamConn.ShowUser(req)
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	c.accountId = resp.User.Id
-	c.userId = resp.User.Name
-	return nil
-}
-
-func (c *HuaweiCloudClient) AccountID() string {
-	return c.accountId
+	return resp.User.Id, nil
 }

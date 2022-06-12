@@ -2,6 +2,7 @@ package aws
 
 import (
 	"github.com/caarlos0/env/v6"
+	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/cmdb/provider/aws/connectivity"
 	"github.com/infraboard/cmdb/provider/aws/ec2"
 )
@@ -18,15 +19,16 @@ func O() *Operator {
 }
 
 func LoadOperatorFromEnv() error {
-	client := &connectivity.AwsCloudClient{}
-	if err := env.Parse(client); err != nil {
+	conf := &connectivity.AwsCloudClient{}
+	if err := env.Parse(conf); err != nil {
 		return err
 	}
-	operator = NewOperator(client)
+	operator = NewOperator(conf.AccessKey, conf.AccessSecret, conf.Region)
 	return nil
 }
 
-func NewOperator(client *connectivity.AwsCloudClient) *Operator {
+func NewOperator(ak, sk, region string) *Operator {
+	client := connectivity.NewAwsCloudClient(ak, sk, region)
 	return &Operator{
 		client: client,
 	}
@@ -36,7 +38,7 @@ type Operator struct {
 	client *connectivity.AwsCloudClient
 }
 
-func (o *Operator) EcsOperator() *ec2.Ec2operator {
+func (o *Operator) HostOperator() provider.HostOperator {
 	c, err := o.client.Ec2Client()
 	if err != nil {
 		panic(err)

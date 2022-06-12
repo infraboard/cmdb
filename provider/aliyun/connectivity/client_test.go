@@ -15,8 +15,7 @@ func TestClient(t *testing.T) {
 	client := &connectivity.AliCloudClient{}
 	if err := env.Parse(client); err != nil {
 		if should.NoError(err) {
-			client.Check()
-			fmt.Println(client.AccountID())
+			fmt.Println(client.Account())
 		}
 	}
 

@@ -66,11 +66,7 @@ func (s *service) CreatTask(ctx context.Context, req *task.CreateTaskRequst) (
 	}
 
 	// 记录任务
-	if err := s.insert(ctx, t); err != nil {
-		return nil, err
-	}
-
-	if err != nil {
+	if err = s.insert(ctx, t); err != nil {
 		return nil, err
 	}
 
@@ -99,9 +95,9 @@ func (s *service) QueryTask(ctx context.Context, req *task.QueryTaskRequest) (*t
 	for rows.Next() {
 		ins := task.NewDefaultTask()
 		err := rows.Scan(
-			&ins.Id, &ins.Data.Region, &ins.Data.ResourceType, &ins.Data.SecretId, &ins.SecretDescription, &ins.Data.Timeout,
-			&ins.Status.Stage, &ins.Status.Message, &ins.Status.StartAt, &ins.Status.EndAt, &ins.Status.TotalSucceed, &ins.Status.TotalFailed,
-			&ins.Data.Domain, &ins.Data.Namespace,
+			&ins.Id, &ins.Data.Region, &ins.Data.ResourceType, &ins.Data.SecretId, &ins.SecretDescription,
+			&ins.Data.Timeout, &ins.Status.Stage, &ins.Status.Message, &ins.Status.StartAt, &ins.Status.EndAt,
+			&ins.Status.TotalSucceed, &ins.Status.TotalFailed, &ins.Data.Domain, &ins.Data.Namespace,
 		)
 		if err != nil {
 			return nil, exception.NewInternalServerError("query task error, %s", err.Error())
@@ -138,9 +134,9 @@ func (s *service) DescribeTask(ctx context.Context, req *task.DescribeTaskReques
 
 	ins := task.NewDefaultTask()
 	err = queryStmt.QueryRow(args...).Scan(
-		&ins.Id, &ins.Data.Region, &ins.Data.ResourceType, &ins.Data.SecretId, &ins.SecretDescription, &ins.Data.Timeout,
-		&ins.Status.Stage, &ins.Status.Message, &ins.Status.StartAt, &ins.Status.EndAt, &ins.Status.TotalSucceed, &ins.Status.TotalFailed,
-		&ins.Data.Domain, &ins.Data.Namespace,
+		&ins.Id, &ins.Data.Region, &ins.Data.ResourceType, &ins.Data.SecretId, &ins.SecretDescription,
+		&ins.Data.Timeout, &ins.Status.Stage, &ins.Status.Message, &ins.Status.StartAt, &ins.Status.EndAt,
+		&ins.Status.TotalSucceed, &ins.Status.TotalFailed, &ins.Data.Domain, &ins.Data.Namespace,
 	)
 	if err != nil {
 		return nil, err

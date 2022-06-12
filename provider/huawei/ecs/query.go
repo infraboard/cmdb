@@ -1,13 +1,17 @@
 package ecs
 
 import (
+	"context"
+	"fmt"
+
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ecs/v2/model"
 
 	"github.com/infraboard/cmdb/apps/host"
+	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/mcube/pager"
 )
 
-func (o *EcsOperator) Query(req *model.ListServersDetailsRequest) (*host.HostSet, error) {
+func (o *EcsOperator) query(req *model.ListServersDetailsRequest) (*host.HostSet, error) {
 	set := host.NewHostSet()
 
 	resp, err := o.client.ListServersDetails(req)
@@ -20,18 +24,12 @@ func (o *EcsOperator) Query(req *model.ListServersDetailsRequest) (*host.HostSet
 	return set, nil
 }
 
-func NewPageQueryRequest(rate float64) *PageQueryRequest {
-	return &PageQueryRequest{
-		Rate: rate,
-	}
-}
-
-type PageQueryRequest struct {
-	Rate float64
-}
-
-func (o *EcsOperator) PageQuery(req *PageQueryRequest) pager.Pager {
+func (o *EcsOperator) QueryHost(req *provider.QueryHostRequest) pager.Pager {
 	p := newPager(o)
 	p.SetRate(req.Rate)
 	return p
+}
+
+func (o *EcsOperator) DescribeHost(ctx context.Context, req *provider.DescribeHostRequest) (*host.Host, error) {
+	return nil, fmt.Errorf("not impl")
 }

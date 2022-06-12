@@ -11,7 +11,7 @@ import (
 
 type QueryCallback func(*host.Host)
 
-func (o *VMOperator) Query(cb QueryCallback) error {
+func (o *VMOperator) QueryHost(cb QueryCallback) error {
 	// 查询DC
 	dcs, err := o.finder.DatacenterList(context.Background(), "*")
 	if err != nil {
@@ -26,7 +26,7 @@ func (o *VMOperator) Query(cb QueryCallback) error {
 		dc := dcs[i]
 		o.log.Debugf("query dc %s vms ...", dc.Name())
 
-		err := o.queryVM(dc, cb)
+		err := o.queryProperties(dc, cb)
 		if err != nil {
 			o.log.Errorf("query dc %s error, %s", dc.Name())
 		}
@@ -35,7 +35,7 @@ func (o *VMOperator) Query(cb QueryCallback) error {
 	return nil
 }
 
-func (o *VMOperator) queryVM(dc *object.Datacenter, cb QueryCallback) error {
+func (o *VMOperator) queryProperties(dc *object.Datacenter, cb QueryCallback) error {
 	dcFinder := o.finder.SetDatacenter(dc)
 
 	ctx, cancel := context.WithTimeout(context.Background(), o.Timeout)

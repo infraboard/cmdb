@@ -17,8 +17,8 @@ var (
 )
 
 func TestQuery(t *testing.T) {
-	req := provider.NewPageQueryRequest()
-	pager := operator.PageQuery(req)
+	req := provider.NewQueryHostRequest()
+	pager := operator.QueryHost(req)
 	for pager.Next() {
 		set := host.NewHostSet()
 		if err := pager.Scan(context.Background(), set); err != nil {
@@ -29,7 +29,8 @@ func TestQuery(t *testing.T) {
 }
 
 func TestDescribe(t *testing.T) {
-	ins, err := operator.Describe(&provider.DescribeRequest{Id: "i-bp1f6d1sbq8s9mm59jeu"})
+	req := &provider.DescribeHostRequest{Id: "i-bp1f6d1sbq8s9mm59jeu"}
+	ins, err := operator.DescribeHost(context.Background(), req)
 	if err != nil {
 		t.Fatal(err)
 	}

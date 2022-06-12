@@ -21,22 +21,36 @@ func O() *Operator {
 }
 
 func LoadOperatorFromEnv() error {
-	client := &connectivity.AliCloudClient{}
-	if err := env.Parse(client); err != nil {
+	conf := &connectivity.AliCloudClient{}
+	if err := env.Parse(conf); err != nil {
 		return err
 	}
-	operator = NewOperator(client)
+	op, err := NewOperator(conf.AccessKey, conf.AccessSecret, conf.Region)
+	if err != nil {
+		return err
+	}
+	operator = op
+
 	return nil
 }
 
-func NewOperator(client *connectivity.AliCloudClient) *Operator {
-	return &Operator{
-		client: client,
+func NewOperator(ak, sk, region string) (*Operator, error) {
+	client := connectivity.NewAliCloudClient(ak, sk, region)
+
+	account, err := client.Account()
+	if err != nil {
+		return nil, err
 	}
+
+	return &Operator{
+		client:  client,
+		account: account,
+	}, nil
 }
 
 type Operator struct {
-	client *connectivity.AliCloudClient
+	client  *connectivity.AliCloudClient
+	account string
 }
 
 func (o *Operator) HostOperator() provider.HostOperator {
@@ -44,7 +58,9 @@ func (o *Operator) HostOperator() provider.HostOperator {
 	if err != nil {
 		panic(err)
 	}
-	return ecs.NewEcsOperator(c)
+	op := ecs.NewEcsOperator(c)
+	op.WithAccountId(o.account)
+	return op
 }
 
 func (o *Operator) BssOperator() *bss.BssOperator {

@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/infraboard/cmdb/apps/host"
+	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/cmdb/provider/aws/connectivity"
 	op "github.com/infraboard/cmdb/provider/aws/ec2"
 )
@@ -16,8 +17,7 @@ var (
 )
 
 func TestQuery(t *testing.T) {
-	req := op.NewPageQueryRequest()
-	pager := operator.PageQuery(req)
+	pager := operator.QueryHost(provider.NewQueryHostRequest())
 
 	for pager.Next() {
 		set := host.NewHostSet()

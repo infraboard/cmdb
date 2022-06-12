@@ -15,7 +15,5 @@ func TestClient(t *testing.T) {
 	if should.NoError(err) {
 		c := connectivity.C()
 		fmt.Println(c.Region)
-		fmt.Println(c.Check())
-		fmt.Println(c.AccountID())
 	}
 }

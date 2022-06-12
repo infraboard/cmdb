@@ -1,6 +1,8 @@
 package ecs
 
 import (
+	"context"
+
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/ecs"
 
 	"github.com/infraboard/cmdb/apps/host"
@@ -10,7 +12,7 @@ import (
 )
 
 // 阿里云ECS实例字段描述: https://next.api.aliyun.com/document/Ecs/2014-05-26/DescribeInstances
-func (o *EcsOperator) Query(req *ecs.DescribeInstancesRequest) (*host.HostSet, error) {
+func (o *EcsOperator) query(req *ecs.DescribeInstancesRequest) (*host.HostSet, error) {
 	set := host.NewHostSet()
 
 	resp, err := o.client.DescribeInstances(req)
@@ -24,16 +26,16 @@ func (o *EcsOperator) Query(req *ecs.DescribeInstancesRequest) (*host.HostSet, e
 	return set, nil
 }
 
-func (o *EcsOperator) PageQuery(req *provider.PageQueryRequest) pager.Pager {
+func (o *EcsOperator) QueryHost(req *provider.QueryHostRequest) pager.Pager {
 	p := newPager(o)
 	p.SetRate(req.Rate)
 	return p
 }
 
-func (o *EcsOperator) Describe(req *provider.DescribeRequest) (*host.Host, error) {
+func (o *EcsOperator) DescribeHost(ctx context.Context, req *provider.DescribeHostRequest) (*host.Host, error) {
 	r := ecs.CreateDescribeInstancesRequest()
 	r.InstanceIds = `["` + req.Id + `"]`
-	hs, err := o.Query(r)
+	hs, err := o.query(r)
 	if err != nil {
 		return nil, err
 	}

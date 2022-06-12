@@ -2,9 +2,11 @@ package ec2
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/infraboard/cmdb/apps/host"
+	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/mcube/pager"
 )
 
@@ -21,18 +23,12 @@ func (o *Ec2operator) Query(ctx context.Context, req *ec2.DescribeInstancesInput
 	return set, nil
 }
 
-func NewPageQueryRequest() *PageQueryRequest {
-	return &PageQueryRequest{
-		Rate: 1,
-	}
-}
-
-type PageQueryRequest struct {
-	Rate float64
-}
-
-func (o *Ec2operator) PageQuery(req *PageQueryRequest) pager.Pager {
+func (o *Ec2operator) QueryHost(req *provider.QueryHostRequest) pager.Pager {
 	p := newPager(o)
 	p.SetRate(req.Rate)
 	return p
+}
+
+func (o *Ec2operator) DescribeHost(ctx context.Context, req *provider.DescribeHostRequest) (*host.Host, error) {
+	return nil, fmt.Errorf("not impl")
 }

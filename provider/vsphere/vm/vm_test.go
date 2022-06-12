@@ -16,7 +16,7 @@ var (
 )
 
 func TestQuery(t *testing.T) {
-	err := operator.Query(func(h *host.Host) {
+	err := operator.QueryHost(func(h *host.Host) {
 		fmt.Println(h)
 	})
 	if err != nil {
