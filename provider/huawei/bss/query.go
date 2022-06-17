@@ -3,6 +3,7 @@ package bss
 import (
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/bss/v2/model"
 	"github.com/infraboard/cmdb/apps/bill"
+	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/mcube/pager"
 )
 
@@ -18,18 +19,7 @@ func (o *BssOperator) Query(req *model.ListCustomerselfResourceRecordsRequest) (
 	return set, nil
 }
 
-func NewPageQueryRequest() *PageQueryRequest {
-	return &PageQueryRequest{
-		Rate: 1,
-	}
-}
-
-type PageQueryRequest struct {
-	Rate  float64
-	Month string
-}
-
-func (o *BssOperator) PageQuery(req *PageQueryRequest) pager.Pager {
+func (o *BssOperator) QueryBill(req *provider.QueryBillRequest) pager.Pager {
 	p := newPager(o, req.Month)
 	p.SetRate(req.Rate)
 	return p

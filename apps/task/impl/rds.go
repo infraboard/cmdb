@@ -30,6 +30,7 @@ func (s *service) syncRds(ctx context.Context, secretIns *secret.Secret, t *task
 
 	secret := secretIns.Data
 	req := provider.NewQueryRdsRequestWithRate(secret.RequestRate)
+
 	switch secret.Vendor {
 	case resource.Vendor_ALIYUN:
 		s.log.Debugf("sync aliyun rds ...")

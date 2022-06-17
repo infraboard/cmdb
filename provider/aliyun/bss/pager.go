@@ -6,12 +6,13 @@ import (
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/bssopenapi"
 
+	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 	"github.com/infraboard/mcube/pager"
 )
 
-func newPager(operator *BssOperator, r *PageQueryRequest) pager.Pager {
+func newPager(operator *BssOperator, r *provider.QueryBillRequest) pager.Pager {
 	req := bssopenapi.CreateQueryInstanceBillRequest()
 	req.BillingCycle = r.Month
 	req.ProductCode = r.ProductCode

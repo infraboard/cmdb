@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/infraboard/cmdb/apps/bill"
+	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/cmdb/provider/huawei/connectivity"
 	"github.com/infraboard/mcube/logger/zap"
 
@@ -13,14 +14,14 @@ import (
 )
 
 var (
-	operator *op.BssOperator
+	operator provider.BillOperator
 )
 
 func TestQuery(t *testing.T) {
-	req := op.NewPageQueryRequest()
+	req := provider.NewQueryBillRequest()
 	req.Month = "2022-04"
 
-	pager := operator.PageQuery(req)
+	pager := operator.QueryBill(req)
 	for pager.Next() {
 		set := bill.NewBillSet()
 		if err := pager.Scan(context.Background(), set); err != nil {

@@ -37,6 +37,8 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 	}()
 
 	secret := secretIns.Data
+	req := provider.NewQueryHostRequestWithRate(secret.RequestRate)
+
 	switch secret.Vendor {
 	case resource.Vendor_ALIYUN:
 		s.log.Debugf("sync aliyun ecs ...")
@@ -45,7 +47,6 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 			t.Failed(err.Error())
 			return
 		}
-		req := provider.NewQueryHostRequestWithRate(secret.RequestRate)
 		pager = op.HostOperator().QueryHost(req)
 	case resource.Vendor_TENCENT:
 		s.log.Debugf("sync txyun cvm ...")
@@ -54,8 +55,6 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 			t.Failed(err.Error())
 			return
 		}
-
-		req := provider.NewQueryHostRequestWithRate(secret.RequestRate)
 		pager = op.HostOperator().QueryHost(req)
 	case resource.Vendor_HUAWEI:
 		s.log.Debugf("sync hwyun ecs ...")
@@ -64,12 +63,10 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 			t.Failed(err.Error())
 			return
 		}
-		req := provider.NewQueryHostRequestWithRate(secret.RequestRate)
 		pager = op.HostOperator().QueryHost(req)
 	case resource.Vendor_AMAZON:
 		s.log.Debugf("sync aws ec2 ...")
 		op := aws.NewOperator(secret.ApiKey, secret.ApiSecret, t.Data.Region)
-		req := provider.NewQueryHostRequestWithRate(secret.RequestRate)
 		pager = op.HostOperator().QueryHost(req)
 	case resource.Vendor_VSPHERE:
 		s.log.Debugf("sync vshpere vm ...")

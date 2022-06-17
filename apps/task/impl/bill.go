@@ -8,14 +8,12 @@ import (
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/apps/secret"
 	"github.com/infraboard/cmdb/apps/task"
+	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/mcube/pager"
 
-	bssOp "github.com/infraboard/cmdb/provider/aliyun/bss"
-	aliConn "github.com/infraboard/cmdb/provider/aliyun/connectivity"
-	hwBssOp "github.com/infraboard/cmdb/provider/huawei/bss"
-	hwConn "github.com/infraboard/cmdb/provider/huawei/connectivity"
-	billOp "github.com/infraboard/cmdb/provider/txyun/billing"
-	txConn "github.com/infraboard/cmdb/provider/txyun/connectivity"
+	"github.com/infraboard/cmdb/provider/aliyun"
+	"github.com/infraboard/cmdb/provider/huawei"
+	"github.com/infraboard/cmdb/provider/txyun"
 )
 
 func (s *service) syncBill(ctx context.Context, secretIns *secret.Secret, t *task.Task, cb SyncTaskCallback) {
@@ -28,42 +26,34 @@ func (s *service) syncBill(ctx context.Context, secretIns *secret.Secret, t *tas
 	defer s.syncBillDown(ctx, t, cb)
 
 	secret := secretIns.Data
+	req := provider.NewQueryBillRequestWithRate(secret.RequestRate)
+	req.Month = t.Data.Params["month"]
+
 	switch secret.Vendor {
 	case resource.Vendor_ALIYUN:
 		s.log.Debugf("sync aliyun bill ...")
-		client := aliConn.NewAliCloudClient(secret.ApiKey, secret.ApiSecret, t.Data.Region)
-		bc, err := client.BssClient()
+		op, err := aliyun.NewOperator(secret.ApiKey, secret.ApiSecret, t.Data.Region)
 		if err != nil {
 			t.Failed(err.Error())
 			return
 		}
-
-		operator := bssOp.NewBssOperator(bc)
-		req := bssOp.NewPageQueryRequest()
-		req.Rate = float64(secret.RequestRate)
-		req.Month = t.Data.Params["month"]
-		pager = operator.PageQuery(req)
+		pager = op.BillOperator().QueryBill(req)
 	case resource.Vendor_TENCENT:
 		s.log.Debugf("sync txyun bill ...")
-		client := txConn.NewTencentCloudClient(secret.ApiKey, secret.ApiSecret, t.Data.Region)
-		operator := billOp.NewBillingoperator(client.BillingClient())
-		req := billOp.NewPageQueryRequest()
-		req.Rate = float64(secret.RequestRate)
-		req.Month = t.Data.Params["month"]
-		pager = operator.PageQuery(req)
-	case resource.Vendor_HUAWEI:
-		s.log.Debugf("sync hwyun bill ...")
-		client := hwConn.NewHuaweiCloudClient(secret.ApiKey, secret.ApiSecret, t.Data.Region)
-		bc, err := client.BssClient()
+		op, err := txyun.NewOperator(secret.ApiKey, secret.ApiSecret, t.Data.Region)
 		if err != nil {
 			t.Failed(err.Error())
 			return
 		}
-		operator := hwBssOp.NewBssOperator(bc)
-		req := hwBssOp.NewPageQueryRequest()
-		req.Rate = float64(secret.RequestRate)
-		req.Month = t.Data.Params["month"]
-		pager = operator.PageQuery(req)
+		pager = op.BillOperator().QueryBill(req)
+	case resource.Vendor_HUAWEI:
+		s.log.Debugf("sync hwyun bill ...")
+		op, err := huawei.NewOperator(secret.ApiKey, secret.ApiSecret, t.Data.Region)
+		if err != nil {
+			t.Failed(err.Error())
+			return
+		}
+		pager = op.BillOperator().QueryBill(req)
 	default:
 		t.Failed(fmt.Sprintf("unsuport bill syncing vendor %s", secret.Vendor))
 		return

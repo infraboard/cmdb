@@ -52,7 +52,7 @@ func (o *Operator) HostOperator() provider.HostOperator {
 	return ecs.NewEcsOperator(c)
 }
 
-func (o *Operator) BssOperator() *bss.BssOperator {
+func (o *Operator) BillOperator() provider.BillOperator {
 	c, err := o.client.BssClient()
 	if err != nil {
 		panic(err)

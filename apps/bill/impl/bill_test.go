@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/infraboard/cmdb/conf"
+	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/mcube/app"
 	"github.com/infraboard/mcube/logger/zap"
 	"github.com/stretchr/testify/assert"
@@ -18,16 +19,16 @@ import (
 
 var (
 	svc      bill.ServiceServer
-	operator *op.Billingoperator
+	operator provider.BillOperator
 )
 
 func TestSyncBill(t *testing.T) {
 	should := assert.New(t)
 
-	req := op.NewPageQueryRequest()
+	req := provider.NewQueryBillRequest()
 	req.Month = "2022-05"
 
-	pager := operator.PageQuery(req)
+	pager := operator.QueryBill(req)
 
 	ctx := context.Background()
 	for pager.Next() {
