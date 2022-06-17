@@ -11,6 +11,11 @@ BUILD_TIME := ${shell date '+%Y-%m-%d %H:%M:%S'}
 BUILD_GO_VERSION := $(shell go version | grep -o  'go[0-9].[0-9].*')
 VERSION_PATH := "${PKG}/version"
 
+MOD_DIR := $(shell go env GOPATH)/pkg/mod
+MCUBE_MODULE := "github.com/infraboard/mcube"
+MCUBE_VERSION :=$(shell go list -m ${MCUBE_MODULE} | cut -d' ' -f2)
+MCUBE_PKG_PATH := ${MOD_DIR}/${MCUBE_MODULE}@${MCUBE_VERSION}
+
 .PHONY: all dep lint vet test test-coverage build clean
 
 all: build
@@ -49,8 +54,13 @@ install: ## install mcube cli
 	@go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 	@go install github.com/favadi/protoc-go-inject-tag@latest
 
+pb: ## Copy mcube protobuf files to common/pb
+	@mkdir -pv common/pb/github.com/infraboard/mcube/pb
+	@cp -r ${MCUBE_PKG_PATH}/pb/* common/pb/github.com/infraboard/mcube/pb
+	@sudo rm -rf common/pb/github.com/infraboard/mcube/pb/*/*.go
+
 gen: ## generate code
-	@protoc -I=. -I=/usr/local/include --go_out=. --go-grpc_out=. --go_opt=module="${PKG}" --go-grpc_opt=module="${PKG}"  apps/*/pb/*
+	@protoc -I=. -I=common/pb --go_out=. --go-grpc_out=. --go_opt=module="${PKG}" --go-grpc_opt=module="${PKG}"  apps/*/pb/*
 	@protoc-go-inject-tag -input=apps/*/*.pb.go
 	@mcube generate enum -p -m apps/*/*.pb.go
 
