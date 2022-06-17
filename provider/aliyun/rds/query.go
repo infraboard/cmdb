@@ -1,9 +1,12 @@
 package rds
 
 import (
+	"context"
+
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/rds"
 
 	cmdbRds "github.com/infraboard/cmdb/apps/rds"
+	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/mcube/pager"
 )
 
@@ -31,18 +34,12 @@ func (o *RdsOperator) Query(req *rds.DescribeDBInstancesRequest) (*cmdbRds.Set, 
 	return set, nil
 }
 
-func NewPageQueryRequest() *PageQueryRequest {
-	return &PageQueryRequest{
-		Rate: 1,
-	}
-}
-
-type PageQueryRequest struct {
-	Rate int
-}
-
-func (o *RdsOperator) PageQuery(req *PageQueryRequest) pager.Pager {
+func (o *RdsOperator) QueryRds(req *provider.QueryRdsRequest) pager.Pager {
 	p := newPager(o)
 	p.SetRate(float64(req.Rate))
 	return p
+}
+
+func (o *RdsOperator) DescribeRds(ctx context.Context, req *provider.DescribeRdsRequest) (*cmdbRds.Rds, error) {
+	return nil, nil
 }

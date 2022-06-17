@@ -60,7 +60,7 @@ func (o *Operator) BssOperator() *bss.BssOperator {
 	return bss.NewBssOperator(c)
 }
 
-func (o *Operator) RdsOperator() *rds.RdsOperator {
+func (o *Operator) RdsOperator() provider.RdsOperator {
 	c, err := o.client.RdsClient()
 	if err != nil {
 		panic(err)

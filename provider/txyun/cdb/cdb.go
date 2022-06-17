@@ -33,7 +33,7 @@ func (o *CDBOperator) transferSet(items []*cdb.InstanceInfo) *rds.Set {
 	return set
 }
 
-func (o *CDBOperator) transferOne(ins *cdb.InstanceInfo) *rds.RDS {
+func (o *CDBOperator) transferOne(ins *cdb.InstanceInfo) *rds.Rds {
 	r := cmdbRds.NewDefaultRDS()
 
 	b := r.Base

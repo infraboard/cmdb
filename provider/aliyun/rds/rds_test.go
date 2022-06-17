@@ -6,19 +6,18 @@ import (
 	"testing"
 
 	"github.com/infraboard/cmdb/apps/rds"
+	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/cmdb/provider/aliyun"
 	"github.com/infraboard/mcube/logger/zap"
-
-	op "github.com/infraboard/cmdb/provider/aliyun/rds"
 )
 
 var (
-	operator *op.RdsOperator
+	operator provider.RdsOperator
 )
 
 func TestQuery(t *testing.T) {
-	req := op.NewPageQueryRequest()
-	pager := operator.PageQuery(req)
+	req := provider.NewQueryRdsRequest()
+	pager := operator.QueryRds(req)
 
 	for pager.Next() {
 		set := rds.NewSet()

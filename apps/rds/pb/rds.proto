@@ -7,11 +7,11 @@ import "apps/resource/pb/resource.proto";
 import "github.com/infraboard/mcube/pb/page/page.proto";
 
 service Service {
-    rpc SyncRDS(RDS) returns(RDS) {}
+    rpc SyncRDS(Rds) returns(Rds) {}
     rpc QueryRDS(QueryRDSRequest) returns(Set) {}
 }
 
-message RDS {
+message Rds {
     // 资源元数据信息
     // @gotags: json:"base"
     infraboard.cmdb.resource.Base base = 1;
@@ -116,7 +116,7 @@ message Set {
     int64 total = 1;
    // 列表项
     // @gotags: json:"items"
-    repeated RDS items = 2;
+    repeated Rds items = 2;
 }
 
 message QueryRDSRequest {

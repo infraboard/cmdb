@@ -9,7 +9,7 @@ import (
 	"github.com/infraboard/cmdb/apps/resource/impl"
 )
 
-func (s *service) save(ctx context.Context, h *rds.RDS) error {
+func (s *service) save(ctx context.Context, h *rds.Rds) error {
 	var (
 		stmt *sql.Stmt
 		err  error

@@ -9,15 +9,17 @@ import (
 	"github.com/infraboard/cmdb/provider/huawei/connectivity"
 	"github.com/infraboard/mcube/logger/zap"
 
+	"github.com/infraboard/cmdb/provider"
 	op "github.com/infraboard/cmdb/provider/huawei/rds"
 )
 
 var (
-	operator *op.RdsOperator
+	operator provider.RdsOperator
 )
 
 func TestQuery(t *testing.T) {
-	pager := operator.PageQuery()
+	req := provider.NewQueryRdsRequest()
+	pager := operator.QueryRds(req)
 
 	for pager.Next() {
 		set := rds.NewSet()

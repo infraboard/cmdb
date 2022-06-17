@@ -58,7 +58,7 @@ func (o *Operator) HostOperator() provider.HostOperator {
 	return op
 }
 
-func (o *Operator) CdbOperator() *cdb.CDBOperator {
+func (o *Operator) RdsOperator() provider.RdsOperator {
 	return cdb.NewCDBOperator(o.client.CDBClient())
 }
 

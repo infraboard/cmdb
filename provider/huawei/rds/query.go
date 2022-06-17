@@ -1,9 +1,13 @@
 package rds
 
 import (
+	"context"
+
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/rds/v3/model"
 
 	"github.com/infraboard/cmdb/apps/rds"
+	cmdbRds "github.com/infraboard/cmdb/apps/rds"
+	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/mcube/pager"
 )
 
@@ -22,6 +26,10 @@ func (o *RdsOperator) Query(req *model.ListInstancesRequest) (*rds.Set, error) {
 	return set, nil
 }
 
-func (o *RdsOperator) PageQuery() pager.Pager {
+func (o *RdsOperator) QueryRds(req *provider.QueryRdsRequest) pager.Pager {
 	return newPager(o)
+}
+
+func (o *RdsOperator) DescribeRds(ctx context.Context, req *provider.DescribeRdsRequest) (*cmdbRds.Rds, error) {
+	return nil, nil
 }

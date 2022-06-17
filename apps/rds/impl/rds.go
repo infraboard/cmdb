@@ -8,8 +8,8 @@ import (
 	"github.com/rs/xid"
 )
 
-func (s *service) SyncRDS(ctx context.Context, h *rds.RDS) (
-	*rds.RDS, error) {
+func (s *service) SyncRDS(ctx context.Context, h *rds.Rds) (
+	*rds.Rds, error) {
 	h.Base.Id = xid.New().String()
 	h.Base.SyncAt = ftime.Now().Timestamp()
 

@@ -33,7 +33,7 @@ func (o *RdsOperator) transferSet(items []rds.DBInstanceAttribute) *cmdbRds.Set 
 	return set
 }
 
-func (o *RdsOperator) transferOne(ins rds.DBInstanceAttribute) *cmdbRds.RDS {
+func (o *RdsOperator) transferOne(ins rds.DBInstanceAttribute) *cmdbRds.Rds {
 	r := cmdbRds.NewDefaultRDS()
 
 	b := r.Base

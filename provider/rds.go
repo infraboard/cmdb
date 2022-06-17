@@ -9,7 +9,7 @@ import (
 
 type RdsOperator interface {
 	QueryRds(req *QueryRdsRequest) pager.Pager
-	DescribeRds(ctx context.Context, req *DescribeRdsRequest) (*rds.Set, error)
+	DescribeRds(ctx context.Context, req *DescribeRdsRequest) (*rds.Rds, error)
 }
 
 func NewQueryRdsRequest() *QueryRdsRequest {

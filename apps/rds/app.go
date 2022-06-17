@@ -16,7 +16,7 @@ const (
 
 func NewSet() *Set {
 	return &Set{
-		Items: []*RDS{},
+		Items: []*Rds{},
 	}
 }
 
@@ -29,7 +29,7 @@ func (s *Set) ToAny() (items []any) {
 
 func (s *Set) Add(items ...any) {
 	for i := range items {
-		s.Items = append(s.Items, items[i].(*RDS))
+		s.Items = append(s.Items, items[i].(*Rds))
 	}
 }
 
@@ -41,8 +41,8 @@ func (s *Set) Length() int64 {
 	return int64(len(s.Items))
 }
 
-func NewDefaultRDS() *RDS {
-	return &RDS{
+func NewDefaultRDS() *Rds {
+	return &Rds{
 		Base: &resource.Base{
 			ResourceType: resource.Type_RDS,
 		},
@@ -51,11 +51,11 @@ func NewDefaultRDS() *RDS {
 	}
 }
 
-func (r *RDS) ShortDesc() string {
+func (r *Rds) ShortDesc() string {
 	return fmt.Sprintf("%s [%s]", r.Information.Name, r.Base.Id)
 }
 
-func (r *RDS) GenHash() error {
+func (r *Rds) GenHash() error {
 	r.Base.ResourceHash = r.Information.Hash()
 	r.Base.DescribeHash = utils.Hash(r.Describe)
 	return nil

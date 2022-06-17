@@ -37,7 +37,7 @@ func (o *RdsOperator) transferSet(list *[]model.InstanceResponse) *rds.Set {
 	return set
 }
 
-func (o *RdsOperator) transferOne(ins model.InstanceResponse) *rds.RDS {
+func (o *RdsOperator) transferOne(ins model.InstanceResponse) *rds.Rds {
 	h := rds.NewDefaultRDS()
 	b := h.Base
 	b.Vendor = resource.Vendor_HUAWEI
