@@ -204,3 +204,37 @@ message ConfirmBillRequest {
     // @gotags: json:"task_id" validate:"required"
     string task_id = 1;
 }
+
+message SummaryRecordSet {
+    // 总条数
+    // @gotags: json:"total"
+    int64 total = 1;
+    // 费用统计
+    // @gotags: json:"sum"
+    Cost sum = 2;
+    // 具体条目
+    // @gotags: json:"items"
+    repeated SummaryRecord items = 3;
+}
+
+// 账单总览项
+message SummaryRecord {
+    // 账号Id
+    // @gotags: json:"owner_id"
+    string owner_id = 1;
+    // 账号名称
+    // @gotags: json:"owner_name"
+    string owner_name = 2;
+    // 产品类型
+    // @gotags: json:"product_type"
+    string product_type = 3;
+    // 产品编码
+    // @gotags: json:"product_code"
+    string product_code = 4;
+    // 产品明细
+    // @gotags: json:"product_detail"
+    string product_detail = 5;
+    // 费用统计
+    // @gotags: json:"sum"
+    Cost sum = 6;
+}

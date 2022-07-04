@@ -1,7 +1,8 @@
 package bss
 
 import (
-	"github.com/aliyun/alibaba-cloud-sdk-go/services/bssopenapi"
+	bssopenapi "github.com/alibabacloud-go/bssopenapi-20171214/v2/client"
+	"github.com/alibabacloud-go/tea/tea"
 
 	"github.com/infraboard/cmdb/apps/bill"
 	"github.com/infraboard/cmdb/apps/resource"
@@ -21,43 +22,41 @@ type BssOperator struct {
 	log    logger.Logger
 }
 
-func (o *BssOperator) transferSet(list bssopenapi.DataInQueryInstanceBill) *bill.BillSet {
+func (o *BssOperator) transferSet(list *bssopenapi.DescribeInstanceBillResponseBodyData) *bill.BillSet {
 	set := bill.NewBillSet()
-	items := list.Items.Item
+	items := list.Items
 	for i := range items {
 		ins := o.transferOne(items[i])
 		ins.Vendor = resource.Vendor_ALIYUN
-		ins.Month = list.BillingCycle
+		ins.Month = tea.StringValue(list.BillingCycle)
 		set.Add(ins)
 	}
 	return set
 }
 
-func (o *BssOperator) transferOne(ins bssopenapi.Item) *bill.Bill {
+func (o *BssOperator) transferOne(ins *bssopenapi.DescribeInstanceBillResponseBodyDataItems) *bill.Bill {
 	b := bill.NewDefaultBill()
-	b.OwnerId = ins.OwnerID
-	b.OwnerName = ins.OwnerName
-	b.ProductType = ins.ProductType
-	b.ProductCode = ins.ProductCode
-	b.ProductDetail = ins.ProductDetail
-	b.PayMode = ins.Item
-	b.PayModeDetail = ins.BillingType
-	b.OrderId = ins.SubOrderId
-	b.InstanceId = ins.InstanceID
-	b.InstanceName = ins.NickName
-	b.PublicIp = ins.InternetIP
-	b.PrivateIp = ins.IntranetIP
-	b.InstanceConfig = ins.InstanceConfig
-	b.RegionCode = ins.RegionNo
-	b.RegionName = ins.Region
+	b.OwnerId = tea.StringValue(ins.OwnerID)
+	b.OwnerName = tea.StringValue(ins.BillAccountName)
+	b.ProductType = tea.StringValue(ins.ProductType)
+	b.ProductCode = tea.StringValue(ins.ProductCode)
+	b.ProductDetail = tea.StringValue(ins.ProductDetail)
+	b.PayMode = tea.StringValue(ins.Item)
+	b.PayModeDetail = tea.StringValue(ins.BillingType)
+	b.InstanceId = tea.StringValue(ins.InstanceID)
+	b.InstanceName = tea.StringValue(ins.NickName)
+	b.PublicIp = tea.StringValue(ins.InternetIP)
+	b.PrivateIp = tea.StringValue(ins.IntranetIP)
+	b.InstanceConfig = tea.StringValue(ins.InstanceConfig)
+	b.RegionName = tea.StringValue(ins.Region)
 
 	cost := b.Cost
-	cost.SalePrice = ins.PretaxGrossAmount
-	cost.SaveCost = ins.InvoiceDiscount
-	cost.RealCost = ins.PretaxAmount
-	cost.StoredcardPay = ins.DeductedByPrepaidCard
-	cost.VoucherPay = ins.DeductedByCashCoupons
-	cost.CashPay = ins.PaymentAmount
-	cost.OutstandingAmount = ins.OutstandingAmount
+	cost.SalePrice = float64(tea.Float32Value(ins.PretaxGrossAmount))
+	cost.SaveCost = float64(tea.Float32Value(ins.InvoiceDiscount))
+	cost.RealCost = float64(tea.Float32Value(ins.PretaxAmount))
+	cost.StoredcardPay = float64(tea.Float32Value(ins.DeductedByPrepaidCard))
+	cost.VoucherPay = float64(tea.Float32Value(ins.DeductedByCashCoupons))
+	cost.CashPay = float64(tea.Float32Value(ins.PaymentAmount))
+	cost.OutstandingAmount = float64(tea.Float32Value(ins.OutstandingAmount))
 	return b
 }

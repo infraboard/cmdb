@@ -1,11 +1,15 @@
 package provider
 
 import (
+	"context"
+
+	"github.com/infraboard/cmdb/apps/bill"
 	"github.com/infraboard/mcube/pager"
 )
 
 type BillOperator interface {
-	QueryBill(req *QueryBillRequest) pager.Pager
+	QueryBill(*QueryBillRequest) pager.Pager
+	QuerySummary(context.Context, *QueryBillSummaryRequeset) (*bill.SummaryRecordSet, error)
 }
 
 func NewQueryBillRequest() *QueryBillRequest {
@@ -24,4 +28,15 @@ type QueryBillRequest struct {
 	Rate        float64
 	Month       string
 	ProductCode string
+}
+
+func NewQueryBillSummaryRequeset() *QueryBillSummaryRequeset {
+	return &QueryBillSummaryRequeset{}
+}
+
+type QueryBillSummaryRequeset struct {
+	// 子账号ID, 设置可查看财务云子账号账单，不填默认查看当前调用账号
+	OwnerId string
+	// 账单月份
+	Month string
 }

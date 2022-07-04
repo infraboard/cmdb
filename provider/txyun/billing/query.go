@@ -28,3 +28,8 @@ func (o *Billingoperator) QueryBill(req *provider.QueryBillRequest) pager.Pager 
 	p.SetRate(req.Rate)
 	return p
 }
+
+func (o *Billingoperator) QuerySummary(ctx context.Context, req *provider.QueryBillSummaryRequeset) (
+	*bill.SummaryRecordSet, error) {
+	return nil, nil
+}

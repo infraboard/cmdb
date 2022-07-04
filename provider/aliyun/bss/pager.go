@@ -3,8 +3,8 @@ package bss
 import (
 	"context"
 
-	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
-	"github.com/aliyun/alibaba-cloud-sdk-go/services/bssopenapi"
+	bssopenapi "github.com/alibabacloud-go/bssopenapi-20171214/v2/client"
+	"github.com/alibabacloud-go/tea/tea"
 
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/mcube/logger"
@@ -13,9 +13,11 @@ import (
 )
 
 func newPager(operator *BssOperator, r *provider.QueryBillRequest) pager.Pager {
-	req := bssopenapi.CreateQueryInstanceBillRequest()
-	req.BillingCycle = r.Month
-	req.ProductCode = r.ProductCode
+	req := &bssopenapi.DescribeInstanceBillRequest{}
+	req.BillingCycle = tea.String(r.Month)
+	if r.ProductCode != "" {
+		req.ProductCode = tea.String(r.ProductCode)
+	}
 
 	return &bssPager{
 		BasePager: pager.NewBasePager(),
@@ -27,9 +29,10 @@ func newPager(operator *BssOperator, r *provider.QueryBillRequest) pager.Pager {
 
 type bssPager struct {
 	*pager.BasePager
-	operator *BssOperator
-	req      *bssopenapi.QueryInstanceBillRequest
-	log      logger.Logger
+	operator  *BssOperator
+	req       *bssopenapi.DescribeInstanceBillRequest
+	log       logger.Logger
+	nextToken string
 }
 
 func (p *bssPager) Scan(ctx context.Context, set pager.Set) error {
@@ -47,9 +50,8 @@ func (p *bssPager) WithLogger(log logger.Logger) {
 	p.log = log
 }
 
-func (p *bssPager) nextReq() *bssopenapi.QueryInstanceBillRequest {
+func (p *bssPager) nextReq() *bssopenapi.DescribeInstanceBillRequest {
 	p.log.Debugf("请求第%d页数据", p.PageNumber())
-	p.req.PageNum = requests.NewInteger(int(p.PageNumber()))
-	p.req.PageSize = requests.NewInteger(int(p.PageSize()))
+	p.req.MaxResults = tea.Int32(int32(p.PageSize()))
 	return p.req
 }

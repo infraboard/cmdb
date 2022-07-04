@@ -1,6 +1,8 @@
 package bss
 
 import (
+	"context"
+
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/bss/v2/model"
 	"github.com/infraboard/cmdb/apps/bill"
 	"github.com/infraboard/cmdb/provider"
@@ -23,4 +25,9 @@ func (o *BssOperator) QueryBill(req *provider.QueryBillRequest) pager.Pager {
 	p := newPager(o, req.Month)
 	p.SetRate(req.Rate)
 	return p
+}
+
+func (o *BssOperator) QuerySummary(ctx context.Context, req *provider.QueryBillSummaryRequeset) (
+	*bill.SummaryRecordSet, error) {
+	return nil, nil
 }

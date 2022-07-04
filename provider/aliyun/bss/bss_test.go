@@ -16,10 +16,9 @@ var (
 	operator provider.BillOperator
 )
 
-func TestQuery(t *testing.T) {
+func TestQueryBill(t *testing.T) {
 	req := provider.NewQueryBillRequest()
 	req.Month = "2022-05"
-	req.ProductCode = "dysms"
 
 	pager := operator.QueryBill(req)
 	for pager.Next() {
@@ -29,6 +28,12 @@ func TestQuery(t *testing.T) {
 		}
 		fmt.Println(set)
 	}
+}
+
+func TestQuerySummary(t *testing.T) {
+	req := provider.NewQueryBillSummaryRequeset()
+	req.Month = "2022-06"
+	operator.QuerySummary(context.TODO(), req)
 }
 
 func init() {

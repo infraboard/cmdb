@@ -3,11 +3,14 @@ package connectivity
 import (
 	"fmt"
 
-	"github.com/aliyun/alibaba-cloud-sdk-go/services/bssopenapi"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/ecs"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/rds"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/sts"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
+
+	bssopenapi "github.com/alibabacloud-go/bssopenapi-20171214/v2/client"
+	openapi "github.com/alibabacloud-go/darabonba-openapi/client"
+	"github.com/alibabacloud-go/tea/tea"
 )
 
 // NewAliCloudClient client
@@ -50,7 +53,11 @@ func (c *AliCloudClient) BssClient() (*bssopenapi.Client, error) {
 		return c.bssConn, nil
 	}
 
-	client, err := bssopenapi.NewClientWithAccessKey(c.Region, c.AccessKey, c.AccessSecret)
+	client, err := bssopenapi.NewClient(&openapi.Config{
+		AccessKeyId:     tea.String(c.AccessKey),
+		AccessKeySecret: tea.String(c.AccessSecret),
+		Endpoint:        tea.String("business.aliyuncs.com"),
+	})
 	if err != nil {
 		return nil, err
 	}
