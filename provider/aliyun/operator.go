@@ -4,6 +4,7 @@ import (
 	"github.com/caarlos0/env/v6"
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/cmdb/provider/aliyun/bss"
+	"github.com/infraboard/cmdb/provider/aliyun/cms"
 	"github.com/infraboard/cmdb/provider/aliyun/connectivity"
 	"github.com/infraboard/cmdb/provider/aliyun/ecs"
 	"github.com/infraboard/cmdb/provider/aliyun/rds"
@@ -69,6 +70,14 @@ func (o *Operator) BillOperator() provider.BillOperator {
 		panic(err)
 	}
 	return bss.NewBssOperator(c)
+}
+
+func (o *Operator) CmsOperator() provider.CmsOperator {
+	c, err := o.client.CmsClient()
+	if err != nil {
+		panic(err)
+	}
+	return cms.NewCmsOperator(c)
 }
 
 func (o *Operator) RdsOperator() provider.RdsOperator {

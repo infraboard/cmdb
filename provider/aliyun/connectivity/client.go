@@ -9,6 +9,7 @@ import (
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 
 	bssopenapi "github.com/alibabacloud-go/bssopenapi-20171214/v2/client"
+	cms "github.com/alibabacloud-go/cms-20190101/v7/client"
 	openapi "github.com/alibabacloud-go/darabonba-openapi/client"
 	"github.com/alibabacloud-go/tea/tea"
 )
@@ -29,6 +30,7 @@ type AliCloudClient struct {
 
 	ecsConn *ecs.Client
 	rdsConn *rds.Client
+	cmsConn *cms.Client
 	bssConn *bssopenapi.Client
 }
 
@@ -44,7 +46,24 @@ func (c *AliCloudClient) EcsClient() (*ecs.Client, error) {
 	}
 
 	c.ecsConn = client
+	return client, nil
+}
 
+func (c *AliCloudClient) CmsClient() (*cms.Client, error) {
+	if c.cmsConn != nil {
+		return c.cmsConn, nil
+	}
+
+	client, err := cms.NewClient(&openapi.Config{
+		AccessKeyId:     tea.String(c.AccessKey),
+		AccessKeySecret: tea.String(c.AccessSecret),
+		Endpoint:        tea.String("metrics.aliyuncs.com"),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	c.cmsConn = client
 	return client, nil
 }
 
@@ -63,7 +82,6 @@ func (c *AliCloudClient) BssClient() (*bssopenapi.Client, error) {
 	}
 
 	c.bssConn = client
-
 	return client, nil
 }
 
@@ -78,7 +96,6 @@ func (c *AliCloudClient) RdsClient() (*rds.Client, error) {
 	}
 
 	c.rdsConn = client
-
 	return client, nil
 }
 
