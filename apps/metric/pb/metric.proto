@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package infraboard.cmdb.metric;
+option go_package="github.com/infraboard/cmdb/apps/metric";
+
+import "apps/resource/pb/resource.proto";
+
+service RPC {
+}
+
+// 统一多个云商的指标名称
+message Metric {
+    // 资源类型
+    // @gotags: json:"resource_type"
+    resource.Type resource_type = 1;
+    // 指标名称
+    // @gotags: json:"name"
+    string name = 2;
+    // 指标描述
+    // @gotags: json:"describe"
+    string describe =3;
+    // 指标单位
+    // @gotags: json:"unit"
+    string unit =4;
+    // 指标的维度
+    // @gotags: json:"dimensions"
+    repeated string dimensions = 5;
+}

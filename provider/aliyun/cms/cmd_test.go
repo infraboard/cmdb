@@ -20,7 +20,9 @@ func TestDescribeMetric(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	fmt.Println(set)
+	for i := range set.Items {
+		fmt.Println(set.Items[i])
+	}
 }
 
 func init() {
