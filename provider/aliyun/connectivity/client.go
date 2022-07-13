@@ -10,6 +10,7 @@ import (
 	cms "github.com/alibabacloud-go/cms-20190101/v7/client"
 	openapi "github.com/alibabacloud-go/darabonba-openapi/client"
 	ecs "github.com/alibabacloud-go/ecs-20140526/v2/client"
+	redis "github.com/alibabacloud-go/r-kvstore-20150101/v2/client"
 	rds "github.com/alibabacloud-go/rds-20140815/v2/client"
 	"github.com/alibabacloud-go/tea/tea"
 )
@@ -28,10 +29,11 @@ type AliCloudClient struct {
 	AccessSecret string `env:"AL_CLOUD_ACCESS_SECRET"`
 	Region       string `env:"AL_CLOUD_REGION"`
 
-	ecsConn *ecs.Client
-	rdsConn *rds.Client
-	cmsConn *cms.Client
-	bssConn *bssopenapi.Client
+	ecsConn   *ecs.Client
+	rdsConn   *rds.Client
+	cmsConn   *cms.Client
+	redisConn *redis.Client
+	bssConn   *bssopenapi.Client
 }
 
 // EcsClient 客户端
@@ -106,6 +108,25 @@ func (c *AliCloudClient) RdsClient() (*rds.Client, error) {
 	}
 
 	c.rdsConn = client
+	return client, nil
+}
+
+func (c *AliCloudClient) RedisClient() (*redis.Client, error) {
+	if c.redisConn != nil {
+		return c.redisConn, nil
+	}
+
+	client, err := redis.NewClient(&openapi.Config{
+		AccessKeyId:     tea.String(c.AccessKey),
+		AccessKeySecret: tea.String(c.AccessSecret),
+		Endpoint:        tea.String("r-kvstore.aliyuncs.com"),
+		RegionId:        tea.String(c.Region),
+	})
+	if err != nil {
+		return nil, fmt.Errorf("new rds client error, %s", err)
+	}
+
+	c.redisConn = client
 	return client, nil
 }
 
