@@ -3,14 +3,14 @@ package connectivity
 import (
 	"fmt"
 
-	"github.com/aliyun/alibaba-cloud-sdk-go/services/ecs"
-	"github.com/aliyun/alibaba-cloud-sdk-go/services/rds"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/sts"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 
 	bssopenapi "github.com/alibabacloud-go/bssopenapi-20171214/v2/client"
 	cms "github.com/alibabacloud-go/cms-20190101/v7/client"
 	openapi "github.com/alibabacloud-go/darabonba-openapi/client"
+	ecs "github.com/alibabacloud-go/ecs-20140526/v2/client"
+	rds "github.com/alibabacloud-go/rds-20140815/v2/client"
 	"github.com/alibabacloud-go/tea/tea"
 )
 
@@ -40,7 +40,12 @@ func (c *AliCloudClient) EcsClient() (*ecs.Client, error) {
 		return c.ecsConn, nil
 	}
 
-	client, err := ecs.NewClientWithAccessKey(c.Region, c.AccessKey, c.AccessSecret)
+	client, err := ecs.NewClient(&openapi.Config{
+		AccessKeyId:     tea.String(c.AccessKey),
+		AccessKeySecret: tea.String(c.AccessSecret),
+		Endpoint:        tea.String("ecs.aliyuncs.com"),
+		RegionId:        tea.String(c.Region),
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -90,9 +95,14 @@ func (c *AliCloudClient) RdsClient() (*rds.Client, error) {
 		return c.rdsConn, nil
 	}
 
-	client, err := rds.NewClientWithAccessKey(c.Region, c.AccessKey, c.AccessSecret)
+	client, err := rds.NewClient(&openapi.Config{
+		AccessKeyId:     tea.String(c.AccessKey),
+		AccessKeySecret: tea.String(c.AccessSecret),
+		Endpoint:        tea.String("rds.aliyuncs.com"),
+		RegionId:        tea.String(c.Region),
+	})
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("new rds client error, %s", err)
 	}
 
 	c.rdsConn = client
@@ -107,6 +117,7 @@ func (c *AliCloudClient) OssClient() (*oss.Client, error) {
 }
 
 // 获取客户端账号ID
+// 参考: https://next.api.aliyun.com/api/Sts/2015-04-01/GetCallerIdentity
 func (c *AliCloudClient) Account() (string, error) {
 	args := sts.CreateGetCallerIdentityRequest()
 

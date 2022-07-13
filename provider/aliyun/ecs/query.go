@@ -3,7 +3,8 @@ package ecs
 import (
 	"context"
 
-	"github.com/aliyun/alibaba-cloud-sdk-go/services/ecs"
+	ecs "github.com/alibabacloud-go/ecs-20140526/v2/client"
+	"github.com/alibabacloud-go/tea/tea"
 
 	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/cmdb/provider"
@@ -19,9 +20,10 @@ func (o *EcsOperator) query(req *ecs.DescribeInstancesRequest) (*host.HostSet, e
 	if err != nil {
 		return nil, err
 	}
+	req.NextToken = req.NextToken
 
-	set.Total = int64(resp.TotalCount)
-	set.Items = o.transferSet(resp.Instances.Instance).Items
+	set.Total = int64(tea.Int32Value(resp.Body.TotalCount))
+	set.Items = o.transferSet(resp.Body.Instances.Instance).Items
 
 	return set, nil
 }
@@ -33,8 +35,8 @@ func (o *EcsOperator) QueryHost(req *provider.QueryHostRequest) pager.Pager {
 }
 
 func (o *EcsOperator) DescribeHost(ctx context.Context, req *provider.DescribeHostRequest) (*host.Host, error) {
-	r := ecs.CreateDescribeInstancesRequest()
-	r.InstanceIds = `["` + req.Id + `"]`
+	r := &ecs.DescribeInstancesRequest{}
+	r.InstanceIds = tea.String(`["` + req.Id + `"]`)
 	hs, err := o.query(r)
 	if err != nil {
 		return nil, err

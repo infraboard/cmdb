@@ -28,6 +28,12 @@ type QueryRdsRequest struct {
 	Rate float64 `json:"rate"`
 }
 
+func NewDescribeRdsRequest(id string) *DescribeRdsRequest {
+	return &DescribeRdsRequest{
+		Id: id,
+	}
+}
+
 type DescribeRdsRequest struct {
 	Id string `json:"id"`
 }

@@ -3,7 +3,8 @@ package ecs
 import (
 	"time"
 
-	"github.com/aliyun/alibaba-cloud-sdk-go/services/ecs"
+	ecs "github.com/alibabacloud-go/ecs-20140526/v2/client"
+	"github.com/alibabacloud-go/tea/tea"
 
 	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/cmdb/apps/resource"
@@ -26,7 +27,7 @@ type EcsOperator struct {
 	*resource.AccountGetter
 }
 
-func (o *EcsOperator) transferSet(items []ecs.Instance) *host.HostSet {
+func (o *EcsOperator) transferSet(items []*ecs.DescribeInstancesResponseBodyInstancesInstance) *host.HostSet {
 	set := host.NewHostSet()
 	for i := range items {
 		set.Add(o.transferOne(items[i]))
@@ -34,48 +35,48 @@ func (o *EcsOperator) transferSet(items []ecs.Instance) *host.HostSet {
 	return set
 }
 
-func (o *EcsOperator) transferOne(ins ecs.Instance) *host.Host {
+func (o *EcsOperator) transferOne(ins *ecs.DescribeInstancesResponseBodyInstancesInstance) *host.Host {
 	h := host.NewDefaultHost()
 	h.Base.Vendor = resource.Vendor_ALIYUN
-	h.Base.Region = ins.RegionId
-	h.Base.Zone = ins.ZoneId
+	h.Base.Region = tea.StringValue(ins.RegionId)
+	h.Base.Zone = tea.StringValue(ins.ZoneId)
 
-	h.Base.CreateAt = o.parseTime(ins.CreationTime)
-	h.Base.Id = ins.InstanceId
+	h.Base.CreateAt = o.parseTime(tea.StringValue(ins.CreationTime))
+	h.Base.Id = tea.StringValue(ins.InstanceId)
 
-	h.Information.ExpireAt = o.parseTime(ins.ExpiredTime)
-	h.Information.Type = ins.InstanceType
-	h.Information.Name = ins.InstanceName
-	h.Information.Description = ins.Description
-	h.Information.Status = ins.Status
-	h.Information.Tags = o.transferTags(ins.Tags.Tag)
-	h.Information.PublicIp = ins.PublicIpAddress.IpAddress
+	h.Information.ExpireAt = o.parseTime(tea.StringValue(ins.ExpiredTime))
+	h.Information.Type = tea.StringValue(ins.InstanceType)
+	h.Information.Name = tea.StringValue(ins.InstanceName)
+	h.Information.Description = tea.StringValue(ins.Description)
+	h.Information.Status = tea.StringValue(ins.Status)
+	h.Information.Tags = o.transferTags(ins.Tags)
+	h.Information.PublicIp = tea.StringSliceValue(ins.PublicIpAddress.IpAddress)
 	h.Information.PrivateIp = o.parsePrivateIp(ins)
-	h.Information.PayType = ins.InstanceChargeType
+	h.Information.PayType = tea.StringValue(ins.InstanceChargeType)
 	h.Information.SyncAccount = o.GetAccountId()
 
-	h.Describe.Cpu = int64(ins.CPU)
-	h.Describe.Memory = int64(ins.Memory)
-	h.Describe.GpuAmount = int32(ins.GPUAmount)
-	h.Describe.GpuSpec = ins.GPUSpec
-	h.Describe.OsType = ins.OsType
-	h.Describe.OsName = ins.OSName
-	h.Describe.SerialNumber = ins.SerialNumber
-	h.Describe.ImageId = ins.ImageId
-	h.Describe.InternetMaxBandwidthOut = int64(ins.InternetMaxBandwidthOut)
-	h.Describe.InternetMaxBandwidthIn = int64(ins.InternetMaxBandwidthIn)
-	h.Describe.KeyPairName = []string{ins.KeyPairName}
-	h.Describe.SecurityGroups = ins.SecurityGroupIds.SecurityGroupId
+	h.Describe.Cpu = int64(tea.Int32Value(ins.Cpu))
+	h.Describe.Memory = int64(tea.Int32Value(ins.Memory))
+	h.Describe.GpuAmount = tea.Int32Value(ins.GPUAmount)
+	h.Describe.GpuSpec = tea.StringValue(ins.GPUSpec)
+	h.Describe.OsType = tea.StringValue(ins.OSType)
+	h.Describe.OsName = tea.StringValue(ins.OSName)
+	h.Describe.SerialNumber = tea.StringValue(ins.SerialNumber)
+	h.Describe.ImageId = tea.StringValue(ins.ImageId)
+	h.Describe.InternetMaxBandwidthOut = int64(tea.Int32Value(ins.InternetMaxBandwidthOut))
+	h.Describe.InternetMaxBandwidthIn = int64(tea.Int32Value(ins.InternetMaxBandwidthIn))
+	h.Describe.KeyPairName = []string{tea.StringValue(ins.KeyPairName)}
+	h.Describe.SecurityGroups = tea.StringSliceValue(ins.SecurityGroupIds.SecurityGroupId)
 	return h
 }
 
-func (o *EcsOperator) parsePrivateIp(ins ecs.Instance) []string {
+func (o *EcsOperator) parsePrivateIp(ins *ecs.DescribeInstancesResponseBodyInstancesInstance) []string {
 	ips := []string{}
 	// 优先通过网卡查询主私网IP地址
 	for _, nc := range ins.NetworkInterfaces.NetworkInterface {
 		for _, ip := range nc.PrivateIpSets.PrivateIpSet {
-			if ip.Primary {
-				ips = append(ips, ip.PrivateIpAddress)
+			if tea.BoolValue(ip.Primary) {
+				ips = append(ips, tea.StringValue(ip.PrivateIpAddress))
 			}
 		}
 	}
@@ -85,18 +86,22 @@ func (o *EcsOperator) parsePrivateIp(ins ecs.Instance) []string {
 
 	// 查询InnerIpAddress属性
 	if len(ins.InnerIpAddress.IpAddress) > 0 {
-		return ins.InnerIpAddress.IpAddress
+		return tea.StringSliceValue(ins.InnerIpAddress.IpAddress)
 	}
 
 	// 通过专有网络VPC属性查询内网Ip
-	return ins.VpcAttributes.PrivateIpAddress.IpAddress
+	return tea.StringSliceValue(ins.VpcAttributes.PrivateIpAddress.IpAddress)
 }
 
-func (o *EcsOperator) transferTags(tags []ecs.Tag) (ret []*resource.Tag) {
-	for i := range tags {
+func (o *EcsOperator) transferTags(tags *ecs.DescribeInstancesResponseBodyInstancesInstanceTags) (ret []*resource.Tag) {
+	if tags == nil {
+		return nil
+	}
+
+	for i := range tags.Tag {
 		ret = append(ret, resource.NewThirdTag(
-			tags[i].Key,
-			tags[i].Value,
+			tea.StringValue(tags.Tag[i].TagKey),
+			tea.StringValue(tags.Tag[i].TagValue),
 		))
 	}
 	return

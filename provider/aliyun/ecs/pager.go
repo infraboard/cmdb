@@ -3,15 +3,18 @@ package ecs
 import (
 	"context"
 
-	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
-	"github.com/aliyun/alibaba-cloud-sdk-go/services/ecs"
+	ecs "github.com/alibabacloud-go/ecs-20140526/v2/client"
+	"github.com/alibabacloud-go/tea/tea"
+
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 	"github.com/infraboard/mcube/pager"
 )
 
 func newPager(operator *EcsOperator) pager.Pager {
-	req := ecs.CreateDescribeInstancesRequest()
+	req := &ecs.DescribeInstancesRequest{
+		RegionId: operator.client.RegionId,
+	}
 
 	return &ecsPager{
 		BasePager: pager.NewBasePager(),
@@ -41,7 +44,7 @@ func (p *ecsPager) Scan(ctx context.Context, set pager.Set) error {
 
 func (p *ecsPager) nextReq() *ecs.DescribeInstancesRequest {
 	p.log.Debugf("请求第%d页数据", p.PageNumber())
-	p.req.PageNumber = requests.NewInteger(int(p.PageNumber()))
-	p.req.PageSize = requests.NewInteger(int(p.PageSize()))
+	p.req.PageNumber = tea.Int32(int32(p.PageNumber()))
+	p.req.PageSize = tea.Int32(int32(p.PageSize()))
 	return p.req
 }
