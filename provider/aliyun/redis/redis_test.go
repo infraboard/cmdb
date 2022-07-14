@@ -28,6 +28,15 @@ func TestQuery(t *testing.T) {
 	}
 }
 
+func TestDescribe(t *testing.T) {
+	req := provider.NewDescribeRedisRequest("")
+	ins, err := operator.DescribeRedis(context.TODO(), req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(ins)
+}
+
 func init() {
 	zap.DevelopmentSetup()
 	err := aliyun.LoadOperatorFromEnv()

@@ -53,3 +53,24 @@ func (o *RedisOperator) parseTime(t string) int64 {
 
 	return ts.UnixNano() / 1000000
 }
+
+func (o *RedisOperator) transferAttrSet(items *redis.DescribeInstanceAttributeResponseBodyInstances) *cmdbRedis.Set {
+	set := cmdbRedis.NewSet()
+	for i := range items.DBInstanceAttribute {
+		set.Add(o.transferAttrOne(items.DBInstanceAttribute[i]))
+	}
+	return set
+}
+
+func (o *RedisOperator) transferAttrOne(ins *redis.DescribeInstanceAttributeResponseBodyInstancesDBInstanceAttribute) *cmdbRedis.Redis {
+	r := cmdbRedis.NewDefaultRedis()
+
+	b := r.Base
+	b.Vendor = resource.Vendor_ALIYUN
+	b.Region = tea.StringValue(ins.RegionId)
+	b.Zone = tea.StringValue(ins.ZoneId)
+	b.CreateAt = o.parseTime(tea.StringValue(ins.CreateTime))
+	b.Id = tea.StringValue(ins.InstanceId)
+
+	return r
+}

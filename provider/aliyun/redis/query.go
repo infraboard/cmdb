@@ -1,9 +1,12 @@
 package redis
 
 import (
+	"context"
+
 	redis "github.com/alibabacloud-go/r-kvstore-20150101/v2/client"
 	"github.com/alibabacloud-go/tea/tea"
 	cmdbRedis "github.com/infraboard/cmdb/apps/redis"
+	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/pager"
 
 	"github.com/infraboard/cmdb/provider"
@@ -27,4 +30,22 @@ func (o *RedisOperator) QueryRedis(req *provider.QueryRedisRequest) pager.Pager 
 	p := newPager(o)
 	p.SetRate(float64(req.Rate))
 	return p
+}
+
+func (o *RedisOperator) DescribeRedis(ctx context.Context, req *provider.DescribeRedisRequest) (*cmdbRedis.Redis, error) {
+	descReq := &redis.DescribeInstanceAttributeRequest{
+		InstanceId: &req.Id,
+	}
+
+	detail, err := o.client.DescribeInstanceAttribute(descReq)
+	if err != nil {
+		return nil, err
+	}
+
+	set := o.transferAttrSet(detail.Body.Instances)
+	if set.Length() == 0 {
+		return nil, exception.NewNotFound("ins %s not found", req.Id)
+	}
+
+	return set.Items[0], nil
 }
