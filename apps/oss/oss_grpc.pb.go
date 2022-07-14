@@ -22,8 +22,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ServiceClient interface {
-	SyncOSS(ctx context.Context, in *OSS, opts ...grpc.CallOption) (*OSS, error)
-	QueryOSS(ctx context.Context, in *QueryOSSRequest, opts ...grpc.CallOption) (*Set, error)
+	SyncBucket(ctx context.Context, in *Bucket, opts ...grpc.CallOption) (*Bucket, error)
+	QueryBucket(ctx context.Context, in *QueryOSSRequest, opts ...grpc.CallOption) (*BucketSet, error)
 }
 
 type serviceClient struct {
@@ -34,18 +34,18 @@ func NewServiceClient(cc grpc.ClientConnInterface) ServiceClient {
 	return &serviceClient{cc}
 }
 
-func (c *serviceClient) SyncOSS(ctx context.Context, in *OSS, opts ...grpc.CallOption) (*OSS, error) {
-	out := new(OSS)
-	err := c.cc.Invoke(ctx, "/infraboard.cmdb.oss.Service/SyncOSS", in, out, opts...)
+func (c *serviceClient) SyncBucket(ctx context.Context, in *Bucket, opts ...grpc.CallOption) (*Bucket, error) {
+	out := new(Bucket)
+	err := c.cc.Invoke(ctx, "/infraboard.cmdb.oss.Service/SyncBucket", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *serviceClient) QueryOSS(ctx context.Context, in *QueryOSSRequest, opts ...grpc.CallOption) (*Set, error) {
-	out := new(Set)
-	err := c.cc.Invoke(ctx, "/infraboard.cmdb.oss.Service/QueryOSS", in, out, opts...)
+func (c *serviceClient) QueryBucket(ctx context.Context, in *QueryOSSRequest, opts ...grpc.CallOption) (*BucketSet, error) {
+	out := new(BucketSet)
+	err := c.cc.Invoke(ctx, "/infraboard.cmdb.oss.Service/QueryBucket", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -56,8 +56,8 @@ func (c *serviceClient) QueryOSS(ctx context.Context, in *QueryOSSRequest, opts 
 // All implementations must embed UnimplementedServiceServer
 // for forward compatibility
 type ServiceServer interface {
-	SyncOSS(context.Context, *OSS) (*OSS, error)
-	QueryOSS(context.Context, *QueryOSSRequest) (*Set, error)
+	SyncBucket(context.Context, *Bucket) (*Bucket, error)
+	QueryBucket(context.Context, *QueryOSSRequest) (*BucketSet, error)
 	mustEmbedUnimplementedServiceServer()
 }
 
@@ -65,11 +65,11 @@ type ServiceServer interface {
 type UnimplementedServiceServer struct {
 }
 
-func (UnimplementedServiceServer) SyncOSS(context.Context, *OSS) (*OSS, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SyncOSS not implemented")
+func (UnimplementedServiceServer) SyncBucket(context.Context, *Bucket) (*Bucket, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SyncBucket not implemented")
 }
-func (UnimplementedServiceServer) QueryOSS(context.Context, *QueryOSSRequest) (*Set, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method QueryOSS not implemented")
+func (UnimplementedServiceServer) QueryBucket(context.Context, *QueryOSSRequest) (*BucketSet, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method QueryBucket not implemented")
 }
 func (UnimplementedServiceServer) mustEmbedUnimplementedServiceServer() {}
 
@@ -84,38 +84,38 @@ func RegisterServiceServer(s grpc.ServiceRegistrar, srv ServiceServer) {
 	s.RegisterService(&Service_ServiceDesc, srv)
 }
 
-func _Service_SyncOSS_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(OSS)
+func _Service_SyncBucket_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Bucket)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ServiceServer).SyncOSS(ctx, in)
+		return srv.(ServiceServer).SyncBucket(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/infraboard.cmdb.oss.Service/SyncOSS",
+		FullMethod: "/infraboard.cmdb.oss.Service/SyncBucket",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).SyncOSS(ctx, req.(*OSS))
+		return srv.(ServiceServer).SyncBucket(ctx, req.(*Bucket))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Service_QueryOSS_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Service_QueryBucket_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(QueryOSSRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ServiceServer).QueryOSS(ctx, in)
+		return srv.(ServiceServer).QueryBucket(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/infraboard.cmdb.oss.Service/QueryOSS",
+		FullMethod: "/infraboard.cmdb.oss.Service/QueryBucket",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).QueryOSS(ctx, req.(*QueryOSSRequest))
+		return srv.(ServiceServer).QueryBucket(ctx, req.(*QueryOSSRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -128,12 +128,12 @@ var Service_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SyncOSS",
-			Handler:    _Service_SyncOSS_Handler,
+			MethodName: "SyncBucket",
+			Handler:    _Service_SyncBucket_Handler,
 		},
 		{
-			MethodName: "QueryOSS",
-			Handler:    _Service_QueryOSS_Handler,
+			MethodName: "QueryBucket",
+			Handler:    _Service_QueryBucket_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
