@@ -6,6 +6,7 @@ option go_package="github.com/infraboard/cmdb/apps/metric";
 import "apps/resource/pb/resource.proto";
 
 service RPC {
+    rpc QueryMetric(QueryMetricRequest) returns(MetricSet);
 }
 
 // 统一多个云商的指标名称
@@ -16,13 +17,31 @@ message Metric {
     // 指标名称
     // @gotags: json:"name"
     string name = 2;
+    // 指标映射名称, 比如 aliyun:xxx@rds
+    // @gotags: json:"mapping_name"
+    map<string,string> mapping_name = 3;
     // 指标描述
     // @gotags: json:"describe"
-    string describe =3;
+    string describe =4;
     // 指标单位
     // @gotags: json:"unit"
-    string unit =4;
+    string unit =5;
     // 指标的维度
     // @gotags: json:"dimensions"
-    repeated string dimensions = 5;
+    repeated string dimensions = 6;
+}
+
+message MetricSet {
+    // 总数
+    // @gotags: json:"total"
+    int64 total = 1;
+    // 指标列表
+    // @gotags: json:"items"
+    repeated Metric items = 2;
+}
+
+message QueryMetricRequest {
+    // 资源类型
+    // @gotags: json:"resource_type"
+    resource.Type resource_type = 1;
 }

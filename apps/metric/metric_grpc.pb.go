@@ -7,7 +7,10 @@
 package metric
 
 import (
+	context "context"
 	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -19,6 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type RPCClient interface {
+	QueryMetric(ctx context.Context, in *QueryMetricRequest, opts ...grpc.CallOption) (*MetricSet, error)
 }
 
 type rPCClient struct {
@@ -29,10 +33,20 @@ func NewRPCClient(cc grpc.ClientConnInterface) RPCClient {
 	return &rPCClient{cc}
 }
 
+func (c *rPCClient) QueryMetric(ctx context.Context, in *QueryMetricRequest, opts ...grpc.CallOption) (*MetricSet, error) {
+	out := new(MetricSet)
+	err := c.cc.Invoke(ctx, "/infraboard.cmdb.metric.RPC/QueryMetric", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // RPCServer is the server API for RPC service.
 // All implementations must embed UnimplementedRPCServer
 // for forward compatibility
 type RPCServer interface {
+	QueryMetric(context.Context, *QueryMetricRequest) (*MetricSet, error)
 	mustEmbedUnimplementedRPCServer()
 }
 
@@ -40,6 +54,9 @@ type RPCServer interface {
 type UnimplementedRPCServer struct {
 }
 
+func (UnimplementedRPCServer) QueryMetric(context.Context, *QueryMetricRequest) (*MetricSet, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method QueryMetric not implemented")
+}
 func (UnimplementedRPCServer) mustEmbedUnimplementedRPCServer() {}
 
 // UnsafeRPCServer may be embedded to opt out of forward compatibility for this service.
@@ -53,13 +70,36 @@ func RegisterRPCServer(s grpc.ServiceRegistrar, srv RPCServer) {
 	s.RegisterService(&RPC_ServiceDesc, srv)
 }
 
+func _RPC_QueryMetric_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryMetricRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RPCServer).QueryMetric(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/infraboard.cmdb.metric.RPC/QueryMetric",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RPCServer).QueryMetric(ctx, req.(*QueryMetricRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // RPC_ServiceDesc is the grpc.ServiceDesc for RPC service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var RPC_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "infraboard.cmdb.metric.RPC",
 	HandlerType: (*RPCServer)(nil),
-	Methods:     []grpc.MethodDesc{},
-	Streams:     []grpc.StreamDesc{},
-	Metadata:    "apps/metric/pb/metric.proto",
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "QueryMetric",
+			Handler:    _RPC_QueryMetric_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "apps/metric/pb/metric.proto",
 }
