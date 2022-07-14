@@ -22,6 +22,7 @@ enum Vendor {
 enum Type {
     HOST = 0;
     RDS = 1;
+    REDIS = 2;
     BILL = 99;
 }
 

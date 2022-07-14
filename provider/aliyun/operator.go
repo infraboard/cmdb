@@ -8,6 +8,7 @@ import (
 	"github.com/infraboard/cmdb/provider/aliyun/connectivity"
 	"github.com/infraboard/cmdb/provider/aliyun/ecs"
 	"github.com/infraboard/cmdb/provider/aliyun/rds"
+	"github.com/infraboard/cmdb/provider/aliyun/redis"
 )
 
 var (
@@ -86,4 +87,12 @@ func (o *Operator) RdsOperator() provider.RdsOperator {
 		panic(err)
 	}
 	return rds.NewRdsOperator(c)
+}
+
+func (o *Operator) RedisOperator() provider.RedisOperator {
+	c, err := o.client.RedisClient()
+	if err != nil {
+		panic(err)
+	}
+	return redis.NewRedisOperator(c)
 }

@@ -20,7 +20,7 @@ func (o *EcsOperator) query(req *ecs.DescribeInstancesRequest) (*host.HostSet, e
 	if err != nil {
 		return nil, err
 	}
-	req.NextToken = req.NextToken
+	req.NextToken = resp.Body.NextToken
 
 	set.Total = int64(tea.Int32Value(resp.Body.TotalCount))
 	set.Items = o.transferSet(resp.Body.Instances.Instance).Items
