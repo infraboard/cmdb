@@ -1,6 +1,8 @@
 package oss
 
 import (
+	"fmt"
+
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	cmdbOss "github.com/infraboard/cmdb/apps/oss"
 	"github.com/infraboard/cmdb/apps/resource"
@@ -34,7 +36,13 @@ func (o *OssOperator) transferBucket(ins oss.BucketProperties) *cmdbOss.Bucket {
 	b := r.Base
 	b.Vendor = resource.Vendor_ALIYUN
 	b.Region = ins.Location
-	b.Id = ins.Name
+	b.Id = fmt.Sprintf("%s.%s", ins.Location, ins.Name)
+	b.CreateAt = ins.CreationDate.UnixMilli()
 
+	info := r.Information
+	info.Name = ins.Name
+
+	desc := r.Describe
+	desc.StorageClass = ins.StorageClass
 	return r
 }

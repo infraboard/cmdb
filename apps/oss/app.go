@@ -36,7 +36,7 @@ func (s *BucketSet) Length() int64 {
 func NewDefaultBucket() *Bucket {
 	return &Bucket{
 		Base: &resource.Base{
-			ResourceType: resource.Type_RDS,
+			ResourceType: resource.Type_BUCKET,
 		},
 		Information: &resource.Information{},
 		Describe:    &Describe{},

@@ -24,6 +24,9 @@ message Bucket {
 }
 
 message Describe {
+    // 存储类型
+    // @gotags: json:"storage_class"
+    string storage_class = 1;
 }
 
 message BucketSet {

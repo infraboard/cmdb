@@ -7,6 +7,7 @@ require (
 	github.com/alibabacloud-go/bssopenapi-20171214/v2 v2.0.6
 	github.com/alibabacloud-go/cms-20190101/v7 v7.0.45
 	github.com/alibabacloud-go/darabonba-openapi v0.1.18
+	github.com/alibabacloud-go/domain-20180129 v1.0.1
 	github.com/alibabacloud-go/ecs-20140526/v2 v2.1.2
 	github.com/alibabacloud-go/r-kvstore-20150101/v2 v2.20.5
 	github.com/alibabacloud-go/rds-20140815/v2 v2.1.0

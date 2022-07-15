@@ -9,6 +9,7 @@ import (
 	bssopenapi "github.com/alibabacloud-go/bssopenapi-20171214/v2/client"
 	cms "github.com/alibabacloud-go/cms-20190101/v7/client"
 	openapi "github.com/alibabacloud-go/darabonba-openapi/client"
+	domain "github.com/alibabacloud-go/domain-20180129/client"
 	ecs "github.com/alibabacloud-go/ecs-20140526/v2/client"
 	redis "github.com/alibabacloud-go/r-kvstore-20150101/v2/client"
 	rds "github.com/alibabacloud-go/rds-20140815/v2/client"
@@ -33,6 +34,7 @@ type AliCloudClient struct {
 	rdsConn   *rds.Client
 	cmsConn   *cms.Client
 	redisConn *redis.Client
+	domConn   *domain.Client
 	bssConn   *bssopenapi.Client
 }
 
@@ -89,6 +91,24 @@ func (c *AliCloudClient) BssClient() (*bssopenapi.Client, error) {
 	}
 
 	c.bssConn = client
+	return client, nil
+}
+
+func (c *AliCloudClient) DomainClient() (*domain.Client, error) {
+	if c.domConn != nil {
+		return c.domConn, nil
+	}
+
+	client, err := domain.NewClient(&openapi.Config{
+		AccessKeyId:     tea.String(c.AccessKey),
+		AccessKeySecret: tea.String(c.AccessSecret),
+		Endpoint:        tea.String("domain.aliyuncs.com"),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	c.domConn = client
 	return client, nil
 }
 

@@ -8,7 +8,7 @@ import "github.com/infraboard/mcube/pb/page/page.proto";
 
 service Service {
     rpc SyncDomain(Domain) returns(Domain) {}
-    rpc QueryDomain(QueryDomainRequest) returns(Set) {}
+    rpc QueryDomain(QueryDomainRequest) returns(DomainSet) {}
 }
 
 message Domain {
@@ -42,7 +42,7 @@ message Describe {
     int64 ttl = 7;
 }
 
-message Set {
+message DomainSet {
     // 总数量
     // @gotags: json:"total"
     int64 total = 1;

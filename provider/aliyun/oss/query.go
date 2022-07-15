@@ -1,8 +1,6 @@
 package oss
 
 import (
-	"fmt"
-
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	cmdbOss "github.com/infraboard/cmdb/apps/oss"
 	"github.com/infraboard/cmdb/provider"
@@ -25,7 +23,6 @@ func (o *OssOperator) query(req *listBucketRequest) (*cmdbOss.BucketSet, error) 
 	req.marker = resp.Marker
 
 	set := cmdbOss.NewBucketSet()
-	fmt.Println(resp)
 	set.Items = o.transferSet(resp).Items
 	return set, nil
 }

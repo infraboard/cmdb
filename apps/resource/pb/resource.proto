@@ -23,6 +23,7 @@ enum Type {
     HOST = 0;
     RDS = 1;
     REDIS = 2;
+    BUCKET = 3;
     BILL = 99;
 }
 
