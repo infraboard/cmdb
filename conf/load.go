@@ -31,11 +31,17 @@ func LoadConfigFromToml(filePath string) error {
 
 // LoadConfigFromEnv 从环境变量中加载配置
 func LoadConfigFromEnv() error {
-	cfg := newConfig()
-	if err := env.Parse(cfg); err != nil {
+	var cfg *Config
+	if global == nil {
+		cfg = NewDefaultConfig()
+	} else {
+		cfg = global
+	}
+	err := env.Parse(cfg)
+	if err != nil {
 		return err
 	}
-	// 加载全局配置单例
-	cfg.InitGloabl()
-	return nil
+	return cfg.InitGloabl()
 }
+
+
