@@ -8,7 +8,7 @@ import (
 	"github.com/infraboard/mcube/http/response"
 )
 
-type ResourceServer interface {
+type ResourceService interface {
 	Search(context.Context, *resource.SearchRequest) (*resource.ResourceSet, error)
 	QueryTag(context.Context, *resource.QueryTagRequest) (*resource.TagSet, error)
 	UpdateTag(context.Context, *resource.UpdateTagRequest) (*resource.Resource, error)

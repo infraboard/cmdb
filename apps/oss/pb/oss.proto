@@ -8,7 +8,7 @@ import "github.com/infraboard/mcube/pb/page/page.proto";
 
 service Service {
     rpc SyncBucket(Bucket) returns(Bucket) {}
-    rpc QueryBucket(QueryOSSRequest) returns(BucketSet) {}
+    rpc QueryBucket(QueryBucketRequest) returns(BucketSet) {}
 }
 
 message Bucket {
@@ -38,7 +38,7 @@ message BucketSet {
     repeated Bucket items = 2;
 }
 
-message QueryOSSRequest {
+message QueryBucketRequest {
     // 分页参数
     // @gotags: json:"page"
     infraboard.mcube.page.PageRequest page = 1;

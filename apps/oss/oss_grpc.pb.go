@@ -23,7 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ServiceClient interface {
 	SyncBucket(ctx context.Context, in *Bucket, opts ...grpc.CallOption) (*Bucket, error)
-	QueryBucket(ctx context.Context, in *QueryOSSRequest, opts ...grpc.CallOption) (*BucketSet, error)
+	QueryBucket(ctx context.Context, in *QueryBucketRequest, opts ...grpc.CallOption) (*BucketSet, error)
 }
 
 type serviceClient struct {
@@ -43,7 +43,7 @@ func (c *serviceClient) SyncBucket(ctx context.Context, in *Bucket, opts ...grpc
 	return out, nil
 }
 
-func (c *serviceClient) QueryBucket(ctx context.Context, in *QueryOSSRequest, opts ...grpc.CallOption) (*BucketSet, error) {
+func (c *serviceClient) QueryBucket(ctx context.Context, in *QueryBucketRequest, opts ...grpc.CallOption) (*BucketSet, error) {
 	out := new(BucketSet)
 	err := c.cc.Invoke(ctx, "/infraboard.cmdb.oss.Service/QueryBucket", in, out, opts...)
 	if err != nil {
@@ -57,7 +57,7 @@ func (c *serviceClient) QueryBucket(ctx context.Context, in *QueryOSSRequest, op
 // for forward compatibility
 type ServiceServer interface {
 	SyncBucket(context.Context, *Bucket) (*Bucket, error)
-	QueryBucket(context.Context, *QueryOSSRequest) (*BucketSet, error)
+	QueryBucket(context.Context, *QueryBucketRequest) (*BucketSet, error)
 	mustEmbedUnimplementedServiceServer()
 }
 
@@ -68,7 +68,7 @@ type UnimplementedServiceServer struct {
 func (UnimplementedServiceServer) SyncBucket(context.Context, *Bucket) (*Bucket, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SyncBucket not implemented")
 }
-func (UnimplementedServiceServer) QueryBucket(context.Context, *QueryOSSRequest) (*BucketSet, error) {
+func (UnimplementedServiceServer) QueryBucket(context.Context, *QueryBucketRequest) (*BucketSet, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryBucket not implemented")
 }
 func (UnimplementedServiceServer) mustEmbedUnimplementedServiceServer() {}
@@ -103,7 +103,7 @@ func _Service_SyncBucket_Handler(srv interface{}, ctx context.Context, dec func(
 }
 
 func _Service_QueryBucket_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryOSSRequest)
+	in := new(QueryBucketRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -115,7 +115,7 @@ func _Service_QueryBucket_Handler(srv interface{}, ctx context.Context, dec func
 		FullMethod: "/infraboard.cmdb.oss.Service/QueryBucket",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).QueryBucket(ctx, req.(*QueryOSSRequest))
+		return srv.(ServiceServer).QueryBucket(ctx, req.(*QueryBucketRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
