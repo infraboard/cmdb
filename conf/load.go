@@ -33,7 +33,7 @@ func LoadConfigFromToml(filePath string) error {
 func LoadConfigFromEnv() error {
 	var cfg *Config
 	if global == nil {
-		cfg = NewDefaultConfig()
+		cfg = newConfig()
 	} else {
 		cfg = global
 	}
