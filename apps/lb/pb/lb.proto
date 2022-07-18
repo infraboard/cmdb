@@ -1,17 +1,17 @@
 syntax = "proto3";
 
 package infraboard.cmdb.slb;
-option go_package="github.com/infraboard/cmdb/apps/slb";
+option go_package="github.com/infraboard/cmdb/apps/lb";
 
 import "apps/resource/pb/resource.proto";
 import "github.com/infraboard/mcube/pb/page/page.proto";
 
 service Service {
-    rpc SyncSLB(SLB) returns(SLB) {}
-    rpc QuerySLB(QuerySLBRequest) returns(Set) {}
+    rpc SyncSLB(LB) returns(LB) {}
+    rpc QuerySLB(QuerySLBRequest) returns(LBSet) {}
 }
 
-message SLB {
+message LB {
     infraboard.cmdb.resource.Base base = 1;
     infraboard.cmdb.resource.Information information = 2;
     Describe describe = 3;
@@ -32,9 +32,9 @@ message Describe {
     string network_type = 4;
 }
 
-message Set {
+message LBSet {
     // 列表项
-    repeated SLB items = 1;
+    repeated LB items = 1;
     // 总数量
     int64 total = 2;
 }
