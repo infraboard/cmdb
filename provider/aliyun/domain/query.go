@@ -6,6 +6,6 @@ import (
 
 //
 // 参考: https://next.api.aliyun.com/api/Domain/2018-01-29/QueryDomainByDomainName?lang=GO&params={}
-func (o *DomainOperator) Query() (*domain.DomainSet, error) {
+func (o *DomainOperator) QueryDomain() (*domain.DomainSet, error) {
 	return nil, nil
 }

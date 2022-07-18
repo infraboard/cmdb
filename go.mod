@@ -11,6 +11,7 @@ require (
 	github.com/alibabacloud-go/ecs-20140526/v2 v2.1.2
 	github.com/alibabacloud-go/r-kvstore-20150101/v2 v2.20.5
 	github.com/alibabacloud-go/rds-20140815/v2 v2.1.0
+	github.com/alibabacloud-go/slb-20140515/v3 v3.3.16
 	github.com/alibabacloud-go/tea v1.1.17
 	github.com/aliyun/alibaba-cloud-sdk-go v1.61.1662
 	github.com/aliyun/aliyun-oss-go-sdk v2.2.2+incompatible
