@@ -17,8 +17,8 @@ const (
 
 var (
 	CrendentialTypes = []utils.EnumDescribe{
-		{Value: credential.Type_API_KEY.String(), Describe: "API凭证"},
-		{Value: credential.Type_PASSWORD.String(), Describe: "用户名密码"},
+		{Value: credential.TYPE_API_KEY.String(), Describe: "API凭证"},
+		{Value: credential.TYPE_PASSWORD.String(), Describe: "用户名密码"},
 	}
 
 	Vendors = []utils.EnumDescribe{

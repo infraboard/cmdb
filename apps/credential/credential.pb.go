@@ -22,49 +22,49 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type Type int32
+type TYPE int32
 
 const (
-	Type_API_KEY  Type = 0
-	Type_PASSWORD Type = 1
+	TYPE_API_KEY  TYPE = 0
+	TYPE_PASSWORD TYPE = 1
 )
 
-// Enum value maps for Type.
+// Enum value maps for TYPE.
 var (
-	Type_name = map[int32]string{
+	TYPE_name = map[int32]string{
 		0: "API_KEY",
 		1: "PASSWORD",
 	}
-	Type_value = map[string]int32{
+	TYPE_value = map[string]int32{
 		"API_KEY":  0,
 		"PASSWORD": 1,
 	}
 )
 
-func (x Type) Enum() *Type {
-	p := new(Type)
+func (x TYPE) Enum() *TYPE {
+	p := new(TYPE)
 	*p = x
 	return p
 }
 
-func (x Type) String() string {
+func (x TYPE) String() string {
 	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
 }
 
-func (Type) Descriptor() protoreflect.EnumDescriptor {
+func (TYPE) Descriptor() protoreflect.EnumDescriptor {
 	return file_apps_credential_pb_credential_proto_enumTypes[0].Descriptor()
 }
 
-func (Type) Type() protoreflect.EnumType {
+func (TYPE) Type() protoreflect.EnumType {
 	return &file_apps_credential_pb_credential_proto_enumTypes[0]
 }
 
-func (x Type) Number() protoreflect.EnumNumber {
+func (x TYPE) Number() protoreflect.EnumNumber {
 	return protoreflect.EnumNumber(x)
 }
 
-// Deprecated: Use Type.Descriptor instead.
-func (Type) EnumDescriptor() ([]byte, []int) {
+// Deprecated: Use TYPE.Descriptor instead.
+func (TYPE) EnumDescriptor() ([]byte, []int) {
 	return file_apps_credential_pb_credential_proto_rawDescGZIP(), []int{0}
 }
 
@@ -84,7 +84,7 @@ type CreateSecretRequest struct {
 	AllowRegions []string `protobuf:"bytes,3,rep,name=allow_regions,json=allowRegions,proto3" json:"allow_regions"`
 	// 凭证类型
 	// @gotags: json:"crendential_type"
-	CrendentialType Type `protobuf:"varint,4,opt,name=crendential_type,json=crendentialType,proto3,enum=infraboard.cmdb.credential.Type" json:"crendential_type"`
+	CrendentialType TYPE `protobuf:"varint,4,opt,name=crendential_type,json=crendentialType,proto3,enum=infraboard.cmdb.credential.TYPE" json:"crendential_type"`
 	// 服务地址, 云商不用填写
 	// @gotags: json:"address"
 	Address string `protobuf:"bytes,5,opt,name=address,proto3" json:"address"`
@@ -158,11 +158,11 @@ func (x *CreateSecretRequest) GetAllowRegions() []string {
 	return nil
 }
 
-func (x *CreateSecretRequest) GetCrendentialType() Type {
+func (x *CreateSecretRequest) GetCrendentialType() TYPE {
 	if x != nil {
 		return x.CrendentialType
 	}
-	return Type_API_KEY
+	return TYPE_API_KEY
 }
 
 func (x *CreateSecretRequest) GetAddress() string {
@@ -531,7 +531,7 @@ var file_apps_credential_pb_credential_proto_rawDesc = []byte{
 	0x72, 0x65, 0x6e, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x18,
 	0x04, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x20, 0x2e, 0x69, 0x6e, 0x66, 0x72, 0x61, 0x62, 0x6f, 0x61,
 	0x72, 0x64, 0x2e, 0x63, 0x6d, 0x64, 0x62, 0x2e, 0x63, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69,
-	0x61, 0x6c, 0x2e, 0x54, 0x79, 0x70, 0x65, 0x52, 0x0f, 0x63, 0x72, 0x65, 0x6e, 0x64, 0x65, 0x6e,
+	0x61, 0x6c, 0x2e, 0x54, 0x59, 0x50, 0x45, 0x52, 0x0f, 0x63, 0x72, 0x65, 0x6e, 0x64, 0x65, 0x6e,
 	0x74, 0x69, 0x61, 0x6c, 0x54, 0x79, 0x70, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x61, 0x64, 0x64, 0x72,
 	0x65, 0x73, 0x73, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x64, 0x64, 0x72, 0x65,
 	0x73, 0x73, 0x12, 0x17, 0x0a, 0x07, 0x61, 0x70, 0x69, 0x5f, 0x6b, 0x65, 0x79, 0x18, 0x06, 0x20,
@@ -572,7 +572,7 @@ var file_apps_credential_pb_credential_proto_rawDesc = []byte{
 	0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x22, 0x25, 0x0a, 0x13, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65,
 	0x53, 0x65, 0x63, 0x72, 0x65, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a,
 	0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x2a, 0x21, 0x0a,
-	0x04, 0x54, 0x79, 0x70, 0x65, 0x12, 0x0b, 0x0a, 0x07, 0x41, 0x50, 0x49, 0x5f, 0x4b, 0x45, 0x59,
+	0x04, 0x54, 0x59, 0x50, 0x45, 0x12, 0x0b, 0x0a, 0x07, 0x41, 0x50, 0x49, 0x5f, 0x4b, 0x45, 0x59,
 	0x10, 0x00, 0x12, 0x0c, 0x0a, 0x08, 0x50, 0x41, 0x53, 0x53, 0x57, 0x4f, 0x52, 0x44, 0x10, 0x01,
 	0x32, 0xa2, 0x03, 0x0a, 0x07, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x63, 0x0a, 0x0c,
 	0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x53, 0x65, 0x63, 0x72, 0x65, 0x74, 0x12, 0x2f, 0x2e, 0x69,
@@ -621,7 +621,7 @@ func file_apps_credential_pb_credential_proto_rawDescGZIP() []byte {
 var file_apps_credential_pb_credential_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_apps_credential_pb_credential_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_apps_credential_pb_credential_proto_goTypes = []interface{}{
-	(Type)(0),                     // 0: infraboard.cmdb.credential.Type
+	(TYPE)(0),                     // 0: infraboard.cmdb.credential.TYPE
 	(*CreateSecretRequest)(nil),   // 1: infraboard.cmdb.credential.CreateSecretRequest
 	(*Secret)(nil),                // 2: infraboard.cmdb.credential.Secret
 	(*QuerySecretRequest)(nil),    // 3: infraboard.cmdb.credential.QuerySecretRequest
@@ -633,7 +633,7 @@ var file_apps_credential_pb_credential_proto_goTypes = []interface{}{
 }
 var file_apps_credential_pb_credential_proto_depIdxs = []int32{
 	7, // 0: infraboard.cmdb.credential.CreateSecretRequest.vendor:type_name -> infraboard.cmdb.resource.Vendor
-	0, // 1: infraboard.cmdb.credential.CreateSecretRequest.crendential_type:type_name -> infraboard.cmdb.credential.Type
+	0, // 1: infraboard.cmdb.credential.CreateSecretRequest.crendential_type:type_name -> infraboard.cmdb.credential.TYPE
 	1, // 2: infraboard.cmdb.credential.Secret.data:type_name -> infraboard.cmdb.credential.CreateSecretRequest
 	8, // 3: infraboard.cmdb.credential.QuerySecretRequest.page:type_name -> infraboard.mcube.page.PageRequest
 	2, // 4: infraboard.cmdb.credential.SecretSet.items:type_name -> infraboard.cmdb.credential.Secret
