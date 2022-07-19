@@ -5,19 +5,14 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-
 	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/cmdb/provider"
-	"github.com/infraboard/cmdb/provider/txyun/connectivity"
-	op "github.com/infraboard/cmdb/provider/txyun/cvm"
-	"github.com/infraboard/cmdb/utils"
+	"github.com/infraboard/cmdb/provider/txyun"
 	"github.com/infraboard/mcube/logger/zap"
-	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 )
 
 var (
-	operator *op.CVMOperator
+	operator provider.HostOperator
 )
 
 func TestQuery(t *testing.T) {
@@ -32,38 +27,38 @@ func TestQuery(t *testing.T) {
 	}
 }
 
-func TestInquiryPrice(t *testing.T) {
-	should := assert.New(t)
+// func TestInquiryPrice(t *testing.T) {
+// 	should := assert.New(t)
 
-	req := cvm.NewInquiryPriceRunInstancesRequest()
-	req.Placement = &cvm.Placement{
-		Zone: utils.StringPtr("ap-shanghai-2"),
-	}
-	req.ImageId = utils.StringPtr("img-l5eqiljn")
-	req.InstanceType = utils.StringPtr("S4.SMALL1")
-	req.InstanceChargeType = utils.StringPtr("SPOTPAID")
-	err := operator.InquiryPrice(req)
-	should.NoError(err)
-}
+// 	req := cvm.NewInquiryPriceRunInstancesRequest()
+// 	req.Placement = &cvm.Placement{
+// 		Zone: utils.StringPtr("ap-shanghai-2"),
+// 	}
+// 	req.ImageId = utils.StringPtr("img-l5eqiljn")
+// 	req.InstanceType = utils.StringPtr("S4.SMALL1")
+// 	req.InstanceChargeType = utils.StringPtr("SPOTPAID")
+// 	err := operator.InquiryPrice(req)
+// 	should.NoError(err)
+// }
 
-func TestDescribeZones(t *testing.T) {
-	operator.DescribeZones()
-}
+// func TestDescribeZones(t *testing.T) {
+// 	operator.DescribeZones()
+// }
 
-func TestDescribeInstanceType(t *testing.T) {
-	operator.DescribeInstanceType()
-}
+// func TestDescribeInstanceType(t *testing.T) {
+// 	operator.DescribeInstanceType()
+// }
 
 func TestCreate(t *testing.T) {
 }
 
 func init() {
 	zap.DevelopmentSetup()
-	err := connectivity.LoadClientFromEnv()
+
+	err := txyun.LoadOperatorFromEnv()
 	if err != nil {
 		panic(err)
 	}
 
-	client := connectivity.C()
-	operator = op.NewCVMOperator(client.CvmClient())
+	operator = txyun.O().HostOperator()
 }

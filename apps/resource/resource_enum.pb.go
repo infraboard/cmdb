@@ -144,24 +144,24 @@ func (t *UsageMode) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// ParseTagTypeFromString Parse TagType from string
-func ParseTagTypeFromString(str string) (TagType, error) {
+// ParseTAG_TYPEFromString Parse TAG_TYPE from string
+func ParseTAG_TYPEFromString(str string) (TAG_TYPE, error) {
 	key := strings.Trim(string(str), `"`)
-	v, ok := TagType_value[strings.ToUpper(key)]
+	v, ok := TAG_TYPE_value[strings.ToUpper(key)]
 	if !ok {
-		return 0, fmt.Errorf("unknown TagType: %s", str)
+		return 0, fmt.Errorf("unknown TAG_TYPE: %s", str)
 	}
 
-	return TagType(v), nil
+	return TAG_TYPE(v), nil
 }
 
 // Equal type compare
-func (t TagType) Equal(target TagType) bool {
+func (t TAG_TYPE) Equal(target TAG_TYPE) bool {
 	return t == target
 }
 
 // IsIn todo
-func (t TagType) IsIn(targets ...TagType) bool {
+func (t TAG_TYPE) IsIn(targets ...TAG_TYPE) bool {
 	for _, target := range targets {
 		if t.Equal(target) {
 			return true
@@ -172,7 +172,7 @@ func (t TagType) IsIn(targets ...TagType) bool {
 }
 
 // MarshalJSON todo
-func (t TagType) MarshalJSON() ([]byte, error) {
+func (t TAG_TYPE) MarshalJSON() ([]byte, error) {
 	b := bytes.NewBufferString(`"`)
 	b.WriteString(strings.ToUpper(t.String()))
 	b.WriteString(`"`)
@@ -180,8 +180,8 @@ func (t TagType) MarshalJSON() ([]byte, error) {
 }
 
 // UnmarshalJSON todo
-func (t *TagType) UnmarshalJSON(b []byte) error {
-	ins, err := ParseTagTypeFromString(string(b))
+func (t *TAG_TYPE) UnmarshalJSON(b []byte) error {
+	ins, err := ParseTAG_TYPEFromString(string(b))
 	if err != nil {
 		return err
 	}

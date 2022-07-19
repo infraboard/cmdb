@@ -33,7 +33,7 @@ func (p *cdbPager) Scan(ctx context.Context, set pager.Set) error {
 		return err
 	}
 	set.Add(resp.ToAny()...)
-	p.log.Debugf("get %d hosts", len(resp.Items))
+	p.log.Debugf("get %d mysql", len(resp.Items))
 
 	p.CheckHasNext(set)
 	return nil

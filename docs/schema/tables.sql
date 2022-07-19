@@ -277,7 +277,7 @@ CREATE TABLE IF NOT EXISTS `resource_tag` (
 -- ----------------------------
 -- Table structure for credential
 -- ----------------------------
-DROP TABLE IF EXISTS `credential`;
+DROP TABLE IF NOT EXISTS `credential`;
 CREATE TABLE `credential` (
   `id` varchar(64)  NOT NULL COMMENT '凭证Id',
   `create_at` bigint(13) NOT NULL COMMENT '创建时间',
@@ -287,7 +287,7 @@ CREATE TABLE `credential` (
   `allow_regions` text  NOT NULL COMMENT '允许同步的Region列表',
   `crendential_type` tinyint(1) NOT NULL COMMENT '凭证类型',
   `api_key` varchar(255) NOT NULL COMMENT '凭证key',
-  `api_credential` text  NOT NULL COMMENT '凭证credential',
+  `api_secret` text  NOT NULL COMMENT '凭证secret',
   `request_rate` int(11) NOT NULL COMMENT '请求速率',
   `domain` varchar(255)  NOT NULL COMMENT '所属域',
   `namespace` varchar(255)  NOT NULL COMMENT '所属空间',

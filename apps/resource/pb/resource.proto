@@ -179,7 +179,7 @@ message Information {
     string pay_type = 12;
 }
 
-enum TagType {
+enum TAG_TYPE {
     // 用户自定义标签, 允许用户修改
     USER = 0;
     // 第三方定义的标签, 比如云商同步过来的标签
@@ -194,7 +194,7 @@ message Tag {
     string resource_id = 1;
     // 标签的类型
     // @gotags: json:"type"
-    TagType type = 2;
+    TAG_TYPE type = 2;
     // 标签的Key
     // @gotags: json:"key" validate:"lte=255,required"
     string key = 3;

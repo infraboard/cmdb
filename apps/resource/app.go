@@ -198,14 +198,14 @@ func NewUpdateTagRequest(resourceId string, action UpdateAction) *UpdateTagReque
 
 func NewDefaultTag() *Tag {
 	return &Tag{
-		Type:   TagType_USER,
+		Type:   TAG_TYPE_USER,
 		Weight: 1,
 	}
 }
 
 func NewThirdTag(key, value string) *Tag {
 	return &Tag{
-		Type:   TagType_THIRD,
+		Type:   TAG_TYPE_THIRD,
 		Key:    key,
 		Value:  value,
 		Weight: 1,
