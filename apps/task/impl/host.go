@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/infraboard/cmdb/apps/credential"
 	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/cmdb/apps/resource"
-	"github.com/infraboard/cmdb/apps/secret"
 	"github.com/infraboard/cmdb/apps/task"
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/mcube/pager"
@@ -20,7 +20,7 @@ import (
 	vmOp "github.com/infraboard/cmdb/provider/vsphere/vm"
 )
 
-func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *task.Task, cb SyncTaskCallback) {
+func (s *service) syncHost(ctx context.Context, credentialIns *credential.Secret, t *task.Task, cb SyncTaskCallback) {
 	var (
 		pager pager.Pager
 	)
@@ -36,13 +36,13 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 		cb(t)
 	}()
 
-	secret := secretIns.Data
-	req := provider.NewQueryHostRequestWithRate(secret.RequestRate)
+	credential := credentialIns.Data
+	req := provider.NewQueryHostRequestWithRate(credential.RequestRate)
 
-	switch secret.Vendor {
+	switch credential.Vendor {
 	case resource.Vendor_ALIYUN:
 		s.log.Debugf("sync aliyun ecs ...")
-		op, err := aliyun.NewOperator(secret.ApiKey, secret.ApiSecret, t.Data.Region)
+		op, err := aliyun.NewOperator(credential.ApiKey, credential.ApiSecret, t.Data.Region)
 		if err != nil {
 			t.Failed(err.Error())
 			return
@@ -50,7 +50,7 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 		pager = op.HostOperator().QueryHost(req)
 	case resource.Vendor_TENCENT:
 		s.log.Debugf("sync txyun cvm ...")
-		op, err := txyun.NewOperator(secret.ApiKey, secret.ApiSecret, t.Data.Region)
+		op, err := txyun.NewOperator(credential.ApiKey, credential.ApiSecret, t.Data.Region)
 		if err != nil {
 			t.Failed(err.Error())
 			return
@@ -58,7 +58,7 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 		pager = op.HostOperator().QueryHost(req)
 	case resource.Vendor_HUAWEI:
 		s.log.Debugf("sync hwyun ecs ...")
-		op, err := huawei.NewOperator(secret.ApiKey, secret.ApiSecret, t.Data.Region)
+		op, err := huawei.NewOperator(credential.ApiKey, credential.ApiSecret, t.Data.Region)
 		if err != nil {
 			t.Failed(err.Error())
 			return
@@ -66,11 +66,11 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 		pager = op.HostOperator().QueryHost(req)
 	case resource.Vendor_AMAZON:
 		s.log.Debugf("sync aws ec2 ...")
-		op := aws.NewOperator(secret.ApiKey, secret.ApiSecret, t.Data.Region)
+		op := aws.NewOperator(credential.ApiKey, credential.ApiSecret, t.Data.Region)
 		pager = op.HostOperator().QueryHost(req)
 	case resource.Vendor_VSPHERE:
 		s.log.Debugf("sync vshpere vm ...")
-		client := vsConn.NewVsphereClient(secret.Address, secret.ApiKey, secret.ApiSecret)
+		client := vsConn.NewVsphereClient(credential.Address, credential.ApiKey, credential.ApiSecret)
 		ec, err := client.VimClient()
 		if err != nil {
 			t.Failed(err.Error())
@@ -80,7 +80,7 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 		// 通过回调直接保存
 		err = operator.QueryHost(func(h *host.Host) {
 			// 补充管理信息
-			h.Base.SecretId = secretIns.Id
+			h.Base.CredentialId = credentialIns.Id
 			s.doSyncHost(ctx, h, t)
 		})
 		if err != nil {
@@ -88,7 +88,7 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 			return
 		}
 	default:
-		t.Failed(fmt.Sprintf("unsuport vendor %s", secret.Vendor))
+		t.Failed(fmt.Sprintf("unsuport vendor %s", credential.Vendor))
 		return
 	}
 
@@ -105,7 +105,7 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 			for i := range set.Items {
 				target := set.Items[i]
 				// 补充管理信息
-				target.Base.SecretId = secretIns.Id
+				target.Base.CredentialId = credentialIns.Id
 				s.doSyncHost(ctx, target, t)
 			}
 		}

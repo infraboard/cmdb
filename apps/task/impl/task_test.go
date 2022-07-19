@@ -25,7 +25,7 @@ func TestSyncHost(t *testing.T) {
 	req := task.NewCreateTaskRequst()
 	req.Type = task.Type_RESOURCE_SYNC
 	req.ResourceType = resource.Type_HOST
-	req.SecretId = "c5pcffua0bro7e7a05j0"
+	req.CredentialId = "c5pcffua0bro7e7a05j0"
 	req.Region = "ap-shanghai"
 
 	ins, err := svc.CreatTask(context.Background(), req)
@@ -41,7 +41,7 @@ func TestSyncBill(t *testing.T) {
 	req := task.NewCreateTaskRequst()
 	req.Type = task.Type_RESOURCE_SYNC
 	req.ResourceType = resource.Type_BILL
-	req.SecretId = "c5pcffua0bro7e7a05j0"
+	req.CredentialId = "c5pcffua0bro7e7a05j0"
 	req.Params["month"] = "2022-04"
 	ins, err := svc.CreatTask(context.Background(), req)
 	if should.NoError(err) {
@@ -56,7 +56,7 @@ func TestSyncRds(t *testing.T) {
 	req := task.NewCreateTaskRequst()
 	req.Type = task.Type_RESOURCE_SYNC
 	req.ResourceType = resource.Type_RDS
-	req.SecretId = "c9rse891eqlk2nabpb10"
+	req.CredentialId = "c9rse891eqlk2nabpb10"
 	req.Region = "ap-shanghai"
 
 	ins, err := svc.CreatTask(context.Background(), req)

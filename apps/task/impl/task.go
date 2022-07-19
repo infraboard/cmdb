@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
+	"github.com/infraboard/cmdb/apps/credential"
 	"github.com/infraboard/cmdb/apps/resource"
-	"github.com/infraboard/cmdb/apps/secret"
 	"github.com/infraboard/cmdb/apps/task"
 	"github.com/infraboard/cmdb/conf"
 	"github.com/infraboard/mcube/exception"
@@ -30,39 +30,39 @@ func (s *service) CreatTask(ctx context.Context, req *task.CreateTaskRequst) (
 		return nil, err
 	}
 
-	secretIns, err := s.secret.DescribeSecret(ctx, secret.NewDescribeSecretRequest(req.SecretId))
+	credentialIns, err := s.credential.DescribeSecret(ctx, credential.NewDescribeSecretRequest(req.CredentialId))
 	if err != nil {
 		return nil, err
 	}
 
-	secret := secretIns.Data
-	t.UpdateSecretDesc(secret.ShortDesc())
+	credential := credentialIns.Data
+	t.UpdateSecretDesc(credential.ShortDesc())
 
 	// 如果不是vsphere 需要检查region
-	if !(secret.Vendor.Equal(resource.Vendor_VSPHERE) || req.ResourceType.IsIn(resource.Type_BILL)) {
+	if !(credential.Vendor.Equal(resource.Vendor_VSPHERE) || req.ResourceType.IsIn(resource.Type_BILL)) {
 		if req.Region == "" {
 			return nil, exception.NewBadRequest("region required")
 		}
-		if !secret.IsAllowRegion(req.Region) {
-			return nil, exception.NewBadRequest("this secret not allow sync region %s", req.Region)
+		if !credential.IsAllowRegion(req.Region) {
+			return nil, exception.NewBadRequest("this credential not allow sync region %s", req.Region)
 		}
 	}
 
-	// 解密secret
-	err = secret.DecryptAPISecret(conf.C().App.EncryptKey)
+	// 解密credential
+	err = credential.DecryptAPISecret(conf.C().App.EncryptKey)
 	if err != nil {
-		s.log.Warnf("decrypt api secret error, %s", err)
+		s.log.Warnf("decrypt api credential error, %s", err)
 	}
 
 	// 资源同步
 	syncCtx, _ := context.WithTimeout(context.Background(), time.Minute*30)
 	switch req.ResourceType {
 	case resource.Type_HOST:
-		go s.syncHost(syncCtx, secretIns, t, s.SyncTaskCallback)
+		go s.syncHost(syncCtx, credentialIns, t, s.SyncTaskCallback)
 	case resource.Type_BILL:
-		go s.syncBill(syncCtx, secretIns, t, s.SyncTaskCallback)
+		go s.syncBill(syncCtx, credentialIns, t, s.SyncTaskCallback)
 	case resource.Type_RDS:
-		go s.syncRds(syncCtx, secretIns, t, s.SyncTaskCallback)
+		go s.syncRds(syncCtx, credentialIns, t, s.SyncTaskCallback)
 	}
 
 	// 记录任务
@@ -95,7 +95,7 @@ func (s *service) QueryTask(ctx context.Context, req *task.QueryTaskRequest) (*t
 	for rows.Next() {
 		ins := task.NewDefaultTask()
 		err := rows.Scan(
-			&ins.Id, &ins.Data.Region, &ins.Data.ResourceType, &ins.Data.SecretId, &ins.SecretDescription,
+			&ins.Id, &ins.Data.Region, &ins.Data.ResourceType, &ins.Data.CredentialId, &ins.CredentialDescription,
 			&ins.Data.Timeout, &ins.Status.Stage, &ins.Status.Message, &ins.Status.StartAt, &ins.Status.EndAt,
 			&ins.Status.TotalSucceed, &ins.Status.TotalFailed, &ins.Data.Domain, &ins.Data.Namespace,
 		)
@@ -134,7 +134,7 @@ func (s *service) DescribeTask(ctx context.Context, req *task.DescribeTaskReques
 
 	ins := task.NewDefaultTask()
 	err = queryStmt.QueryRow(args...).Scan(
-		&ins.Id, &ins.Data.Region, &ins.Data.ResourceType, &ins.Data.SecretId, &ins.SecretDescription,
+		&ins.Id, &ins.Data.Region, &ins.Data.ResourceType, &ins.Data.CredentialId, &ins.CredentialDescription,
 		&ins.Data.Timeout, &ins.Status.Stage, &ins.Status.Message, &ins.Status.StartAt, &ins.Status.EndAt,
 		&ins.Status.TotalSucceed, &ins.Status.TotalFailed, &ins.Data.Domain, &ins.Data.Namespace,
 	)

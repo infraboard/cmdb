@@ -33,7 +33,7 @@ func (s *Task) Run() {
 }
 
 func (s *Task) UpdateSecretDesc(desc string) {
-	s.SecretDescription = desc
+	s.CredentialDescription = desc
 }
 
 func (s *Task) Completed() {

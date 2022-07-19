@@ -186,7 +186,7 @@ CREATE TABLE IF NOT EXISTS `resource` (
   `pay_type` varchar(255) DEFAULT NULL COMMENT '实例付费方式',
   `describe_hash` varchar(255) NOT NULL COMMENT '描述数据Hash',
   `resource_hash` varchar(255) NOT NULL COMMENT '基础数据Hash',
-  `secret_id` varchar(64) NOT NULL COMMENT '关联的同于同步的secret id',
+  `credential_id` varchar(64) NOT NULL COMMENT '关联的同于同步的credential id',
   `domain` varchar(255) NOT NULL COMMENT '资源所属域',
   `namespace` varchar(255) NOT NULL COMMENT '资源所属空间',
   `env` varchar(255) NOT NULL COMMENT '资源所属环境',
@@ -275,10 +275,10 @@ CREATE TABLE IF NOT EXISTS `resource_tag` (
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COMMENT='资源标签';
 
 -- ----------------------------
--- Table structure for secret
+-- Table structure for credential
 -- ----------------------------
-DROP TABLE IF EXISTS `secret`;
-CREATE TABLE `secret` (
+DROP TABLE IF EXISTS `credential`;
+CREATE TABLE `credential` (
   `id` varchar(64)  NOT NULL COMMENT '凭证Id',
   `create_at` bigint(13) NOT NULL COMMENT '创建时间',
   `description` varchar(255) NOT NULL COMMENT '凭证描述',
@@ -287,7 +287,7 @@ CREATE TABLE `secret` (
   `allow_regions` text  NOT NULL COMMENT '允许同步的Region列表',
   `crendential_type` tinyint(1) NOT NULL COMMENT '凭证类型',
   `api_key` varchar(255) NOT NULL COMMENT '凭证key',
-  `api_secret` text  NOT NULL COMMENT '凭证secret',
+  `api_credential` text  NOT NULL COMMENT '凭证credential',
   `request_rate` int(11) NOT NULL COMMENT '请求速率',
   `domain` varchar(255)  NOT NULL COMMENT '所属域',
   `namespace` varchar(255)  NOT NULL COMMENT '所属空间',
@@ -302,8 +302,8 @@ CREATE TABLE IF NOT EXISTS `task` (
   `id` varchar(64)  NOT NULL COMMENT '任务Id',
   `region` varchar(64) NOT NULL COMMENT '资源所属Region',
   `resource_type` tinyint(1) NOT NULL COMMENT '资源类型',
-  `secret_id` varchar(64)  NOT NULL COMMENT '用于操作资源的凭证Id',
-  `secret_desc` text NOT NULL COMMENT '凭证描述',
+  `credential_id` varchar(64)  NOT NULL COMMENT '用于操作资源的凭证Id',
+  `credential_desc` text NOT NULL COMMENT '凭证描述',
   `timeout` int(11) NOT NULL COMMENT '任务超时时间',
   `status` tinyint(1) NOT NULL COMMENT '任务当前状态',
   `message` text NOT NULL COMMENT '任务失败相关信息',

@@ -33,8 +33,8 @@ func LoadOperatorFromEnv() error {
 	return nil
 }
 
-func NewOperator(secretID, secretKey, region string) (*Operator, error) {
-	client := connectivity.NewTencentCloudClient(secretID, secretKey, region)
+func NewOperator(credentialID, credentialKey, region string) (*Operator, error) {
+	client := connectivity.NewTencentCloudClient(credentialID, credentialKey, region)
 
 	account, err := client.Account()
 	if err != nil {

@@ -3,7 +3,7 @@ package impl
 const (
 	insertTaskSQL = `
 	INSERT INTO task (
-		id,region,resource_type,secret_id,secret_desc,timeout,status,
+		id,region,resource_type,credential_id,credential_desc,timeout,status,
 		message,start_at,end_at,total_succeed,total_failed,
 		domain,namespace
 	) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?);

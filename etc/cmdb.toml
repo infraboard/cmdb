@@ -16,7 +16,7 @@ database = "cmdb"
 [mcenter]
 address = "127.0.0.1:18010"
 client_id = "xxx"
-client_secret = "xxx"
+client_credential = "xxx"
 
 [log]
 level = "debug"

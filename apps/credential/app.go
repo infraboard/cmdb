@@ -1,4 +1,4 @@
-package secret
+package credential
 
 import (
 	"encoding/base64"
@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	AppName = "secret"
+	AppName = "credential"
 )
 
 var (

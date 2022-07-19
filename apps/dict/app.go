@@ -1,8 +1,8 @@
 package dict
 
 import (
+	"github.com/infraboard/cmdb/apps/credential"
 	"github.com/infraboard/cmdb/apps/resource"
-	"github.com/infraboard/cmdb/apps/secret"
 	"github.com/infraboard/cmdb/utils"
 
 	ali_region "github.com/infraboard/cmdb/provider/aliyun/region"
@@ -17,8 +17,8 @@ const (
 
 var (
 	CrendentialTypes = []utils.EnumDescribe{
-		{Value: secret.Type_API_KEY.String(), Describe: "API凭证"},
-		{Value: secret.Type_PASSWORD.String(), Describe: "用户名密码"},
+		{Value: credential.Type_API_KEY.String(), Describe: "API凭证"},
+		{Value: credential.Type_PASSWORD.String(), Describe: "用户名密码"},
 	}
 
 	Vendors = []utils.EnumDescribe{

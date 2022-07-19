@@ -84,8 +84,8 @@ message Base {
     // @gotags: json:"sync_at"
     int64 sync_at = 2;  
     // 用于同步的凭证ID
-    // @gotags: json:"secret_id"
-    string secret_id = 3; 
+    // @gotags: json:"credential_id"
+    string credential_id = 3; 
     // 厂商
     // @gotags: json:"vendor"
     Vendor vendor = 4;

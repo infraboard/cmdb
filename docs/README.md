@@ -12,17 +12,6 @@ $ docker run -p 3306:3306 -itd -e MARIADB_USER=cmdb -e MARIADB_PASSWORD=123456 -
 
 
 ## 应用中间件
-Resource
-
-
-// 创建一个部署
-1. Privider (阿里云/腾讯云/华为云/IDC)
-
-
-// 计算
-ECS     instance         username   password
-
-
 
 配置
 
@@ -32,8 +21,8 @@ Redis     instance  db    username   password
 Mongodb   instance  db    username   password
 
 
-Bucket              bucket client_id client_secret
+Bucket              bucket client_id client_credential
 
 // 功能
-Sms                 client_id client_secret
-Vms                 client_id client_secret
+Sms                 client_id client_credential
+Vms                 client_id client_credential

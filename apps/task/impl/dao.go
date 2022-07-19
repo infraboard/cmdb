@@ -15,7 +15,7 @@ func (s *service) insert(ctx context.Context, t *task.Task) error {
 	defer stmt.Close()
 
 	_, err = stmt.Exec(
-		t.Id, t.Data.Region, t.Data.ResourceType, t.Data.SecretId, t.SecretDescription, t.Data.Timeout,
+		t.Id, t.Data.Region, t.Data.ResourceType, t.Data.CredentialId, t.CredentialDescription, t.Data.Timeout,
 		t.Status.Stage, t.Status.Message, t.Status.StartAt, t.Status.EndAt, t.Status.TotalSucceed, t.Status.TotalFailed,
 		t.Data.Domain, t.Data.Namespace,
 	)

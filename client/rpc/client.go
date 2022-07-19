@@ -12,10 +12,10 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 
 	"github.com/infraboard/cmdb/apps/bill"
+	"github.com/infraboard/cmdb/apps/credential"
 	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/cmdb/apps/rds"
 	"github.com/infraboard/cmdb/apps/resource"
-	"github.com/infraboard/cmdb/apps/secret"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 )
@@ -66,8 +66,8 @@ func (c *ClientSet) Host() host.ServiceClient {
 }
 
 // Host todos
-func (c *ClientSet) Secret() secret.ServiceClient {
-	return secret.NewServiceClient(c.conn)
+func (c *ClientSet) Secret() credential.ServiceClient {
+	return credential.NewServiceClient(c.conn)
 }
 
 // Bill service

@@ -29,16 +29,16 @@ func TestQuery(t *testing.T) {
 }
 
 func init() {
-	var secretID, secretKey string
-	if secretID = os.Getenv("AMAZON_CLOUD_ACCESS_KEY"); secretID == "" {
+	var credentialID, credentialKey string
+	if credentialID = os.Getenv("AMAZON_CLOUD_ACCESS_KEY"); credentialID == "" {
 		panic("empty AMAZON_CLOUD_ACCESS_KEY")
 	}
 
-	if secretKey = os.Getenv("AMAZON_CLOUD_ACCESS_SECRET"); secretKey == "" {
+	if credentialKey = os.Getenv("AMAZON_CLOUD_ACCESS_SECRET"); credentialKey == "" {
 		panic("empty AMAZON_CLOUD_ACCESS_SECRET")
 	}
 
-	client := connectivity.NewAwsCloudClient(secretID, secretKey, "ap-south-1")
+	client := connectivity.NewAwsCloudClient(credentialID, credentialKey, "ap-south-1")
 
 	ec, err := client.Ec2Client()
 	if err != nil {

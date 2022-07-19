@@ -37,7 +37,7 @@ func (h *handler) Registry(ws *restful.WebService) {
 	tags := []string{h.Name()}
 
 	ws.Route(ws.GET("/crendential_types").To(h.CrendentialType).
-		Doc("get all secret").
+		Doc("get all credential").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.Resource, "crendential_types").
 		Metadata(label.Action, label.List.Value()).

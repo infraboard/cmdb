@@ -7,15 +7,15 @@ import (
 	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/sqlbuilder"
 
-	"github.com/infraboard/cmdb/apps/secret"
+	"github.com/infraboard/cmdb/apps/credential"
 	"github.com/infraboard/cmdb/conf"
 )
 
-func (s *service) CreateSecret(ctx context.Context, req *secret.CreateSecretRequest) (
-	*secret.Secret, error) {
-	ins, err := secret.NewSecret(req)
+func (s *service) CreateSecret(ctx context.Context, req *credential.CreateSecretRequest) (
+	*credential.Secret, error) {
+	ins, err := credential.NewSecret(req)
 	if err != nil {
-		return nil, exception.NewBadRequest("validate create secret error, %s", err)
+		return nil, exception.NewBadRequest("validate create credential error, %s", err)
 	}
 
 	stmt, err := s.db.PrepareContext(ctx, insertSecretSQL)
@@ -41,8 +41,8 @@ func (s *service) CreateSecret(ctx context.Context, req *secret.CreateSecretRequ
 	return ins, nil
 }
 
-func (s *service) QuerySecret(ctx context.Context, req *secret.QuerySecretRequest) (
-	*secret.SecretSet, error) {
+func (s *service) QuerySecret(ctx context.Context, req *credential.QuerySecretRequest) (
+	*credential.SecretSet, error) {
 	query := sqlbuilder.NewQuery(querySecretSQL)
 
 	if req.Keywords != "" {
@@ -57,7 +57,7 @@ func (s *service) QuerySecret(ctx context.Context, req *secret.QuerySecretReques
 
 	queryStmt, err := s.db.PrepareContext(ctx, querySQL)
 	if err != nil {
-		return nil, exception.NewInternalServerError("prepare query secret error, %s", err.Error())
+		return nil, exception.NewInternalServerError("prepare query credential error, %s", err.Error())
 	}
 	defer queryStmt.Close()
 
@@ -67,17 +67,17 @@ func (s *service) QuerySecret(ctx context.Context, req *secret.QuerySecretReques
 	}
 	defer rows.Close()
 
-	set := secret.NewSecretSet()
+	set := credential.NewSecretSet()
 	allowRegions := ""
 	for rows.Next() {
-		ins := secret.NewDefaultSecret()
+		ins := credential.NewDefaultSecret()
 		err := rows.Scan(
 			&ins.Id, &ins.CreateAt, &ins.Data.Description, &ins.Data.Vendor, &ins.Data.Address,
 			&allowRegions, &ins.Data.CrendentialType, &ins.Data.ApiKey, &ins.Data.ApiSecret,
 			&ins.Data.RequestRate, &ins.Data.Domain, &ins.Data.Namespace,
 		)
 		if err != nil {
-			return nil, exception.NewInternalServerError("query secret error, %s", err.Error())
+			return nil, exception.NewInternalServerError("query credential error, %s", err.Error())
 		}
 		ins.Data.LoadAllowRegionFromString(allowRegions)
 		ins.Data.Desense()
@@ -100,19 +100,19 @@ func (s *service) QuerySecret(ctx context.Context, req *secret.QuerySecretReques
 	return set, nil
 }
 
-func (s *service) DescribeSecret(ctx context.Context, req *secret.DescribeSecretRequest) (
-	*secret.Secret, error) {
+func (s *service) DescribeSecret(ctx context.Context, req *credential.DescribeSecretRequest) (
+	*credential.Secret, error) {
 	query := sqlbuilder.NewQuery(querySecretSQL)
 	querySQL, args := query.Where("id = ?", req.Id).BuildQuery()
 	s.log.Debugf("sql: %s", querySQL)
 
 	queryStmt, err := s.db.PrepareContext(ctx, querySQL)
 	if err != nil {
-		return nil, exception.NewInternalServerError("prepare query secret error, %s", err.Error())
+		return nil, exception.NewInternalServerError("prepare query credential error, %s", err.Error())
 	}
 	defer queryStmt.Close()
 
-	ins := secret.NewDefaultSecret()
+	ins := credential.NewDefaultSecret()
 	allowRegions := ""
 	err = queryStmt.QueryRowContext(ctx, args...).Scan(
 		&ins.Id, &ins.CreateAt, &ins.Data.Description, &ins.Data.Vendor, &ins.Data.Address,
@@ -124,16 +124,16 @@ func (s *service) DescribeSecret(ctx context.Context, req *secret.DescribeSecret
 		if err == sql.ErrNoRows {
 			return nil, exception.NewNotFound("%#v not found", req)
 		}
-		return nil, exception.NewInternalServerError("describe secret error, %s", err.Error())
+		return nil, exception.NewInternalServerError("describe credential error, %s", err.Error())
 	}
 
 	ins.Data.LoadAllowRegionFromString(allowRegions)
 	return ins, nil
 }
 
-func (s *service) DeleteSecret(ctx context.Context, req *secret.DeleteSecretRequest) (
-	*secret.Secret, error) {
-	ins, err := s.DescribeSecret(ctx, secret.NewDescribeSecretRequest(req.Id))
+func (s *service) DeleteSecret(ctx context.Context, req *credential.DeleteSecretRequest) (
+	*credential.Secret, error) {
+	ins, err := s.DescribeSecret(ctx, credential.NewDescribeSecretRequest(req.Id))
 	if err != nil {
 		return nil, err
 	}

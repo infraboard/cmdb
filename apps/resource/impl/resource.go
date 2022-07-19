@@ -76,7 +76,7 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 			&info.Category, &info.Type, &info.Name, &info.Description,
 			&info.Status, &info.UpdateAt, &base.SyncAt, &info.SyncAccount,
 			&publicIPList, &privateIPList, &info.PayType, &base.DescribeHash, &base.ResourceHash,
-			&base.SecretId, &base.Domain, &base.Namespace, &base.Env, &base.UsageMode,
+			&base.CredentialId, &base.Domain, &base.Namespace, &base.Env, &base.UsageMode,
 		)
 		if err != nil {
 			return nil, exception.NewInternalServerError("query resource error, %s", err.Error())

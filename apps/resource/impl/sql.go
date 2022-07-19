@@ -4,14 +4,14 @@ const (
 	sqlInsertResource = `INSERT INTO resource (
 		id,resource_type,vendor,region,zone,create_at,expire_at,category,type,
 		name,description,status,update_at,sync_at,sync_accout,public_ip,
-		private_ip,pay_type,describe_hash,resource_hash,secret_id,domain,
+		private_ip,pay_type,describe_hash,resource_hash,credential_id,domain,
 		namespace,env,usage_mode
 	) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);`
 	sqlUpdateResource = `UPDATE resource SET 
 		expire_at=?,category=?,type=?,name=?,description=?,
 		status=?,update_at=?,sync_at=?,sync_accout=?,
 		public_ip=?,private_ip=?,pay_type=?,describe_hash=?,resource_hash=?,
-		secret_id=?,namespace=?,env=?,usage_mode=?
+		credential_id=?,namespace=?,env=?,usage_mode=?
 	WHERE id = ?`
 	sqlDeleteResource = `DELETE FROM resource WHERE id = ?;`
 	sqlQueryResource  = `SELECT r.* FROM resource r %s JOIN resource_tag t ON r.id = t.resource_id`

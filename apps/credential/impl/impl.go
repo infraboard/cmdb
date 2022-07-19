@@ -3,8 +3,8 @@ package impl
 import (
 	"database/sql"
 
+	"github.com/infraboard/cmdb/apps/credential"
 	"github.com/infraboard/cmdb/apps/host"
-	"github.com/infraboard/cmdb/apps/secret"
 	"github.com/infraboard/cmdb/conf"
 	"github.com/infraboard/mcube/app"
 	"github.com/infraboard/mcube/logger"
@@ -21,7 +21,7 @@ type service struct {
 	db   *sql.DB
 	log  logger.Logger
 	host host.ServiceServer
-	secret.UnimplementedServiceServer
+	credential.UnimplementedServiceServer
 }
 
 func (s *service) Config() error {
@@ -37,11 +37,11 @@ func (s *service) Config() error {
 }
 
 func (s *service) Name() string {
-	return secret.AppName
+	return credential.AppName
 }
 
 func (s *service) Registry(server *grpc.Server) {
-	secret.RegisterServiceServer(server, svr)
+	credential.RegisterServiceServer(server, svr)
 }
 
 func init() {
