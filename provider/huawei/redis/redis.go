@@ -1,0 +1,44 @@
+package redis
+
+import (
+	"github.com/alibabacloud-go/tea/tea"
+	dcs "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/dcs/v2"
+	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/dcs/v2/model"
+
+	"github.com/infraboard/cmdb/apps/redis"
+	"github.com/infraboard/cmdb/apps/resource"
+	"github.com/infraboard/mcube/logger"
+	"github.com/infraboard/mcube/logger/zap"
+)
+
+func NewDcsOperator(client *dcs.DcsClient) *DcsOperator {
+	return &DcsOperator{
+		client: client,
+		log:    zap.L().Named("Huawei Rds"),
+	}
+}
+
+type DcsOperator struct {
+	client *dcs.DcsClient
+	log    logger.Logger
+}
+
+func (o *DcsOperator) transferSet(list *[]model.InstanceListInfo) *redis.Set {
+	set := redis.NewSet()
+	items := *list
+	for i := range items {
+		set.Add(o.transferOne(items[i]))
+	}
+	return set
+}
+
+func (o *DcsOperator) transferOne(ins model.InstanceListInfo) *redis.Redis {
+	r := redis.NewDefaultRedis()
+	b := r.Base
+	b.Vendor = resource.Vendor_HUAWEI
+	b.Id = tea.StringValue(ins.InstanceId)
+
+	info := r.Information
+	info.Name = tea.StringValue(ins.Name)
+	return r
+}
