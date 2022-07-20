@@ -53,9 +53,6 @@ func (o *CDBOperator) transferOne(ins *cdb.InstanceInfo) *rds.Rds {
 	desc := r.Describe
 	desc.EngineType = "MySQL"
 	desc.EngineVersion = utils.PtrStrV(ins.EngineVersion)
-	// desc.ExportType = ins.DBInstanceNetType
-	// desc.NetworkType = ins.InstanceNetworkType
-	// desc.Type = ins.DBInstanceType
 	desc.Type = o.ParseType(ins.InstanceType)
 	desc.Cpu = int32(utils.PtrInt64(ins.Cpu))
 	desc.Memory = utils.PtrInt64(ins.Memory)
@@ -72,7 +69,7 @@ func (o *CDBOperator) parseTime(t string) int64 {
 		return 0
 	}
 
-	return ts.UnixNano() / 1000000
+	return ts.UnixMilli()
 }
 
 // 实例类型，可能的返回值：1-主实例；2-灾备实例；3-只读实例

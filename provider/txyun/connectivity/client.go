@@ -10,6 +10,7 @@ import (
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
 	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
+	redis "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/redis/v20180412"
 	sts "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sts/v20180813"
 )
 
@@ -48,9 +49,10 @@ type TencentCloudClient struct {
 	SecretID  string `env:"TX_CLOUD_SECRET_ID"`
 	SecretKey string `env:"TX_CLOUD_SECRET_KEY"`
 
-	cvmConn  *cvm.Client
-	cdbConn  *cdb.Client
-	billConn *billing.Client
+	cvmConn   *cvm.Client
+	cdbConn   *cdb.Client
+	redisConn *redis.Client
+	billConn  *billing.Client
 }
 
 // UseCvmClient cvm
@@ -114,6 +116,27 @@ func (me *TencentCloudClient) CDBClient() *cdb.Client {
 	cdbConn, _ := cdb.NewClient(credential, me.Region, cpf)
 	me.cdbConn = cdbConn
 	return me.cdbConn
+}
+
+// CDBClient cdb
+func (me *TencentCloudClient) RedisClient() *redis.Client {
+	if me.redisConn != nil {
+		return me.redisConn
+	}
+
+	credential := common.NewCredential(
+		me.SecretID,
+		me.SecretKey,
+	)
+
+	cpf := profile.NewClientProfile()
+	cpf.HttpProfile.ReqMethod = "POST"
+	cpf.HttpProfile.ReqTimeout = 300
+	cpf.Language = "en-US"
+
+	conn, _ := redis.NewClient(credential, me.Region, cpf)
+	me.redisConn = conn
+	return me.redisConn
 }
 
 // 获取客户端账号ID

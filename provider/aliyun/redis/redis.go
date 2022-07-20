@@ -41,6 +41,30 @@ func (o *RedisOperator) transferOne(ins *redis.DescribeInstancesResponseBodyInst
 	b.CreateAt = o.parseTime(tea.StringValue(ins.CreateTime))
 	b.Id = tea.StringValue(ins.InstanceId)
 
+	info := r.Information
+	info.ExpireAt = o.parseTime(tea.StringValue(ins.EndTime))
+	info.Name = tea.StringValue(ins.InstanceName)
+	info.Type = tea.StringValue(ins.EditionType)
+	info.Category = tea.StringValue(ins.ArchitectureType)
+	info.Status = tea.StringValue(ins.InstanceStatus)
+	info.PayType = tea.StringValue(ins.ChargeType)
+	info.PrivateIp = []string{tea.StringValue(ins.PrivateIp)}
+
+	desc := r.Describe
+	desc.Memory = tea.Int64Value(ins.Capacity)
+	desc.ConnectAddr = tea.StringValue(ins.ConnectionDomain)
+	desc.ConnectPort = tea.Int64Value(ins.Port)
+	desc.ArchitectureType = tea.StringValue(ins.ArchitectureType)
+	desc.Qps = tea.Int64Value(ins.QPS)
+	desc.BandWidth = tea.Int64Value(ins.Bandwidth)
+	desc.MaxConnection = tea.Int64Value(ins.Connections)
+	desc.Config = tea.StringValue(ins.Config)
+	desc.NodeType = tea.StringValue(ins.NodeType)
+	desc.NetworkType = tea.StringValue(ins.NetworkType)
+	desc.EngineType = tea.StringValue(ins.InstanceType)
+	desc.EngineVersion = tea.StringValue(ins.EngineVersion)
+	desc.ReplicaId = tea.StringValue(ins.ReplacateId)
+
 	return r
 }
 

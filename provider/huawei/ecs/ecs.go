@@ -51,7 +51,7 @@ func (o *EcsOperator) transferOne(ins model.ServerDetail) *host.Host {
 	h.Information.Status = ins.Status
 	h.Information.Tags = o.transferTags(ins.Tags)
 	h.Information.PrivateIp, h.Information.PublicIp = o.parseIp(ins.Addresses)
-	h.Information.PayType = ins.Metadata["charging_mode"]
+	h.Information.PayType = o.ParseChangeMode(ins.Metadata["charging_mode"])
 	h.Information.SyncAccount = o.GetAccountId()
 
 	h.Describe.SerialNumber = ins.Id
@@ -90,6 +90,20 @@ func (o *EcsOperator) parseTime(t string) int64 {
 	}
 
 	return ts.UnixNano() / 1000000
+}
+
+//  1. charging_mode 云服务器的计费类型。  - “0”：按需计费（即postPaid-后付费方式）。 - “1”：按包年包月计费（即prePaid-预付费方式）。\"2\"：
+func (o *EcsOperator) ParseChangeMode(mode string) string {
+	switch mode {
+	case "0":
+		return "按需计费"
+	case "1":
+		return "按包年包月计费"
+	case "2":
+		return "竞价实例计费"
+	}
+
+	return ""
 }
 
 func (o *EcsOperator) parseIp(address map[string][]model.ServerAddress) (privateIps []string, publicIps []string) {
