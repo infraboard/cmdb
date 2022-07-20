@@ -47,19 +47,16 @@ func (o *CDBOperator) transferOne(ins *cdb.InstanceInfo) *rds.Rds {
 	info.ExpireAt = o.parseTime(utils.PtrStrV(ins.DeadlineTime))
 	info.Name = utils.PtrStrV(ins.InstanceName)
 	info.Category = utils.PtrStrV(ins.DeviceType)
-	// info.Type = ins.DBInstanceType
-	// info.Description = ins.DBInstanceDescription
-	// info.Status = ins.DBInstanceStatus
-	// info.PayType = ins.PayType
+	info.Status = o.ParseStatus(ins.Status)
+	info.PayType = o.ParsePayType(ins.PayType)
 
 	desc := r.Describe
 	desc.EngineType = "MySQL"
 	desc.EngineVersion = utils.PtrStrV(ins.EngineVersion)
-	desc.InstanceClass = o.ParseInstanceType(ins.InstanceType)
-	// desc.ClassType = ins.DBInstanceClass
 	// desc.ExportType = ins.DBInstanceNetType
 	// desc.NetworkType = ins.InstanceNetworkType
 	// desc.Type = ins.DBInstanceType
+	desc.Type = o.ParseType(ins.InstanceType)
 	desc.Cpu = int32(utils.PtrInt64(ins.Cpu))
 	desc.Memory = utils.PtrInt64(ins.Memory)
 	desc.StorageCapacity = utils.PtrInt64(ins.Volume)
@@ -79,11 +76,10 @@ func (o *CDBOperator) parseTime(t string) int64 {
 }
 
 // 实例类型，可能的返回值：1-主实例；2-灾备实例；3-只读实例
-func (o *CDBOperator) ParseInstanceType(id *int64) string {
+func (o *CDBOperator) ParseType(id *int64) string {
 	if id == nil {
 		return ""
 	}
-
 	switch *id {
 	case 1:
 		return "主实例"
@@ -92,6 +88,37 @@ func (o *CDBOperator) ParseInstanceType(id *int64) string {
 	case 3:
 		return "只读实例"
 	}
+	return ""
+}
 
+// 实例状态，可能的返回值：0-创建中；1-运行中；4-隔离中；5-已隔离
+func (o *CDBOperator) ParseStatus(id *int64) string {
+	if id == nil {
+		return ""
+	}
+	switch *id {
+	case 0:
+		return "创建中"
+	case 1:
+		return "运行中"
+	case 4:
+		return "隔离中"
+	case 5:
+		return "已隔离"
+	}
+	return ""
+}
+
+// 付费类型，可能的返回值：0-包年包月；1-包年包月
+func (o *CDBOperator) ParsePayType(id *int64) string {
+	if id == nil {
+		return ""
+	}
+	switch *id {
+	case 0:
+		return "包年包月"
+	case 1:
+		return "包年包月"
+	}
 	return ""
 }
