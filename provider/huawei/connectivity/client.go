@@ -6,6 +6,7 @@ import (
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/auth/global"
 	bss "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/bss/v2"
 	dcs "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/dcs/v2"
+	dcs_region "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/dcs/v2/region"
 	ecs "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ecs/v2"
 	ecs_region "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ecs/v2/region"
 	iam "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/iam/v3"
@@ -112,7 +113,7 @@ func (c *HuaweiCloudClient) DcsClient() (*dcs.DcsClient, error) {
 	}
 
 	client := dcs.DcsClientBuilder().
-		WithRegion(ecs_region.ValueOf(c.Region)).
+		WithRegion(dcs_region.ValueOf(c.Region)).
 		WithCredential(c.Credentials()).
 		Build()
 
