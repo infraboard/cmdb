@@ -1,4 +1,4 @@
-package lb
+package slb
 
 import (
 	slb "github.com/alibabacloud-go/slb-20140515/v3/client"

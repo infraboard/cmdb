@@ -37,8 +37,10 @@ require (
 	github.com/stretchr/testify v1.7.1
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/billing v1.0.393
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cdb v1.0.393
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.446
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/clb v1.0.447
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.447
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm v1.0.393
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod v1.0.447
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/redis v1.0.446
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sts v1.0.393
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.35
