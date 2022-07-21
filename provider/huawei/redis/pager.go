@@ -1,9 +1,9 @@
-package rds
+package redis
 
 import (
 	"context"
 
-	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/rds/v3/model"
+	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/dcs/v2/model"
 
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
@@ -12,18 +12,18 @@ import (
 	"github.com/infraboard/cmdb/utils"
 )
 
-func newPager(operator *RdsOperator) pager.Pager {
+func newPager(operator *DcsOperator) pager.Pager {
 	return &rdsPager{
 		BasePager: pager.NewBasePager(),
 		operator:  operator,
 		req:       &model.ListInstancesRequest{},
-		log:       zap.L().Named("huawei.rds"),
+		log:       zap.L().Named("huawei.redis"),
 	}
 }
 
 type rdsPager struct {
 	*pager.BasePager
-	operator *RdsOperator
+	operator *DcsOperator
 	req      *model.ListInstancesRequest
 	log      logger.Logger
 }

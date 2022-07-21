@@ -38,7 +38,7 @@ func (p *redisPager) Scan(ctx context.Context, set pager.Set) error {
 	}
 	set.Add(resp.ToAny()...)
 
-	p.CheckHasNext(set)
+	p.CheckHasNext(resp)
 	return nil
 }
 

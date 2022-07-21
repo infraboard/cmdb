@@ -1,15 +1,14 @@
-package oss_test
+package cos_test
 
 import (
 	"context"
 	"fmt"
 	"testing"
 
-	"github.com/infraboard/cmdb/apps/oss"
+	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/cmdb/provider"
+	"github.com/infraboard/cmdb/provider/txyun"
 	"github.com/infraboard/mcube/logger/zap"
-
-	"github.com/infraboard/cmdb/provider/aliyun"
 )
 
 var (
@@ -17,11 +16,10 @@ var (
 )
 
 func TestQuery(t *testing.T) {
-	req := provider.NewQueryBucketRate(5)
-	pager := operator.QueryBucket(context.Background(), req)
+	pager := operator.QueryBucket(context.Background(), provider.NewQueryBucketRate(5))
 
-	set := oss.NewBucketSet()
 	for pager.Next() {
+		set := host.NewHostSet()
 		if err := pager.Scan(context.Background(), set); err != nil {
 			panic(err)
 		}
@@ -31,9 +29,11 @@ func TestQuery(t *testing.T) {
 
 func init() {
 	zap.DevelopmentSetup()
-	err := aliyun.LoadOperatorFromEnv()
+
+	err := txyun.LoadOperatorFromEnv()
 	if err != nil {
 		panic(err)
 	}
-	operator = aliyun.O().OssOperator()
+
+	operator = txyun.O().OssOperator()
 }

@@ -6,7 +6,9 @@ import (
 	"github.com/infraboard/cmdb/provider/txyun/billing"
 	"github.com/infraboard/cmdb/provider/txyun/cdb"
 	"github.com/infraboard/cmdb/provider/txyun/connectivity"
+	"github.com/infraboard/cmdb/provider/txyun/cos"
 	"github.com/infraboard/cmdb/provider/txyun/cvm"
+	"github.com/infraboard/cmdb/provider/txyun/redis"
 )
 
 var (
@@ -60,6 +62,16 @@ func (o *Operator) HostOperator() provider.HostOperator {
 
 func (o *Operator) RdsOperator() provider.RdsOperator {
 	return cdb.NewCDBOperator(o.client.CDBClient())
+}
+
+func (o *Operator) RedisOperator() provider.RedisOperator {
+	op := redis.NewRedisOperator(o.client.RedisClient())
+	return op
+}
+
+func (o *Operator) OssOperator() provider.OssOperator {
+	op := cos.NewCosOperator(o.client.CosClient())
+	return op
 }
 
 func (o *Operator) BillOperator() provider.BillOperator {

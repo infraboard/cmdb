@@ -1,13 +1,15 @@
 package oss
 
 import (
+	"context"
+
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	cmdbOss "github.com/infraboard/cmdb/apps/oss"
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/mcube/pager"
 )
 
-func (o *OssOperator) QueryBucket(req *provider.QueryBucketRequest) pager.Pager {
+func (o *OssOperator) QueryBucket(ctx context.Context, req *provider.QueryBucketRequest) pager.Pager {
 	p := newBucketPager(o)
 	p.SetRate(float64(req.Rate))
 	return p
