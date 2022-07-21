@@ -2,6 +2,7 @@ package vm
 
 import (
 	"regexp"
+	"strings"
 	"time"
 
 	"github.com/vmware/govmomi/vim25"
@@ -46,7 +47,7 @@ func (o *VMOperator) transferOne(ins *mo.VirtualMachine, dcName string) *host.Ho
 
 	h.Describe.Cpu = int64(ins.Config.Hardware.NumCPU)
 	h.Describe.Memory = int64(ins.Config.Hardware.MemoryMB)
-	h.Describe.OsType = ins.Guest.GuestFamily
+	h.Describe.OsType = strings.TrimSuffix(ins.Guest.GuestFamily, "Guest")
 	h.Describe.OsName = ins.Guest.GuestFullName
 	h.Describe.SerialNumber = ins.Config.Uuid
 
@@ -80,4 +81,38 @@ func (o *VMOperator) GetMasterIp(nics []types.GuestNicInfo) string {
 		return ips[0]
 	}
 	return ""
+}
+
+func ParseExtraConfigValue(v string) map[string]string {
+	conf := map[string]string{}
+
+	key := []rune{}
+	value := []rune{}
+	count := 0
+	parsekey := true
+	for _, c := range v {
+		if parsekey {
+			// 解析key
+			if c != '=' {
+				key = append(key, c)
+			} else {
+				parsekey = false
+			}
+		} else {
+			// 解析value
+			if c == '\'' {
+				count++
+				if count%2 == 0 {
+					conf[strings.TrimSpace(string(key))] = strings.TrimSpace(string(value))
+					key = []rune{}
+					value = []rune{}
+					parsekey = true
+				}
+			} else {
+				value = append(value, c)
+			}
+		}
+	}
+
+	return conf
 }

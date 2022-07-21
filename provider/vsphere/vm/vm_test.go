@@ -24,6 +24,14 @@ func TestQuery(t *testing.T) {
 	}
 }
 
+func TestRangeString(t *testing.T) {
+	str := "architecture='X86' bitness='64' distroName='CentOS Stream' distroVersion='8' familyName='Linux' kernelVersion='4.18.0-365.el8.x86_64' prettyName='CentOS Stream 8'"
+	m := op.ParseExtraConfigValue(str)
+	for k, v := range m {
+		fmt.Println(k, v)
+	}
+}
+
 func init() {
 	zap.DevelopmentSetup()
 
