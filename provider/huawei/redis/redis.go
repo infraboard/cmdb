@@ -16,7 +16,7 @@ import (
 func NewDcsOperator(client *dcs.DcsClient) *DcsOperator {
 	return &DcsOperator{
 		client: client,
-		log:    zap.L().Named("Huawei Rds"),
+		log:    zap.L().Named("huawei.redis"),
 	}
 }
 
