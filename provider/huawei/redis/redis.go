@@ -44,6 +44,16 @@ func (o *DcsOperator) transferOne(ins model.InstanceListInfo) *redis.Redis {
 	info := r.Information
 	info.Name = tea.StringValue(ins.Name)
 	info.Category = tea.StringValue(ins.SpecCode)
+	info.PayType = o.parseChargeMod(ins.ChargingMode)
+	info.Status = tea.StringValue(ins.Status)
+
+	d := r.Describe
+	d.Memory = int64(tea.Int32Value(ins.Capacity))
+	d.ConnectAddr = tea.StringValue(ins.Ip)
+	d.ConnectPort = int64(tea.Int32Value(ins.Port))
+	d.ArchitectureType = tea.StringValue(ins.SpecCode)
+	d.EngineType = tea.StringValue(ins.Engine)
+	d.EngineVersion = tea.StringValue(ins.EngineVersion)
 	return r
 }
 
@@ -59,4 +69,18 @@ func (o *DcsOperator) parseTime(t string) int64 {
 	}
 
 	return ts.UnixMilli()
+}
+
+var (
+	chargeModeMap = map[int32]string{
+		0: "按需计费",
+		1: "包年/包月计费",
+	}
+)
+
+func (o *DcsOperator) parseChargeMod(t *int32) string {
+	if t == nil {
+		return ""
+	}
+	return chargeModeMap[*t]
 }

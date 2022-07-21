@@ -20,7 +20,7 @@ func NewVMOperator(client *vim25.Client) *VMOperator {
 		masterIpRegx: "",
 		client:       client,
 		finder:       find.NewFinder(client, false),
-		log:          zap.L().Named("Vsphere VM"),
+		log:          zap.L().Named("vsphere.vm"),
 		Timeout:      time.Second * 60,
 	}
 }
