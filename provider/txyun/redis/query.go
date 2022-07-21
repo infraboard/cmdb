@@ -24,3 +24,7 @@ func (o *RedisOperator) Query(ctx context.Context, req *redis.DescribeInstancesR
 func (o *RedisOperator) QueryRedis(req *provider.QueryRedisRequest) pager.Pager {
 	return newPager(20, o)
 }
+
+func (o *RedisOperator) DescribeRedis(ctx context.Context, req *provider.DescribeRedisRequest) (*cmdbRedis.Redis, error) {
+	return nil, nil
+}

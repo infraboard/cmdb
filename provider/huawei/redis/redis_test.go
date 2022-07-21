@@ -21,8 +21,8 @@ func TestQuery(t *testing.T) {
 	req := provider.NewQueryRedisWithRate(5)
 	pager := operator.QueryRedis(req)
 
+	set := redis.NewSet()
 	for pager.Next() {
-		set := redis.NewSet()
 		if err := pager.Scan(context.Background(), set); err != nil {
 			panic(err)
 		}

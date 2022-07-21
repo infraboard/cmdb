@@ -2,6 +2,7 @@ package connectivity
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/caarlos0/env/v6"
 	"github.com/infraboard/cmdb/utils"
@@ -12,6 +13,7 @@ import (
 	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 	redis "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/redis/v20180412"
 	sts "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sts/v20180813"
+	"github.com/tencentyun/cos-go-sdk-v5"
 )
 
 var (
@@ -52,6 +54,7 @@ type TencentCloudClient struct {
 	cvmConn   *cvm.Client
 	cdbConn   *cdb.Client
 	redisConn *redis.Client
+	cosConn   *cos.Client
 	billConn  *billing.Client
 }
 
@@ -137,6 +140,22 @@ func (me *TencentCloudClient) RedisClient() *redis.Client {
 	conn, _ := redis.NewClient(credential, me.Region, cpf)
 	me.redisConn = conn
 	return me.redisConn
+}
+
+// CDBClient cdb
+func (me *TencentCloudClient) CosClient() *cos.Client {
+	if me.cosConn != nil {
+		return me.cosConn
+	}
+
+	me.cosConn = cos.NewClient(nil, &http.Client{
+		Transport: &cos.AuthorizationTransport{
+			SecretID:  me.SecretID,
+			SecretKey: me.SecretKey,
+		},
+	})
+
+	return me.cosConn
 }
 
 // 获取客户端账号ID

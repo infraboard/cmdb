@@ -1,9 +1,13 @@
 package provider
 
-import "github.com/infraboard/mcube/pager"
+import (
+	"context"
+
+	"github.com/infraboard/mcube/pager"
+)
 
 type OssOperator interface {
-	QueryBucket(req *QueryBucketRequest) pager.Pager
+	QueryBucket(ctx context.Context, req *QueryBucketRequest) pager.Pager
 }
 
 func NewQueryBucketRate(rate int32) *QueryBucketRequest {
