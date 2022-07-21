@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/infraboard/cmdb/apps/host"
+	"github.com/infraboard/cmdb/apps/oss"
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/cmdb/provider/txyun"
 	"github.com/infraboard/mcube/logger/zap"
@@ -19,7 +19,7 @@ func TestQuery(t *testing.T) {
 	pager := operator.QueryBucket(context.Background(), provider.NewQueryBucketRate(5))
 
 	for pager.Next() {
-		set := host.NewHostSet()
+		set := oss.NewBucketSet()
 		if err := pager.Scan(context.Background(), set); err != nil {
 			panic(err)
 		}

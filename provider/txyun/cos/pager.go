@@ -5,6 +5,7 @@ import (
 
 	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 
+	"github.com/infraboard/cmdb/apps/oss"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 	"github.com/infraboard/mcube/pager"
@@ -26,6 +27,7 @@ type cvmPager struct {
 	operator *CosOperator
 	req      *cvm.DescribeInstancesRequest
 	log      logger.Logger
+	isEnd    bool
 }
 
 func (p *cvmPager) Scan(ctx context.Context, set pager.Set) error {
@@ -36,6 +38,8 @@ func (p *cvmPager) Scan(ctx context.Context, set pager.Set) error {
 	set.Add(resp.ToAny()...)
 	p.log.Debugf("get %d buckets", len(resp.Items))
 
+	// 无分页
+	resp.Items = []*oss.Bucket{}
 	p.CheckHasNext(resp)
 	return nil
 }
