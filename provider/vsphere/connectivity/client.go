@@ -23,7 +23,9 @@ func C() *VsphereClient {
 }
 
 func LoadClientFromEnv() error {
-	client = &VsphereClient{}
+	client = &VsphereClient{
+		Insecure: true,
+	}
 	if err := env.Parse(client); err != nil {
 		return err
 	}

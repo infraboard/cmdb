@@ -1,10 +1,12 @@
 package vm
 
 import (
+	"regexp"
 	"time"
 
 	"github.com/vmware/govmomi/vim25"
 	"github.com/vmware/govmomi/vim25/mo"
+	"github.com/vmware/govmomi/vim25/types"
 
 	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/cmdb/apps/resource"
@@ -15,18 +17,20 @@ import (
 
 func NewVMOperator(client *vim25.Client) *VMOperator {
 	return &VMOperator{
-		client:  client,
-		finder:  find.NewFinder(client, false),
-		log:     zap.L().Named("Vsphere VM"),
-		Timeout: time.Second * 60,
+		masterIpRegx: "",
+		client:       client,
+		finder:       find.NewFinder(client, false),
+		log:          zap.L().Named("Vsphere VM"),
+		Timeout:      time.Second * 60,
 	}
 }
 
 type VMOperator struct {
-	client  *vim25.Client
-	log     logger.Logger
-	finder  *find.Finder
-	Timeout time.Duration
+	masterIpRegx string
+	client       *vim25.Client
+	log          logger.Logger
+	finder       *find.Finder
+	Timeout      time.Duration
 }
 
 func (o *VMOperator) transferOne(ins *mo.VirtualMachine, dcName string) *host.Host {
@@ -39,12 +43,41 @@ func (o *VMOperator) transferOne(ins *mo.VirtualMachine, dcName string) *host.Ho
 
 	h.Information.Name = ins.Name
 	h.Information.Status = string(ins.Summary.Runtime.PowerState)
-	h.Information.PrivateIp = []string{ins.Guest.IpAddress}
 
 	h.Describe.Cpu = int64(ins.Config.Hardware.NumCPU)
 	h.Describe.Memory = int64(ins.Config.Hardware.MemoryMB)
 	h.Describe.OsType = ins.Guest.GuestFamily
 	h.Describe.OsName = ins.Guest.GuestFullName
 	h.Describe.SerialNumber = ins.Config.Uuid
+
+	// 获取主Ip
+	privateIP := o.GetMasterIp(ins.Guest.Net)
+	if privateIP == "" {
+		privateIP = ins.Guest.IpAddress
+	}
+	h.Information.PrivateIp = []string{privateIP}
 	return h
+}
+
+func (o *VMOperator) GetMasterIp(nics []types.GuestNicInfo) string {
+	ips := []string{}
+	for i := range nics {
+		for j := range nics[i].IpAddress {
+			ips = append(ips, nics[i].IpAddress[j])
+		}
+	}
+
+	if o.masterIpRegx != "" {
+		expr, _ := regexp.Compile(o.masterIpRegx)
+		for _, ip := range ips {
+			if expr.MatchString(ip) {
+				return ip
+			}
+		}
+	}
+
+	if len(ips) > 0 {
+		return ips[0]
+	}
+	return ""
 }
