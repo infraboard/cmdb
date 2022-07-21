@@ -118,7 +118,7 @@ func (me *TencentCloudClient) CDBClient() *cdb.Client {
 	return me.cdbConn
 }
 
-// CDBClient cdb
+// RedisClient cdb
 func (me *TencentCloudClient) RedisClient() *redis.Client {
 	if me.redisConn != nil {
 		return me.redisConn
