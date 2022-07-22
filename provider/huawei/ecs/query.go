@@ -11,6 +11,8 @@ import (
 	"github.com/infraboard/mcube/pager"
 )
 
+// 查询云服务器详情列表
+// 参考文档: https://apiexplorer.developer.huaweicloud.com/apiexplorer/doc?product=ECS&api=ListServersDetails
 func (o *EcsOperator) query(req *model.ListServersDetailsRequest) (*host.HostSet, error) {
 	set := host.NewHostSet()
 

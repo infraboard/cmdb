@@ -124,3 +124,37 @@ message ReleaseHostRequest {
     // @gotags: json:"release_plan"
     infraboard.cmdb.resource.ReleasePlan release_plan = 2;
 }
+
+enum STATUS {
+    // 未知状态
+    UNKNOW = 0;
+    // 表示创建中
+    PENDING = 5;
+    // 表示创建失败
+    LAUNCH_FAILED = 6;
+
+    // 表示开机中
+    STARTING = 10;
+    // 表示运行中
+    RUNNING = 11;
+
+    // 表示关机中
+    STOPPING = 20; 
+    // 表示关机
+    STOPPED = 21;
+
+    // 表示重启中
+    REBOOTING = 30;
+    // 暂停中
+    SUSPENDED = 40;
+
+    // 状态异常
+	ERROR  = 50;
+
+    // 表示停止待销毁
+    SHUTDOWN = 80;
+    // 表示销毁中
+    TERMINATING = 81;
+    // 已归档
+    ARCHIVED = 90;
+}

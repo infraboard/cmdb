@@ -160,6 +160,15 @@ func (s *HostSet) UpdateTag(tags []*resource.Tag) {
 	}
 }
 
+func (h *Host) Status() STATUS {
+	s, err := ParseSTATUSFromString(h.Information.Status)
+	if err != nil {
+		return STATUS_UNKNOW
+	}
+
+	return s
+}
+
 func (req *DescribeHostRequest) Where() (string, interface{}) {
 	switch req.DescribeBy {
 	default:

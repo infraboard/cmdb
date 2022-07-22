@@ -45,7 +45,7 @@ func (o *CVMOperator) transferOne(ins *cvm.Instance) *host.Host {
 	h.Information.ExpireAt = o.parseTime(utils.PtrStrV(ins.ExpiredTime))
 	h.Information.Type = utils.PtrStrV(ins.InstanceType)
 	h.Information.Name = utils.PtrStrV(ins.InstanceName)
-	h.Information.Status = utils.PtrStrV(ins.InstanceState)
+	h.Information.Status = praseStatus(ins.InstanceState)
 	h.Information.Tags = transferTags(ins.Tags)
 	h.Information.PublicIp = utils.SlicePtrStrv(ins.PublicIpAddresses)
 	h.Information.PrivateIp = utils.SlicePtrStrv(ins.PrivateIpAddresses)

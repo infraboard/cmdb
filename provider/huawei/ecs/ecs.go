@@ -48,7 +48,7 @@ func (o *EcsOperator) transferOne(ins model.ServerDetail) *host.Host {
 	h.Information.ExpireAt = o.parseTime(ins.AutoTerminateTime)
 	h.Information.Name = ins.Name
 	h.Information.Description = utils.PtrStrV(ins.Description)
-	h.Information.Status = ins.Status
+	h.Information.Status = praseStatus(ins.Status)
 	h.Information.Tags = o.transferTags(ins.Tags)
 	h.Information.PrivateIp, h.Information.PublicIp = o.parseIp(ins.Addresses)
 	h.Information.PayType = o.ParseChangeMode(ins.Metadata["charging_mode"])

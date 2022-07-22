@@ -43,7 +43,7 @@ func (o *VMOperator) transferOne(ins *mo.VirtualMachine, dcName string) *host.Ho
 	h.Base.Id = ins.Config.Uuid
 
 	h.Information.Name = ins.Name
-	h.Information.Status = string(ins.Summary.Runtime.PowerState)
+	h.Information.Status = praseStatus(string(ins.Summary.Runtime.PowerState))
 
 	h.Describe.Cpu = int64(ins.Config.Hardware.NumCPU)
 	h.Describe.Memory = int64(ins.Config.Hardware.MemoryMB)

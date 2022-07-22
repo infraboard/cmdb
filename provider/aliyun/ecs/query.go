@@ -12,7 +12,8 @@ import (
 	"github.com/infraboard/mcube/pager"
 )
 
-// 阿里云ECS实例字段描述: https://next.api.aliyun.com/document/Ecs/2014-05-26/DescribeInstances
+// 查询一台或多台ECS实例的详细信息
+// 参考文档: https://next.api.aliyun.com/api/Ecs/2014-05-26/DescribeInstances?params={}
 func (o *EcsOperator) query(req *ecs.DescribeInstancesRequest) (*host.HostSet, error) {
 	set := host.NewHostSet()
 

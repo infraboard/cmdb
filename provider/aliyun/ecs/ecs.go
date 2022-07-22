@@ -48,7 +48,7 @@ func (o *EcsOperator) transferOne(ins *ecs.DescribeInstancesResponseBodyInstance
 	h.Information.Type = tea.StringValue(ins.InstanceType)
 	h.Information.Name = tea.StringValue(ins.InstanceName)
 	h.Information.Description = tea.StringValue(ins.Description)
-	h.Information.Status = tea.StringValue(ins.Status)
+	h.Information.Status = praseStatus(ins.Status)
 	h.Information.Tags = o.transferTags(ins.Tags)
 	h.Information.PublicIp = tea.StringSliceValue(ins.PublicIpAddress.IpAddress)
 	h.Information.PrivateIp = o.parsePrivateIp(ins)
