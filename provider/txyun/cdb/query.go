@@ -11,6 +11,8 @@ import (
 	"github.com/infraboard/mcube/pager"
 )
 
+// 查询实例列表 (CDB)
+// 参考: https://console.cloud.tencent.com/api/explorer?Product=cdb&Version=2017-03-20&Action=DescribeDBInstances&SignVersion=
 func (o *CDBOperator) Query(ctx context.Context, req *cdb.DescribeDBInstancesRequest) (*rds.Set, error) {
 	resp, err := o.client.DescribeDBInstancesWithContext(ctx, req)
 	if err != nil {
