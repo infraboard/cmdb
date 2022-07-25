@@ -47,8 +47,13 @@ func (o *CDBOperator) transferOne(ins *cdb.InstanceInfo) *rds.Rds {
 	info.ExpireAt = o.parseTime(utils.PtrStrV(ins.DeadlineTime))
 	info.Name = utils.PtrStrV(ins.InstanceName)
 	info.Category = utils.PtrStrV(ins.DeviceType)
-	info.Status = o.ParseStatus(ins.Status)
+	info.Status = praseStatus(ins.Status)
 	info.PayType = o.ParsePayType(ins.PayType)
+
+	// 补充其他状态
+	if ins.TaskStatus != nil && *ins.TaskStatus != 0 {
+		info.Status = praseTaskStatus(ins.TaskStatus)
+	}
 
 	desc := r.Describe
 	desc.EngineType = "MySQL"
@@ -84,24 +89,6 @@ func (o *CDBOperator) ParseType(id *int64) string {
 		return "灾备实例"
 	case 3:
 		return "只读实例"
-	}
-	return ""
-}
-
-// 实例状态，可能的返回值：0-创建中；1-运行中；4-隔离中；5-已隔离
-func (o *CDBOperator) ParseStatus(id *int64) string {
-	if id == nil {
-		return ""
-	}
-	switch *id {
-	case 0:
-		return "创建中"
-	case 1:
-		return "运行中"
-	case 4:
-		return "隔离中"
-	case 5:
-		return "已隔离"
 	}
 	return ""
 }

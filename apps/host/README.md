@@ -57,9 +57,11 @@ Vmware:
 + PENDING：表示创建中
 + LAUNCH_FAILED：表示创建失败
 + RUNNING：表示运行中
++ ERROR: 运行异常
 + STOPPED：表示关机
 + STARTING：表示开机中
 + STOPPING：表示关机中
 + REBOOTING：表示重启中
 + SHUTDOWN：表示停止待销毁
 + TERMINATING：表示销毁中。
++ ARCHIVED: 已销毁, 

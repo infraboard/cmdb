@@ -11,6 +11,8 @@ import (
 	"github.com/infraboard/mcube/pager"
 )
 
+// 查询数据库实例列表
+// 参考: https://apiexplorer.developer.huaweicloud.com/apiexplorer/sdk?product=RDS&api=ListInstances
 func (o *RdsOperator) Query(req *model.ListInstancesRequest) (*rds.Set, error) {
 	set := rds.NewSet()
 

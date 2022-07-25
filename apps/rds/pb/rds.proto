@@ -180,3 +180,55 @@ message ConnectionAddr {
    // @gotags: json:"port"
     int64 port = 3;
 }
+
+enum STATUS {
+    // 未知状态
+    UNKNOW = 0;
+    // 表示创建中
+    PENDING = 5;
+
+    // 表示运行中
+    RUNNING = 11;
+
+    // 实例配置变更生效中
+    MODIFYING = 20;
+
+    // 表示重启中
+    REBOOTING = 30;
+    // 备份恢复中
+    RESTORING = 31;
+    // 迁移中
+    TRANSING = 32;
+    // 数据导入中
+    IMPORTING = 33;
+    // 实例克隆中
+    CLONING = 34;
+    // 迁移版本中
+    UPGRADING = 35;
+    // 表示实例正在进行备份
+    BACKING_UP = 36;
+    // 内外网切换中
+    NET_CHANGING = 37;
+
+    // 表示实例正在主备切换
+    SWITCHOVER = 40;
+    // 灾备实例创建同步中
+    GUARD_CREATING = 41;
+
+    // 状态异常
+	ERROR  = 50;
+    // 表示实例磁盘空间满
+    STORAGE_FULL = 51;
+
+    // 隔离中
+    ISOLATIONING = 70;
+    // 已隔中
+    ISOLATIONED = 71;
+
+    // 表示停止待销毁
+    SHUTDOWN = 80;
+    // 表示销毁中
+    TERMINATING = 81;
+    // 已归档
+    ARCHIVED = 90;
+}
