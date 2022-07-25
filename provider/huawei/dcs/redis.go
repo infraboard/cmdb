@@ -45,7 +45,7 @@ func (o *DcsOperator) transferOne(ins model.InstanceListInfo) *redis.Redis {
 	info.Name = tea.StringValue(ins.Name)
 	info.Category = tea.StringValue(ins.SpecCode)
 	info.PayType = o.parseChargeMod(ins.ChargingMode)
-	info.Status = tea.StringValue(ins.Status)
+	info.Status = praseStatus(ins.Status)
 
 	d := r.Describe
 	d.Memory = int64(tea.Int32Value(ins.Capacity))
