@@ -1,4 +1,4 @@
-package redis
+package dcs
 
 import (
 	"context"
@@ -10,6 +10,8 @@ import (
 	"github.com/infraboard/mcube/pager"
 )
 
+// 查询租户的缓存实例列表，支持按照条件查询
+// 参考: https://apiexplorer.developer.huaweicloud.com/apiexplorer/doc?product=DCS&api=ListInstances
 func (o *DcsOperator) Query(req *model.ListInstancesRequest) (*redis.Set, error) {
 	set := redis.NewSet()
 

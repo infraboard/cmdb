@@ -1,4 +1,4 @@
-package redis_test
+package dcs_test
 
 import (
 	"context"
@@ -10,7 +10,7 @@ import (
 	"github.com/infraboard/mcube/logger/zap"
 
 	"github.com/infraboard/cmdb/provider"
-	op "github.com/infraboard/cmdb/provider/huawei/redis"
+	op "github.com/infraboard/cmdb/provider/huawei/dcs"
 )
 
 var (

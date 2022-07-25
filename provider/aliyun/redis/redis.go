@@ -46,7 +46,7 @@ func (o *RedisOperator) transferOne(ins *redis.DescribeInstancesResponseBodyInst
 	info.Name = tea.StringValue(ins.InstanceName)
 	info.Type = tea.StringValue(ins.EditionType)
 	info.Category = tea.StringValue(ins.ArchitectureType)
-	info.Status = tea.StringValue(ins.InstanceStatus)
+	info.Status = praseStatus(ins.InstanceStatus)
 	info.PayType = tea.StringValue(ins.ChargeType)
 	info.PrivateIp = []string{tea.StringValue(ins.PrivateIp)}
 

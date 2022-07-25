@@ -45,7 +45,7 @@ func (o *RedisOperator) transferOne(ins *redis.InstanceSet) *cmdbRedis.Redis {
 	info.Category = tea.StringValue(ins.ProductType)
 	info.Type = o.ParseType(ins.Type)
 	info.Name = tea.StringValue(ins.InstanceName)
-	info.Status = o.ParseStatus(ins.Status)
+	info.Status = praseStatus(ins.Status)
 	info.PayType = o.ParseBillMode(ins.BillingMode)
 	info.PrivateIp = []string{tea.StringValue(ins.WanIp)}
 
@@ -79,24 +79,6 @@ func (o *RedisOperator) ParseType(t *int64) string {
 		return ""
 	}
 	return typeMap[*t]
-}
-
-var (
-	statusMap = map[int64]string{
-		0:  "待初始化",
-		1:  "实例在流程中",
-		2:  "实例运行中",
-		-2: "实例已隔离",
-		-3: "实例待删除",
-	}
-)
-
-func (o *RedisOperator) ParseStatus(t *int64) string {
-	if t == nil {
-		return ""
-	}
-
-	return statusMap[*t]
 }
 
 var (
