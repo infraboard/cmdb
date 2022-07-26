@@ -81,7 +81,7 @@ message Base {
     // @gotags: json:"id" validate:"required"
     string id = 1; 
     // 同步时间
-    // @gotags: json:"sync_at"
+    // @gotags: json:"sync_at" validate:"required"
     int64 sync_at = 2;  
     // 用于同步的凭证ID
     // @gotags: json:"credential_id"
@@ -114,7 +114,7 @@ message Base {
     // @gotags: json:"describe_hash_changed,omitempty"
     bool describe_hash_changed = 13;
     // 资源所属空间
-    // @gotags: json:"namespace"
+    // @gotags: json:"namespace" validate:"required"
     string namespace = 14;
     // 资源所属环境
     // @gotags: json:"env"
@@ -126,7 +126,7 @@ message Base {
     // @gotags: json:"shared_policy"
     SharedPolicy shared_policy = 17;
     // 资源所属域
-    // @gotags: json:"domain"
+    // @gotags: json:"domain" validate:"required"
     string domain = 18;
 }
 

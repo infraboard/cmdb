@@ -515,8 +515,8 @@ type Base struct {
 	// @gotags: json:"id" validate:"required"
 	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id" validate:"required"`
 	// 同步时间
-	// @gotags: json:"sync_at"
-	SyncAt int64 `protobuf:"varint,2,opt,name=sync_at,json=syncAt,proto3" json:"sync_at"`
+	// @gotags: json:"sync_at" validate:"required"
+	SyncAt int64 `protobuf:"varint,2,opt,name=sync_at,json=syncAt,proto3" json:"sync_at" validate:"required"`
 	// 用于同步的凭证ID
 	// @gotags: json:"credential_id"
 	CredentialId string `protobuf:"bytes,3,opt,name=credential_id,json=credentialId,proto3" json:"credential_id"`
@@ -548,8 +548,8 @@ type Base struct {
 	// @gotags: json:"describe_hash_changed,omitempty"
 	DescribeHashChanged bool `protobuf:"varint,13,opt,name=describe_hash_changed,json=describeHashChanged,proto3" json:"describe_hash_changed,omitempty"`
 	// 资源所属空间
-	// @gotags: json:"namespace"
-	Namespace string `protobuf:"bytes,14,opt,name=namespace,proto3" json:"namespace"`
+	// @gotags: json:"namespace" validate:"required"
+	Namespace string `protobuf:"bytes,14,opt,name=namespace,proto3" json:"namespace" validate:"required"`
 	// 资源所属环境
 	// @gotags: json:"env"
 	Env string `protobuf:"bytes,15,opt,name=env,proto3" json:"env"`
@@ -560,8 +560,8 @@ type Base struct {
 	// @gotags: json:"shared_policy"
 	SharedPolicy *SharedPolicy `protobuf:"bytes,17,opt,name=shared_policy,json=sharedPolicy,proto3" json:"shared_policy"`
 	// 资源所属域
-	// @gotags: json:"domain"
-	Domain string `protobuf:"bytes,18,opt,name=domain,proto3" json:"domain"`
+	// @gotags: json:"domain" validate:"required"
+	Domain string `protobuf:"bytes,18,opt,name=domain,proto3" json:"domain" validate:"required"`
 }
 
 func (x *Base) Reset() {

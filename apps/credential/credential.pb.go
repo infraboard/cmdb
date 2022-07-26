@@ -98,11 +98,11 @@ type CreateSecretRequest struct {
 	// @gotags: json:"request_rate"
 	RequestRate int32 `protobuf:"varint,8,opt,name=request_rate,json=requestRate,proto3" json:"request_rate"`
 	// 所属Domain
-	// @gotags: json:"domain"
-	Domain string `protobuf:"bytes,9,opt,name=domain,proto3" json:"domain"`
+	// @gotags: json:"domain" validate:"required"
+	Domain string `protobuf:"bytes,9,opt,name=domain,proto3" json:"domain" validate:"required"`
 	// 所属Namespace
-	// @gotags: json:"namespace"
-	Namespace string `protobuf:"bytes,10,opt,name=namespace,proto3" json:"namespace"`
+	// @gotags: json:"namespace" validate:"required"
+	Namespace string `protobuf:"bytes,10,opt,name=namespace,proto3" json:"namespace" validate:"required"`
 }
 
 func (x *CreateSecretRequest) Reset() {

@@ -3,6 +3,7 @@ package impl
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/infraboard/cmdb/apps/credential"
 	"github.com/infraboard/cmdb/apps/rds"
@@ -72,7 +73,8 @@ func (s *service) syncRds(ctx context.Context, credentialIns *credential.Secret,
 			// 调用rds服务保持数据
 			for i := range set.Items {
 				target := set.Items[i]
-				target.Base.CredentialId = credentialIns.Id
+				// 补充管理信息
+				InjectBaseFromSecret(target.Base, credentialIns)
 				s.SaveOrUpdateRds(ctx, target, t)
 			}
 		}
@@ -81,6 +83,7 @@ func (s *service) syncRds(ctx context.Context, credentialIns *credential.Secret,
 
 // Rds数据入库
 func (s *service) SaveOrUpdateRds(ctx context.Context, ins *rds.Rds, t *task.Task) {
+	ins.Base.SyncAt = time.Now().Unix()
 	b, err := s.rds.SyncRDS(ctx, ins)
 
 	var detail *task.Record
