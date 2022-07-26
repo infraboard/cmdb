@@ -131,7 +131,7 @@ enum STATUS {
     // 表示创建中
     PENDING = 5;
     // 表示创建失败
-    LAUNCH_FAILED = 6;
+    CREATE_FAILED = 6;
 
     // 表示开机中
     STARTING = 10;

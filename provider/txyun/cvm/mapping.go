@@ -5,7 +5,7 @@ import "github.com/infraboard/cmdb/apps/host"
 var (
 	STATUS_MAP = map[string]host.STATUS{
 		"PENDING":               host.STATUS_PENDING,
-		"LAUNCH_FAILED":         host.STATUS_LAUNCH_FAILED,
+		"LAUNCH_FAILED":         host.STATUS_CREATE_FAILED,
 		"RUNNING":               host.STATUS_RUNNING,
 		"STOPPED":               host.STATUS_STOPPED,
 		"STARTING":              host.STATUS_STARTING,

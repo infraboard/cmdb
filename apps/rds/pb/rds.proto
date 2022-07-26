@@ -186,6 +186,8 @@ enum STATUS {
     UNKNOW = 0;
     // 表示创建中
     PENDING = 5;
+    // 表示创建失败
+    CREATE_FAILED = 6;
 
     // 表示运行中
     RUNNING = 11;
