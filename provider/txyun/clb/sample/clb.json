@@ -1,0 +1,74 @@
+{
+    "LoadBalancerId": "lb-xxxx",
+    "LoadBalancerName": "xxxxx",
+    "LoadBalancerType": "INTERNAL",
+    "Forward": 1,
+    "Domain": "",
+    "LoadBalancerVips": [
+        "1xxxx"
+    ],
+    "Status": 1,
+    "CreateTime": "2022-01-25 16:44:51",
+    "StatusTime": "2022-04-20 12:47:03",
+    "ProjectId": 0,
+    "VpcId": "vpc-xxxx",
+    "OpenBgp": 0,
+    "Snat": false,
+    "Isolation": 0,
+    "Log": "",
+    "SubnetId": "subnet-xxxx",
+    "Tags": [
+        {
+            "TagKey": "tke-clusterId",
+            "TagValue": "cls-xxxxx"
+        },
+        {
+            "TagKey": "991xxxxx",
+            "TagValue": "lxxxx"
+        },
+        {
+            "TagKey": "991",
+            "TagValue": "tkxxx"
+        },
+        {
+            "TagKey": "99109xxxx",
+            "TagValue": "lxxxx"
+        },
+        {
+            "TagKey": "99xxx",
+            "TagValue": "lbxxxx"
+        },
+        {
+            "TagKey": "991",
+            "TagValue": "lxxxx"
+        }
+    ],
+    "TargetRegionInfo": {
+        "Region": "ap-shanghai",
+        "VpcId": "vxxx"
+    },
+    "AnycastZone": "",
+    "AddressIPVersion": "ipv4",
+    "NumericalVpcId": 187945,
+    "VipIsp": "INTERNAL",
+    "ChargeType": "POSTPAID_BY_HOUR",
+    "NetworkAttributes": {
+        "InternetChargeType": "",
+        "InternetMaxBandwidthOut": 0
+    },
+    "LogSetId": "",
+    "LogTopicId": "",
+    "IsDDos": false,
+    "ConfigId": "",
+    "LoadBalancerPassToTarget": true,
+    "ExclusiveCluster": {},
+    "SnatPro": false,
+    "SlaType": "",
+    "IsBlock": false,
+    "IsBlockTime": "",
+    "LocalBgp": false,
+    "MixIpTarget": false,
+    "NfvInfo": "",
+    "HealthLogSetId": "",
+    "HealthLogTopicId": ""
+}

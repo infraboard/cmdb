@@ -9,6 +9,7 @@ import (
 	billing "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/billing/v20180709"
 	cbs "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cbs/v20170312"
 	cdb "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cdb/v20170320"
+	clb "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/clb/v20180317"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
 	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
@@ -57,6 +58,7 @@ type TencentCloudClient struct {
 	redisConn *redis.Client
 	cosConn   *cos.Client
 	cbsConn   *cbs.Client
+	clbConn   *clb.Client
 	billConn  *billing.Client
 }
 
@@ -79,6 +81,27 @@ func (me *TencentCloudClient) CvmClient() *cvm.Client {
 	cvmConn, _ := cvm.NewClient(credential, me.Region, cpf)
 	me.cvmConn = cvmConn
 	return me.cvmConn
+}
+
+// UseCvmClient cvm
+func (me *TencentCloudClient) ClbClient() *clb.Client {
+	if me.clbConn != nil {
+		return me.clbConn
+	}
+
+	credential := common.NewCredential(
+		me.SecretID,
+		me.SecretKey,
+	)
+
+	cpf := profile.NewClientProfile()
+	cpf.HttpProfile.ReqMethod = "POST"
+	cpf.HttpProfile.ReqTimeout = 300
+	cpf.Language = "en-US"
+
+	clbConn, _ := clb.NewClient(credential, me.Region, cpf)
+	me.clbConn = clbConn
+	return me.clbConn
 }
 
 // UseCvmClient cvm
