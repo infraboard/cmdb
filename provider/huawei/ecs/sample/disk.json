@@ -1,0 +1,53 @@
+{
+    "id": "6209dexxxx",
+    "links": [
+        {
+            "href": "https://evs.cn-north-4.myhuaweicloud.com/v2/089e08759600f40f2f06c018700aa64c/os-vendor-volumes/xxxxx",
+            "rel": "self"
+        },
+        {
+            "href": "https://evs.cn-north-4.myhuaweicloud.com/089e08759600f40f2f06c018700aa64c/os-vendor-volumes/xxxxx",
+            "rel": "bookmark"
+        }
+    ],
+    "name": "测试-xxxxx",
+    "status": "in-use",
+    "attachments": [
+        {
+            "attached_at": "2022-05-06T03:41:34.606179",
+            "attachment_id": "1cd7dfb2xxxx",
+            "device": "/dev/vdb",
+            "host_name": "",
+            "id": "6209de77xxxx",
+            "server_id": "866c9f6exxxx",
+            "volume_id": "6209de77xxxx"
+        }
+    ],
+    "availability_zone": "cn-north-4b",
+    "os-vol-host-attr:host": "pod16.cn-north-4b#39",
+    "snapshot_id": "",
+    "description": "",
+    "created_at": "2022-05-06T03: 41: 15.479800",
+    "os-vol-tenant-attr:tenant_id": "089e08759600f4xxxxx",
+    "volume_image_metadata": {},
+    "volume_type": "GPSSD",
+    "size": 100,
+    "bootable": "false",
+    "metadata": {
+        "hw:passthrough": "false",
+        "orderID": "CS220xxxx"
+    },
+    "updated_at": "2022-05-13T16: 53: 24.772535",
+    "encrypted": false,
+    "replication_status": "disabled",
+    "os-volume-replication:extended_status": "",
+    "os-vol-mig-status-attr:migstat": "",
+    "os-vol-mig-status-attr:name_id": "",
+    "shareable": "false",
+    "user_id": "085xxxx",
+    "service_type": "EVS",
+    "multiattach": false,
+    "tags": {},
+    "wwn": "6888xxxxx",
+    "enterprise_project_id": "0"
+}

@@ -51,6 +51,9 @@ message Describe {
     // 随实例销毁
     // @gotags: json:"delete_with_instance"
     bool delete_with_instance = 10;
+    // 是否是共享盘
+    // @gotags: json:"multi_attach"
+    bool multi_attach = 12;
 }
 
 message DiskSet {

@@ -1,43 +1,61 @@
 package ecs
 
 import (
+	"context"
+	"fmt"
 	"strconv"
 	"time"
 
-	ecs "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ecs/v2"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ecs/v2/model"
 
 	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/cmdb/apps/resource"
+	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/cmdb/utils"
-	"github.com/infraboard/mcube/logger"
-	"github.com/infraboard/mcube/logger/zap"
+	"github.com/infraboard/mcube/pager"
 )
 
-func NewEcsOperator(client *ecs.EcsClient) *EcsOperator {
-	return &EcsOperator{
-		client:        client,
-		log:           zap.L().Named("Huawei ECS"),
-		AccountGetter: &resource.AccountGetter{},
+// 查询云服务器详情列表
+// 参考文档: https://apiexplorer.developer.huaweicloud.com/apiexplorer/doc?product=ECS&api=ListServersDetails
+func (o *EcsOperator) queryInstance(req *model.ListServersDetailsRequest) (*host.HostSet, error) {
+	set := host.NewHostSet()
+
+	resp, err := o.client.ListServersDetails(req)
+	if err != nil {
+		return nil, err
 	}
+	set.Total = int64(*resp.Count)
+	set.Items = o.transferInstanceSet(resp.Servers).Items
+
+	return set, nil
 }
 
-type EcsOperator struct {
-	client *ecs.EcsClient
-	log    logger.Logger
-	*resource.AccountGetter
+func (o *EcsOperator) QueryHost(req *provider.QueryHostRequest) pager.Pager {
+	p := newPager(o)
+	p.SetRate(req.Rate)
+	return p
 }
 
-func (o *EcsOperator) transferSet(list *[]model.ServerDetail) *host.HostSet {
+func (o *EcsOperator) QueryDisk(req *provider.QueryDiskRequest) pager.Pager {
+	p := newDiskPager(o)
+	p.SetRate(req.Rate)
+	return p
+}
+
+func (o *EcsOperator) DescribeHost(ctx context.Context, req *provider.DescribeHostRequest) (*host.Host, error) {
+	return nil, fmt.Errorf("not impl")
+}
+
+func (o *EcsOperator) transferInstanceSet(list *[]model.ServerDetail) *host.HostSet {
 	set := host.NewHostSet()
 	items := *list
 	for i := range items {
-		set.Add(o.transferOne(items[i]))
+		set.Add(o.transferInstance(items[i]))
 	}
 	return set
 }
 
-func (o *EcsOperator) transferOne(ins model.ServerDetail) *host.Host {
+func (o *EcsOperator) transferInstance(ins model.ServerDetail) *host.Host {
 	h := host.NewDefaultHost()
 	h.Base.Vendor = resource.VENDOR_HUAWEI
 	h.Base.Zone = ins.OSEXTAZavailabilityZone

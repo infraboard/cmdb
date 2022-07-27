@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/infraboard/cmdb/apps/disk"
 	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/cmdb/provider/huawei/connectivity"
@@ -17,11 +18,23 @@ var (
 	operator *op.EcsOperator
 )
 
-func TestQuery(t *testing.T) {
+func TestQueryEcs(t *testing.T) {
 	pager := operator.QueryHost(provider.NewQueryHostRequest())
 
 	for pager.Next() {
 		set := host.NewHostSet()
+		if err := pager.Scan(context.Background(), set); err != nil {
+			panic(err)
+		}
+		fmt.Println(set)
+	}
+}
+
+func TestQueryDisk(t *testing.T) {
+	pager := operator.QueryDisk(provider.NewQueryDiskRequest())
+
+	for pager.Next() {
+		set := disk.NewDiskSet()
 		if err := pager.Scan(context.Background(), set); err != nil {
 			panic(err)
 		}
@@ -40,5 +53,9 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	operator = op.NewEcsOperator(ec)
+	ev, err := connectivity.C().EvsClient()
+	if err != nil {
+		panic(err)
+	}
+	operator = op.NewEcsOperator(ec, ev)
 }

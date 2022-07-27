@@ -1,29 +1,42 @@
 package cvm
 
 import (
-	"time"
-
-	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
+	"context"
+	"fmt"
 
 	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/cmdb/apps/resource"
+	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/cmdb/utils"
-	"github.com/infraboard/mcube/logger"
-	"github.com/infraboard/mcube/logger/zap"
+	"github.com/infraboard/mcube/pager"
+	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 )
 
-func NewCVMOperator(client *cvm.Client) *CVMOperator {
-	return &CVMOperator{
-		client:        client,
-		log:           zap.L().Named("Tx CVM"),
-		AccountGetter: &resource.AccountGetter{},
+// 查看实例列表: https://cloud.tencent.com/document/api/213/15728
+func (o *CVMOperator) Query(ctx context.Context, req *cvm.DescribeInstancesRequest) (*host.HostSet, error) {
+	resp, err := o.client.DescribeInstancesWithContext(ctx, req)
+	if err != nil {
+		return nil, err
 	}
+
+	set := o.transferSet(resp.Response.InstanceSet)
+	set.Total = utils.PtrInt64(resp.Response.TotalCount)
+
+	return set, nil
 }
 
-type CVMOperator struct {
-	client *cvm.Client
-	log    logger.Logger
-	*resource.AccountGetter
+func (o *CVMOperator) QueryHost(req *provider.QueryHostRequest) pager.Pager {
+	p := newPager(o)
+	p.SetRate(req.Rate)
+	return p
+}
+
+func (o *CVMOperator) QueryDisk(req *provider.QueryDiskRequest) pager.Pager {
+	panic("not impl")
+}
+
+func (o *CVMOperator) DescribeHost(ctx context.Context, req *provider.DescribeHostRequest) (*host.Host, error) {
+	return nil, fmt.Errorf("not impl")
 }
 
 func (o *CVMOperator) transferSet(items []*cvm.Instance) *host.HostSet {
@@ -39,10 +52,10 @@ func (o *CVMOperator) transferOne(ins *cvm.Instance) *host.Host {
 	h.Base.Vendor = resource.VENDOR_TENCENT
 	h.Base.Region = o.client.GetRegion()
 	h.Base.Zone = utils.PtrStrV(ins.Placement.Zone)
-	h.Base.CreateAt = o.parseTime(utils.PtrStrV(ins.CreatedTime))
+	h.Base.CreateAt = utils.ParseDefaultSecondTime(utils.PtrStrV(ins.CreatedTime))
 	h.Base.Id = utils.PtrStrV(ins.InstanceId)
 
-	h.Information.ExpireAt = o.parseTime(utils.PtrStrV(ins.ExpiredTime))
+	h.Information.ExpireAt = utils.ParseDefaultSecondTime(utils.PtrStrV(ins.ExpiredTime))
 	h.Information.Type = utils.PtrStrV(ins.InstanceType)
 	h.Information.Name = utils.PtrStrV(ins.InstanceName)
 	h.Information.Status = praseStatus(ins.InstanceState)
@@ -73,18 +86,4 @@ func transferTags(tags []*cvm.Tag) (ret []*resource.Tag) {
 		)
 	}
 	return
-}
-
-func (o *CVMOperator) parseTime(t string) int64 {
-	if t == "" {
-		return 0
-	}
-
-	ts, err := time.Parse("2006-01-02T15:04:05Z", t)
-	if err != nil {
-		o.log.Errorf("parse time %s error, %s", t, err)
-		return 0
-	}
-
-	return ts.UnixNano() / 1000000
 }
