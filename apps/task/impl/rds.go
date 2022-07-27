@@ -33,7 +33,7 @@ func (s *service) syncRds(ctx context.Context, credentialIns *credential.Secret,
 	req := provider.NewQueryRdsRequestWithRate(credential.RequestRate)
 
 	switch credential.Vendor {
-	case resource.Vendor_ALIYUN:
+	case resource.VENDOR_ALIYUN:
 		s.log.Debugf("sync aliyun rds ...")
 		op, err := aliyun.NewOperator(credential.ApiKey, credential.ApiSecret, t.Data.Region)
 		if err != nil {
@@ -41,7 +41,7 @@ func (s *service) syncRds(ctx context.Context, credentialIns *credential.Secret,
 			return
 		}
 		pager = op.RdsOperator().QueryRds(req)
-	case resource.Vendor_TENCENT:
+	case resource.VENDOR_TENCENT:
 		s.log.Debugf("sync txyun rds ...")
 		op, err := txyun.NewOperator(credential.ApiKey, credential.ApiSecret, t.Data.Region)
 		if err != nil {
@@ -49,7 +49,7 @@ func (s *service) syncRds(ctx context.Context, credentialIns *credential.Secret,
 			return
 		}
 		pager = op.RdsOperator().QueryRds(req)
-	case resource.Vendor_HUAWEI:
+	case resource.VENDOR_HUAWEI:
 		s.log.Debugf("sync hwyun rds ...")
 		op, err := huawei.NewOperator(credential.ApiKey, credential.ApiSecret, t.Data.Region)
 		if err != nil {

@@ -36,7 +36,7 @@ func (o *Ec2operator) transferSet(items []types.Reservation) *host.HostSet {
 
 func (o *Ec2operator) transferOne(ins types.Instance) *host.Host {
 	h := host.NewDefaultHost()
-	h.Base.Vendor = resource.Vendor_AMAZON
+	h.Base.Vendor = resource.VENDOR_AMAZON
 	h.Base.Zone = *ins.Placement.AvailabilityZone
 	h.Base.Id = *ins.InstanceId
 	h.Base.CreateAt = ins.LaunchTime.Unix()

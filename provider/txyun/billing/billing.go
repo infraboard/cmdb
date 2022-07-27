@@ -29,7 +29,7 @@ func (o *Billingoperator) transferSet(items []*billing.BillResourceSummary, mont
 	set := bill.NewBillSet()
 	for i := range items {
 		ins := o.transferOne(items[i])
-		ins.Vendor = resource.Vendor_TENCENT
+		ins.Vendor = resource.VENDOR_TENCENT
 		ins.Month = month
 		set.Add(ins)
 	}

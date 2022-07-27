@@ -13,7 +13,7 @@ service RPC {
 message Metric {
     // 资源类型
     // @gotags: json:"resource_type"
-    resource.Type resource_type = 1;
+    resource.TYPE resource_type = 1;
     // 指标名称
     // @gotags: json:"name"
     string name = 2;
@@ -43,5 +43,5 @@ message MetricSet {
 message QueryMetricRequest {
     // 资源类型
     // @gotags: json:"resource_type"
-    resource.Type resource_type = 1;
+    resource.TYPE resource_type = 1;
 }

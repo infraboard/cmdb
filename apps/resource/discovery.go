@@ -24,7 +24,7 @@ func (r *Resource) PrometheusEndpont() (string, error) {
 	port := r.GetTagValueOne(PROMETHEUS_PORT)
 	if port == "" {
 		switch r.Base.ResourceType {
-		case Type_RDS:
+		case TYPE_RDS:
 			port = "6221"
 		default:
 			port = "9100"

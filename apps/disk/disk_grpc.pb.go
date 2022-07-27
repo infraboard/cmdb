@@ -23,7 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ServiceClient interface {
 	SyncDisk(ctx context.Context, in *Disk, opts ...grpc.CallOption) (*Disk, error)
-	QueryDisk(ctx context.Context, in *QueryDiskRequest, opts ...grpc.CallOption) (*Set, error)
+	QueryDisk(ctx context.Context, in *QueryDiskRequest, opts ...grpc.CallOption) (*DiskSet, error)
 }
 
 type serviceClient struct {
@@ -43,8 +43,8 @@ func (c *serviceClient) SyncDisk(ctx context.Context, in *Disk, opts ...grpc.Cal
 	return out, nil
 }
 
-func (c *serviceClient) QueryDisk(ctx context.Context, in *QueryDiskRequest, opts ...grpc.CallOption) (*Set, error) {
-	out := new(Set)
+func (c *serviceClient) QueryDisk(ctx context.Context, in *QueryDiskRequest, opts ...grpc.CallOption) (*DiskSet, error) {
+	out := new(DiskSet)
 	err := c.cc.Invoke(ctx, "/infraboard.cmdb.disk.Service/QueryDisk", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -57,7 +57,7 @@ func (c *serviceClient) QueryDisk(ctx context.Context, in *QueryDiskRequest, opt
 // for forward compatibility
 type ServiceServer interface {
 	SyncDisk(context.Context, *Disk) (*Disk, error)
-	QueryDisk(context.Context, *QueryDiskRequest) (*Set, error)
+	QueryDisk(context.Context, *QueryDiskRequest) (*DiskSet, error)
 	mustEmbedUnimplementedServiceServer()
 }
 
@@ -68,7 +68,7 @@ type UnimplementedServiceServer struct {
 func (UnimplementedServiceServer) SyncDisk(context.Context, *Disk) (*Disk, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SyncDisk not implemented")
 }
-func (UnimplementedServiceServer) QueryDisk(context.Context, *QueryDiskRequest) (*Set, error) {
+func (UnimplementedServiceServer) QueryDisk(context.Context, *QueryDiskRequest) (*DiskSet, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryDisk not implemented")
 }
 func (UnimplementedServiceServer) mustEmbedUnimplementedServiceServer() {}

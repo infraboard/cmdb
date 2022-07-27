@@ -8,7 +8,7 @@ import "github.com/infraboard/mcube/pb/page/page.proto";
 
 service Service {
     rpc SyncDisk(Disk) returns(Disk) {}
-    rpc QueryDisk(QueryDiskRequest) returns(Set) {}
+    rpc QueryDisk(QueryDiskRequest) returns(DiskSet) {}
 }
 
 message Disk {
@@ -27,6 +27,9 @@ message Describe {
     // 容量大小
     // @gotags: json:"size"
     uint64 size = 3;
+    // 容量IOPS
+    // @gotags: json:"iops"
+    int32 iops = 11;
     // 卸载时间
     // @gotags: json:"detached_time"
     int64 detached_time = 4;
@@ -50,7 +53,7 @@ message Describe {
     bool delete_with_instance = 10;
 }
 
-message Set {
+message DiskSet {
     // 总数量
     // @gotags: json:"total"
     int64 total = 1;

@@ -52,7 +52,7 @@ func NewSearchRequestFromHTTP(r *http.Request) (*SearchRequest, error) {
 
 	rtStr := qs.Get("resource_type")
 	if rtStr != "" {
-		rt, err := ParseTypeFromString(rtStr)
+		rt, err := ParseTYPEFromString(rtStr)
 		if err != nil {
 			return nil, err
 		}

@@ -44,7 +44,7 @@ func (s *Set) Length() int64 {
 func NewDefaultRDS() *Rds {
 	return &Rds{
 		Base: &resource.Base{
-			ResourceType: resource.Type_RDS,
+			ResourceType: resource.TYPE_RDS,
 		},
 		Information: &resource.Information{},
 		Describe:    &Describe{},

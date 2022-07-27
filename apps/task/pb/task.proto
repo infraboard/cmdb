@@ -107,7 +107,7 @@ message QueryTaskRequest {
     // @gotags: json:"page"
     infraboard.mcube.page.PageRequest page = 1;
     // @gotags: json:"resource_type"
-    infraboard.cmdb.resource.Type resource_type = 3;
+    infraboard.cmdb.resource.TYPE resource_type = 3;
     // @gotags: json:"keywords"
     string keywords = 4;
 }
@@ -124,7 +124,7 @@ message CreateTaskRequst {
     string credential_id = 3;
     // 任务操作的资源类型
     // @gotags: json:"resource_type"
-    infraboard.cmdb.resource.Type resource_type = 4;
+    infraboard.cmdb.resource.TYPE resource_type = 4;
     // 通知资源的Region
     // @gotags: json:"region"
     string region = 5;

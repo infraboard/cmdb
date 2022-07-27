@@ -40,7 +40,7 @@ func (o *RdsOperator) transferSet(list *[]model.InstanceResponse) *rds.Set {
 func (o *RdsOperator) transferOne(ins model.InstanceResponse) *rds.Rds {
 	h := rds.NewDefaultRDS()
 	b := h.Base
-	b.Vendor = resource.Vendor_HUAWEI
+	b.Vendor = resource.VENDOR_HUAWEI
 	b.Region = ins.Region
 	b.CreateAt = o.parseTime(ins.Created)
 	b.Id = ins.Id

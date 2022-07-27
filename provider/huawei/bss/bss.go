@@ -36,7 +36,7 @@ func (o *BssOperator) transferSet(list *[]model.ResFeeRecordV2) *bill.BillSet {
 
 func (o *BssOperator) transferOne(ins model.ResFeeRecordV2) *bill.Bill {
 	b := bill.NewDefaultBill()
-	b.Vendor = resource.Vendor_HUAWEI
+	b.Vendor = resource.VENDOR_HUAWEI
 	b.Month = utils.PtrStrV(ins.BillDate)
 	b.OwnerId = utils.PtrStrV(ins.CustomerId)
 	b.ProductType = utils.PtrStrV(ins.CloudServiceType)

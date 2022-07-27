@@ -36,7 +36,7 @@ func (o *CosOperator) transferSet(items []cos.Bucket) *oss.BucketSet {
 func (o *CosOperator) transferOne(ins cos.Bucket) *oss.Bucket {
 	r := oss.NewDefaultBucket()
 	b := r.Base
-	b.Vendor = resource.Vendor_TENCENT
+	b.Vendor = resource.VENDOR_TENCENT
 	b.Region = ins.Region
 	b.Id = fmt.Sprintf("%s.%s", ins.Region, ins.Name)
 

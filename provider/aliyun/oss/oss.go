@@ -34,7 +34,7 @@ func (o *OssOperator) transferBucket(ins oss.BucketProperties) *cmdbOss.Bucket {
 	r := cmdbOss.NewDefaultBucket()
 
 	b := r.Base
-	b.Vendor = resource.Vendor_ALIYUN
+	b.Vendor = resource.VENDOR_ALIYUN
 	b.Region = ins.Location
 	b.Id = fmt.Sprintf("%s.%s", ins.Location, ins.Name)
 	b.CreateAt = ins.CreationDate.UnixMilli()

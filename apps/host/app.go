@@ -21,7 +21,7 @@ const (
 func NewDefaultHost() *Host {
 	return &Host{
 		Base: &resource.Base{
-			ResourceType: resource.Type_HOST,
+			ResourceType: resource.TYPE_HOST,
 		},
 		Information: &resource.Information{},
 		Describe:    &Describe{},

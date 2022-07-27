@@ -78,7 +78,7 @@ type CreateSecretRequest struct {
 	Description string `protobuf:"bytes,1,opt,name=description,proto3" json:"description" validate:"required,lte=100"`
 	// 厂商
 	// @gotags: json:"vendor"
-	Vendor resource.Vendor `protobuf:"varint,2,opt,name=vendor,proto3,enum=infraboard.cmdb.resource.Vendor" json:"vendor"`
+	Vendor resource.VENDOR `protobuf:"varint,2,opt,name=vendor,proto3,enum=infraboard.cmdb.resource.VENDOR" json:"vendor"`
 	// 允许同步的区域
 	// @gotags: json:"allow_regions"
 	AllowRegions []string `protobuf:"bytes,3,rep,name=allow_regions,json=allowRegions,proto3" json:"allow_regions"`
@@ -144,11 +144,11 @@ func (x *CreateSecretRequest) GetDescription() string {
 	return ""
 }
 
-func (x *CreateSecretRequest) GetVendor() resource.Vendor {
+func (x *CreateSecretRequest) GetVendor() resource.VENDOR {
 	if x != nil {
 		return x.Vendor
 	}
-	return resource.Vendor(0)
+	return resource.VENDOR(0)
 }
 
 func (x *CreateSecretRequest) GetAllowRegions() []string {
@@ -524,7 +524,7 @@ var file_apps_credential_pb_credential_proto_rawDesc = []byte{
 	0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x38, 0x0a, 0x06,
 	0x76, 0x65, 0x6e, 0x64, 0x6f, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x20, 0x2e, 0x69,
 	0x6e, 0x66, 0x72, 0x61, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x63, 0x6d, 0x64, 0x62, 0x2e, 0x72,
-	0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x2e, 0x56, 0x65, 0x6e, 0x64, 0x6f, 0x72, 0x52, 0x06,
+	0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x2e, 0x56, 0x45, 0x4e, 0x44, 0x4f, 0x52, 0x52, 0x06,
 	0x76, 0x65, 0x6e, 0x64, 0x6f, 0x72, 0x12, 0x23, 0x0a, 0x0d, 0x61, 0x6c, 0x6c, 0x6f, 0x77, 0x5f,
 	0x72, 0x65, 0x67, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x09, 0x52, 0x0c, 0x61,
 	0x6c, 0x6c, 0x6f, 0x77, 0x52, 0x65, 0x67, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x4b, 0x0a, 0x10, 0x63,
@@ -628,11 +628,11 @@ var file_apps_credential_pb_credential_proto_goTypes = []interface{}{
 	(*SecretSet)(nil),             // 4: infraboard.cmdb.credential.SecretSet
 	(*DescribeSecretRequest)(nil), // 5: infraboard.cmdb.credential.DescribeSecretRequest
 	(*DeleteSecretRequest)(nil),   // 6: infraboard.cmdb.credential.DeleteSecretRequest
-	(resource.Vendor)(0),          // 7: infraboard.cmdb.resource.Vendor
+	(resource.VENDOR)(0),          // 7: infraboard.cmdb.resource.VENDOR
 	(*request.PageRequest)(nil),   // 8: infraboard.mcube.page.PageRequest
 }
 var file_apps_credential_pb_credential_proto_depIdxs = []int32{
-	7, // 0: infraboard.cmdb.credential.CreateSecretRequest.vendor:type_name -> infraboard.cmdb.resource.Vendor
+	7, // 0: infraboard.cmdb.credential.CreateSecretRequest.vendor:type_name -> infraboard.cmdb.resource.VENDOR
 	0, // 1: infraboard.cmdb.credential.CreateSecretRequest.crendential_type:type_name -> infraboard.cmdb.credential.TYPE
 	1, // 2: infraboard.cmdb.credential.Secret.data:type_name -> infraboard.cmdb.credential.CreateSecretRequest
 	8, // 3: infraboard.cmdb.credential.QuerySecretRequest.page:type_name -> infraboard.mcube.page.PageRequest

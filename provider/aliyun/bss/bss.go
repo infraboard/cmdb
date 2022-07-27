@@ -27,7 +27,7 @@ func (o *BssOperator) transferSet(list *bssopenapi.DescribeInstanceBillResponseB
 	items := list.Items
 	for i := range items {
 		ins := o.transferOne(items[i])
-		ins.Vendor = resource.Vendor_ALIYUN
+		ins.Vendor = resource.VENDOR_ALIYUN
 		ins.Month = tea.StringValue(list.BillingCycle)
 		set.Add(ins)
 	}

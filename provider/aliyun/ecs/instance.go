@@ -1,6 +1,7 @@
 package ecs
 
 import (
+	"context"
 	"time"
 
 	ecs "github.com/alibabacloud-go/ecs-20140526/v2/client"
@@ -8,36 +9,59 @@ import (
 
 	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/cmdb/apps/resource"
-	"github.com/infraboard/mcube/logger"
-	"github.com/infraboard/mcube/logger/zap"
+	"github.com/infraboard/cmdb/provider"
+	"github.com/infraboard/mcube/exception"
+	"github.com/infraboard/mcube/pager"
 )
 
-func NewEcsOperator(client *ecs.Client) *EcsOperator {
-	return &EcsOperator{
-		client:        client,
-		log:           zap.L().Named("ALI ECS"),
-		AccountGetter: &resource.AccountGetter{},
+// 查询一台或多台ECS实例的详细信息
+// 参考文档: https://next.api.aliyun.com/api/Ecs/2014-05-26/DescribeInstances?params={}
+func (o *EcsOperator) queryInstance(req *ecs.DescribeInstancesRequest) (*host.HostSet, error) {
+	set := host.NewHostSet()
+
+	resp, err := o.client.DescribeInstances(req)
+	if err != nil {
+		return nil, err
 	}
+	req.NextToken = resp.Body.NextToken
+
+	set.Total = int64(tea.Int32Value(resp.Body.TotalCount))
+	set.Items = o.transferInstanceSet(resp.Body.Instances.Instance).Items
+
+	return set, nil
 }
 
-// https://next.api.aliyun.com/api/Ecs/2014-05-26/CreateInstance?lang=GO&params={}
-type EcsOperator struct {
-	client *ecs.Client
-	log    logger.Logger
-	*resource.AccountGetter
+func (o *EcsOperator) QueryHost(req *provider.QueryHostRequest) pager.Pager {
+	p := newPager(o)
+	p.SetRate(req.Rate)
+	return p
 }
 
-func (o *EcsOperator) transferSet(items []*ecs.DescribeInstancesResponseBodyInstancesInstance) *host.HostSet {
+func (o *EcsOperator) DescribeHost(ctx context.Context, req *provider.DescribeHostRequest) (*host.Host, error) {
+	r := &ecs.DescribeInstancesRequest{}
+	r.InstanceIds = tea.String(`["` + req.Id + `"]`)
+	hs, err := o.queryInstance(r)
+	if err != nil {
+		return nil, err
+	}
+	if hs.Length() == 0 {
+		return nil, exception.NewNotFound("instance %s not found", err)
+	}
+
+	return hs.Items[0], nil
+}
+
+func (o *EcsOperator) transferInstanceSet(items []*ecs.DescribeInstancesResponseBodyInstancesInstance) *host.HostSet {
 	set := host.NewHostSet()
 	for i := range items {
-		set.Add(o.transferOne(items[i]))
+		set.Add(o.transferInstance(items[i]))
 	}
 	return set
 }
 
-func (o *EcsOperator) transferOne(ins *ecs.DescribeInstancesResponseBodyInstancesInstance) *host.Host {
+func (o *EcsOperator) transferInstance(ins *ecs.DescribeInstancesResponseBodyInstancesInstance) *host.Host {
 	h := host.NewDefaultHost()
-	h.Base.Vendor = resource.Vendor_ALIYUN
+	h.Base.Vendor = resource.VENDOR_ALIYUN
 	h.Base.Region = tea.StringValue(ins.RegionId)
 	h.Base.Zone = tea.StringValue(ins.ZoneId)
 

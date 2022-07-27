@@ -30,7 +30,7 @@ func (s *service) syncBill(ctx context.Context, credentialIns *credential.Secret
 	req.Month = t.Data.Params["month"]
 
 	switch credential.Vendor {
-	case resource.Vendor_ALIYUN:
+	case resource.VENDOR_ALIYUN:
 		s.log.Debugf("sync aliyun bill ...")
 		op, err := aliyun.NewOperator(credential.ApiKey, credential.ApiSecret, t.Data.Region)
 		if err != nil {
@@ -38,7 +38,7 @@ func (s *service) syncBill(ctx context.Context, credentialIns *credential.Secret
 			return
 		}
 		pager = op.BillOperator().QueryBill(req)
-	case resource.Vendor_TENCENT:
+	case resource.VENDOR_TENCENT:
 		s.log.Debugf("sync txyun bill ...")
 		op, err := txyun.NewOperator(credential.ApiKey, credential.ApiSecret, t.Data.Region)
 		if err != nil {
@@ -46,7 +46,7 @@ func (s *service) syncBill(ctx context.Context, credentialIns *credential.Secret
 			return
 		}
 		pager = op.BillOperator().QueryBill(req)
-	case resource.Vendor_HUAWEI:
+	case resource.VENDOR_HUAWEI:
 		s.log.Debugf("sync hwyun bill ...")
 		op, err := huawei.NewOperator(credential.ApiKey, credential.ApiSecret, t.Data.Region)
 		if err != nil {

@@ -37,7 +37,7 @@ func (o *CDBOperator) transferOne(ins *cdb.InstanceInfo) *rds.Rds {
 	r := cmdbRds.NewDefaultRDS()
 
 	b := r.Base
-	b.Vendor = resource.Vendor_TENCENT
+	b.Vendor = resource.VENDOR_TENCENT
 	b.Region = utils.PtrStrV(ins.Region)
 	b.Zone = utils.PtrStrV(ins.Zone)
 	b.CreateAt = o.parseTime(utils.PtrStrV(ins.CreateTime))

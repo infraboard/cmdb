@@ -39,7 +39,7 @@ func (o *EcsOperator) transferSet(list *[]model.ServerDetail) *host.HostSet {
 
 func (o *EcsOperator) transferOne(ins model.ServerDetail) *host.Host {
 	h := host.NewDefaultHost()
-	h.Base.Vendor = resource.Vendor_HUAWEI
+	h.Base.Vendor = resource.VENDOR_HUAWEI
 	h.Base.Zone = ins.OSEXTAZavailabilityZone
 	h.Base.CreateAt = o.parseTime(ins.Created)
 	h.Base.Id = ins.Id

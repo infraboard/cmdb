@@ -11,7 +11,7 @@ service Service {
     rpc UpdateTag (UpdateTagRequest) returns (Resource);
 }
 
-enum Vendor {
+enum VENDOR {
     ALIYUN = 0;
     TENCENT = 1;
     HUAWEI = 2;
@@ -19,11 +19,12 @@ enum Vendor {
     AMAZON = 4;
 }
 
-enum Type {
+enum TYPE {
     HOST = 0;
     RDS = 1;
     REDIS = 2;
     BUCKET = 3;
+    DISK = 4;
     BILL = 99;
 }
 
@@ -88,10 +89,10 @@ message Base {
     string credential_id = 3; 
     // 厂商
     // @gotags: json:"vendor"
-    Vendor vendor = 4;
+    VENDOR vendor = 4;
     // 资源类型
     // @gotags: json:"resource_type"
-    Type resource_type = 5;
+    TYPE resource_type = 5;
     // 地域
     // @gotags: json:"region"
     string region = 6; 
@@ -186,6 +187,8 @@ enum TAG_TYPE {
     THIRD = 1;
     // 系统使用标签, 禁止用户修改, 表示被其他系统引用, 比如应用关联标签
     SYSTEM = 2;
+    // 资源关联标签, 用于关联其他资源
+    REF_RESOURCE = 3;
 }
 
 message Tag {
@@ -243,13 +246,13 @@ message SearchRequest {
     optional UsageMode usage_mode = 5;
     // 厂商
     // @gotags: json:"vendor"
-    optional Vendor vendor = 6;
+    optional VENDOR vendor = 6;
     // 同步的账号
     // @gotags: json:"sync_account"
     string sync_account = 7;
     // 资源类型
     // @gotags: json:"type"
-    optional Type type = 8;
+    optional TYPE type = 8;
     // 服务商中的状态
     // @gotags: json:"status"
     string status = 9;

@@ -23,10 +23,10 @@ message Bill {
     string task_id = 1;
     // 厂商
     // @gotags: json:"vendor"
-    infraboard.cmdb.resource.Vendor vendor = 2;
+    infraboard.cmdb.resource.VENDOR vendor = 2;
     // 资源类型
     // @gotags: json:"type"
-    infraboard.cmdb.resource.Type type = 3;
+    infraboard.cmdb.resource.TYPE type = 3;
     // 账单的月份
     // @gotags: json:"month"
     string month = 4;
@@ -172,7 +172,7 @@ message QueryBillRequest {
     string env = 4;
     // 厂商
     // @gotags: json:"vendor"
-    infraboard.cmdb.resource.Vendor vendor = 5;
+    infraboard.cmdb.resource.VENDOR vendor = 5;
     // 账单的月份
     // @gotags: json:"month"
     string month = 6;

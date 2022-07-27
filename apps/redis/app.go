@@ -32,7 +32,7 @@ func (s *Set) Length() int64 {
 func NewDefaultRedis() *Redis {
 	return &Redis{
 		Base: &resource.Base{
-			ResourceType: resource.Type_REDIS,
+			ResourceType: resource.TYPE_REDIS,
 		},
 		Information: &resource.Information{},
 		Describe:    &Describe{},

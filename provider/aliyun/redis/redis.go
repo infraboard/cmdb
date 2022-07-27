@@ -35,7 +35,7 @@ func (o *RedisOperator) transferOne(ins *redis.DescribeInstancesResponseBodyInst
 	r := cmdbRedis.NewDefaultRedis()
 
 	b := r.Base
-	b.Vendor = resource.Vendor_ALIYUN
+	b.Vendor = resource.VENDOR_ALIYUN
 	b.Region = tea.StringValue(ins.RegionId)
 	b.Zone = tea.StringValue(ins.ZoneId)
 	b.CreateAt = o.parseTime(tea.StringValue(ins.CreateTime))
@@ -90,7 +90,7 @@ func (o *RedisOperator) transferAttrOne(ins *redis.DescribeInstanceAttributeResp
 	r := cmdbRedis.NewDefaultRedis()
 
 	b := r.Base
-	b.Vendor = resource.Vendor_ALIYUN
+	b.Vendor = resource.VENDOR_ALIYUN
 	b.Region = tea.StringValue(ins.RegionId)
 	b.Zone = tea.StringValue(ins.ZoneId)
 	b.CreateAt = o.parseTime(tea.StringValue(ins.CreateTime))

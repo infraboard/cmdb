@@ -36,7 +36,7 @@ func (o *CVMOperator) transferSet(items []*cvm.Instance) *host.HostSet {
 
 func (o *CVMOperator) transferOne(ins *cvm.Instance) *host.Host {
 	h := host.NewDefaultHost()
-	h.Base.Vendor = resource.Vendor_TENCENT
+	h.Base.Vendor = resource.VENDOR_TENCENT
 	h.Base.Region = o.client.GetRegion()
 	h.Base.Zone = utils.PtrStrV(ins.Placement.Zone)
 	h.Base.CreateAt = o.parseTime(utils.PtrStrV(ins.CreatedTime))

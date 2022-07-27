@@ -36,7 +36,7 @@ type VMOperator struct {
 
 func (o *VMOperator) transferOne(ins *mo.VirtualMachine, dcName string) *host.Host {
 	h := host.NewDefaultHost()
-	h.Base.Vendor = resource.Vendor_VSPHERE
+	h.Base.Vendor = resource.VENDOR_VSPHERE
 	h.Base.Region = o.client.URL().Host
 	h.Base.Zone = dcName
 	h.Base.CreateAt = ins.Config.CreateDate.UnixMilli()

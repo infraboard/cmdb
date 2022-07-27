@@ -38,7 +38,7 @@ func (o *RdsOperator) transferOne(ins *rds.DescribeDBInstanceAttributeResponseBo
 	r := cmdbRds.NewDefaultRDS()
 
 	b := r.Base
-	b.Vendor = resource.Vendor_ALIYUN
+	b.Vendor = resource.VENDOR_ALIYUN
 	b.Region = tea.StringValue(ins.RegionId)
 	b.Zone = tea.StringValue(ins.ZoneId)
 	b.CreateAt = o.parseTime(tea.StringValue(ins.CreationTime))

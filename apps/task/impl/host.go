@@ -40,7 +40,7 @@ func (s *service) syncHost(ctx context.Context, credentialIns *credential.Secret
 	req := provider.NewQueryHostRequestWithRate(credential.RequestRate)
 
 	switch credential.Vendor {
-	case resource.Vendor_ALIYUN:
+	case resource.VENDOR_ALIYUN:
 		s.log.Debugf("sync aliyun ecs ...")
 		op, err := aliyun.NewOperator(credential.ApiKey, credential.ApiSecret, t.Data.Region)
 		if err != nil {
@@ -48,7 +48,7 @@ func (s *service) syncHost(ctx context.Context, credentialIns *credential.Secret
 			return
 		}
 		pager = op.HostOperator().QueryHost(req)
-	case resource.Vendor_TENCENT:
+	case resource.VENDOR_TENCENT:
 		s.log.Debugf("sync txyun cvm ...")
 		op, err := txyun.NewOperator(credential.ApiKey, credential.ApiSecret, t.Data.Region)
 		if err != nil {
@@ -56,7 +56,7 @@ func (s *service) syncHost(ctx context.Context, credentialIns *credential.Secret
 			return
 		}
 		pager = op.HostOperator().QueryHost(req)
-	case resource.Vendor_HUAWEI:
+	case resource.VENDOR_HUAWEI:
 		s.log.Debugf("sync hwyun ecs ...")
 		op, err := huawei.NewOperator(credential.ApiKey, credential.ApiSecret, t.Data.Region)
 		if err != nil {
@@ -64,11 +64,11 @@ func (s *service) syncHost(ctx context.Context, credentialIns *credential.Secret
 			return
 		}
 		pager = op.HostOperator().QueryHost(req)
-	case resource.Vendor_AMAZON:
+	case resource.VENDOR_AMAZON:
 		s.log.Debugf("sync aws ec2 ...")
 		op := aws.NewOperator(credential.ApiKey, credential.ApiSecret, t.Data.Region)
 		pager = op.HostOperator().QueryHost(req)
-	case resource.Vendor_VSPHERE:
+	case resource.VENDOR_VSPHERE:
 		s.log.Debugf("sync vshpere vm ...")
 		client := vsConn.NewVsphereClient(credential.Address, credential.ApiKey, credential.ApiSecret)
 		ec, err := client.VimClient()
