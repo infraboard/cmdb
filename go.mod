@@ -36,9 +36,10 @@ require (
 	github.com/spf13/cobra v1.4.0
 	github.com/stretchr/testify v1.7.1
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/billing v1.0.393
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cbs v1.0.451
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cdb v1.0.393
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/clb v1.0.447
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.447
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.451
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm v1.0.393
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod v1.0.447
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/redis v1.0.446

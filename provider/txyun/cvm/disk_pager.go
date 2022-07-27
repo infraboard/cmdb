@@ -3,34 +3,34 @@ package cvm
 import (
 	"context"
 
+	cbs "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cbs/v20170312"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
-	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 	"github.com/infraboard/mcube/pager"
 )
 
-func newPager(operator *CVMOperator) pager.Pager {
-	req := cvm.NewDescribeInstancesRequest()
+func newDiskPager(operator *CVMOperator) pager.Pager {
+	req := cbs.NewDescribeDisksRequest()
 
-	return &cvmPager{
+	return &diskPager{
 		BasePager: pager.NewBasePager(),
 		operator:  operator,
 		req:       req,
-		log:       zap.L().Named("tx.cvm"),
+		log:       zap.L().Named("tx.disk"),
 	}
 }
 
-type cvmPager struct {
+type diskPager struct {
 	*pager.BasePager
 	operator *CVMOperator
-	req      *cvm.DescribeInstancesRequest
+	req      *cbs.DescribeDisksRequest
 	log      logger.Logger
 }
 
-func (p *cvmPager) Scan(ctx context.Context, set pager.Set) error {
-	resp, err := p.operator.QueryCVM(ctx, p.nextReq())
+func (p *diskPager) Scan(ctx context.Context, set pager.Set) error {
+	resp, err := p.operator.queryDisk(ctx, p.nextReq())
 	if err != nil {
 		return err
 	}
@@ -41,9 +41,9 @@ func (p *cvmPager) Scan(ctx context.Context, set pager.Set) error {
 	return nil
 }
 
-func (p *cvmPager) nextReq() *cvm.DescribeInstancesRequest {
+func (p *diskPager) nextReq() *cbs.DescribeDisksRequest {
 	p.log.Debugf("请求第%d页数据", p.PageNumber())
-	p.req.Offset = common.Int64Ptr(p.Offset())
-	p.req.Limit = common.Int64Ptr(int64(p.PageSize()))
+	p.req.Offset = common.Uint64Ptr(uint64(p.Offset()))
+	p.req.Limit = common.Uint64Ptr(uint64(p.PageSize()))
 	return p.req
 }

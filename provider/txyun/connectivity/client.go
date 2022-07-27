@@ -7,6 +7,7 @@ import (
 	"github.com/caarlos0/env/v6"
 	"github.com/infraboard/cmdb/utils"
 	billing "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/billing/v20180709"
+	cbs "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cbs/v20170312"
 	cdb "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cdb/v20170320"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
@@ -55,6 +56,7 @@ type TencentCloudClient struct {
 	cdbConn   *cdb.Client
 	redisConn *redis.Client
 	cosConn   *cos.Client
+	cbsConn   *cbs.Client
 	billConn  *billing.Client
 }
 
@@ -77,6 +79,27 @@ func (me *TencentCloudClient) CvmClient() *cvm.Client {
 	cvmConn, _ := cvm.NewClient(credential, me.Region, cpf)
 	me.cvmConn = cvmConn
 	return me.cvmConn
+}
+
+// UseCvmClient cvm
+func (me *TencentCloudClient) CBSClient() *cbs.Client {
+	if me.cbsConn != nil {
+		return me.cbsConn
+	}
+
+	credential := common.NewCredential(
+		me.SecretID,
+		me.SecretKey,
+	)
+
+	cpf := profile.NewClientProfile()
+	cpf.HttpProfile.ReqMethod = "POST"
+	cpf.HttpProfile.ReqTimeout = 300
+	cpf.Language = "en-US"
+
+	cbsConn, _ := cbs.NewClient(credential, me.Region, cpf)
+	me.cbsConn = cbsConn
+	return me.cbsConn
 }
 
 // UseBillingClient billing客户端

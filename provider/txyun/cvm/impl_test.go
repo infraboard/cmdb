@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/infraboard/cmdb/apps/disk"
 	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/cmdb/provider/txyun"
@@ -20,6 +21,18 @@ func TestQuery(t *testing.T) {
 
 	for pager.Next() {
 		set := host.NewHostSet()
+		if err := pager.Scan(context.Background(), set); err != nil {
+			panic(err)
+		}
+		fmt.Println(set)
+	}
+}
+
+func TestQueryDisk(t *testing.T) {
+	pager := operator.QueryDisk(provider.NewQueryDiskRequest())
+
+	for pager.Next() {
+		set := disk.NewDiskSet()
 		if err := pager.Scan(context.Background(), set); err != nil {
 			panic(err)
 		}
