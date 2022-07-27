@@ -9,6 +9,8 @@ import (
 	dcs_region "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/dcs/v2/region"
 	ecs "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ecs/v2"
 	ecs_region "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ecs/v2/region"
+	elb "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/elb/v2"
+	elb_region "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/elb/v2/region"
 	evs "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/evs/v2"
 	evs_region "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/evs/v2/region"
 	iam "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/iam/v3"
@@ -58,6 +60,7 @@ type HuaweiCloudClient struct {
 	dcsConn *dcs.DcsClient
 	bssConn *bss.BssClient
 	evsConn *evs.EvsClient
+	elbConn *elb.ElbClient
 	iamConn *iam.IamClient
 }
 
@@ -107,6 +110,22 @@ func (c *HuaweiCloudClient) EvsClient() (*evs.EvsClient, error) {
 	c.evsConn = evs.NewEvsClient(client)
 
 	return c.evsConn, nil
+}
+
+// ElbClient 客户端
+func (c *HuaweiCloudClient) ElbClient() (*elb.ElbClient, error) {
+	if c.elbConn != nil {
+		return c.elbConn, nil
+	}
+
+	client := evs.EvsClientBuilder().
+		WithRegion(elb_region.ValueOf(c.Region)).
+		WithCredential(c.Credentials()).
+		Build()
+
+	c.elbConn = elb.NewElbClient(client)
+
+	return c.elbConn, nil
 }
 
 // RdsClient 客户端

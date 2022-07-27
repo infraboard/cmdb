@@ -60,6 +60,10 @@ func (o *EcsOperator) transferDisk(ins model.VolumeDetail) *disk.Disk {
 	} else {
 		desc.Type = "data"
 	}
+	if len(ins.Attachments) > 0 {
+		desc.AttachedTime = utils.ParseTime("2006-01-02T15:04:05.999999", ins.Attachments[0].AttachedAt)
+		desc.Device = ins.Attachments[0].Device
+	}
 
 	desc.MultiAttach = ins.Multiattach
 	desc.Size = uint64(ins.Size)

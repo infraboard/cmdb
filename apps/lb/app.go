@@ -26,6 +26,15 @@ func NewLBSet() *LBSet {
 	}
 }
 
+func (s *LBSet) GetLast() *LB {
+	l := s.Length()
+	if l == 0 {
+		return nil
+	}
+
+	return s.Items[l-1]
+}
+
 func (s *LBSet) Add(items ...any) {
 	for i := range items {
 		s.Items = append(s.Items, items[i].(*LB))
