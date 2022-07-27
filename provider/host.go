@@ -9,6 +9,7 @@ import (
 
 type HostOperator interface {
 	QueryHost(req *QueryHostRequest) pager.Pager
+	QueryDisk(req *QueryDiskRequest) pager.Pager
 	DescribeHost(ctx context.Context, req *DescribeHostRequest) (*host.Host, error)
 }
 
@@ -30,4 +31,14 @@ type QueryHostRequest struct {
 
 type DescribeHostRequest struct {
 	Id string `json:"id"`
+}
+
+func NewQueryDiskRequest() *QueryDiskRequest {
+	return &QueryDiskRequest{
+		Rate: 5,
+	}
+}
+
+type QueryDiskRequest struct {
+	Rate float64 `json:"rate"`
 }

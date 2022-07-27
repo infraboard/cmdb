@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/infraboard/cmdb/apps/disk"
 	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/mcube/logger/zap"
@@ -16,7 +17,7 @@ var (
 	operator provider.HostOperator
 )
 
-func TestQuery(t *testing.T) {
+func TestQueryInstance(t *testing.T) {
 	req := provider.NewQueryHostRequest()
 	pager := operator.QueryHost(req)
 	for pager.Next() {
@@ -35,6 +36,18 @@ func TestDescribe(t *testing.T) {
 		t.Fatal(err)
 	}
 	t.Log(ins)
+}
+
+func TestQueryDisk(t *testing.T) {
+	req := provider.NewQueryDiskRequest()
+	pager := operator.QueryDisk(req)
+	for pager.Next() {
+		set := disk.NewDiskSet()
+		if err := pager.Scan(context.Background(), set); err != nil {
+			panic(err)
+		}
+		fmt.Println(set)
+	}
 }
 
 func init() {

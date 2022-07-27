@@ -29,6 +29,10 @@ func (o *Ec2operator) QueryHost(req *provider.QueryHostRequest) pager.Pager {
 	return p
 }
 
+func (o *Ec2operator) QueryDisk(req *provider.QueryDiskRequest) pager.Pager {
+	panic("not imple")
+}
+
 func (o *Ec2operator) DescribeHost(ctx context.Context, req *provider.DescribeHostRequest) (*host.Host, error) {
 	return nil, fmt.Errorf("not impl")
 }

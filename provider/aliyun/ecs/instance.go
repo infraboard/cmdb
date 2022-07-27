@@ -2,7 +2,6 @@ package ecs
 
 import (
 	"context"
-	"time"
 
 	ecs "github.com/alibabacloud-go/ecs-20140526/v2/client"
 	"github.com/alibabacloud-go/tea/tea"
@@ -10,6 +9,7 @@ import (
 	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
+	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/pager"
 )
@@ -32,7 +32,7 @@ func (o *EcsOperator) queryInstance(req *ecs.DescribeInstancesRequest) (*host.Ho
 }
 
 func (o *EcsOperator) QueryHost(req *provider.QueryHostRequest) pager.Pager {
-	p := newPager(o)
+	p := newEcsPager(o)
 	p.SetRate(req.Rate)
 	return p
 }
@@ -65,10 +65,10 @@ func (o *EcsOperator) transferInstance(ins *ecs.DescribeInstancesResponseBodyIns
 	h.Base.Region = tea.StringValue(ins.RegionId)
 	h.Base.Zone = tea.StringValue(ins.ZoneId)
 
-	h.Base.CreateAt = o.parseTime(tea.StringValue(ins.CreationTime))
+	h.Base.CreateAt = utils.ParseDefaultMiniteTime(tea.StringValue(ins.CreationTime))
 	h.Base.Id = tea.StringValue(ins.InstanceId)
 
-	h.Information.ExpireAt = o.parseTime(tea.StringValue(ins.ExpiredTime))
+	h.Information.ExpireAt = utils.ParseDefaultMiniteTime(tea.StringValue(ins.ExpiredTime))
 	h.Information.Type = tea.StringValue(ins.InstanceType)
 	h.Information.Name = tea.StringValue(ins.InstanceName)
 	h.Information.Description = tea.StringValue(ins.Description)
@@ -129,14 +129,4 @@ func (o *EcsOperator) transferTags(tags *ecs.DescribeInstancesResponseBodyInstan
 		))
 	}
 	return
-}
-
-func (o *EcsOperator) parseTime(t string) int64 {
-	ts, err := time.Parse("2006-01-02T15:04Z", t)
-	if err != nil {
-		o.log.Errorf("parse time %s error, %s", t, err)
-		return 0
-	}
-
-	return ts.UnixNano() / 1000000
 }

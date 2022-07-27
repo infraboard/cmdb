@@ -99,7 +99,7 @@ type Describe struct {
 	// 容量大小
 	// @gotags: json:"size"
 	Size uint64 `protobuf:"varint,3,opt,name=size,proto3" json:"size"`
-	// 容量IOPS
+	// IOPS
 	// @gotags: json:"iops"
 	Iops int32 `protobuf:"varint,11,opt,name=iops,proto3" json:"iops"`
 	// 卸载时间

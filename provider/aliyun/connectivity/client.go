@@ -14,6 +14,7 @@ import (
 	ecs "github.com/alibabacloud-go/ecs-20140526/v2/client"
 	redis "github.com/alibabacloud-go/r-kvstore-20150101/v2/client"
 	rds "github.com/alibabacloud-go/rds-20140815/v2/client"
+	slb "github.com/alibabacloud-go/slb-20140515/v3/client"
 	"github.com/alibabacloud-go/tea/tea"
 )
 
@@ -37,6 +38,7 @@ type AliCloudClient struct {
 	redisConn *redis.Client
 	ddsConn   *dds.Client
 	domConn   *domain.Client
+	slbConn   *slb.Client
 	bssConn   *bssopenapi.Client
 }
 
@@ -177,6 +179,25 @@ func (c *AliCloudClient) OssClient() (*oss.Client, error) {
 	// 阿里云账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM用户进行API访问或日常运维，请登录RAM控制台创建RAM用户。
 	ep := fmt.Sprintf("https://oss-%s.aliyuncs.com", c.Region)
 	return oss.New(ep, c.AccessKey, c.AccessSecret)
+}
+
+func (c *AliCloudClient) SLBClient() (*slb.Client, error) {
+	if c.slbConn != nil {
+		return c.slbConn, nil
+	}
+
+	client, err := slb.NewClient(&openapi.Config{
+		AccessKeyId:     tea.String(c.AccessKey),
+		AccessKeySecret: tea.String(c.AccessSecret),
+		Endpoint:        tea.String("slb.aliyuncs.com"),
+		RegionId:        tea.String(c.Region),
+	})
+	if err != nil {
+		return nil, fmt.Errorf("new slb client error, %s", err)
+	}
+
+	c.slbConn = client
+	return client, nil
 }
 
 // 获取客户端账号ID

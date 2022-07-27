@@ -30,6 +30,10 @@ func (o *CVMOperator) QueryHost(req *provider.QueryHostRequest) pager.Pager {
 	return p
 }
 
+func (o *CVMOperator) QueryDisk(req *provider.QueryDiskRequest) pager.Pager {
+	panic("not impl")
+}
+
 func (o *CVMOperator) DescribeHost(ctx context.Context, req *provider.DescribeHostRequest) (*host.Host, error) {
 	return nil, fmt.Errorf("not impl")
 }

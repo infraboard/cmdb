@@ -1,0 +1,60 @@
+{
+	"AttachedTime": "2022-07-27T02:34:32Z",
+	"Attachments": {
+	   "Attachment": [
+		  {
+			 "AttachedTime": "2022-07-27T02:34:32Z",
+			 "Device": "/dev/xvdb",
+			 "InstanceId": "i-xxxxxx"
+		  }
+	   ]
+	},
+	"AutoSnapshotPolicyId": "",
+	"BdfId": "",
+	"Category": "cloud_efficiency",
+	"CreationTime": "2022-07-27T02:34:29Z",
+	"DeleteAutoSnapshot": false,
+	"DeleteWithInstance": true,
+	"Description": "",
+	"DetachedTime": "",
+	"Device": "/dev/xvdb",
+	"DiskChargeType": "PrePaid",
+	"DiskId": "d-xxxxxx",
+	"DiskName": "",
+	"EnableAutoSnapshot": true,
+	"EnableAutomatedSnapshotPolicy": false,
+	"Encrypted": false,
+	"ExpiredTime": "2022-08-27T16:00Z",
+	"IOPS": 2600,
+	"ImageId": "",
+	"InstanceId": "i-xxxxx",
+	"KMSKeyId": "",
+	"MultiAttach": "Disabled",
+	"OperationLocks": {},
+	"PerformanceLevel": "",
+	"Portable": false,
+	"ProductCode": "",
+	"RegionId": "cn-hangzhou",
+	"ResourceGroupId": "rg-acfmoiyermnrcxy",
+	"SerialNumber": "xxxxx",
+	"Size": 100,
+	"SourceSnapshotId": "",
+	"Status": "In_use",
+	"StorageClusterId": "",
+	"StorageSetId": "",
+	"Tags": {
+	   "Tag": [
+		  {
+			 "TagKey": "ack.aliyun.com",
+			 "TagValue": "cdb795c446add48398a86f00e01a67830"
+		  },
+		  {
+			 "TagKey": "ack.alibabacloud.com/nodepool-id",
+			 "TagValue": "np0f6e823cd06a464981abd65371f5054b"
+		  }
+	   ]
+	},
+	"Throughput": 115,
+	"Type": "data",
+	"ZoneId": "cn-hangzhou-k"
+ }

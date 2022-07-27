@@ -10,6 +10,7 @@ import (
 	"github.com/infraboard/cmdb/provider/aliyun/oss"
 	"github.com/infraboard/cmdb/provider/aliyun/rds"
 	"github.com/infraboard/cmdb/provider/aliyun/redis"
+	"github.com/infraboard/cmdb/provider/aliyun/slb"
 )
 
 var (
@@ -104,4 +105,12 @@ func (o *Operator) OssOperator() provider.OssOperator {
 		panic(err)
 	}
 	return oss.NewOssOperator(c)
+}
+
+func (o *Operator) LbOperator() provider.LBOperator {
+	c, err := o.client.SLBClient()
+	if err != nil {
+		panic(err)
+	}
+	return slb.NewSLBOperator(c)
 }

@@ -11,28 +11,28 @@ import (
 	"github.com/infraboard/mcube/pager"
 )
 
-func newPager(operator *EcsOperator) pager.Pager {
-	req := &ecs.DescribeInstancesRequest{
+func newDiskPager(operator *EcsOperator) pager.Pager {
+	req := &ecs.DescribeDisksRequest{
 		RegionId: operator.client.RegionId,
 	}
 
-	return &ecsPager{
+	return &diskPager{
 		BasePager: pager.NewBasePager(),
 		operator:  operator,
 		req:       req,
-		log:       zap.L().Named("ali.ecs"),
+		log:       zap.L().Named("ali.disk"),
 	}
 }
 
-type ecsPager struct {
+type diskPager struct {
 	*pager.BasePager
 	operator *EcsOperator
-	req      *ecs.DescribeInstancesRequest
+	req      *ecs.DescribeDisksRequest
 	log      logger.Logger
 }
 
-func (p *ecsPager) Scan(ctx context.Context, set pager.Set) error {
-	resp, err := p.operator.queryInstance(p.nextReq())
+func (p *diskPager) Scan(ctx context.Context, set pager.Set) error {
+	resp, err := p.operator.queryDisk(p.nextReq())
 	if err != nil {
 		return err
 	}
@@ -42,7 +42,7 @@ func (p *ecsPager) Scan(ctx context.Context, set pager.Set) error {
 	return nil
 }
 
-func (p *ecsPager) nextReq() *ecs.DescribeInstancesRequest {
+func (p *diskPager) nextReq() *ecs.DescribeDisksRequest {
 	p.log.Debugf("请求第%d页数据", p.PageNumber())
 	p.req.PageNumber = tea.Int32(int32(p.PageNumber()))
 	p.req.PageSize = tea.Int32(int32(p.PageSize()))

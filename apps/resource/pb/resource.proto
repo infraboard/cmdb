@@ -25,6 +25,7 @@ enum TYPE {
     REDIS = 2;
     BUCKET = 3;
     DISK = 4;
+    LB = 5;
     BILL = 99;
 }
 

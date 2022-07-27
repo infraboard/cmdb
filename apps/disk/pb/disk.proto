@@ -27,7 +27,7 @@ message Describe {
     // 容量大小
     // @gotags: json:"size"
     uint64 size = 3;
-    // 容量IOPS
+    // IOPS
     // @gotags: json:"iops"
     int32 iops = 11;
     // 卸载时间

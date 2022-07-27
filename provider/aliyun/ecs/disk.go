@@ -5,7 +5,16 @@ import (
 	"github.com/alibabacloud-go/tea/tea"
 	"github.com/infraboard/cmdb/apps/disk"
 	"github.com/infraboard/cmdb/apps/resource"
+	"github.com/infraboard/cmdb/provider"
+	"github.com/infraboard/cmdb/utils"
+	"github.com/infraboard/mcube/pager"
 )
+
+func (o *EcsOperator) QueryDisk(req *provider.QueryDiskRequest) pager.Pager {
+	p := newDiskPager(o)
+	p.SetRate(req.Rate)
+	return p
+}
 
 // 查询一块或多块已经创建的块存储（包括云盘以及本地盘）
 // 参考文档: https://next.api.aliyun.com/api/Ecs/2014-05-26/DescribeDisks?params={}&lang=GO
@@ -38,10 +47,10 @@ func (o *EcsOperator) transferDisk(ins *ecs.DescribeDisksResponseBodyDisksDisk) 
 	h.Base.Region = tea.StringValue(ins.RegionId)
 	h.Base.Zone = tea.StringValue(ins.ZoneId)
 
-	h.Base.CreateAt = o.parseTime(tea.StringValue(ins.CreationTime))
+	h.Base.CreateAt = utils.ParseDefaultSecondTime(tea.StringValue(ins.CreationTime))
 	h.Base.Id = tea.StringValue(ins.DiskId)
 
-	h.Information.ExpireAt = o.parseTime(tea.StringValue(ins.ExpiredTime))
+	h.Information.ExpireAt = utils.ParseDefaultMiniteTime(tea.StringValue(ins.ExpiredTime))
 	h.Information.Type = tea.StringValue(ins.Type)
 	h.Information.Name = tea.StringValue(ins.DiskName)
 	h.Information.Description = tea.StringValue(ins.Description)
@@ -53,9 +62,9 @@ func (o *EcsOperator) transferDisk(ins *ecs.DescribeDisksResponseBodyDisksDisk) 
 	h.Describe.InstanceId = tea.StringValue(ins.InstanceId)
 	h.Describe.Size = uint64(tea.Int32Value(ins.Size))
 	h.Describe.Device = tea.StringValue(ins.Device)
-	h.Describe.AttachedTime = o.parseTime(tea.StringValue(ins.AttachedTime))
+	h.Describe.AttachedTime = utils.ParseDefaultSecondTime(tea.StringValue(ins.AttachedTime))
 	h.Describe.Portable = tea.BoolValue(ins.Portable)
-	h.Describe.DetachedTime = o.parseTime(tea.StringValue(ins.DetachedTime))
+	h.Describe.DetachedTime = utils.ParseDefaultSecondTime(tea.StringValue(ins.DetachedTime))
 	h.Describe.Encrypted = tea.BoolValue(ins.Encrypted)
 	h.Describe.EnableAutoSnapshot = tea.BoolValue(ins.EnableAutoSnapshot)
 	h.Describe.DeleteWithInstance = tea.BoolValue(ins.DeleteWithInstance)
