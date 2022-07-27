@@ -7,7 +7,6 @@ import (
 	"github.com/infraboard/cmdb/apps/lb"
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
-	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/pager"
 )
 
@@ -27,7 +26,7 @@ func (o *SLBOperator) Query(req *slb.DescribeLoadBalancersRequest) (*lb.LBSet, e
 	set := lb.NewLBSet()
 	set.Total = int64(tea.Int32Value(resp.Body.TotalCount))
 	set.Items = o.transferLBSet(resp.Body.LoadBalancers).Items
-	return nil, nil
+	return set, nil
 }
 
 func (o *SLBOperator) transferLBSet(items *slb.DescribeLoadBalancersResponseBodyLoadBalancers) *lb.LBSet {
@@ -44,7 +43,7 @@ func (o *SLBOperator) transferLB(ins *slb.DescribeLoadBalancersResponseBodyLoadB
 	b.Vendor = resource.VENDOR_ALIYUN
 	b.Region = tea.StringValue(ins.RegionId)
 	b.Zone = tea.StringValue(ins.MasterZoneId)
-	b.CreateAt = utils.ParseDefaultSecondTime(tea.StringValue(ins.CreateTime))
+	b.CreateAt = tea.Int64Value(ins.CreateTimeStamp) / 1000
 	b.Id = tea.StringValue(ins.LoadBalancerId)
 
 	info := r.Information
@@ -52,5 +51,10 @@ func (o *SLBOperator) transferLB(ins *slb.DescribeLoadBalancersResponseBodyLoadB
 	info.Type = tea.StringValue(ins.NetworkType)
 	info.Status = tea.StringValue(ins.LoadBalancerStatus)
 	info.PayType = tea.StringValue(ins.PayType)
+	info.PrivateIp = []string{tea.StringValue(ins.Address)}
+
+	desc := r.Describe
+	desc.BandWidth = tea.Int32Value(ins.Bandwidth)
+
 	return r
 }

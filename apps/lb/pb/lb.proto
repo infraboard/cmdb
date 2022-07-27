@@ -30,6 +30,9 @@ message Describe {
     // 私网负载均衡实例的网络类型 vpc：专有网络实例 classic：经典网络实例
     // @gotags: json:"network_type"
     string network_type = 4;
+    // 带宽
+    // @gotags: json:"band_width"
+    int32 band_width = 5;
 }
 
 message LBSet {
