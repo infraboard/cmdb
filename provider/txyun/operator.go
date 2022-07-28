@@ -54,6 +54,10 @@ type Operator struct {
 	client  *connectivity.TencentCloudClient
 }
 
+func (o *Operator) Client() *connectivity.TencentCloudClient {
+	return o.client
+}
+
 func (o *Operator) HostOperator() provider.HostOperator {
 	op := cvm.NewCVMOperator(o.client.CvmClient(), o.client.CBSClient())
 	op.WithAccountId(o.account)

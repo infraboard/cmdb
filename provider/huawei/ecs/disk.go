@@ -5,8 +5,16 @@ import (
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/evs/v2/model"
 	"github.com/infraboard/cmdb/apps/disk"
 	"github.com/infraboard/cmdb/apps/resource"
+	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/cmdb/utils"
+	"github.com/infraboard/mcube/pager"
 )
+
+func (o *EcsOperator) QueryDisk(req *provider.QueryDiskRequest) pager.Pager {
+	p := newDiskPager(o)
+	p.SetRate(req.Rate)
+	return p
+}
 
 // 查询所有云硬盘详情
 // 参考文档: https://apiexplorer.developer.huaweicloud.com/apiexplorer/doc?product=EVS&api=ListVolumes

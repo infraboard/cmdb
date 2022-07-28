@@ -22,18 +22,6 @@ func (o *CVMOperator) Create(req *cvm.DescribeInstancesRequest) (*host.HostSet, 
 	return set, nil
 }
 
-// 创建实例询价 https://cloud.tencent.com/document/api/213/15726
-func (o *CVMOperator) InquiryPrice(req *cvm.InquiryPriceRunInstancesRequest) error {
-	resp, err := o.client.InquiryPriceRunInstances(req)
-	if err != nil {
-		return err
-	}
-
-	v, _ := json.Marshal(resp)
-	fmt.Println(string(v))
-	return nil
-}
-
 // 查询可用区列表: https://cloud.tencent.com/document/product/213/15707
 func (o *CVMOperator) DescribeZones() error {
 	req := cvm.NewDescribeZonesRequest()

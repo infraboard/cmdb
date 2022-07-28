@@ -9,14 +9,18 @@ import (
 	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/cmdb/provider/txyun"
+	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/logger/zap"
+
+	op "github.com/infraboard/cmdb/provider/txyun/cvm"
+	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 )
 
 var (
-	operator provider.HostOperator
+	operator *op.CVMOperator
 )
 
-func TestQuery(t *testing.T) {
+func TestQueryCVM(t *testing.T) {
 	pager := operator.QueryHost(provider.NewQueryHostRequest())
 
 	for pager.Next() {
@@ -40,27 +44,26 @@ func TestQueryDisk(t *testing.T) {
 	}
 }
 
-// func TestInquiryPrice(t *testing.T) {
-// 	should := assert.New(t)
+func TestInquiryPrice(t *testing.T) {
+	req := cvm.NewInquiryPriceRunInstancesRequest()
+	req.Placement = &cvm.Placement{
+		Zone: utils.StringPtr("ap-shanghai-2"),
+	}
+	req.ImageId = utils.StringPtr("img-l5eqiljn")
+	req.InstanceType = utils.StringPtr("S4.SMALL1")
+	req.InstanceChargeType = utils.StringPtr("SPOTPAID")
+	if err := operator.InquiryPrice(req); err != nil {
 
-// 	req := cvm.NewInquiryPriceRunInstancesRequest()
-// 	req.Placement = &cvm.Placement{
-// 		Zone: utils.StringPtr("ap-shanghai-2"),
-// 	}
-// 	req.ImageId = utils.StringPtr("img-l5eqiljn")
-// 	req.InstanceType = utils.StringPtr("S4.SMALL1")
-// 	req.InstanceChargeType = utils.StringPtr("SPOTPAID")
-// 	err := operator.InquiryPrice(req)
-// 	should.NoError(err)
-// }
+	}
+}
 
-// func TestDescribeZones(t *testing.T) {
-// 	operator.DescribeZones()
-// }
+func TestDescribeZones(t *testing.T) {
+	operator.DescribeZones()
+}
 
-// func TestDescribeInstanceType(t *testing.T) {
-// 	operator.DescribeInstanceType()
-// }
+func TestDescribeInstanceType(t *testing.T) {
+	operator.DescribeInstanceType()
+}
 
 func TestCreate(t *testing.T) {
 }
@@ -73,5 +76,6 @@ func init() {
 		panic(err)
 	}
 
-	operator = txyun.O().HostOperator()
+	c := txyun.O().Client()
+	operator = op.NewCVMOperator(c.CvmClient(), c.CBSClient())
 }

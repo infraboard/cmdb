@@ -36,12 +36,6 @@ func (o *EcsOperator) QueryHost(req *provider.QueryHostRequest) pager.Pager {
 	return p
 }
 
-func (o *EcsOperator) QueryDisk(req *provider.QueryDiskRequest) pager.Pager {
-	p := newDiskPager(o)
-	p.SetRate(req.Rate)
-	return p
-}
-
 func (o *EcsOperator) DescribeHost(ctx context.Context, req *provider.DescribeHostRequest) (*host.Host, error) {
 	return nil, fmt.Errorf("not impl")
 }
