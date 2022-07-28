@@ -6,6 +6,7 @@ import (
 	"github.com/infraboard/cmdb/provider/aliyun/bss"
 	"github.com/infraboard/cmdb/provider/aliyun/cms"
 	"github.com/infraboard/cmdb/provider/aliyun/connectivity"
+	"github.com/infraboard/cmdb/provider/aliyun/domain"
 	"github.com/infraboard/cmdb/provider/aliyun/ecs"
 	"github.com/infraboard/cmdb/provider/aliyun/oss"
 	"github.com/infraboard/cmdb/provider/aliyun/rds"
@@ -113,4 +114,13 @@ func (o *Operator) LbOperator() provider.LBOperator {
 		panic(err)
 	}
 	return slb.NewSLBOperator(c)
+}
+
+func (o *Operator) DomainOperator() provider.DomainOperator {
+	c, err := o.client.DomainClient()
+	if err != nil {
+		panic(err)
+	}
+	op := domain.NewDomainOperator(c)
+	return op
 }

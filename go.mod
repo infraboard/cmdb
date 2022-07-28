@@ -9,6 +9,7 @@ require (
 	github.com/alibabacloud-go/darabonba-openapi v0.1.18
 	github.com/alibabacloud-go/dds-20151201/v3 v3.6.8
 	github.com/alibabacloud-go/domain-20180129 v1.0.1
+	github.com/alibabacloud-go/domain-20180129/v3 v3.14.8
 	github.com/alibabacloud-go/dysmsapi-20170525/v2 v2.0.16
 	github.com/alibabacloud-go/dyvmsapi-20170525/v2 v2.1.4
 	github.com/alibabacloud-go/ecs-20140526/v2 v2.1.2

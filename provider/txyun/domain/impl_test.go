@@ -6,15 +6,14 @@ import (
 	"testing"
 
 	"github.com/infraboard/cmdb/apps/domain"
-	"github.com/infraboard/cmdb/provider/huawei/connectivity"
-	"github.com/infraboard/mcube/logger/zap"
-
 	"github.com/infraboard/cmdb/provider"
-	op "github.com/infraboard/cmdb/provider/huawei/domain"
+	"github.com/infraboard/cmdb/provider/txyun/connectivity"
+	op "github.com/infraboard/cmdb/provider/txyun/domain"
+	"github.com/infraboard/mcube/logger/zap"
 )
 
 var (
-	operator provider.DomainOperator
+	operator *op.DnsOperator
 )
 
 func TestQuery(t *testing.T) {
@@ -26,7 +25,9 @@ func TestQuery(t *testing.T) {
 		if err := pager.Scan(context.Background(), set); err != nil {
 			panic(err)
 		}
-		fmt.Println(set)
+		for i := range set.Items {
+			fmt.Println(set.Items[i])
+		}
 	}
 }
 
@@ -37,9 +38,6 @@ func init() {
 		panic(err)
 	}
 
-	ec, err := connectivity.C().DnsClient()
-	if err != nil {
-		panic(err)
-	}
-	operator = op.NewDnsOperator(ec)
+	client := connectivity.C()
+	operator = op.NewDnsOperator(client.DnsClient())
 }

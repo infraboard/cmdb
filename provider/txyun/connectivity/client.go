@@ -13,6 +13,7 @@ import (
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
 	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
+	dnspod "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod/v20210323"
 	redis "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/redis/v20180412"
 	sts "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sts/v20180813"
 	"github.com/tencentyun/cos-go-sdk-v5"
@@ -59,6 +60,7 @@ type TencentCloudClient struct {
 	cosConn   *cos.Client
 	cbsConn   *cbs.Client
 	clbConn   *clb.Client
+	dnsConn   *dnspod.Client
 	billConn  *billing.Client
 }
 
@@ -81,6 +83,27 @@ func (me *TencentCloudClient) CvmClient() *cvm.Client {
 	cvmConn, _ := cvm.NewClient(credential, me.Region, cpf)
 	me.cvmConn = cvmConn
 	return me.cvmConn
+}
+
+// UseCvmClient cvm
+func (me *TencentCloudClient) DnsClient() *dnspod.Client {
+	if me.dnsConn != nil {
+		return me.dnsConn
+	}
+
+	credential := common.NewCredential(
+		me.SecretID,
+		me.SecretKey,
+	)
+
+	cpf := profile.NewClientProfile()
+	cpf.HttpProfile.ReqMethod = "POST"
+	cpf.HttpProfile.ReqTimeout = 300
+	cpf.Language = "en-US"
+
+	dnsConn, _ := dnspod.NewClient(credential, me.Region, cpf)
+	me.dnsConn = dnsConn
+	return me.dnsConn
 }
 
 // UseCvmClient cvm

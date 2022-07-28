@@ -26,6 +26,7 @@ enum TYPE {
     BUCKET = 3;
     DISK = 4;
     LB = 5;
+    DOMAIN = 6;
     BILL = 99;
 }
 

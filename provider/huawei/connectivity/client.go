@@ -7,6 +7,8 @@ import (
 	bss "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/bss/v2"
 	dcs "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/dcs/v2"
 	dcs_region "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/dcs/v2/region"
+	dns "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/dns/v2"
+	dns_region "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/dns/v2/region"
 	ecs "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ecs/v2"
 	ecs_region "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ecs/v2/region"
 	elb "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/elb/v2"
@@ -61,6 +63,7 @@ type HuaweiCloudClient struct {
 	bssConn *bss.BssClient
 	evsConn *evs.EvsClient
 	elbConn *elb.ElbClient
+	dnsConn *dns.DnsClient
 	iamConn *iam.IamClient
 }
 
@@ -173,6 +176,26 @@ func (c *HuaweiCloudClient) BssClient() (*bss.BssClient, error) {
 
 	c.bssConn = bss.NewBssClient(client)
 	return c.bssConn, nil
+}
+
+// EcsClient 客户端
+func (c *HuaweiCloudClient) DnsClient() (*dns.DnsClient, error) {
+	if c.dnsConn != nil {
+		return c.dnsConn, nil
+	}
+
+	auth := basic.NewCredentialsBuilder().
+		WithAk(c.AccessKey).
+		WithSk(c.AccessSecret).
+		Build()
+
+	c.dnsConn = dns.NewDnsClient(
+		dns.DnsClientBuilder().
+			WithRegion(dns_region.ValueOf(c.Region)).
+			WithCredential(auth).
+			Build())
+
+	return c.dnsConn, nil
 }
 
 // IamClient 客户端

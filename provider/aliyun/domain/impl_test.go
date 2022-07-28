@@ -6,21 +6,19 @@ import (
 	"testing"
 
 	"github.com/infraboard/cmdb/apps/domain"
-	"github.com/infraboard/cmdb/provider/huawei/connectivity"
+	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/mcube/logger/zap"
 
-	"github.com/infraboard/cmdb/provider"
-	op "github.com/infraboard/cmdb/provider/huawei/domain"
+	"github.com/infraboard/cmdb/provider/aliyun"
 )
 
 var (
 	operator provider.DomainOperator
 )
 
-func TestQuery(t *testing.T) {
+func TestQueryInstance(t *testing.T) {
 	req := provider.NewQueryDomainRequest()
 	pager := operator.QueryDomain(req)
-
 	for pager.Next() {
 		set := domain.NewDomainSet()
 		if err := pager.Scan(context.Background(), set); err != nil {
@@ -32,14 +30,9 @@ func TestQuery(t *testing.T) {
 
 func init() {
 	zap.DevelopmentSetup()
-	err := connectivity.LoadClientFromEnv()
+	err := aliyun.LoadOperatorFromEnv()
 	if err != nil {
 		panic(err)
 	}
-
-	ec, err := connectivity.C().DnsClient()
-	if err != nil {
-		panic(err)
-	}
-	operator = op.NewDnsOperator(ec)
+	operator = aliyun.O().DomainOperator()
 }

@@ -10,7 +10,7 @@ import (
 	cms "github.com/alibabacloud-go/cms-20190101/v7/client"
 	openapi "github.com/alibabacloud-go/darabonba-openapi/client"
 	dds "github.com/alibabacloud-go/dds-20151201/v3/client"
-	domain "github.com/alibabacloud-go/domain-20180129/client"
+	domain "github.com/alibabacloud-go/domain-20180129/v3/client"
 	ecs "github.com/alibabacloud-go/ecs-20140526/v2/client"
 	redis "github.com/alibabacloud-go/r-kvstore-20150101/v2/client"
 	rds "github.com/alibabacloud-go/rds-20140815/v2/client"

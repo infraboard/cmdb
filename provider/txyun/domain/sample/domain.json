@@ -1,0 +1,27 @@
+{
+    "DomainId": 80000000,
+    "Name": "xxxxx.com",
+    "Status": "ENABLE",
+    "TTL": 600,
+    "CNAMESpeedup": "DISABLE",
+    "DNSStatus": "",
+    "Grade": "DP_FREE",
+    "GroupId": 1,
+    "SearchEnginePush": "NO",
+    "Remark": "",
+    "Punycode": "xxxxxx.com",
+    "EffectiveDNS": [
+        "dana.dnspod.net",
+        "lena.dnspod.net"
+    ],
+    "GradeLevel": 2,
+    "GradeTitle": "免费版",
+    "IsVip": "NO",
+    "VipStartAt": "0000-00-00 00:00:00",
+    "VipEndAt": "0000-00-00 00:00:00",
+    "VipAutoRenew": "NO",
+    "RecordCount": 4,
+    "CreatedOn": "2021-09-10 15:58:02",
+    "UpdatedOn": "2021-09-10 16:08:06",
+    "Owner": "xxxxxxxxx.com"
+}

@@ -1,19 +1,19 @@
 package domain
 
 import (
-	dns "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/dns/v2"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
+	dnspod "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod/v20210323"
 )
 
-func NewDnsOperator(client *dns.DnsClient) *DnsOperator {
+func NewDnsOperator(client *dnspod.Client) *DnsOperator {
 	return &DnsOperator{
 		client: client,
-		log:    zap.L().Named("hw.dns"),
+		log:    zap.L().Named("tx.dns"),
 	}
 }
 
 type DnsOperator struct {
-	client *dns.DnsClient
+	client *dnspod.Client
 	log    logger.Logger
 }

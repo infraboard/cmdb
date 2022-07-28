@@ -1,0 +1,16 @@
+{
+    "DomainAuditStatus": "SUCCEED",
+    "DomainName": "xxxx.cn",
+    "DomainStatus": "3",
+    "DomainType": "ccTLD",
+    "ExpirationCurrDateDiff": 323,
+    "ExpirationDate": "2023-06-16 16:31:16",
+    "ExpirationDateLong": 1686904276000,
+    "ExpirationDateStatus": "1",
+    "InstanceId": "xxxxx",
+    "Premium": false,
+    "ProductId": "10681",
+    "RegistrantType": "2",
+    "RegistrationDate": "2022-06-16 16:31:16",
+    "RegistrationDateLong": 1655368276000
+ }
