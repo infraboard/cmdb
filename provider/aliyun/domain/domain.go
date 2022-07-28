@@ -1,11 +1,11 @@
 package domain
 
 import (
-	domain "github.com/alibabacloud-go/domain-20180129/client"
-	"github.com/infraboard/mcube/logger"
+	"github.com/infraboard/cmdb/apps/domain"
 )
 
-type DomainOperator struct {
-	client *domain.Client
-	log    logger.Logger
+//
+// 参考: https://next.api.aliyun.com/api/Domain/2018-01-29/QueryDomainByDomainName?lang=GO&params={}
+func (o *DomainOperator) QueryDomain() (*domain.DomainSet, error) {
+	return nil, nil
 }
