@@ -1,9 +1,12 @@
 package cvm
 
-import "github.com/infraboard/cmdb/apps/host"
+import (
+	"github.com/infraboard/cmdb/apps/disk"
+	"github.com/infraboard/cmdb/apps/host"
+)
 
 var (
-	STATUS_MAP = map[string]host.STATUS{
+	CVM_STATUS_MAP = map[string]host.STATUS{
 		"PENDING":               host.STATUS_PENDING,
 		"LAUNCH_FAILED":         host.STATUS_CREATE_FAILED,
 		"RUNNING":               host.STATUS_RUNNING,
@@ -18,11 +21,43 @@ var (
 	}
 )
 
-func praseStatus(s *string) string {
+func praseCvmStatus(s *string) string {
 	if s == nil {
 		return ""
 	}
-	if v, ok := STATUS_MAP[*s]; ok {
+	if v, ok := CVM_STATUS_MAP[*s]; ok {
+		return v.String()
+	}
+
+	return *s
+}
+
+var (
+	// UNATTACHED：未挂载
+	// ATTACHING：挂载中
+	// ATTACHED：已挂载
+	// DETACHING：解挂中
+	// EXPANDING：扩容中
+	// ROLLBACKING：回滚中
+	// TORECYCLE：待回收
+	// DUMPING：拷贝硬盘中
+	DISK_STATUS_MAP = map[string]disk.STATUS{
+		"UNATTACHED":  disk.STATUS_UNATTACHED,
+		"ATTACHING":   disk.STATUS_ATTACHING,
+		"ATTACHED":    disk.STATUS_ATTACHED,
+		"DETACHING":   disk.STATUS_DETACHING,
+		"EXPANDING":   disk.STATUS_EXPANDING,
+		"ROLLBACKING": disk.STATUS_ROLLBACKING,
+		"TORECYCLE":   disk.STATUS_RECYCLE,
+		"DUMPING":     disk.STATUS_DUMPING,
+	}
+)
+
+func praseDiskStatus(s *string) string {
+	if s == nil {
+		return ""
+	}
+	if v, ok := DISK_STATUS_MAP[*s]; ok {
 		return v.String()
 	}
 

@@ -58,7 +58,7 @@ func (o *EcsOperator) transferDisk(ins model.VolumeDetail) *disk.Disk {
 	info := h.Information
 	info.Name = ins.Name
 	info.Description = ins.Description
-	info.Status = ins.Status
+	info.Status = praseDiskStatus(ins.Status)
 	info.Category = ins.ServiceType
 	info.Type = ins.VolumeType
 

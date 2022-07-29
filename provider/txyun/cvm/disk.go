@@ -50,7 +50,7 @@ func (o *CVMOperator) transferDisk(ins *cbs.Disk) *disk.Disk {
 	h.Information.ExpireAt = utils.ParseTime("2006-01-02 15:04:05", utils.PtrStrV(ins.DeadlineTime))
 	h.Information.Type = utils.PtrStrV(ins.DiskType)
 	h.Information.Name = utils.PtrStrV(ins.DiskName)
-	h.Information.Status = praseStatus(ins.DiskState)
+	h.Information.Status = praseDiskStatus(ins.DiskState)
 	h.Information.PayType = utils.PtrStrV(ins.DiskChargeType)
 	h.Information.SyncAccount = o.GetAccountId()
 

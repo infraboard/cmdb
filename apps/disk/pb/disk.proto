@@ -70,3 +70,32 @@ message QueryDiskRequest {
     // @gotags: json:"page"
     infraboard.mcube.page.PageRequest page = 1;
 }
+
+enum STATUS {
+    // 未知状态
+    UNKNOW = 0;
+
+    // 表示创建中
+    PENDING = 5;
+    // 挂载中
+    ATTACHING = 6;
+   // 未挂载
+    UNATTACHED = 7;
+
+    // 已挂载
+    ATTACHED = 11;
+
+    // 解挂中
+    DETACHING = 30;
+    // 回滚中
+    ROLLBACKING = 31;
+    // 扩容中
+    EXPANDING = 32;
+    // 实例克隆中
+    DUMPING = 34;
+
+    // 表示停止待销毁
+    RECYCLE = 80;
+    // 已归档
+    ARCHIVED = 90;
+}

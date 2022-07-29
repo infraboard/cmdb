@@ -46,6 +46,7 @@ func TestQueryDisk(t *testing.T) {
 		if err := pager.Scan(context.Background(), set); err != nil {
 			panic(err)
 		}
+
 		fmt.Println(set)
 	}
 }
