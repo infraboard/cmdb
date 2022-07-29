@@ -47,3 +47,20 @@ message QuerySLBRequest {
     // @gotags: json:"page"
     infraboard.mcube.page.PageRequest page = 1;
 }
+
+
+enum STATUS {
+    // 未知状态
+    UNKNOW = 0;
+    // 表示创建中
+    PENDING = 5;
+
+    // 表示运行中
+    RUNNING = 11;
+
+    // 表示实例已经锁定
+    LOCKED = 70;
+
+    // 已归档
+    ARCHIVED = 90;
+}

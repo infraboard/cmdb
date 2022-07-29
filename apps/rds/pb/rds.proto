@@ -222,10 +222,12 @@ enum STATUS {
     // 表示实例磁盘空间满
     STORAGE_FULL = 51;
 
+    // 表示实例已经锁定
+    LOCKED = 70;
     // 隔离中
-    ISOLATIONING = 70;
+    ISOLATIONING = 71;
     // 已隔中
-    ISOLATIONED = 71;
+    ISOLATIONED = 72;
 
     // 表示停止待销毁
     SHUTDOWN = 80;

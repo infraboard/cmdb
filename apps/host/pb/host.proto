@@ -151,6 +151,9 @@ enum STATUS {
     // 状态异常
 	ERROR  = 50;
 
+    // 表示实例已经锁定
+    LOCKED = 70;
+
     // 表示停止待销毁
     SHUTDOWN = 80;
     // 表示销毁中
