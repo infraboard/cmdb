@@ -61,7 +61,7 @@ func (o *ELBOperator) transferELB(ins model.LoadbalancerResp) *lb.LB {
 	info := r.Information
 	info.Name = ins.Name
 	st, _ := ins.OperatingStatus.MarshalJSON()
-	info.Status = strings.Trim(strings.TrimSpace(string(st)), `"`)
+	info.Status = praseElbStatus(strings.Trim(strings.TrimSpace(string(st)), `"`))
 	info.PrivateIp = []string{ins.VipAddress}
 	return r
 }

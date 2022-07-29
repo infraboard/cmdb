@@ -61,6 +61,8 @@ enum STATUS {
     // 表示实例已经锁定
     LOCKED = 70;
 
+    // 表示停止
+    STOPPED = 80;
     // 已归档
     ARCHIVED = 90;
 }

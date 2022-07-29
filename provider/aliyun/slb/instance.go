@@ -49,7 +49,7 @@ func (o *SLBOperator) transferLB(ins *slb.DescribeLoadBalancersResponseBodyLoadB
 	info := r.Information
 	info.Name = tea.StringValue(ins.LoadBalancerName)
 	info.Type = tea.StringValue(ins.NetworkType)
-	info.Status = tea.StringValue(ins.LoadBalancerStatus)
+	info.Status = praseSlbStatus(ins.LoadBalancerStatus)
 	info.PayType = tea.StringValue(ins.PayType)
 	info.PrivateIp = []string{tea.StringValue(ins.Address)}
 
