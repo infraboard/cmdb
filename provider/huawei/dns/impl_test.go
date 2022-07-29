@@ -1,4 +1,4 @@
-package domain_test
+package dns_test
 
 import (
 	"context"
@@ -10,11 +10,11 @@ import (
 	"github.com/infraboard/mcube/logger/zap"
 
 	"github.com/infraboard/cmdb/provider"
-	op "github.com/infraboard/cmdb/provider/huawei/domain"
+	op "github.com/infraboard/cmdb/provider/huawei/dns"
 )
 
 var (
-	operator provider.DomainOperator
+	operator provider.DnsOperator
 )
 
 func TestQuery(t *testing.T) {

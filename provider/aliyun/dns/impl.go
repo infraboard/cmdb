@@ -1,4 +1,4 @@
-package domain
+package dns
 
 import (
 	domain "github.com/alibabacloud-go/domain-20180129/v3/client"

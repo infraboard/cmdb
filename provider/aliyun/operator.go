@@ -6,7 +6,7 @@ import (
 	"github.com/infraboard/cmdb/provider/aliyun/bss"
 	"github.com/infraboard/cmdb/provider/aliyun/cms"
 	"github.com/infraboard/cmdb/provider/aliyun/connectivity"
-	"github.com/infraboard/cmdb/provider/aliyun/domain"
+	"github.com/infraboard/cmdb/provider/aliyun/dns"
 	"github.com/infraboard/cmdb/provider/aliyun/ecs"
 	"github.com/infraboard/cmdb/provider/aliyun/oss"
 	"github.com/infraboard/cmdb/provider/aliyun/rds"
@@ -116,11 +116,11 @@ func (o *Operator) LbOperator() provider.LBOperator {
 	return slb.NewSLBOperator(c)
 }
 
-func (o *Operator) DomainOperator() provider.DomainOperator {
+func (o *Operator) DnsOperator() provider.DnsOperator {
 	c, err := o.client.DomainClient()
 	if err != nil {
 		panic(err)
 	}
-	op := domain.NewDomainOperator(c)
+	op := dns.NewDomainOperator(c)
 	return op
 }

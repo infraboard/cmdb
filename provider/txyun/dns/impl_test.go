@@ -1,4 +1,4 @@
-package domain_test
+package dns_test
 
 import (
 	"context"
@@ -8,7 +8,7 @@ import (
 	"github.com/infraboard/cmdb/apps/domain"
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/cmdb/provider/txyun/connectivity"
-	op "github.com/infraboard/cmdb/provider/txyun/domain"
+	op "github.com/infraboard/cmdb/provider/txyun/dns"
 	"github.com/infraboard/mcube/logger/zap"
 )
 

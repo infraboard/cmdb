@@ -1,4 +1,4 @@
-package domain
+package dns
 
 import (
 	"github.com/infraboard/mcube/logger"

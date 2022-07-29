@@ -1,4 +1,4 @@
-package domain_test
+package dns_test
 
 import (
 	"context"
@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	operator provider.DomainOperator
+	operator provider.DnsOperator
 )
 
 func TestQueryInstance(t *testing.T) {
@@ -34,5 +34,5 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	operator = aliyun.O().DomainOperator()
+	operator = aliyun.O().DnsOperator()
 }

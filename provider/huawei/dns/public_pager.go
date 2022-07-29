@@ -1,4 +1,4 @@
-package domain
+package dns
 
 import (
 	"context"
@@ -11,25 +11,25 @@ import (
 	"github.com/infraboard/mcube/pager"
 )
 
-func newPrivateZonePager(operator *DnsOperator) pager.Pager {
+func newPublicZonePager(operator *DnsOperator) pager.Pager {
 	req := &model.ListPublicZonesRequest{}
 
-	return &privateZonePager{
+	return &publicZonePager{
 		BasePager: pager.NewBasePager(),
 		operator:  operator,
 		req:       req,
-		log:       zap.L().Named("hw.zone.private"),
+		log:       zap.L().Named("hw.zone.public"),
 	}
 }
 
-type privateZonePager struct {
+type publicZonePager struct {
 	*pager.BasePager
 	operator *DnsOperator
 	req      *model.ListPublicZonesRequest
 	log      logger.Logger
 }
 
-func (p *privateZonePager) Scan(ctx context.Context, set pager.Set) error {
+func (p *publicZonePager) Scan(ctx context.Context, set pager.Set) error {
 	resp, err := p.operator.queryPublicDomain(p.nextReq())
 	if err != nil {
 		return err
@@ -40,7 +40,7 @@ func (p *privateZonePager) Scan(ctx context.Context, set pager.Set) error {
 	return nil
 }
 
-func (p *privateZonePager) nextReq() *model.ListPublicZonesRequest {
+func (p *publicZonePager) nextReq() *model.ListPublicZonesRequest {
 	p.log.Debugf("请求第%d页数据", p.PageNumber())
 
 	// 注意: 华为云的Offse表示的是页码

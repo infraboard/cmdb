@@ -2,7 +2,7 @@ package provider
 
 import "github.com/infraboard/mcube/pager"
 
-type DomainOperator interface {
+type DnsOperator interface {
 	QueryDomain(req *QueryDomainRequest) pager.Pager
 }
 

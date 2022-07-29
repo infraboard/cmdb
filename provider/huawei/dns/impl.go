@@ -1,4 +1,4 @@
-package domain
+package dns
 
 import (
 	dns "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/dns/v2"
