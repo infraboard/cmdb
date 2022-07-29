@@ -1,0 +1,12 @@
+{
+    "Status": "ENABLE",
+    "Type": "A",
+    "TTL": 600,
+    "RecordId": "24xxxxx",
+    "RR": "xxxx",
+    "DomainName": "xxxxx",
+    "Weight": 1,
+    "Value": "6xxxxx",
+    "Line": "default",
+    "Locked": false
+ }

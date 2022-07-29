@@ -6,6 +6,7 @@ import (
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/sts"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 
+	dns "github.com/alibabacloud-go/alidns-20150109/v2/client"
 	bssopenapi "github.com/alibabacloud-go/bssopenapi-20171214/v2/client"
 	cms "github.com/alibabacloud-go/cms-20190101/v7/client"
 	openapi "github.com/alibabacloud-go/darabonba-openapi/client"
@@ -38,6 +39,7 @@ type AliCloudClient struct {
 	redisConn *redis.Client
 	ddsConn   *dds.Client
 	domConn   *domain.Client
+	dnsConn   *dns.Client
 	slbConn   *slb.Client
 	bssConn   *bssopenapi.Client
 }
@@ -113,6 +115,24 @@ func (c *AliCloudClient) DomainClient() (*domain.Client, error) {
 	}
 
 	c.domConn = client
+	return client, nil
+}
+
+func (c *AliCloudClient) DnsClient() (*dns.Client, error) {
+	if c.dnsConn != nil {
+		return c.dnsConn, nil
+	}
+
+	client, err := dns.NewClient(&openapi.Config{
+		AccessKeyId:     tea.String(c.AccessKey),
+		AccessKeySecret: tea.String(c.AccessSecret),
+		Endpoint:        tea.String("alidns.aliyuncs.com"),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	c.dnsConn = client
 	return client, nil
 }
 

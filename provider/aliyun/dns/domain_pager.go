@@ -18,7 +18,7 @@ func newDomainPager(operator *DnsOperator) pager.Pager {
 		BasePager: pager.NewBasePager(),
 		operator:  operator,
 		req:       req,
-		log:       zap.L().Named("ali.domain"),
+		log:       zap.L().Named("ali.dns.domain"),
 	}
 }
 

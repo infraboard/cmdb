@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/BurntSushi/toml v1.1.0
+	github.com/alibabacloud-go/alidns-20150109/v2 v2.0.1
 	github.com/alibabacloud-go/bssopenapi-20171214/v2 v2.0.6
 	github.com/alibabacloud-go/cms-20190101/v7 v7.0.45
 	github.com/alibabacloud-go/darabonba-openapi v0.1.18

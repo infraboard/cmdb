@@ -121,6 +121,11 @@ func (o *Operator) DnsOperator() provider.DnsOperator {
 	if err != nil {
 		panic(err)
 	}
-	op := dns.NewDomainOperator(c)
+	d, err := o.client.DnsClient()
+	if err != nil {
+		panic(err)
+	}
+
+	op := dns.NewDomainOperator(c, d)
 	return op
 }
