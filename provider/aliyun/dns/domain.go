@@ -3,13 +3,13 @@ package dns
 import (
 	dom "github.com/alibabacloud-go/domain-20180129/v3/client"
 	"github.com/alibabacloud-go/tea/tea"
-	"github.com/infraboard/cmdb/apps/domain"
+	"github.com/infraboard/cmdb/apps/dns"
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/mcube/pager"
 )
 
-func (o *DomainOperator) QueryDomain(req *provider.QueryDomainRequest) pager.Pager {
+func (o *DnsOperator) QueryDomain(req *provider.QueryDomainRequest) pager.Pager {
 	p := newDomainPager(o)
 	p.SetRate(req.Rate)
 	return p
@@ -17,8 +17,8 @@ func (o *DomainOperator) QueryDomain(req *provider.QueryDomainRequest) pager.Pag
 
 // 分页查询自己账户下的域名列表
 // 参考: https://next.api.aliyun.com/api/Domain/2018-01-29/QueryDomainList?params={}
-func (o *DomainOperator) queryDomain(req *dom.QueryDomainListRequest) (*domain.DomainSet, error) {
-	set := domain.NewDomainSet()
+func (o *DnsOperator) queryDomain(req *dom.QueryDomainListRequest) (*dns.DomainSet, error) {
+	set := dns.NewDomainSet()
 
 	resp, err := o.client.QueryDomainList(req)
 	if err != nil {
@@ -30,16 +30,16 @@ func (o *DomainOperator) queryDomain(req *dom.QueryDomainListRequest) (*domain.D
 	return set, nil
 }
 
-func (o *DomainOperator) transferDomainSet(items *dom.QueryDomainListResponseBodyData) *domain.DomainSet {
-	set := domain.NewDomainSet()
+func (o *DnsOperator) transferDomainSet(items *dom.QueryDomainListResponseBodyData) *dns.DomainSet {
+	set := dns.NewDomainSet()
 	for i := range items.Domain {
 		set.Add(o.transferDomain(items.Domain[i]))
 	}
 	return set
 }
 
-func (o *DomainOperator) transferDomain(ins *dom.QueryDomainListResponseBodyDataDomain) *domain.Domain {
-	r := domain.NewDefaultDomain()
+func (o *DnsOperator) transferDomain(ins *dom.QueryDomainListResponseBodyDataDomain) *dns.Domain {
+	r := dns.NewDefaultDomain()
 
 	b := r.Base
 	b.Vendor = resource.VENDOR_ALIYUN

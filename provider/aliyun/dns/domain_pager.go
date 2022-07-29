@@ -11,7 +11,7 @@ import (
 	"github.com/infraboard/mcube/pager"
 )
 
-func newDomainPager(operator *DomainOperator) pager.Pager {
+func newDomainPager(operator *DnsOperator) pager.Pager {
 	req := &dom.QueryDomainListRequest{}
 
 	return &domainPager{
@@ -24,7 +24,7 @@ func newDomainPager(operator *DomainOperator) pager.Pager {
 
 type domainPager struct {
 	*pager.BasePager
-	operator *DomainOperator
+	operator *DnsOperator
 	req      *dom.QueryDomainListRequest
 	log      logger.Logger
 }

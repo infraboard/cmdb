@@ -40,6 +40,7 @@ var (
 		"creating":  disk.STATUS_PENDING,
 		"available": disk.STATUS_UNATTACHED,
 		"in_use":    disk.STATUS_ATTACHED,
+		"in-use":    disk.STATUS_ATTACHED,
 		"reiniting": disk.STATUS_PENDING,
 		"detaching": disk.STATUS_DETACHING,
 		"deleting*": disk.STATUS_RECYCLE,

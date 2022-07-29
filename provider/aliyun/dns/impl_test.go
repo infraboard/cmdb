@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/infraboard/cmdb/apps/domain"
+	"github.com/infraboard/cmdb/apps/dns"
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/mcube/logger/zap"
 
@@ -20,7 +20,7 @@ func TestQueryInstance(t *testing.T) {
 	req := provider.NewQueryDomainRequest()
 	pager := operator.QueryDomain(req)
 	for pager.Next() {
-		set := domain.NewDomainSet()
+		set := dns.NewDomainSet()
 		if err := pager.Scan(context.Background(), set); err != nil {
 			panic(err)
 		}

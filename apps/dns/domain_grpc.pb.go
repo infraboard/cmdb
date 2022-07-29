@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.21.1
-// source: apps/domain/pb/domain.proto
+// source: apps/dns/pb/domain.proto
 
-package domain
+package dns
 
 import (
 	context "context"
@@ -137,5 +137,5 @@ var Service_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "apps/domain/pb/domain.proto",
+	Metadata: "apps/dns/pb/domain.proto",
 }

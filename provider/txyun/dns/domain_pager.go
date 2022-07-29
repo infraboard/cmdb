@@ -16,7 +16,7 @@ func newDomainPager(operator *DnsOperator) pager.Pager {
 		BasePager: pager.NewBasePager(),
 		operator:  operator,
 		req:       dnspod.NewDescribeDomainListRequest(),
-		log:       zap.L().Named("tx.domain"),
+		log:       zap.L().Named("tx.dns.domain"),
 	}
 }
 

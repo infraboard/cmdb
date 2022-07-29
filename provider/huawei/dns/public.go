@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/dns/v2/model"
-	"github.com/infraboard/cmdb/apps/domain"
+	"github.com/infraboard/cmdb/apps/dns"
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/mcube/pager"
@@ -18,8 +18,8 @@ func (o *DnsOperator) QueryDomain(req *provider.QueryDomainRequest) pager.Pager 
 
 // 查询公网Zone的列表
 // 参考文档: https://apiexplorer.developer.huaweicloud.com/apiexplorer/sdk?product=DNS&api=ListPublicZones
-func (o *DnsOperator) queryPublicDomain(req *model.ListPublicZonesRequest) (*domain.DomainSet, error) {
-	set := domain.NewDomainSet()
+func (o *DnsOperator) queryPublicDomain(req *model.ListPublicZonesRequest) (*dns.DomainSet, error) {
+	set := dns.NewDomainSet()
 
 	resp, err := o.client.ListPublicZones(req)
 	if err != nil {
@@ -33,8 +33,8 @@ func (o *DnsOperator) queryPublicDomain(req *model.ListPublicZonesRequest) (*dom
 	return set, nil
 }
 
-func (o *DnsOperator) transferPublicZoneSet(list *model.ListPublicZonesResponse) *domain.DomainSet {
-	set := domain.NewDomainSet()
+func (o *DnsOperator) transferPublicZoneSet(list *model.ListPublicZonesResponse) *dns.DomainSet {
+	set := dns.NewDomainSet()
 
 	items := *list.Zones
 	for i := range items {
@@ -43,8 +43,8 @@ func (o *DnsOperator) transferPublicZoneSet(list *model.ListPublicZonesResponse)
 	return set
 }
 
-func (o *DnsOperator) transferPublicZone(ins model.PublicZoneResp) *domain.Domain {
-	r := domain.NewDefaultDomain()
+func (o *DnsOperator) transferPublicZone(ins model.PublicZoneResp) *dns.Domain {
+	r := dns.NewDefaultDomain()
 
 	b := r.Base
 	b.Vendor = resource.VENDOR_HUAWEI

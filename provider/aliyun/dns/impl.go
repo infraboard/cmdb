@@ -6,14 +6,14 @@ import (
 	"github.com/infraboard/mcube/logger/zap"
 )
 
-func NewDomainOperator(client *domain.Client) *DomainOperator {
-	return &DomainOperator{
+func NewDomainOperator(client *domain.Client) *DnsOperator {
+	return &DnsOperator{
 		client: client,
 		log:    zap.L().Named("ali.domain"),
 	}
 }
 
-type DomainOperator struct {
+type DnsOperator struct {
 	client *domain.Client
 	log    logger.Logger
 }

@@ -3,9 +3,10 @@ package dns_test
 import (
 	"context"
 	"fmt"
+	"os"
 	"testing"
 
-	"github.com/infraboard/cmdb/apps/domain"
+	"github.com/infraboard/cmdb/apps/dns"
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/cmdb/provider/txyun/connectivity"
 	op "github.com/infraboard/cmdb/provider/txyun/dns"
@@ -16,12 +17,27 @@ var (
 	operator *op.DnsOperator
 )
 
-func TestQuery(t *testing.T) {
+func TestQueryDomain(t *testing.T) {
 	req := provider.NewQueryDomainRequest()
 	pager := operator.QueryDomain(req)
 
 	for pager.Next() {
-		set := domain.NewDomainSet()
+		set := dns.NewDomainSet()
+		if err := pager.Scan(context.Background(), set); err != nil {
+			panic(err)
+		}
+		for i := range set.Items {
+			fmt.Println(set.Items[i])
+		}
+	}
+}
+
+func TestQueryReord(t *testing.T) {
+	req := provider.NewQueryRecordRequest(os.Getenv("TX_DNS_DOMAIN"))
+	pager := operator.QueryRecord(req)
+
+	for pager.Next() {
+		set := dns.NewRecordSet()
 		if err := pager.Scan(context.Background(), set); err != nil {
 			panic(err)
 		}

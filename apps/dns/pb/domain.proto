@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package infraboard.cmdb.domain;
-option go_package="github.com/infraboard/cmdb/apps/domain";
+option go_package="github.com/infraboard/cmdb/apps/dns";
 
 import "apps/resource/pb/resource.proto";
 import "github.com/infraboard/mcube/pb/page/page.proto";
@@ -59,8 +59,8 @@ message QueryDomainRequest {
 
 message Record {
     // 记录的暂停、启用状态，1和0分别代表启用和暂停
-    // @gotags: json:"enabled"
-    bool enabled = 1;
+    // @gotags: json:"status"
+    string status = 1;
     // 解析记录的ID
     // @gotags: json:"id"
     string id = 2;

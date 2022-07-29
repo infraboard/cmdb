@@ -1,0 +1,14 @@
+{
+    "RecordId": 30111111,
+    "Value": "131.1.1.1",
+    "Status": "DISABLE",
+    "UpdatedOn": "2017-05-31 22:08:38",
+    "Name": "mall",
+    "Line": "境外",
+    "LineId": "3=0",
+    "Type": "A",
+    "MonitorStatus": "",
+    "Remark": "",
+    "TTL": 3600,
+    "MX": 0
+}

@@ -1,6 +1,8 @@
 package ecs
 
 import (
+	"strings"
+
 	"github.com/infraboard/cmdb/apps/disk"
 	"github.com/infraboard/cmdb/apps/host"
 )
@@ -65,6 +67,8 @@ var (
 )
 
 func praseDiskStatus(s string) string {
+	s = strings.ToLower(s)
+
 	if v, ok := DISK_STATUS_MAP[s]; ok {
 		return v.String()
 	}
