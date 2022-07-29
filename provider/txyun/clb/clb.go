@@ -53,6 +53,7 @@ func (o *CLBOperator) transferLB(ins *clb.LoadBalancer) *lb.LB {
 	info.ExpireAt = utils.ParseTime("2006-01-02 15:04:05", utils.PtrStrV(ins.ExpireTime))
 	info.PayType = tea.StringValue(ins.ChargeType)
 	info.PrivateIp = tea.StringSliceValue(ins.LoadBalancerVips)
+	info.Status = praseClbStatus(ins.Status)
 
 	desc := r.Describe
 	desc.Domain = tea.StringValue(ins.Domain)

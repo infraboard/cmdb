@@ -16,7 +16,7 @@ var (
 	operator *op.CLBOperator
 )
 
-func TestQuery(t *testing.T) {
+func TestQueryCLB(t *testing.T) {
 	req := provider.NewQueryLBRequest()
 	pager := operator.QueryLB(req)
 
