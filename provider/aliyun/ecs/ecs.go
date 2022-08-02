@@ -24,8 +24,15 @@ func (o *EcsOperator) queryInstance(req *ecs.DescribeInstancesRequest) (*host.Ho
 		return nil, err
 	}
 
-	set.Total = int64(tea.Int32Value(resp.Body.TotalCount))
-	set.Items = o.transferInstanceSet(resp.Body.Instances.Instance).Items
+	if resp.Body != nil && resp.Body.Instances != nil && resp.Body.Instances.Instance != nil {
+		set.Total = int64(tea.Int32Value(resp.Body.TotalCount))
+		set.Items = o.transferInstanceSet(resp.Body.Instances.Instance).Items
+		o.log.Debugf("get %d host, page number[%d], page size[%d] total[%d]",
+			set.Length(),
+			*req.PageNumber,
+			*req.PageSize,
+			set.Total)
+	}
 
 	return set, nil
 }
@@ -95,6 +102,11 @@ func (o *EcsOperator) transferInstance(ins *ecs.DescribeInstancesResponseBodyIns
 
 func (o *EcsOperator) parsePrivateIp(ins *ecs.DescribeInstancesResponseBodyInstancesInstance) []string {
 	ips := []string{}
+
+	if ins.NetworkInterfaces == nil {
+		return ips
+	}
+
 	// 优先通过网卡查询主私网IP地址
 	for _, nc := range ins.NetworkInterfaces.NetworkInterface {
 		for _, ip := range nc.PrivateIpSets.PrivateIpSet {
