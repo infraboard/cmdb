@@ -17,7 +17,7 @@ var (
 	operator provider.HostOperator
 )
 
-func TestQueryInstance(t *testing.T) {
+func TestQueryEcs(t *testing.T) {
 	req := provider.NewQueryHostRequest()
 	pager := operator.QueryHost(req)
 	for pager.Next() {
