@@ -277,8 +277,7 @@ CREATE TABLE IF NOT EXISTS `resource_tag` (
 -- ----------------------------
 -- Table structure for credential
 -- ----------------------------
-DROP TABLE IF NOT EXISTS `credential`;
-CREATE TABLE `credential` (
+CREATE TABLE  IF NOT EXISTS `credential` (
   `id` varchar(64)  NOT NULL COMMENT '凭证Id',
   `create_at` bigint(13) NOT NULL COMMENT '创建时间',
   `description` varchar(255) NOT NULL COMMENT '凭证描述',

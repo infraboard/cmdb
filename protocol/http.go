@@ -90,7 +90,7 @@ func (s *HTTPService) Start() error {
 	s.r.Add(restfulspec.NewOpenAPIService(config))
 	s.l.Infof("Get the API using http://%s%s", s.c.App.HTTPAddr(), config.APIPath)
 	// 注册路由条目
-	s.RegistryEndpoint()
+	// s.RegistryEndpoint()
 
 	// 启动 HTTP服务
 	s.l.Infof("HTTP服务启动成功, 监听地址: %s", s.server.Addr)
