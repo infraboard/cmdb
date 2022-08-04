@@ -2,12 +2,13 @@ package cvm
 
 import (
 	"context"
-	"fmt"
 
+	"github.com/alibabacloud-go/tea/tea"
 	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/cmdb/utils"
+	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/pager"
 	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 )
@@ -22,7 +23,6 @@ func (o *CVMOperator) QueryCVM(ctx context.Context, req *cvm.DescribeInstancesRe
 
 	set := o.transferSet(resp.Response.InstanceSet)
 	set.Total = utils.PtrInt64(resp.Response.TotalCount)
-
 	return set, nil
 }
 
@@ -33,7 +33,18 @@ func (o *CVMOperator) QueryHost(req *provider.QueryHostRequest) pager.Pager {
 }
 
 func (o *CVMOperator) DescribeHost(ctx context.Context, req *provider.DescribeHostRequest) (*host.Host, error) {
-	return nil, fmt.Errorf("not impl")
+	query := cvm.NewDescribeInstancesRequest()
+	query.InstanceIds = []*string{tea.String(req.Id)}
+	query.Limit = tea.Int64(1)
+	hs, err := o.QueryCVM(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	if hs.Length() == 0 {
+		return nil, exception.NewNotFound("instance %s not found", err)
+	}
+
+	return hs.Items[0], nil
 }
 
 func (o *CVMOperator) transferSet(items []*cvm.Instance) *host.HostSet {

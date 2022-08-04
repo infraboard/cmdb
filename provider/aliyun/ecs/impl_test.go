@@ -29,8 +29,8 @@ func TestQueryEcs(t *testing.T) {
 	}
 }
 
-func TestDescribe(t *testing.T) {
-	req := &provider.DescribeHostRequest{Id: "i-bp1f6d1sbq8s9mm59jeu"}
+func TestDescribeEcs(t *testing.T) {
+	req := &provider.DescribeHostRequest{Id: "i-bp1ieov2ieftvjai48nf"}
 	ins, err := operator.DescribeHost(context.Background(), req)
 	if err != nil {
 		t.Fatal(err)

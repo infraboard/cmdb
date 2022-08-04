@@ -44,6 +44,15 @@ func TestQueryDisk(t *testing.T) {
 	}
 }
 
+func TestDescribeEcs(t *testing.T) {
+	req := provider.NewDescribeHostRequest("ins-1wxeveeb")
+	ins, err := operator.DescribeHost(context.Background(), req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(ins)
+}
+
 func TestInquiryPrice(t *testing.T) {
 	req := cvm.NewInquiryPriceRunInstancesRequest()
 	req.Placement = &cvm.Placement{

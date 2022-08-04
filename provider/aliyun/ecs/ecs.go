@@ -44,7 +44,11 @@ func (o *EcsOperator) QueryHost(req *provider.QueryHostRequest) pager.Pager {
 }
 
 func (o *EcsOperator) DescribeHost(ctx context.Context, req *provider.DescribeHostRequest) (*host.Host, error) {
-	r := &ecs.DescribeInstancesRequest{}
+	r := &ecs.DescribeInstancesRequest{
+		RegionId:   o.client.RegionId,
+		PageNumber: tea.Int32(1),
+		PageSize:   tea.Int32(1),
+	}
 	r.InstanceIds = tea.String(`["` + req.Id + `"]`)
 	hs, err := o.queryInstance(r)
 	if err != nil {

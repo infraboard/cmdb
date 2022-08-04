@@ -42,6 +42,15 @@ func TestQueryDisk(t *testing.T) {
 	}
 }
 
+func TestDescribeHost(t *testing.T) {
+	req := &provider.DescribeHostRequest{Id: "5f55a412-cd3c-4144-82ce-5001c2b2f08c"}
+	ins, err := operator.DescribeHost(context.Background(), req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(ins)
+}
+
 func init() {
 	zap.DevelopmentSetup()
 	err := connectivity.LoadClientFromEnv()

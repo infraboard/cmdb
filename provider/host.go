@@ -29,6 +29,12 @@ type QueryHostRequest struct {
 	Rate float64 `json:"rate"`
 }
 
+func NewDescribeHostRequest(id string) *DescribeHostRequest {
+	return &DescribeHostRequest{
+		Id: id,
+	}
+}
+
 type DescribeHostRequest struct {
 	Id string `json:"id"`
 }

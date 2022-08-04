@@ -1,0 +1,90 @@
+{
+    "server": {
+        "name": "xxxx",
+        "id": "xxxxxx",
+        "status": "ACTIVE",
+        "created": "2022-08-01T03:42:59Z",
+        "updated": "2022-08-01T03:43:32Z",
+        "flavor": {
+            "id": "c6s.large.2",
+            "links": [
+                {
+                    "href": "https://ecs.cn-north-4.myhuaweicloud.com/xxxxxx/flavors/c6s.large.2",
+                    "rel": "bookmark"
+                }
+            ]
+        },
+        "image": {
+            "id": "xxxxx",
+            "links": [
+                {
+                    "href": "https://ecs.cn-north-4.myhuaweicloud.com/xxxx/images/xxxx",
+                    "rel": "bookmark"
+                }
+            ]
+        },
+        "tenant_id": "xxx",
+        "key_name": "",
+        "user_id": "xxx",
+        "metadata": {},
+        "hostId": "xxxx",
+        "addresses": {
+            "xxx": [
+                {
+                    "addr": "192.168.0.232",
+                    "version": 4,
+                    "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:8f:e6:cf",
+                    "OS-EXT-IPS:type": "fixed"
+                },
+                {
+                    "addr": "121.36.42.204",
+                    "version": 4,
+                    "OS-EXT-IPS-MAC:mac_addr": "fa:16:3e:8f:e6:cf",
+                    "OS-EXT-IPS:type": "floating"
+                }
+            ]
+        },
+        "security_groups": [
+            {
+                "name": "xxx"
+            },
+            {
+                "name": "xxx"
+            },
+            {
+                "name": "xxx"
+            }
+        ],
+        "links": [
+            {
+                "href": "https: //ecs.cn-north-4.myhuaweicloud.com/v2.1/xxxx",
+                "rel": "self"
+            },
+            {
+                "href": "https://ecs.cn-north-4.myhuaweicloud.com/xxxx",
+                "rel": "bookmark"
+            }
+        ],
+        "OS-DCF:diskConfig": "MANUAL",
+        "OS-EXT-AZ:availability_zone": "cn-north-4c",
+        "OS-EXT-SRV-ATTR:host": "xxx",
+        "OS-EXT-SRV-ATTR:hypervisor_hostname": "xxxx",
+        "OS-EXT-SRV-ATTR:instance_name": "instance-017cb7b6",
+        "OS-EXT-STS:power_state": 1,
+        "OS-EXT-STS:task_state": "null",
+        "OS-EXT-STS:vm_state": "active",
+        "OS-SRV-USG:launched_at": "2022-08-01T03:43:11.000000",
+        "OS-SRV-USG:terminated_at": "",
+        "os-extended-volumes:volumes_attached": [
+            {
+                "id": "xxxx"
+            }
+        ],
+        "host_status": "",
+        "tags": null,
+        "accessIPv4": "",
+        "accessIPv6": "",
+        "config_drive": "",
+        "progress": 0
+    }
+}
