@@ -72,7 +72,9 @@ func (o *EcsOperator) transferInstance(ins model.ServerDetail) *host.Host {
 	h.Information.Name = ins.Name
 	h.Information.Description = utils.PtrStrV(ins.Description)
 	h.Information.Status = praseEcsStatus(ins.Status)
-	h.Information.Tags = o.transferTags(ins.Tags)
+	if ins.Tags != nil {
+		h.Information.Tags = o.transferTags(*ins.Tags)
+	}
 	h.Information.PrivateIp, h.Information.PublicIp = o.parseIp(ins.Addresses)
 	h.Information.PayType = o.ParseChangeMode(ins.Metadata["charging_mode"])
 	h.Information.SyncAccount = o.GetAccountId()
@@ -85,20 +87,6 @@ func (o *EcsOperator) transferInstance(ins model.ServerDetail) *host.Host {
 	h.Describe.ImageId = ins.Image.Id
 	h.Describe.KeyPairName = []string{ins.KeyName}
 	return h
-}
-
-func (o *EcsOperator) transferTags(tags *[]string) (ret []*resource.Tag) {
-	if tags == nil {
-		return
-	}
-
-	t := *tags
-
-	for i := range t {
-		ret = append(ret, resource.NewThirdTag("ecs", t[i]))
-	}
-
-	return
 }
 
 func (o *EcsOperator) parseTime(t string) int64 {
@@ -177,7 +165,7 @@ func (o *EcsOperator) tansferNavaServer(ins *model.NovaServer) *host.Host {
 		h.Information.Status = praseEcsStatus(st)
 	}
 
-	// h.Information.Tags = o.transferTags(ins.Tags)
+	h.Information.Tags = o.transferTags(ins.Tags)
 	h.Information.PrivateIp, h.Information.PublicIp = o.parseNavoIp(ins.Addresses)
 	h.Information.PayType = o.ParseChangeMode(ins.Metadata["charging_mode"])
 	h.Information.SyncAccount = o.GetAccountId()
@@ -190,4 +178,17 @@ func (o *EcsOperator) tansferNavaServer(ins *model.NovaServer) *host.Host {
 	h.Describe.ImageId = ins.Image.Id
 	h.Describe.KeyPairName = []string{ins.KeyName}
 	return h
+}
+
+func (o *EcsOperator) transferTags(tags []string) (ret []*resource.Tag) {
+	for _, t := range tags {
+		kv := strings.Split(t, "=")
+		if len(kv) == 2 {
+			ret = append(ret, resource.NewThirdTag(kv[0], kv[1]))
+		} else {
+			ret = append(ret, resource.NewThirdTag("ecs", t))
+		}
+	}
+
+	return
 }
