@@ -6,14 +6,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/alibabacloud-go/tea/tea"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ecs/v2/model"
 
 	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/cmdb/utils"
-	"github.com/infraboard/mcube/logger/zap"
 	"github.com/infraboard/mcube/pager"
 )
 
@@ -39,14 +37,14 @@ func (o *EcsOperator) QueryHost(req *provider.QueryHostRequest) pager.Pager {
 }
 
 func (o *EcsOperator) DescribeHost(ctx context.Context, req *provider.DescribeHostRequest) (*host.Host, error) {
-	resp, err := o.client.NovaShowServer(&model.NovaShowServerRequest{
+	resp, err := o.client.ShowServer(&model.ShowServerRequest{
 		ServerId: req.Id,
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	h := o.tansferNavaServer(resp.Server)
+	h := o.transferInstance(*resp.Server)
 
 	return h, nil
 }
@@ -129,55 +127,6 @@ func (o *EcsOperator) parseIp(address map[string][]model.ServerAddress) (private
 		}
 	}
 	return
-}
-
-func (o *EcsOperator) parseNavoIp(address map[string][]model.NovaNetwork) (privateIps []string, publicIps []string) {
-	for _, addrs := range address {
-		for i := range addrs {
-			switch addrs[i].OSEXTIPStype {
-			case "fixed":
-				privateIps = append(privateIps, addrs[i].Addr)
-			case "floating":
-				publicIps = append(publicIps, addrs[i].Addr)
-			}
-		}
-	}
-	return
-}
-
-func (o *EcsOperator) tansferNavaServer(ins *model.NovaServer) *host.Host {
-	h := host.NewDefaultHost()
-	h.Base.Vendor = resource.VENDOR_HUAWEI
-	h.Base.Zone = ins.OSEXTAZavailabilityZone
-	h.Base.CreateAt = o.parseTime(ins.Created)
-	h.Base.Id = ins.Id
-
-	h.Information.Category = tea.StringValue(ins.Flavor.OriginalName)
-	// h.Information.ExpireAt = o.parseTime(ins.AutoTerminateTime)
-	h.Information.Name = ins.Name
-	h.Information.Description = utils.PtrStrV(ins.Description)
-
-	status, err := ins.Status.MarshalJSON()
-	if err != nil {
-		zap.L().Errorf("get ecs status error, %s", err)
-	} else {
-		st := strings.Trim(strings.TrimSpace(string(status)), `"`)
-		h.Information.Status = praseEcsStatus(st)
-	}
-
-	h.Information.Tags = o.transferTags(ins.Tags)
-	h.Information.PrivateIp, h.Information.PublicIp = o.parseNavoIp(ins.Addresses)
-	h.Information.PayType = o.ParseChangeMode(ins.Metadata["charging_mode"])
-	h.Information.SyncAccount = o.GetAccountId()
-
-	h.Describe.SerialNumber = ins.Id
-	h.Describe.Cpu = int64(tea.Int32Value(ins.Flavor.Vcpus))
-	h.Describe.Memory = int64(tea.Int32Value(ins.Flavor.Ram))
-	h.Describe.OsType = ins.Metadata["os_type"]
-	h.Describe.OsName = ins.Metadata["image_name"]
-	h.Describe.ImageId = ins.Image.Id
-	h.Describe.KeyPairName = []string{ins.KeyName}
-	return h
 }
 
 func (o *EcsOperator) transferTags(tags []string) (ret []*resource.Tag) {
