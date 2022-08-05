@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package infraboard.cmdb.bill;
+option go_package="github.com/infraboard/cmdb/apps/bill";
+
+
+enum ORDER_TYPE {
+    // 资源新增订单
+    NEW = 0;
+    // 续费。
+    RENEW = 1;
+    // 升级。
+    UPGRADE = 2;
+    // 退款
+    REFUND = 3;
+}
+
+message Order {
+    // 订单类型
+    // @gotags: json:"type"
+    ORDER_TYPE type = 1;
+}

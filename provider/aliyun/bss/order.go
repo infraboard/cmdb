@@ -5,7 +5,13 @@ import (
 
 	bssopenapi "github.com/alibabacloud-go/bssopenapi-20171214/v2/client"
 	"github.com/infraboard/cmdb/apps/bill"
+	"github.com/infraboard/cmdb/provider"
+	"github.com/infraboard/mcube/pager"
 )
+
+func (o *BssOperator) QueryOrder(req *provider.QueryOrderRequest) pager.Pager {
+	return nil
+}
 
 // 查询用户或者分销客户订单列表情况。默认查询当前时间最近1小时范围内订单，如需查询更长时间范围的订单数据，
 // 请设**CreateTimeStart** 和**CreateTimeEnd**参数

@@ -9,6 +9,8 @@ import (
 	"github.com/infraboard/mcube/pager"
 )
 
+// 查询资源消费记录
+// 参考文档: https://apiexplorer.developer.huaweicloud.com/apiexplorer/doc?product=BSS&api=ListCustomerselfResourceRecords
 func (o *BssOperator) Query(req *model.ListCustomerselfResourceRecordsRequest) (*bill.BillSet, error) {
 	set := bill.NewBillSet()
 

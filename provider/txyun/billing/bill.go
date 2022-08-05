@@ -13,7 +13,7 @@ import (
 
 // 查询账单资源汇总数据
 //参考文档: https://console.cloud.tencent.com/api/explorer?Product=billing&Version=2018-07-09&Action=DescribeBillResourceSummary&SignVersion=
-func (o *Billingoperator) Query(ctx context.Context, req *billing.DescribeBillResourceSummaryRequest) (*bill.BillSet, error) {
+func (o *BillOperator) Query(ctx context.Context, req *billing.DescribeBillResourceSummaryRequest) (*bill.BillSet, error) {
 	resp, err := o.client.DescribeBillResourceSummaryWithContext(ctx, req)
 	if err != nil {
 		return nil, err
@@ -25,13 +25,13 @@ func (o *Billingoperator) Query(ctx context.Context, req *billing.DescribeBillRe
 	return set, nil
 }
 
-func (o *Billingoperator) QueryBill(req *provider.QueryBillRequest) pager.Pager {
+func (o *BillOperator) QueryBill(req *provider.QueryBillRequest) pager.Pager {
 	p := newPager(o, req.Month)
 	p.SetRate(req.Rate)
 	return p
 }
 
-func (o *Billingoperator) QuerySummary(ctx context.Context, req *provider.QueryBillSummaryRequeset) (
+func (o *BillOperator) QuerySummary(ctx context.Context, req *provider.QueryBillSummaryRequeset) (
 	*bill.SummaryRecordSet, error) {
 	return nil, nil
 }

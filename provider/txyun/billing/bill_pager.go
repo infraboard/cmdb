@@ -14,7 +14,7 @@ import (
 // 周期类型，byUsedTime按计费周期/byPayTime按扣费周期。需要与费用中心该月份账单的周期保持一致。
 // 您可前往[账单概览](https://console.cloud.tencent.com/expense/bill/overview)
 // 页面顶部查看确认您的账单统计周期类型。
-func newPager(operator *Billingoperator, month string) pager.Pager {
+func newPager(operator *BillOperator, month string) pager.Pager {
 	req := billing.NewDescribeBillResourceSummaryRequest()
 	req.Month = common.StringPtr(month)
 	req.PeriodType = common.StringPtr("byPayTime")
@@ -29,7 +29,7 @@ func newPager(operator *Billingoperator, month string) pager.Pager {
 
 type billPager struct {
 	*pager.BasePager
-	operator *Billingoperator
+	operator *BillOperator
 	req      *billing.DescribeBillResourceSummaryRequest
 	log      logger.Logger
 }

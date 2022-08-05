@@ -10,6 +10,7 @@ import (
 type BillOperator interface {
 	QueryBill(*QueryBillRequest) pager.Pager
 	QuerySummary(context.Context, *QueryBillSummaryRequeset) (*bill.SummaryRecordSet, error)
+	QueryOrder(*QueryOrderRequest) pager.Pager
 }
 
 func NewQueryBillRequest() *QueryBillRequest {
@@ -39,4 +40,8 @@ type QueryBillSummaryRequeset struct {
 	OwnerId string
 	// 账单月份
 	Month string
+}
+
+type QueryOrderRequest struct {
+	Rate float64
 }
