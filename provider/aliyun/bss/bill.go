@@ -15,7 +15,7 @@ import (
 
 // 查询用户某个账期内所有商品实例或计费项的消费汇总
 // 参考: https://next.api.aliyun.com/api/BssOpenApi/2017-12-14/DescribeInstanceBill?params={}
-func (o *BssOperator) Query(req *bssopenapi.DescribeInstanceBillRequest) (*bill.BillSet, error) {
+func (o *BssOperator) doQueryBill(req *bssopenapi.DescribeInstanceBillRequest) (*bill.BillSet, error) {
 	set := bill.NewBillSet()
 	resp, err := o.client.DescribeInstanceBill(req)
 	if err != nil {

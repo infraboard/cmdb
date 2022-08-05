@@ -36,6 +36,10 @@ func TestQuerySummary(t *testing.T) {
 	operator.QuerySummary(context.TODO(), req)
 }
 
+func TestQueryOrder(t *testing.T) {
+
+}
+
 func init() {
 	zap.DevelopmentSetup()
 
