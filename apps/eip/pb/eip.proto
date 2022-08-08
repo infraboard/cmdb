@@ -21,9 +21,9 @@ message Describe {
     // BGP
     // @gotags: json:"isp"
     string isp = 1;
-    // 带宽
+    // 带宽, 单位M
     // @gotags: json:"band_width"
-    string band_width = 2;
+    int64 band_width = 2;
     // 关联实例ID
     // @gotags: json:"instance_id"
     string instance_id = 3;

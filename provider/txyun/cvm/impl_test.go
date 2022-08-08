@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/infraboard/cmdb/apps/disk"
+	"github.com/infraboard/cmdb/apps/eip"
 	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/cmdb/provider/txyun"
@@ -37,6 +38,18 @@ func TestQueryDisk(t *testing.T) {
 
 	for pager.Next() {
 		set := disk.NewDiskSet()
+		if err := pager.Scan(context.Background(), set); err != nil {
+			panic(err)
+		}
+		fmt.Println(set)
+	}
+}
+
+func TestQueryEip(t *testing.T) {
+	pager := operator.QueryEip(provider.NewQueryEipRequest())
+
+	for pager.Next() {
+		set := eip.NewEIPSet()
 		if err := pager.Scan(context.Background(), set); err != nil {
 			panic(err)
 		}
@@ -86,5 +99,5 @@ func init() {
 	}
 
 	c := txyun.O().Client()
-	operator = op.NewCVMOperator(c.CvmClient(), c.CBSClient())
+	operator = op.NewCVMOperator(c.CvmClient(), c.CBSClient(), c.VpcClient())
 }

@@ -1,6 +1,8 @@
 package ecs
 
 import (
+	"strconv"
+
 	ecs "github.com/alibabacloud-go/ecs-20140526/v2/client"
 	"github.com/alibabacloud-go/tea/tea"
 	"github.com/infraboard/cmdb/apps/eip"
@@ -62,7 +64,7 @@ func (o *EcsOperator) transferEip(ins *ecs.DescribeEipAddressesResponseBodyEipAd
 	h.Information.PayType = tea.StringValue(ins.ChargeType)
 	h.Information.SyncAccount = o.GetAccountId()
 
-	h.Describe.BandWidth = tea.StringValue(ins.Bandwidth)
+	h.Describe.BandWidth, _ = strconv.ParseInt(tea.StringValue(ins.Bandwidth), 10, 64)
 	h.Describe.InstanceId = tea.StringValue(ins.InstanceId)
 	h.Describe.InstanceType = tea.StringValue(ins.InstanceType)
 	return h

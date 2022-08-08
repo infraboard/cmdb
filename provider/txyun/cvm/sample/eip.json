@@ -1,0 +1,20 @@
+{
+    "AddressId": "eip-xxx",
+    "AddressStatus": "BIND",
+    "AddressIp": "xxxxx",
+    "InstanceId": "ins-xxxx",
+    "CreatedTime": "2018-12-01T03:00:27Z",
+    "NetworkInterfaceId": "eni-xxx",
+    "PrivateAddressIp": "xxxxxx",
+    "IsArrears": false,
+    "IsBlocked": false,
+    "IsEipDirectConnection": false,
+    "AddressType": "EIP",
+    "CascadeRelease": false,
+    "EipAlgType": {
+        "Ftp": true,
+        "Sip": true
+    },
+    "InternetServiceProvider": "BGP",
+    "LocalBgp": false
+}

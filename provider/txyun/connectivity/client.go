@@ -16,6 +16,7 @@ import (
 	dnspod "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod/v20210323"
 	redis "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/redis/v20180412"
 	sts "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sts/v20180813"
+	vpc "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/vpc/v20170312"
 	"github.com/tencentyun/cos-go-sdk-v5"
 )
 
@@ -56,6 +57,7 @@ type TencentCloudClient struct {
 
 	cvmConn   *cvm.Client
 	cdbConn   *cdb.Client
+	vpcConn   *vpc.Client
 	redisConn *redis.Client
 	cosConn   *cos.Client
 	cbsConn   *cbs.Client
@@ -146,6 +148,27 @@ func (me *TencentCloudClient) CBSClient() *cbs.Client {
 	cbsConn, _ := cbs.NewClient(credential, me.Region, cpf)
 	me.cbsConn = cbsConn
 	return me.cbsConn
+}
+
+// UseCvmClient cvm
+func (me *TencentCloudClient) VpcClient() *vpc.Client {
+	if me.vpcConn != nil {
+		return me.vpcConn
+	}
+
+	credential := common.NewCredential(
+		me.SecretID,
+		me.SecretKey,
+	)
+
+	cpf := profile.NewClientProfile()
+	cpf.HttpProfile.ReqMethod = "POST"
+	cpf.HttpProfile.ReqTimeout = 300
+	cpf.Language = "en-US"
+
+	vpcConn, _ := vpc.NewClient(credential, me.Region, cpf)
+	me.vpcConn = vpcConn
+	return me.vpcConn
 }
 
 // UseBillingClient billing客户端

@@ -59,7 +59,7 @@ func (o *Operator) Client() *connectivity.TencentCloudClient {
 }
 
 func (o *Operator) HostOperator() provider.HostOperator {
-	op := cvm.NewCVMOperator(o.client.CvmClient(), o.client.CBSClient())
+	op := cvm.NewCVMOperator(o.client.CvmClient(), o.client.CBSClient(), o.client.VpcClient())
 	op.WithAccountId(o.account)
 	return op
 }
