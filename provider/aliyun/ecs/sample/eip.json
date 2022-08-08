@@ -1,0 +1,14 @@
+{
+    "AllocationId": "eip-xxxx",
+    "AllocationTime": "2022-08-05T09:43:11Z",
+    "Bandwidth": "5",
+    "ChargeType": "PostPaid",
+    "ExpiredTime": "",
+    "InstanceId": "i-xxxx",
+    "InstanceType": "EcsInstance",
+    "InternetChargeType": "PayByBandwidth",
+    "IpAddress": "xxxx",
+    "OperationLocks": {},
+    "RegionId": "cn-hangzhou",
+    "Status": "InUse"
+ }

@@ -10,6 +10,7 @@ import (
 type HostOperator interface {
 	QueryHost(req *QueryHostRequest) pager.Pager
 	QueryDisk(req *QueryDiskRequest) pager.Pager
+	QueryEip(req *QueryEipRequest) pager.Pager
 	DescribeHost(ctx context.Context, req *DescribeHostRequest) (*host.Host, error)
 }
 
@@ -46,5 +47,15 @@ func NewQueryDiskRequest() *QueryDiskRequest {
 }
 
 type QueryDiskRequest struct {
+	Rate float64 `json:"rate"`
+}
+
+func NewQueryEipRequest() *QueryEipRequest {
+	return &QueryEipRequest{
+		Rate: 5,
+	}
+}
+
+type QueryEipRequest struct {
 	Rate float64 `json:"rate"`
 }

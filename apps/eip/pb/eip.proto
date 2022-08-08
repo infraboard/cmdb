@@ -8,7 +8,7 @@ import "github.com/infraboard/mcube/pb/page/page.proto";
 
 service Service {
     rpc SyncEIP(EIP) returns(EIP) {}
-    rpc QueryEIP(QueryEIPRequest) returns(Set) {}
+    rpc QueryEIP(QueryEIPRequest) returns(EIPSet) {}
 }
 
 message EIP {
@@ -38,7 +38,7 @@ message Describe {
     string mode = 6;
 }
 
-message Set {
+message EIPSet {
     // 总数量
     // @gotags: json:"total"
     int64 total = 1;

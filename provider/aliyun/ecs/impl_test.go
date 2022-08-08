@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/infraboard/cmdb/apps/disk"
+	"github.com/infraboard/cmdb/apps/eip"
 	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/mcube/logger/zap"
@@ -43,6 +44,19 @@ func TestQueryDisk(t *testing.T) {
 	pager := operator.QueryDisk(req)
 	for pager.Next() {
 		set := disk.NewDiskSet()
+		if err := pager.Scan(context.Background(), set); err != nil {
+			panic(err)
+		}
+
+		fmt.Println(set)
+	}
+}
+
+func TestQueryEip(t *testing.T) {
+	req := provider.NewQueryEipRequest()
+	pager := operator.QueryEip(req)
+	for pager.Next() {
+		set := eip.NewEIPSet()
 		if err := pager.Scan(context.Background(), set); err != nil {
 			panic(err)
 		}
