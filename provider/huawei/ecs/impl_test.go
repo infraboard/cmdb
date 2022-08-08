@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/infraboard/cmdb/apps/disk"
+	"github.com/infraboard/cmdb/apps/eip"
 	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/cmdb/provider/huawei/connectivity"
@@ -42,6 +43,18 @@ func TestQueryDisk(t *testing.T) {
 	}
 }
 
+func TestQueryEip(t *testing.T) {
+	pager := operator.QueryEip(provider.NewQueryEipRequest())
+
+	for pager.Next() {
+		set := eip.NewEIPSet()
+		if err := pager.Scan(context.Background(), set); err != nil {
+			panic(err)
+		}
+		fmt.Println(set)
+	}
+}
+
 func TestDescribeHost(t *testing.T) {
 	req := &provider.DescribeHostRequest{Id: "5f55a412-cd3c-4144-82ce-5001c2b2f08c"}
 	ins, err := operator.DescribeHost(context.Background(), req)
@@ -66,5 +79,9 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	operator = op.NewEcsOperator(ec, ev)
+	ep, err := connectivity.C().EipClient()
+	if err != nil {
+		panic(err)
+	}
+	operator = op.NewEcsOperator(ec, ev, ep)
 }

@@ -53,7 +53,11 @@ func (o *Operator) HostOperator() provider.HostOperator {
 	if err != nil {
 		panic(err)
 	}
-	return ecs.NewEcsOperator(c, ev)
+	ep, err := o.client.EipClient()
+	if err != nil {
+		panic(err)
+	}
+	return ecs.NewEcsOperator(c, ev, ep)
 }
 
 func (o *Operator) BillOperator() provider.BillOperator {
