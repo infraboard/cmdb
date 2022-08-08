@@ -1,7 +1,7 @@
 syntax = "proto3";
 
-package infraboard.cmdb.bill;
-option go_package="github.com/infraboard/cmdb/apps/bill";
+package infraboard.cmdb.order;
+option go_package="github.com/infraboard/cmdb/apps/order";
 
 
 enum ORDER_TYPE {
@@ -11,8 +11,12 @@ enum ORDER_TYPE {
     RENEW = 1;
     // 升级。
     UPGRADE = 2;
+    // 降配
+    DOWNGRADE = 3;
     // 退款
-    REFUND = 3;
+    REFUND = 4;
+    // 付费方式调整
+    MODIFY = 5;
 }
 
 message Order {
