@@ -53,3 +53,48 @@ func (t *ORDER_TYPE) UnmarshalJSON(b []byte) error {
 	*t = ins
 	return nil
 }
+
+// ParseORDER_STATUSFromString Parse ORDER_STATUS from string
+func ParseORDER_STATUSFromString(str string) (ORDER_STATUS, error) {
+	key := strings.Trim(string(str), `"`)
+	v, ok := ORDER_STATUS_value[strings.ToUpper(key)]
+	if !ok {
+		return 0, fmt.Errorf("unknown ORDER_STATUS: %s", str)
+	}
+
+	return ORDER_STATUS(v), nil
+}
+
+// Equal type compare
+func (t ORDER_STATUS) Equal(target ORDER_STATUS) bool {
+	return t == target
+}
+
+// IsIn todo
+func (t ORDER_STATUS) IsIn(targets ...ORDER_STATUS) bool {
+	for _, target := range targets {
+		if t.Equal(target) {
+			return true
+		}
+	}
+
+	return false
+}
+
+// MarshalJSON todo
+func (t ORDER_STATUS) MarshalJSON() ([]byte, error) {
+	b := bytes.NewBufferString(`"`)
+	b.WriteString(strings.ToUpper(t.String()))
+	b.WriteString(`"`)
+	return b.Bytes(), nil
+}
+
+// UnmarshalJSON todo
+func (t *ORDER_STATUS) UnmarshalJSON(b []byte) error {
+	ins, err := ParseORDER_STATUSFromString(string(b))
+	if err != nil {
+		return err
+	}
+	*t = ins
+	return nil
+}

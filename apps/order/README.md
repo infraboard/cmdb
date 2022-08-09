@@ -1,8 +1,8 @@
 # 订单管理
 
-## 统一订单状态
+## 统一订单分类
 
-### 各厂商状态
+### 各厂商分类
 
 阿里云: [订单API文档](https://next.api.aliyun.com/api/BssOpenApi/2017-12-14/QueryOrders?params={}&lang=GO&tab=DOC)
 + New：新购。
@@ -34,7 +34,7 @@
 + 14:转商用
 + 15:费用调整
 
-### 统一状态
+### 统一分类
 
 + purchase 购买
 + renew 续费
@@ -42,3 +42,46 @@
 + downgrade 降配
 + refund 退款
 + modify 费用调整
+
+
+## 统一订单状态
+
+
+### 各厂商状态
+
+阿里云: [订单API文档](https://next.api.aliyun.com/api/BssOpenApi/2017-12-14/QueryOrders?params={}&lang=GO&tab=DOC)
++ Unpaid：未支付。
++ Paid：已支付。
++ Cancelled：已作废。
+
+腾讯云: [腾讯云API文档](https://console.cloud.tencent.com/api/explorer?Product=billing&Version=2018-07-09&Action=DescribeDealsByCond&SignVersion=)
++ 1：未支付 
++ 2：已支付
++ 3：发货中 
++ 4：已发货 
++ 5：发货失败 
++ 6：已退款 
++ 7：已关单 
++ 8：订单过期 
++ 9：订单已失效 
++ 10：产品已失效 
++ 11：代付拒绝 
++ 12：支付中
+
+华为云: [API文档](https://apiexplorer.developer.huaweicloud.com/apiexplorer/doc?product=BSS&api=ListCustomerOrders)
++ 1:待审核
++ 3:处理中
++ 4:已取消
++ 5:已完成
++ 6:待支付
++ 9:待确认
+
+### 统一状态
+
++ 1：未支付 
++ 8：订单过期 
++ 2：支付中
++ 4: 已取消
++ 5：已支付
++ 6：已退款 
++ 7：已关单 

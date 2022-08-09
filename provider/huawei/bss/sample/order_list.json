@@ -1,0 +1,26 @@
+{
+    "order_id": "xxxxx",
+    "customer_id": "xxxxx",
+    "service_type_code": "hws.service.type.ec2",
+    "service_type_name": "弹性云服务器",
+    "source_type": 7,
+    "status": 5,
+    "order_type": 2,
+    "amount_after_discount": 0,
+    "official_amount": 0.55,
+    "measure_id": 1,
+    "create_time": "2020-06-29T07: 45: 35Z",
+    "payment_time": "2020-06-29T07: 45: 35Z",
+    "currency": "CNY",
+    "amount_info": {
+        "discounts": [
+            {
+                "discount_type": "301",
+                "discount_amount": 0.55
+            }
+        ],
+        "flexipurchase_coupon_amount": 0,
+        "coupon_amount": 0.55,
+        "stored_card_amount": 0
+    }
+}

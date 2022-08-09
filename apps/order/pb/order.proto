@@ -5,6 +5,14 @@ option go_package="github.com/infraboard/cmdb/apps/order";
 
 import "apps/resource/pb/resource.proto";
 
+message OrderSet {
+    // 总数量
+    // @gotags: json:"total"
+    int64 total = 1;
+    // 列表项
+    // @gotags: json:"items"
+    repeated Order items = 2;
+}
 
 enum ORDER_TYPE {
     // 资源新增订单
@@ -19,6 +27,19 @@ enum ORDER_TYPE {
     REFUND = 4;
     // 付费方式调整
     MODIFY = 5;
+}
+
+enum ORDER_STATUS {
+    // 未支付 
+    UNPAID = 0;
+    // 订单过期 
+    EXPIRED = 1;
+    // 支付中
+    PAYING = 2;
+    // 已取消
+    CANCELLED = 3;
+    // 已支付
+    PAID = 4;
 }
 
 message Order {
@@ -36,7 +57,7 @@ message Order {
     string id = 4;
     // 订单类型
     // @gotags: json:"order_type"
-    ORDER_TYPE order_type = 5;
+    string order_type = 5;
     // 订单状态
     // @gotags: json:"status"
     string status = 6;
@@ -46,33 +67,36 @@ message Order {
     // 创建时间
     // @gotags: json:"create_at"
     int64  create_at = 8;
+    // 支付时间
+    // @gotags: json:"pay_at"
+    int64  pay_at = 9;
     // 创建人
     // @gotags: json:"create_by"
-    string create_by = 9;
+    string create_by = 10;
     // 计费方式，比如：月95，日均峰值
     // @gotags: json:"pay_mode"
-    string pay_mode = 10;
+    string pay_mode = 11;
     // 定义费用
     // @gotags: json:"cost"
-    Cost cost = 11;
+    Cost cost = 12;
     // 产品编码
     // @gotags: json:"product_code"
-    string product_code = 12;
+    string product_code = 13;
     // 产品编码中文名称
     // @gotags: json:"product_name"
-    string product_name = 13;
+    string product_name = 14;
     // 子产品编码
     // @gotags: json:"sub_product_code"
-    string sub_product_code = 14;
+    string sub_product_code = 15;
     // 子产品编码中文名称
     // @gotags: json:"sub_product_name"
-    string sub_product_name = 15;
+    string sub_product_name = 16;
     // 购买产品详情 
     // @gotags: json:"product_info"
-    string product_info = 16;
+    string product_info = 17;
     // 订单对应的资源id
     // @gotags: json:"resource_id"
-    repeated string resource_id = 17;
+    repeated string resource_id = 18;
 }
 
 message Cost {
