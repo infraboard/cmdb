@@ -11,12 +11,16 @@ import (
 )
 
 func (o *BillOperator) QueryOrder(req *provider.QueryOrderRequest) pager.Pager {
-	return nil
+	p := newOrderPager(o, req)
+	p.SetRate(req.Rate)
+
+	return p
 }
 
 // 查询订单数据
 // 参考: https://console.cloud.tencent.com/api/explorer?Product=billing&Version=2018-07-09&Action=DescribeDealsByCond&SignVersion=
 func (o *BillOperator) doQueryOrder(ctx context.Context, req *billing.DescribeDealsByCondRequest) (*bill.BillSet, error) {
+	set := bill.NewBillSet()
 	resp, err := o.client.DescribeDealsByCondWithContext(ctx, req)
 	if err != nil {
 		return nil, err
@@ -24,5 +28,5 @@ func (o *BillOperator) doQueryOrder(ctx context.Context, req *billing.DescribeDe
 
 	fmt.Println(resp.ToJsonString())
 
-	return nil, nil
+	return set, nil
 }

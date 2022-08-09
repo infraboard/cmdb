@@ -45,3 +45,15 @@ func (o *BssOperator) doDetailOroder(req *model.ShowCustomerOrderDetailsRequest)
 
 // 客户在伙伴销售平台查询某个或所有的包年/包月资源(ListPayPerUseCustomerResources)
 // 参考文档: https://apiexplorer.developer.huaweicloud.com/apiexplorer/doc?product=BSS&api=ListPayPerUseCustomerResources
+func (o *BssOperator) doOrderResource(req *model.ListPayPerUseCustomerResourcesRequest) (*bill.BillSet, error) {
+	set := bill.NewBillSet()
+
+	resp, err := o.client.ListPayPerUseCustomerResources(req)
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Println(resp.String())
+
+	return set, nil
+}

@@ -1,0 +1,79 @@
+{
+    "Response": {
+        "Deals": [
+            {
+                "OrderId": "xxxxx",
+                "Status": 4,
+                "Payer": "xxxx",
+                "CreateTime": "2022-08-09 00:12:38",
+                "Creator": "xxxx",
+                "RealTotalCost": 1111,
+                "VoucherDecline": 0,
+                "ProjectId": 0,
+                "GoodsCategoryId": 11111,
+                "ProductInfo": [
+                    {
+                        "Name": "项目",
+                        "Value": "默认项目"
+                    },
+                    {
+                        "Name": "规格",
+                        "Value": "cluster"
+                    },
+                    {
+                        "Name": "容量",
+                        "Value": "8 GB"
+                    },
+                    {
+                        "Name": "地域",
+                        "Value": "华北地区（北京）"
+                    },
+                    {
+                        "Name": "可用区",
+                        "Value": "北京一区"
+                    },
+                    {
+                        "Name": "实例名称",
+                        "Value": "crs-xxxxx"
+                    },
+                    {
+                        "Name": "内网地址",
+                        "Value": "17xxxxx"
+                    },
+                    {
+                        "Name": "所属网络",
+                        "Value": "xxxx项目"
+                    },
+                    {
+                        "Name": "类型",
+                        "Value": "热备"
+                    },
+                    {
+                        "Name": "机器",
+                        "Value": "cluster"
+                    }
+                ],
+                "TimeSpan": 1,
+                "TimeUnit": "m",
+                "Currency": "CNY",
+                "Policy": 1111,
+                "Price": 11111,
+                "TotalCost": 111111,
+                "ProductCode": "p_redis",
+                "SubProductCode": "sp_redis_single",
+                "BigDealId": "xxxxxxx",
+                "Formula": "",
+                "RefReturnDeals": "",
+                "PayMode": "prePay",
+                "Action": "renew",
+                "ProductName": "云数据库Redis",
+                "SubProductName": "云数据库Redis-社区版",
+                "ResourceId": [
+                    "crs-xxxxx"
+                ]
+            }
+        ],
+        "TotalCount": 2,
+        "RequestId": "b876xxxxx"
+    }
+}

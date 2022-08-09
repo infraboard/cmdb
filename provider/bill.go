@@ -2,6 +2,7 @@ package provider
 
 import (
 	"context"
+	"time"
 
 	"github.com/infraboard/cmdb/apps/bill"
 	"github.com/infraboard/mcube/pager"
@@ -42,6 +43,17 @@ type QueryBillSummaryRequeset struct {
 	Month string
 }
 
+func NewQueryOrderRequest() *QueryOrderRequest {
+	now := time.Now()
+	return &QueryOrderRequest{
+		Rate:      5,
+		StartTime: now.Add(-1 * time.Hour),
+		EndTime:   now,
+	}
+}
+
 type QueryOrderRequest struct {
-	Rate float64
+	Rate      float64
+	StartTime time.Time
+	EndTime   time.Time
 }

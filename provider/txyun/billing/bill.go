@@ -13,7 +13,7 @@ import (
 
 // 查询账单资源汇总数据
 //参考文档: https://console.cloud.tencent.com/api/explorer?Product=billing&Version=2018-07-09&Action=DescribeBillResourceSummary&SignVersion=
-func (o *BillOperator) Query(ctx context.Context, req *billing.DescribeBillResourceSummaryRequest) (*bill.BillSet, error) {
+func (o *BillOperator) doQueryBill(ctx context.Context, req *billing.DescribeBillResourceSummaryRequest) (*bill.BillSet, error) {
 	resp, err := o.client.DescribeBillResourceSummaryWithContext(ctx, req)
 	if err != nil {
 		return nil, err

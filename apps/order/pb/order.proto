@@ -3,6 +3,8 @@ syntax = "proto3";
 package infraboard.cmdb.order;
 option go_package="github.com/infraboard/cmdb/apps/order";
 
+import "apps/resource/pb/resource.proto";
+
 
 enum ORDER_TYPE {
     // 资源新增订单
@@ -20,7 +22,74 @@ enum ORDER_TYPE {
 }
 
 message Order {
+    // 本次账单同步关联的任务Id
+    // @gotags: json:"task_id"
+    string task_id = 1;
+    // 厂商
+    // @gotags: json:"vendor"
+    infraboard.cmdb.resource.VENDOR vendor = 2;
+    // 大订单号
+    // @gotags: json:"big_order_id"
+    string big_order_id = 3;
+    // 订单Id
+    // @gotags: json:"id"
+    string id = 4;
     // 订单类型
-    // @gotags: json:"type"
-    ORDER_TYPE type = 1;
+    // @gotags: json:"order_type"
+    ORDER_TYPE order_type = 5;
+    // 订单状态
+    // @gotags: json:"status"
+    string status = 6;
+    // 支付者
+    // @gotags: json:"payer"
+    string payer = 7;
+    // 创建时间
+    // @gotags: json:"create_at"
+    int64  create_at = 8;
+    // 创建人
+    // @gotags: json:"create_by"
+    string create_by = 9;
+    // 计费方式，比如：月95，日均峰值
+    // @gotags: json:"pay_mode"
+    string pay_mode = 10;
+    // 定义费用
+    // @gotags: json:"cost"
+    Cost cost = 11;
+    // 产品编码
+    // @gotags: json:"product_code"
+    string product_code = 12;
+    // 产品编码中文名称
+    // @gotags: json:"product_name"
+    string product_name = 13;
+    // 子产品编码
+    // @gotags: json:"sub_product_code"
+    string sub_product_code = 14;
+    // 子产品编码中文名称
+    // @gotags: json:"sub_product_name"
+    string sub_product_name = 15;
+    // 购买产品详情 
+    // @gotags: json:"product_info"
+    string product_info = 16;
+    // 订单对应的资源id
+    // @gotags: json:"resource_id"
+    repeated string resource_id = 17;
+}
+
+message Cost {
+    // 官网价,原价（分）
+    // @gotags: json:"sale_price"
+    double sale_price = 1;
+    // 单价（分）
+    // @gotags: json:"unit_price"
+    double unit_price = 2;
+    // 实际支付金额（分）
+    // @gotags: json:"real_cost"
+    double real_cost = 3;
+    // 代金券抵扣金额（分）
+    // 腾讯对应: VoucherPayAmount
+    // 阿里云: DeductedByCashCoupons
+    double voucher_pay = 4;
+    // 折扣率
+    // @gotags: json:"policy"
+    double policy = 5;
 }

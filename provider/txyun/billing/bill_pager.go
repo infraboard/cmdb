@@ -35,7 +35,7 @@ type billPager struct {
 }
 
 func (p *billPager) Scan(ctx context.Context, set pager.Set) error {
-	resp, err := p.operator.Query(ctx, p.nextReq())
+	resp, err := p.operator.doQueryBill(ctx, p.nextReq())
 	if err != nil {
 		return err
 	}
