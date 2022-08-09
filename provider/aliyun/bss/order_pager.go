@@ -7,6 +7,7 @@ import (
 	"github.com/alibabacloud-go/tea/tea"
 
 	"github.com/infraboard/cmdb/provider"
+	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 	"github.com/infraboard/mcube/pager"
@@ -14,6 +15,8 @@ import (
 
 func newOrderPager(operator *BssOperator, r *provider.QueryOrderRequest) pager.Pager {
 	req := &bssopenapi.QueryOrdersRequest{}
+	req.CreateTimeEnd = tea.String(r.EndTime.Format(utils.DEFAULT_TIME_SECOND_FORMAT))
+	req.CreateTimeStart = tea.String(r.StartTime.Format(utils.DEFAULT_TIME_SECOND_FORMAT))
 	return &orderPager{
 		BasePager: pager.NewBasePager(),
 		operator:  operator,
@@ -48,6 +51,7 @@ func (p *orderPager) WithLogger(log logger.Logger) {
 func (p *orderPager) nextReq() *bssopenapi.QueryOrdersRequest {
 	p.req.PageSize = tea.Int32(int32(p.PageSize()))
 	p.req.PageNum = tea.Int32(int32(p.PageNumber()))
+	p.log.Debugf("请求参数: %s", p.req.String())
 	p.log.Debugf("请求第%d页数据", p.PageNumber())
 	return p.req
 }

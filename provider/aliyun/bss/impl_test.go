@@ -4,8 +4,10 @@ import (
 	"context"
 	"fmt"
 	"testing"
+	"time"
 
 	"github.com/infraboard/cmdb/apps/bill"
+	"github.com/infraboard/cmdb/apps/order"
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/mcube/logger/zap"
 
@@ -37,7 +39,18 @@ func TestQuerySummary(t *testing.T) {
 }
 
 func TestQueryOrder(t *testing.T) {
-
+	req := provider.NewQueryOrderRequest()
+	req.StartTime = time.Now().Add(-10 * time.Hour)
+	pager := operator.QueryOrder(req)
+	for pager.Next() {
+		set := order.NewOrderSet()
+		if err := pager.Scan(context.Background(), set); err != nil {
+			panic(err)
+		}
+		for i := range set.Items {
+			fmt.Println(set.Items[i])
+		}
+	}
 }
 
 func init() {

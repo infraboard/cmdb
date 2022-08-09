@@ -32,6 +32,9 @@ func (o *BssOperator) doQueryOrder(req *model.ListCustomerOrdersRequest) (*order
 
 	set.Total = int64(*resp.TotalCount)
 	set.Items = o.transferOrderSet(resp.OrderInfos).Items
+
+	// 补充订单关联的资源
+
 	return set, nil
 }
 
@@ -46,7 +49,7 @@ func (o *BssOperator) transferOrderSet(list *[]model.CustomerOrderV2) *order.Ord
 
 func (o *BssOperator) transferOrder(ins model.CustomerOrderV2) *order.Order {
 	b := order.NewDefaultOrder()
-	b.Vendor = resource.VENDOR_HUAWEI
+	b.Vendor = resource.VENDOR_ALIYUN
 	b.Id = tea.StringValue(ins.OrderId)
 	b.OrderType = praseOrderType(ins.OrderType)
 	b.Status = praseOrderStatus(ins.Status)
@@ -79,15 +82,3 @@ func (o *BssOperator) doOrderResource(req *model.ListPayPerUseCustomerResourcesR
 
 // 客户可以在伙伴销售平台查看订单详情
 // 参考文档: https://apiexplorer.developer.huaweicloud.com/apiexplorer/sdk?product=BSS&api=ShowCustomerOrderDetails
-// func (o *BssOperator) doDetailOroder(req *model.ShowCustomerOrderDetailsRequest) (*bill.BillSet, error) {
-// 	set := bill.NewBillSet()
-
-// 	resp, err := o.client.ShowCustomerOrderDetails(req)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	fmt.Println(resp.String())
-
-// 	return set, nil
-// }

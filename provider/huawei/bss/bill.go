@@ -12,6 +12,12 @@ import (
 	"github.com/infraboard/mcube/pager"
 )
 
+func (o *BssOperator) QueryBill(req *provider.QueryBillRequest) pager.Pager {
+	p := newPager(o, req.Month)
+	p.SetRate(req.Rate)
+	return p
+}
+
 // 查询资源消费记录
 // 参考文档: https://apiexplorer.developer.huaweicloud.com/apiexplorer/doc?product=BSS&api=ListCustomerselfResourceRecords
 func (o *BssOperator) Query(req *model.ListCustomerselfResourceRecordsRequest) (*bill.BillSet, error) {
@@ -62,12 +68,6 @@ func (o *BssOperator) transferOne(ins model.ResFeeRecordV2) *bill.Bill {
 	cost.StoredcardPay = utils.PtrFloat64(ins.StoredCardAmount)
 	cost.OutstandingAmount = utils.PtrFloat64(ins.DebtAmount)
 	return b
-}
-
-func (o *BssOperator) QueryBill(req *provider.QueryBillRequest) pager.Pager {
-	p := newPager(o, req.Month)
-	p.SetRate(req.Rate)
-	return p
 }
 
 func (o *BssOperator) QuerySummary(ctx context.Context, req *provider.QueryBillSummaryRequeset) (
