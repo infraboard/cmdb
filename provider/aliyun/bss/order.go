@@ -60,7 +60,6 @@ func (o *BssOperator) doQueryOrder(req *bssopenapi.QueryOrdersRequest) (*order.O
 			set.Add(ins.ToAny()...)
 		}(oid)
 	}
-
 	wg.Wait()
 	return set, nil
 }

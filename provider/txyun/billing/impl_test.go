@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/infraboard/cmdb/apps/bill"
+	"github.com/infraboard/cmdb/apps/order"
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/cmdb/provider/txyun/connectivity"
 	"github.com/infraboard/mcube/logger/zap"
@@ -34,10 +35,10 @@ func TestQueryBill(t *testing.T) {
 
 func TestQueryOrder(t *testing.T) {
 	req := provider.NewQueryOrderRequest()
-	req.StartTime = time.Now().Add(-24 * time.Hour)
+	req.StartTime = time.Now().Add(-38 * time.Hour)
 	pager := operator.QueryOrder(req)
 	for pager.Next() {
-		set := bill.NewBillSet()
+		set := order.NewOrderSet()
 		if err := pager.Scan(context.Background(), set); err != nil {
 			panic(err)
 		}

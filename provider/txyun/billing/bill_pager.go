@@ -23,7 +23,7 @@ func newPager(operator *BillOperator, month string) pager.Pager {
 		BasePager: pager.NewBasePager(),
 		operator:  operator,
 		req:       req,
-		log:       zap.L().Named("tx.billing"),
+		log:       zap.L().Named("tx.bill"),
 	}
 }
 
