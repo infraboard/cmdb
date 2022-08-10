@@ -85,3 +85,17 @@
 + 5：已支付
 + 6：已退款 
 + 7：已关单 
+
+
+
+## 资源续费订单
+
+// RegionId实例所属的地域ID
+// ResourceId查询续费价格的资源ID
+// Period指定续费时长
+// PriceUnit指定续费周期
+// ExpectedRenewDay统一到期日
+
+// InstanceIds
+// Period 购买实例的时长，单位：月。取值范围：1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 24, 36, 48, 60。
+/ RenewFlag  自动续费标识。取值范围：<br><li>NOTIFY_AND_AUTO_RENEW：通知过期且自动续费<br><li>NOTIFY_AND_MANUAL_RENEW：通知过期不自动续费<br><li>DISABLE_NOTIFY_AND_MANUAL_RENEW：不通知过期不自动续费<br><br>默认取值：NOTIFY_AND_MANUAL_RENEW。若该参数指定为NOTIFY_AND_AUTO_RENEW，在账户余额充足的情况下，实例到期后将按月自动续费。

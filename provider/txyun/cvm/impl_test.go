@@ -74,7 +74,7 @@ func TestInquiryPrice(t *testing.T) {
 	req.ImageId = utils.StringPtr("img-l5eqiljn")
 	req.InstanceType = utils.StringPtr("S4.SMALL1")
 	req.InstanceChargeType = utils.StringPtr("SPOTPAID")
-	if err := operator.InquiryPrice(req); err != nil {
+	if err := operator.InquiryNewPrice(req); err != nil {
 
 	}
 }
