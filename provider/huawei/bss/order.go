@@ -1,13 +1,12 @@
 package bss
 
 import (
-	"fmt"
+	"sync"
 
 	"github.com/alibabacloud-go/tea/tea"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/bss/v2/model"
 	"github.com/infraboard/mcube/pager"
 
-	"github.com/infraboard/cmdb/apps/bill"
 	"github.com/infraboard/cmdb/apps/order"
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
@@ -34,6 +33,7 @@ func (o *BssOperator) doQueryOrder(req *model.ListCustomerOrdersRequest) (*order
 	set.Items = o.transferOrderSet(resp.OrderInfos).Items
 
 	// 补充订单关联的资源
+	o.fillResourceId(set)
 
 	return set, nil
 }
@@ -65,17 +65,52 @@ func (o *BssOperator) transferOrder(ins model.CustomerOrderV2) *order.Order {
 	return b
 }
 
+func (o *BssOperator) fillResourceId(set *order.OrderSet) {
+	wg := &sync.WaitGroup{}
+	for i := range set.Items {
+		wg.Add(1)
+		go func(orderId string) {
+			defer wg.Done()
+			o.log.Debugf("query order: %s resources", orderId)
+			req := &model.ListPayPerUseCustomerResourcesRequest{
+				Body: &model.QueryResourcesReq{
+					OrderId: tea.String(orderId),
+				},
+			}
+			resources, err := o.doOrderResource(req)
+			if err != nil {
+				o.log.Errorf("query order resource error, %s", err)
+			}
+			if o := set.GetOrderById(orderId); o != nil {
+				o.ResourceId = append(o.ResourceId, resources.ResourceIds()...)
+			}
+		}(set.Items[i].Id)
+	}
+
+	wg.Wait()
+}
+
 // 客户在伙伴销售平台查询某个或所有的包年/包月资源(ListPayPerUseCustomerResources)
 // 参考文档: https://apiexplorer.developer.huaweicloud.com/apiexplorer/doc?product=BSS&api=ListPayPerUseCustomerResources
-func (o *BssOperator) doOrderResource(req *model.ListPayPerUseCustomerResourcesRequest) (*bill.BillSet, error) {
-	set := bill.NewBillSet()
+func (o *BssOperator) doOrderResource(req *model.ListPayPerUseCustomerResourcesRequest) (*resource.ResourceSet, error) {
+	set := resource.NewResourceSet()
+
+	o.tb.Wait(1)
 
 	resp, err := o.client.ListPayPerUseCustomerResources(req)
 	if err != nil {
 		return nil, err
 	}
 
-	fmt.Println(resp.String())
+	if resp.Data == nil {
+		return set, nil
+	}
+
+	for _, d := range *resp.Data {
+		r := resource.NewDefaultResource()
+		r.Base.Id = tea.StringValue(d.ResourceId)
+		set.Add(r)
+	}
 
 	return set, nil
 }

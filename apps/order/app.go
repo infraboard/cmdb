@@ -30,6 +30,16 @@ func (s *OrderSet) Add(items ...any) {
 	}
 }
 
+func (s *OrderSet) GetOrderById(orderId string) *Order {
+	for i := range s.Items {
+		if s.Items[i].Id == orderId {
+			return s.Items[i]
+		}
+	}
+
+	return nil
+}
+
 func (s *OrderSet) Length() int64 {
 	return int64(len(s.Items))
 }

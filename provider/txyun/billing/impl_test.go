@@ -35,7 +35,7 @@ func TestQueryBill(t *testing.T) {
 
 func TestQueryOrder(t *testing.T) {
 	req := provider.NewQueryOrderRequest()
-	req.StartTime = time.Now().Add(-38 * time.Hour)
+	req.StartTime = time.Now().Add(-6 * time.Hour)
 	pager := operator.QueryOrder(req)
 	for pager.Next() {
 		set := order.NewOrderSet()
