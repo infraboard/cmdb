@@ -109,6 +109,9 @@ func (o *BssOperator) doOrderResource(req *model.ListPayPerUseCustomerResourcesR
 	for _, d := range *resp.Data {
 		r := resource.NewDefaultResource()
 		r.Base.Id = tea.StringValue(d.ResourceId)
+		r.Information.Name = tea.StringValue(d.ResourceName)
+		r.Base.Region = tea.StringValue(d.RegionCode)
+		r.Information.Category = tea.StringValue(d.ResourceSpecCode)
 		set.Add(r)
 	}
 
