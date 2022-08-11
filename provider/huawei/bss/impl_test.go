@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"testing"
+	"time"
 
 	"github.com/infraboard/cmdb/apps/bill"
 	"github.com/infraboard/cmdb/apps/order"
@@ -34,7 +35,7 @@ func TestQueryBill(t *testing.T) {
 
 func TestQueryOrder(t *testing.T) {
 	req := provider.NewQueryOrderRequest()
-
+	req.StartTime = time.Now().Add(-12 * time.Hour)
 	pager := operator.QueryOrder(req)
 	for pager.Next() {
 		set := order.NewOrderSet()

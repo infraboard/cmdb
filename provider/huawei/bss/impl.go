@@ -12,7 +12,7 @@ func NewBssOperator(client *v2.BssClient) *BssOperator {
 	return &BssOperator{
 		client: client,
 		log:    zap.L().Named("hw.bss"),
-		tb:     tokenbucket.NewBucketWithRate(10, 1),
+		tb:     tokenbucket.NewBucketWithRate(5, 1),
 	}
 }
 

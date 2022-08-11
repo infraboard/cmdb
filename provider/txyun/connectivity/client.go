@@ -186,7 +186,7 @@ func (me *TencentCloudClient) BillingClient() *billing.Client {
 	cpf.HttpProfile.ReqTimeout = 300
 	cpf.Language = "en-US"
 
-	billConn, _ := billing.NewClient(credential, me.Region, cpf)
+	billConn, _ := billing.NewClient(credential, "", cpf)
 	me.billConn = billConn
 
 	return me.billConn

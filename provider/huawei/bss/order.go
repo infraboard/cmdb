@@ -14,7 +14,7 @@ import (
 )
 
 func (o *BssOperator) QueryOrder(req *provider.QueryOrderRequest) pager.Pager {
-	p := newOrderPager(o)
+	p := newOrderPager(o, req)
 	p.SetRate(req.Rate)
 	return p
 }

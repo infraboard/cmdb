@@ -42,8 +42,6 @@ func (o *BssOperator) doQueryOrder(req *bssopenapi.QueryOrdersRequest) (*order.O
 		orderIds = append(orderIds, tea.StringValue(orders[i].OrderId))
 	}
 
-	o.log.Debugf("query orders: %v", orderIds)
-
 	// 查询订单详情
 	wg := &sync.WaitGroup{}
 	for _, oid := range orderIds {
@@ -67,6 +65,9 @@ func (o *BssOperator) doQueryOrder(req *bssopenapi.QueryOrdersRequest) (*order.O
 // 查询用户或分销客户某个订单详情信息
 // 参考文档: https://next.api.aliyun.com/api/BssOpenApi/2017-12-14/GetOrderDetail?params={}
 func (o *BssOperator) doDescribeOrder(req *bssopenapi.GetOrderDetailRequest) (*order.OrderSet, error) {
+	o.tb.Wait(1)
+	o.log.Debugf("query order: %s detail", tea.StringValue(req.OrderId))
+
 	set := order.NewOrderSet()
 	resp, err := o.client.GetOrderDetail(req)
 	if err != nil {
@@ -92,8 +93,8 @@ func (o *BssOperator) transferOrder(ins *bssopenapi.GetOrderDetailResponseBodyDa
 	b := order.NewDefaultOrder()
 	b.BigOrderId = tea.StringValue(ins.OrderId)
 	b.Id = tea.StringValue(ins.SubOrderId)
-	b.OrderType = tea.StringValue(ins.OrderType)
-	b.Status = tea.StringValue(ins.PaymentStatus)
+	b.OrderType = praseOrderType(ins.OrderType)
+	b.Status = praseOrderStatus(ins.PaymentStatus)
 	b.CreateAt = utils.ParseDefaultSecondTime(tea.StringValue(ins.CreateTime))
 	b.PayAt = utils.ParseDefaultSecondTime(tea.StringValue(ins.PaymentTime))
 	b.PayMode = tea.StringValue(ins.SubscriptionType)
