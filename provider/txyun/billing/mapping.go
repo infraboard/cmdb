@@ -20,18 +20,18 @@ import (
 // postMoveIn 按量计费迁入资源
 var (
 	ORDER_TYPE_MAP = map[string]order.ORDER_TYPE{
-		"modifyNetworkMode": order.ORDER_TYPE_MODIFY,
-		"modifyNetworkSize": order.ORDER_TYPE_MODIFY,
+		"modifyNetworkMode": order.ORDER_TYPE_CONVERT,
+		"modifyNetworkSize": order.ORDER_TYPE_CONVERT,
 		"refund":            order.ORDER_TYPE_REFUND,
 		"downgrade":         order.ORDER_TYPE_DOWNGRADE,
 		"upgrade":           order.ORDER_TYPE_UPGRADE,
 		"renew":             order.ORDER_TYPE_RENEW,
 		"purchase":          order.ORDER_TYPE_NEW,
-		"preMoveOut":        order.ORDER_TYPE_MODIFY,
-		"preMoveIn":         order.ORDER_TYPE_MODIFY,
-		"preToPost":         order.ORDER_TYPE_MODIFY,
-		"postMoveOut":       order.ORDER_TYPE_MODIFY,
-		"postMoveIn":        order.ORDER_TYPE_MODIFY,
+		"preMoveOut":        order.ORDER_TYPE_CONVERT,
+		"preMoveIn":         order.ORDER_TYPE_CONVERT,
+		"preToPost":         order.ORDER_TYPE_CONVERT,
+		"postMoveOut":       order.ORDER_TYPE_CONVERT,
+		"postMoveIn":        order.ORDER_TYPE_CONVERT,
 	}
 )
 

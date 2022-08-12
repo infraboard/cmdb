@@ -8,12 +8,18 @@ import (
 // Renew：续费。
 // Upgrade：升级。
 // Refund：退款。
+// Convert： 付费类型转换。
+// Downgrade：降配。
+// ResizeDisk：磁盘扩容
 var (
 	ORDER_TYPE_MAP = map[string]order.ORDER_TYPE{
-		"New":     order.ORDER_TYPE_NEW,
-		"Renew":   order.ORDER_TYPE_RENEW,
-		"Upgrade": order.ORDER_TYPE_UPGRADE,
-		"Refund":  order.ORDER_TYPE_REFUND,
+		"New":        order.ORDER_TYPE_NEW,
+		"Renew":      order.ORDER_TYPE_RENEW,
+		"Upgrade":    order.ORDER_TYPE_UPGRADE,
+		"Downgrade":  order.ORDER_TYPE_DOWNGRADE,
+		"Refund":     order.ORDER_TYPE_REFUND,
+		"Convert":    order.ORDER_TYPE_CONVERT,
+		"ResizeDisk": order.ORDER_TYPE_UPGRADE,
 	}
 )
 

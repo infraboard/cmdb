@@ -25,8 +25,10 @@ enum ORDER_TYPE {
     DOWNGRADE = 3;
     // 退款
     REFUND = 4;
-    // 付费方式调整
-    MODIFY = 5;
+    // 付费方式转换
+    CONVERT = 5;
+    // 配置调整
+    MODIFY = 6;
 }
 
 enum ORDER_STATUS {
