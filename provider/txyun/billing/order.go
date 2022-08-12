@@ -62,8 +62,11 @@ func (o *BillOperator) transferOrder(ins *billing.Deal) *order.Order {
 
 	cost := b.Cost
 	cost.SalePrice = tea.Float64Value(ins.TotalCost)
+	cost.Policy = tea.Float64Value(ins.Policy)
+	cost.TimeSpan = tea.Float64Value(ins.TimeSpan)
+	cost.TimeUnit = tea.StringValue(ins.TimeUnit)
 	cost.RealCost = float64(tea.Int64Value(ins.RealTotalCost))
 	cost.VoucherPay = float64(tea.Int64Value(ins.VoucherDecline))
-	cost.Policy = tea.Float64Value(ins.Policy)
+
 	return b
 }

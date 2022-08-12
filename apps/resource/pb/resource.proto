@@ -53,9 +53,12 @@ message Resource {
     // 资源信息
     // @gotags: json:"information"
     Information information = 2;
+    // 资源费用
+    // @gotags: json:"cost"
+    Cost cost = 3;
     // 资源释放计划
     // @gotags: json:"release_plan"
-    ReleasePlan release_plan = 3;
+    ReleasePlan release_plan = 4;
 }
 
 // 资源释放计划
@@ -229,6 +232,25 @@ message TagSet {
     int64 total = 1;
     // @gotags: json:"items"
     repeated Tag items = 2;
+}
+
+// 资产价格, 包年包月 记录月
+message Cost {
+    // 官网价,原价（分）
+    // @gotags: json:"sale_price"
+    double sale_price = 1;
+    // 折扣率
+    // @gotags: json:"policy"
+    double policy = 2;
+    // 单价（分）
+    // @gotags: json:"unit_price"
+    double unit_price = 3;
+    // 实际支付金额（分）
+    // @gotags: json:"real_cost"
+    double real_cost = 4;
+    // 代金券抵扣金额（分）
+    // @gotags: json:"voucher_pay"
+    double voucher_pay = 5;
 }
 
 message SearchRequest {

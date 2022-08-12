@@ -103,17 +103,23 @@ message Cost {
     // 官网价,原价（分）
     // @gotags: json:"sale_price"
     double sale_price = 1;
-    // 单价（分）
-    // @gotags: json:"unit_price"
-    double unit_price = 2;
-    // 实际支付金额（分）
-    // @gotags: json:"real_cost"
-    double real_cost = 3;
-    // 代金券抵扣金额（分）
-    // 腾讯对应: VoucherPayAmount
-    // 阿里云: DeductedByCashCoupons
-    double voucher_pay = 4;
     // 折扣率
     // @gotags: json:"policy"
-    double policy = 5;
+    double policy = 2;
+    // 单价（分）
+    // @gotags: json:"unit_price"
+    double unit_price = 3;
+    // 购买时长
+    // @gotags: json:"time_span"
+    double time_span = 4;
+    // 购买时长
+    // @gotags: json:"time_unit"
+    string time_unit = 5;
+    // 实际支付金额（分）
+    // @gotags: json:"real_cost"
+    double real_cost = 6;
+    // 代金券抵扣金额（分）
+    // @gotags: json:"voucher_pay"
+    double voucher_pay = 7;
+
 }
