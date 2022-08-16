@@ -1,14 +1,41 @@
 package ecs
 
 import (
+	"context"
+
 	ecs "github.com/alibabacloud-go/ecs-20140526/v2/client"
 	"github.com/alibabacloud-go/tea/tea"
 	"github.com/infraboard/cmdb/apps/disk"
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/cmdb/utils"
+	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/pager"
 )
+
+func (o *EcsOperator) DescribeDisk(ctx context.Context, r *provider.DescribeRequest) (
+	*disk.Disk, error) {
+	if err := r.Validate(); err != nil {
+		return nil, exception.NewBadRequest(err.Error())
+	}
+
+	req := &ecs.DescribeDisksRequest{
+		RegionId: o.client.RegionId,
+		PageSize: tea.Int32(1),
+		DiskIds:  tea.String(`["` + r.Id + `"]`),
+	}
+
+	set, err := o.QueryDisk(req)
+	if err != nil {
+		return nil, err
+	}
+
+	if set.Length() == 0 {
+		return nil, exception.NewNotFound("disk %s not found", r.Id)
+	}
+
+	return set.Items[0], nil
+}
 
 func (o *EcsOperator) PageQueryDisk(req *provider.QueryDiskRequest) pager.Pager {
 	p := newDiskPager(o)
@@ -18,7 +45,7 @@ func (o *EcsOperator) PageQueryDisk(req *provider.QueryDiskRequest) pager.Pager 
 
 // 查询一块或多块已经创建的块存储（包括云盘以及本地盘）
 // 参考文档: https://next.api.aliyun.com/api/Ecs/2014-05-26/DescribeDisks?params={}&lang=GO
-func (o *EcsOperator) queryDisk(req *ecs.DescribeDisksRequest) (*disk.DiskSet, error) {
+func (o *EcsOperator) QueryDisk(req *ecs.DescribeDisksRequest) (*disk.DiskSet, error) {
 	set := disk.NewDiskSet()
 
 	resp, err := o.client.DescribeDisks(req)

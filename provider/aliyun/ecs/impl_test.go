@@ -16,6 +16,7 @@ import (
 
 var (
 	operator provider.HostOperator
+	ctx      = context.Background()
 )
 
 func TestPageQueryHost(t *testing.T) {
@@ -50,6 +51,15 @@ func TestPageQueryDisk(t *testing.T) {
 
 		fmt.Println(set)
 	}
+}
+
+func TestDescribeDisk(t *testing.T) {
+	req := provider.NewDescribeRequest("xxx")
+	ins, err := operator.DescribeDisk(ctx, req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(ins)
 }
 
 func TestPageQueryEip(t *testing.T) {

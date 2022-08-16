@@ -8,9 +8,32 @@ import (
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/cmdb/utils"
+	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/pager"
 	cbs "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cbs/v20170312"
 )
+
+func (o *CVMOperator) DescribeDisk(ctx context.Context, r *provider.DescribeRequest) (
+	*disk.Disk, error) {
+	if err := r.Validate(); err != nil {
+		return nil, exception.NewBadRequest(err.Error())
+	}
+
+	req := cbs.NewDescribeDisksRequest()
+	req.Limit = tea.Uint64(1)
+	req.DiskIds = tea.StringSlice([]string{r.Id})
+
+	set, err := o.QueryDisk(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	if set.Length() == 0 {
+		return nil, exception.NewNotFound("disk %s not found", r.Id)
+	}
+
+	return set.Items[0], nil
+}
 
 func (o *CVMOperator) PageQueryDisk(req *provider.QueryDiskRequest) pager.Pager {
 	p := newDiskPager(o)
@@ -20,7 +43,7 @@ func (o *CVMOperator) PageQueryDisk(req *provider.QueryDiskRequest) pager.Pager 
 
 // 查询云硬盘列表
 // 查看实例列表: https://console.cloud.tencent.com/api/explorer?Product=cbs&Version=2017-03-12&Action=DescribeDisks&SignVersion=
-func (o *CVMOperator) queryDisk(ctx context.Context, req *cbs.DescribeDisksRequest) (*disk.DiskSet, error) {
+func (o *CVMOperator) QueryDisk(ctx context.Context, req *cbs.DescribeDisksRequest) (*disk.DiskSet, error) {
 	resp, err := o.cbs.DescribeDisksWithContext(ctx, req)
 	if err != nil {
 		return nil, err
@@ -45,7 +68,7 @@ func (o *CVMOperator) transferDisk(ins *cbs.Disk) *disk.Disk {
 	h.Base.Region = o.client.GetRegion()
 	h.Base.Zone = utils.PtrStrV(ins.Placement.Zone)
 	h.Base.CreateAt = utils.ParseTime("2006-01-02 15:04:05", utils.PtrStrV(ins.CreateTime))
-	h.Base.Id = utils.PtrStrV(ins.InstanceId)
+	h.Base.Id = utils.PtrStrV(ins.DiskId)
 
 	h.Information.ExpireAt = utils.ParseTime("2006-01-02 15:04:05", utils.PtrStrV(ins.DeadlineTime))
 	h.Information.Type = utils.PtrStrV(ins.DiskType)

@@ -14,6 +14,24 @@ import (
 	"github.com/infraboard/mcube/pager"
 )
 
+func (o *EcsOperator) DescribeHost(ctx context.Context, req *provider.DescribeHostRequest) (*host.Host, error) {
+	r := &ecs.DescribeInstancesRequest{
+		RegionId:   o.client.RegionId,
+		PageNumber: tea.Int32(1),
+		PageSize:   tea.Int32(1),
+	}
+	r.InstanceIds = tea.String(`["` + req.Id + `"]`)
+	hs, err := o.queryInstance(r)
+	if err != nil {
+		return nil, err
+	}
+	if hs.Length() == 0 {
+		return nil, exception.NewNotFound("instance %s not found", err)
+	}
+
+	return hs.Items[0], nil
+}
+
 func (o *EcsOperator) PageQueryHost(req *provider.QueryHostRequest) pager.Pager {
 	p := newEcsPager(o)
 	p.SetRate(req.Rate)
@@ -41,24 +59,6 @@ func (o *EcsOperator) queryInstance(req *ecs.DescribeInstancesRequest) (*host.Ho
 	}
 
 	return set, nil
-}
-
-func (o *EcsOperator) DescribeHost(ctx context.Context, req *provider.DescribeHostRequest) (*host.Host, error) {
-	r := &ecs.DescribeInstancesRequest{
-		RegionId:   o.client.RegionId,
-		PageNumber: tea.Int32(1),
-		PageSize:   tea.Int32(1),
-	}
-	r.InstanceIds = tea.String(`["` + req.Id + `"]`)
-	hs, err := o.queryInstance(r)
-	if err != nil {
-		return nil, err
-	}
-	if hs.Length() == 0 {
-		return nil, exception.NewNotFound("instance %s not found", err)
-	}
-
-	return hs.Items[0], nil
 }
 
 func (o *EcsOperator) transferInstanceSet(items []*ecs.DescribeInstancesResponseBodyInstancesInstance) *host.HostSet {

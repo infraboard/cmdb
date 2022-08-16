@@ -3,15 +3,17 @@ package provider
 import (
 	"context"
 
+	"github.com/infraboard/cmdb/apps/disk"
 	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/mcube/pager"
 )
 
 type HostOperator interface {
 	PageQueryHost(req *QueryHostRequest) pager.Pager
-	PageQueryDisk(req *QueryDiskRequest) pager.Pager
-	PageQueryEip(req *QueryEipRequest) pager.Pager
 	DescribeHost(ctx context.Context, req *DescribeHostRequest) (*host.Host, error)
+	PageQueryDisk(req *QueryDiskRequest) pager.Pager
+	DescribeDisk(ctx context.Context, req *DescribeRequest) (*disk.Disk, error)
+	PageQueryEip(req *QueryEipRequest) pager.Pager
 }
 
 func NewQueryHostRequest() *QueryHostRequest {

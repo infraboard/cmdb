@@ -1,14 +1,41 @@
 package ecs
 
 import (
+	"context"
+
 	"github.com/alibabacloud-go/tea/tea"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/evs/v2/model"
+	"github.com/infraboard/mcube/exception"
+	"github.com/infraboard/mcube/pager"
+
 	"github.com/infraboard/cmdb/apps/disk"
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/cmdb/utils"
-	"github.com/infraboard/mcube/pager"
 )
+
+func (o *EcsOperator) DescribeDisk(ctx context.Context, r *provider.DescribeRequest) (
+	*disk.Disk, error) {
+	if err := r.Validate(); err != nil {
+		return nil, exception.NewBadRequest(err.Error())
+	}
+
+	req := &model.ListVolumesRequest{
+		Id:    tea.String(r.Id),
+		Limit: tea.Int32(1),
+	}
+
+	set, err := o.QueryDisk(req)
+	if err != nil {
+		return nil, err
+	}
+
+	if set.Length() == 0 {
+		return nil, exception.NewNotFound("disk %s not found", r.Id)
+	}
+
+	return set.Items[0], nil
+}
 
 func (o *EcsOperator) PageQueryDisk(req *provider.QueryDiskRequest) pager.Pager {
 	p := newDiskPager(o)
@@ -18,7 +45,7 @@ func (o *EcsOperator) PageQueryDisk(req *provider.QueryDiskRequest) pager.Pager 
 
 // 查询所有云硬盘详情
 // 参考文档: https://apiexplorer.developer.huaweicloud.com/apiexplorer/doc?product=EVS&api=ListVolumes
-func (o *EcsOperator) queryDisk(req *model.ListVolumesRequest) (*disk.DiskSet, error) {
+func (o *EcsOperator) QueryDisk(req *model.ListVolumesRequest) (*disk.DiskSet, error) {
 	set := disk.NewDiskSet()
 
 	resp, err := o.evs.ListVolumes(req)

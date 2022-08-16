@@ -30,7 +30,7 @@ type diskPager struct {
 }
 
 func (p *diskPager) Scan(ctx context.Context, set pager.Set) error {
-	resp, err := p.operator.queryDisk(p.nextReq())
+	resp, err := p.operator.QueryDisk(p.nextReq())
 	if err != nil {
 		return err
 	}
