@@ -9,12 +9,32 @@ import (
 	"github.com/infraboard/cmdb/apps/lb"
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
+	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/pager"
 )
 
-func (o *SLBOperator) DescribeLoadBalancer(ctx context.Context, req *provider.DescribeRequest) (
+func (o *SLBOperator) DescribeLoadBalancer(ctx context.Context, r *provider.DescribeRequest) (
 	*lb.LoadBalancer, error) {
-	return nil, nil
+	if err := r.Validate(); err != nil {
+		return nil, exception.NewBadRequest(err.Error())
+	}
+
+	req := &slb.DescribeLoadBalancersRequest{
+		LoadBalancerId: &r.Id,
+		RegionId:       o.client.RegionId,
+		PageNumber:     tea.Int32(1),
+		PageSize:       tea.Int32(1),
+	}
+
+	set, err := o.QueryLoadBalancer(req)
+	if err != nil {
+		return nil, err
+	}
+	if set.Length() == 0 {
+		return nil, exception.NewNotFound("lb %s not found", r.Id)
+	}
+
+	return set.Items[0], nil
 }
 
 func (o *SLBOperator) PageQueryLoadBalancer(req *provider.QueryRequest) pager.Pager {
@@ -25,26 +45,27 @@ func (o *SLBOperator) PageQueryLoadBalancer(req *provider.QueryRequest) pager.Pa
 
 // 查询已创建的负载均衡实例
 // 参考: https://next.api.aliyun.com/api/Slb/2014-05-15/DescribeLoadBalancers?params={}
-func (o *SLBOperator) Query(req *slb.DescribeLoadBalancersRequest) (*lb.LoadBalancerSet, error) {
+func (o *SLBOperator) QueryLoadBalancer(req *slb.DescribeLoadBalancersRequest) (*lb.LoadBalancerSet, error) {
 	resp, err := o.client.DescribeLoadBalancers(req)
 	if err != nil {
 		return nil, err
 	}
+
 	set := lb.NewLoadBalancerSet()
 	set.Total = int64(tea.Int32Value(resp.Body.TotalCount))
-	set.Items = o.transferLBSet(resp.Body.LoadBalancers).Items
+	set.Items = o.transferLoadBalancerSet(resp.Body.LoadBalancers).Items
 	return set, nil
 }
 
-func (o *SLBOperator) transferLBSet(items *slb.DescribeLoadBalancersResponseBodyLoadBalancers) *lb.LoadBalancerSet {
+func (o *SLBOperator) transferLoadBalancerSet(items *slb.DescribeLoadBalancersResponseBodyLoadBalancers) *lb.LoadBalancerSet {
 	set := lb.NewLoadBalancerSet()
 	for i := range items.LoadBalancer {
-		set.Add(o.transferLB(items.LoadBalancer[i]))
+		set.Add(o.transferLoadBalancer(items.LoadBalancer[i]))
 	}
 	return set
 }
 
-func (o *SLBOperator) transferLB(ins *slb.DescribeLoadBalancersResponseBodyLoadBalancersLoadBalancer) *lb.LoadBalancer {
+func (o *SLBOperator) transferLoadBalancer(ins *slb.DescribeLoadBalancersResponseBodyLoadBalancersLoadBalancer) *lb.LoadBalancer {
 	r := lb.NewDefaultLoadBalancer()
 	b := r.Base
 	b.Vendor = resource.VENDOR_ALIYUN

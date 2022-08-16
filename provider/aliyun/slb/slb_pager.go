@@ -29,7 +29,7 @@ type slbPager struct {
 }
 
 func (p *slbPager) Scan(ctx context.Context, set pager.Set) error {
-	resp, err := p.operator.Query(p.nextReq())
+	resp, err := p.operator.QueryLoadBalancer(p.nextReq())
 	if err != nil {
 		return err
 	}
