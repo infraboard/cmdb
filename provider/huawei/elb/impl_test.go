@@ -15,9 +15,10 @@ import (
 
 var (
 	operator provider.LBOperator
+	ctx      = context.Background()
 )
 
-func TestQueryELB(t *testing.T) {
+func TestPageQueryLoadBalancer(t *testing.T) {
 	req := provider.NewQueryRequest()
 	pager := operator.PageQueryLoadBalancer(req)
 
@@ -28,6 +29,15 @@ func TestQueryELB(t *testing.T) {
 		}
 		fmt.Println(set)
 	}
+}
+
+func TestDescribeLoadBalancer(t *testing.T) {
+	req := provider.NewDescribeRequest("xxx")
+	ins, err := operator.DescribeLoadBalancer(ctx, req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(ins)
 }
 
 func init() {

@@ -28,7 +28,7 @@ type clbPager struct {
 }
 
 func (p *clbPager) Scan(ctx context.Context, set pager.Set) error {
-	resp, err := p.operator.queryCLB(ctx, p.nextReq())
+	resp, err := p.operator.QueryLoadBalancer(ctx, p.nextReq())
 	if err != nil {
 		return err
 	}

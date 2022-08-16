@@ -8,9 +8,32 @@ import (
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/cmdb/utils"
+	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/pager"
 	clb "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/clb/v20180317"
 )
+
+func (o *CLBOperator) DescribeLoadBalancer(ctx context.Context, r *provider.DescribeRequest) (
+	*lb.LoadBalancer, error) {
+	if err := r.Validate(); err != nil {
+		return nil, exception.NewBadRequest(err.Error())
+	}
+
+	req := clb.NewDescribeLoadBalancersRequest()
+	req.LoadBalancerIds = tea.StringSlice([]string{r.Id})
+	req.Limit = tea.Int64(1)
+
+	set, err := o.QueryLoadBalancer(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	if set.Length() == 0 {
+		return nil, exception.NewNotFound("lb %s not found", r.Id)
+	}
+
+	return set.Items[0], nil
+}
 
 func (o *CLBOperator) PageQueryLoadBalancer(req *provider.QueryRequest) pager.Pager {
 	p := newPager(o)
@@ -20,7 +43,7 @@ func (o *CLBOperator) PageQueryLoadBalancer(req *provider.QueryRequest) pager.Pa
 
 // 查询一个地域的负载均衡实例列表。
 // 参考: https://console.cloud.tencent.com/api/explorer?Product=clb&Version=2018-03-17&Action=DescribeLoadBalancers&SignVersion=
-func (o *CLBOperator) queryCLB(ctx context.Context, req *clb.DescribeLoadBalancersRequest) (*lb.LoadBalancerSet, error) {
+func (o *CLBOperator) QueryLoadBalancer(ctx context.Context, req *clb.DescribeLoadBalancersRequest) (*lb.LoadBalancerSet, error) {
 	resp, err := o.client.DescribeLoadBalancersWithContext(ctx, req)
 	if err != nil {
 		return nil, err
