@@ -14,7 +14,7 @@ import (
 )
 
 var (
-	operator provider.LBOperator
+	operator provider.LoadBalancerOperator
 	ctx      = context.Background()
 )
 

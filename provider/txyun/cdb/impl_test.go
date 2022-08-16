@@ -14,11 +14,12 @@ import (
 
 var (
 	operator *op.CDBOperator
+	ctx      = context.Background()
 )
 
-func TestQuery(t *testing.T) {
+func TestPageQueryRds(t *testing.T) {
 	req := provider.NewQueryRdsRequest()
-	pager := operator.QueryRds(req)
+	pager := operator.PageQueryRds(req)
 
 	for pager.Next() {
 		set := rds.NewSet()
@@ -27,6 +28,15 @@ func TestQuery(t *testing.T) {
 		}
 		fmt.Println(set)
 	}
+}
+
+func TestDescribeRds(t *testing.T) {
+	req := provider.NewDescribeRequest("xxx")
+	ins, err := operator.DescribeRds(ctx, req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(ins)
 }
 
 func init() {

@@ -16,6 +16,30 @@ import (
 	"github.com/infraboard/mcube/pager"
 )
 
+func (o *RdsOperator) DescribeRds(ctx context.Context, req *provider.DescribeRequest) (*cmdbRds.Rds, error) {
+	descReq := &rds.DescribeDBInstanceAttributeRequest{
+		DBInstanceId: &req.Id,
+	}
+
+	detail, err := o.client.DescribeDBInstanceAttribute(descReq)
+	if err != nil {
+		return nil, err
+	}
+
+	set := o.transferSet(detail.Body.Items)
+	if set.Length() == 0 {
+		return nil, exception.NewNotFound("ins %s not found", req.Id)
+	}
+
+	return set.Items[0], nil
+}
+
+func (o *RdsOperator) PageQueryRds(req *provider.QueryRdsRequest) pager.Pager {
+	p := newPager(o)
+	p.SetRate(float64(req.Rate))
+	return p
+}
+
 // 查询RDS实例列表
 // 参考文档: https://next.api.aliyun.com/api/Rds/2014-08-15/DescribeDBInstances?params={}&lang=GO
 func (o *RdsOperator) Query(req *rds.DescribeDBInstancesRequest) (*cmdbRds.Set, error) {
@@ -39,30 +63,6 @@ func (o *RdsOperator) Query(req *rds.DescribeDBInstancesRequest) (*cmdbRds.Set, 
 
 	set.Total = int64(tea.Int32Value(resp.Body.TotalRecordCount))
 	return set, nil
-}
-
-func (o *RdsOperator) QueryRds(req *provider.QueryRdsRequest) pager.Pager {
-	p := newPager(o)
-	p.SetRate(float64(req.Rate))
-	return p
-}
-
-func (o *RdsOperator) DescribeRds(ctx context.Context, req *provider.DescribeRdsRequest) (*cmdbRds.Rds, error) {
-	descReq := &rds.DescribeDBInstanceAttributeRequest{
-		DBInstanceId: &req.Id,
-	}
-
-	detail, err := o.client.DescribeDBInstanceAttribute(descReq)
-	if err != nil {
-		return nil, err
-	}
-
-	set := o.transferSet(detail.Body.Items)
-	if set.Length() == 0 {
-		return nil, exception.NewNotFound("ins %s not found", req.Id)
-	}
-
-	return set.Items[0], nil
 }
 
 func (o *RdsOperator) transferSet(items *rds.DescribeDBInstanceAttributeResponseBodyItems) *cmdbRds.Set {

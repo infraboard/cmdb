@@ -17,7 +17,7 @@ var (
 
 func TestQuery(t *testing.T) {
 	req := provider.NewQueryRdsRequest()
-	pager := operator.QueryRds(req)
+	pager := operator.PageQueryRds(req)
 
 	for pager.Next() {
 		set := rds.NewSet()
@@ -29,7 +29,7 @@ func TestQuery(t *testing.T) {
 }
 
 func TestDescribe(t *testing.T) {
-	req := provider.NewDescribeRdsRequest("")
+	req := provider.NewDescribeRequest("xxx")
 	ins, err := operator.DescribeRds(context.TODO(), req)
 	if err != nil {
 		t.Fatal(err)

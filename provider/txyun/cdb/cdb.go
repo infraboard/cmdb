@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/alibabacloud-go/tea/tea"
 	cdb "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cdb/v20170320"
 
 	"github.com/infraboard/cmdb/apps/rds"
@@ -11,8 +12,34 @@ import (
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/cmdb/utils"
+	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/pager"
 )
+
+func (o *CDBOperator) DescribeRds(ctx context.Context, r *provider.DescribeRequest) (
+	*cmdbRds.Rds, error) {
+	if err := r.Validate(); err != nil {
+		return nil, exception.NewBadRequest(err.Error())
+	}
+
+	req := cdb.NewDescribeDBInstancesRequest()
+	req.InstanceIds = tea.StringSlice([]string{r.Id})
+	req.Limit = tea.Uint64(1)
+
+	set, err := o.Query(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	if set.Length() == 0 {
+		return nil, exception.NewNotFound("rds %s not found", r.Id)
+	}
+
+	return set.Items[0], nil
+}
+
+func (o *CDBOperator) PageQueryRds(req *provider.QueryRdsRequest) pager.Pager {
+	return newPager(20, o)
+}
 
 // 查询实例列表 (CDB)
 // 参考: https://console.cloud.tencent.com/api/explorer?Product=cdb&Version=2017-03-20&Action=DescribeDBInstances&SignVersion=
@@ -23,14 +50,6 @@ func (o *CDBOperator) Query(ctx context.Context, req *cdb.DescribeDBInstancesReq
 	}
 
 	return o.transferSet(resp.Response.Items), nil
-}
-
-func (o *CDBOperator) QueryRds(req *provider.QueryRdsRequest) pager.Pager {
-	return newPager(20, o)
-}
-
-func (o *CDBOperator) DescribeRds(ctx context.Context, req *provider.DescribeRdsRequest) (*cmdbRds.Rds, error) {
-	return nil, nil
 }
 
 func (o *CDBOperator) transferSet(items []*cdb.InstanceInfo) *rds.Set {

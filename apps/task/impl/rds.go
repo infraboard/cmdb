@@ -40,7 +40,7 @@ func (s *service) syncRds(ctx context.Context, credentialIns *credential.Secret,
 			t.Failed(err.Error())
 			return
 		}
-		pager = op.RdsOperator().QueryRds(req)
+		pager = op.RdsOperator().PageQueryRds(req)
 	case resource.VENDOR_TENCENT:
 		s.log.Debugf("sync txyun rds ...")
 		op, err := txyun.NewOperator(credential.ApiKey, credential.ApiSecret, t.Data.Region)
@@ -48,7 +48,7 @@ func (s *service) syncRds(ctx context.Context, credentialIns *credential.Secret,
 			t.Failed(err.Error())
 			return
 		}
-		pager = op.RdsOperator().QueryRds(req)
+		pager = op.RdsOperator().PageQueryRds(req)
 	case resource.VENDOR_HUAWEI:
 		s.log.Debugf("sync hwyun rds ...")
 		op, err := huawei.NewOperator(credential.ApiKey, credential.ApiSecret, t.Data.Region)
@@ -56,7 +56,7 @@ func (s *service) syncRds(ctx context.Context, credentialIns *credential.Secret,
 			t.Failed(err.Error())
 			return
 		}
-		pager = op.RdsOperator().QueryRds(req)
+		pager = op.RdsOperator().PageQueryRds(req)
 	default:
 		t.Failed(fmt.Sprintf("unsuport bill syncing vendor %s", credential.Vendor))
 		return

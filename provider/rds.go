@@ -8,8 +8,8 @@ import (
 )
 
 type RdsOperator interface {
-	QueryRds(req *QueryRdsRequest) pager.Pager
-	DescribeRds(ctx context.Context, req *DescribeRdsRequest) (*rds.Rds, error)
+	PageQueryRds(req *QueryRdsRequest) pager.Pager
+	DescribeRds(ctx context.Context, req *DescribeRequest) (*rds.Rds, error)
 }
 
 func NewQueryRdsRequest() *QueryRdsRequest {
@@ -26,14 +26,4 @@ func NewQueryRdsRequestWithRate(rate int32) *QueryRdsRequest {
 
 type QueryRdsRequest struct {
 	Rate float64 `json:"rate"`
-}
-
-func NewDescribeRdsRequest(id string) *DescribeRdsRequest {
-	return &DescribeRdsRequest{
-		Id: id,
-	}
-}
-
-type DescribeRdsRequest struct {
-	Id string `json:"id"`
 }

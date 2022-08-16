@@ -108,7 +108,7 @@ func (o *Operator) OssOperator() provider.OssOperator {
 	return oss.NewOssOperator(c)
 }
 
-func (o *Operator) LbOperator() provider.LBOperator {
+func (o *Operator) LbOperator() provider.LoadBalancerOperator {
 	c, err := o.client.SLBClient()
 	if err != nil {
 		panic(err)

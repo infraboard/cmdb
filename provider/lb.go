@@ -7,7 +7,7 @@ import (
 	"github.com/infraboard/mcube/pager"
 )
 
-type LBOperator interface {
+type LoadBalancerOperator interface {
 	DescribeLoadBalancer(context.Context, *DescribeRequest) (*lb.LoadBalancer, error)
 	PageQueryLoadBalancer(*QueryRequest) pager.Pager
 }
