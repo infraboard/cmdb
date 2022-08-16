@@ -1,6 +1,7 @@
 package bss
 
 import (
+	"encoding/json"
 	"sync"
 
 	"github.com/alibabacloud-go/tea/tea"
@@ -77,13 +78,16 @@ func (o *BssOperator) fillResourceId(set *order.OrderSet) {
 					OrderId: tea.String(orderId),
 				},
 			}
-			resources, err := o.doOrderResource(req)
+			od := set.GetOrderById(orderId)
+			if o != nil {
+				return
+			}
+
+			err := o.doOrderResource(req, od)
 			if err != nil {
 				o.log.Errorf("query order resource error, %s", err)
 			}
-			if o := set.GetOrderById(orderId); o != nil {
-				o.ResourceId = append(o.ResourceId, resources.ResourceIds()...)
-			}
+
 		}(set.Items[i].Id)
 	}
 
@@ -92,30 +96,30 @@ func (o *BssOperator) fillResourceId(set *order.OrderSet) {
 
 // 客户在伙伴销售平台查询某个或所有的包年/包月资源(ListPayPerUseCustomerResources)
 // 参考文档: https://apiexplorer.developer.huaweicloud.com/apiexplorer/doc?product=BSS&api=ListPayPerUseCustomerResources
-func (o *BssOperator) doOrderResource(req *model.ListPayPerUseCustomerResourcesRequest) (*resource.ResourceSet, error) {
-	set := resource.NewResourceSet()
-
+func (o *BssOperator) doOrderResource(req *model.ListPayPerUseCustomerResourcesRequest, od *order.Order) error {
 	o.tb.Wait(1)
 
 	resp, err := o.client.ListPayPerUseCustomerResources(req)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	if resp.Data == nil {
-		return set, nil
+		return nil
+	}
+
+	pi, err := json.Marshal(*resp.Data)
+	if err == nil {
+		od.ProductInfo = string(pi)
 	}
 
 	for _, d := range *resp.Data {
-		r := resource.NewDefaultResource()
-		r.Base.Id = tea.StringValue(d.ResourceId)
-		r.Information.Name = tea.StringValue(d.ResourceName)
-		r.Base.Region = tea.StringValue(d.RegionCode)
-		r.Information.Category = tea.StringValue(d.ResourceSpecCode)
-		set.Add(r)
+		if tea.Int32Value(d.IsMainResource) == 1 {
+			od.ResourceId = append(od.ResourceId, tea.StringValue(d.ResourceId))
+		}
 	}
 
-	return set, nil
+	return nil
 }
 
 // 客户可以在伙伴销售平台查看订单详情

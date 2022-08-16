@@ -10,8 +10,8 @@ const (
 	AppName = "lb"
 )
 
-func NewDefaultLB() *LB {
-	return &LB{
+func NewDefaultLoadBalancer() *LoadBalancer {
+	return &LoadBalancer{
 		Base: &resource.Base{
 			ResourceType: resource.TYPE_LB,
 		},
@@ -20,13 +20,13 @@ func NewDefaultLB() *LB {
 	}
 }
 
-func NewLBSet() *LBSet {
-	return &LBSet{
-		Items: []*LB{},
+func NewLoadBalancerSet() *LoadBalancerSet {
+	return &LoadBalancerSet{
+		Items: []*LoadBalancer{},
 	}
 }
 
-func (s *LBSet) GetLast() *LB {
+func (s *LoadBalancerSet) GetLast() *LoadBalancer {
 	l := s.Length()
 	if l == 0 {
 		return nil
@@ -35,31 +35,31 @@ func (s *LBSet) GetLast() *LB {
 	return s.Items[l-1]
 }
 
-func (s *LBSet) Add(items ...any) {
+func (s *LoadBalancerSet) Add(items ...any) {
 	for i := range items {
-		s.Items = append(s.Items, items[i].(*LB))
+		s.Items = append(s.Items, items[i].(*LoadBalancer))
 	}
 }
 
-func (s *LBSet) ResourceIds() (ids []string) {
+func (s *LoadBalancerSet) ResourceIds() (ids []string) {
 	for i := range s.Items {
 		ids = append(ids, s.Items[i].Base.Id)
 	}
 	return
 }
 
-func (s *LBSet) Length() int64 {
+func (s *LoadBalancerSet) Length() int64 {
 	return int64(len(s.Items))
 }
 
-func (s *LBSet) ToAny() (items []any) {
+func (s *LoadBalancerSet) ToAny() (items []any) {
 	for i := range s.Items {
 		items = append(items, s.Items[i])
 	}
 	return
 }
 
-func (s *LBSet) ToJsonString() string {
+func (s *LoadBalancerSet) ToJsonString() string {
 	b, _ := json.Marshal(s)
 	return string(b)
 }

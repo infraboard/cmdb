@@ -12,7 +12,7 @@ import (
 	clb "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/clb/v20180317"
 )
 
-func (o *CLBOperator) QueryLB(req *provider.QueryLBRequest) pager.Pager {
+func (o *CLBOperator) PageQueryLoadBalancer(req *provider.QueryRequest) pager.Pager {
 	p := newPager(o)
 	p.SetRate(float64(req.Rate))
 	return p
@@ -20,7 +20,7 @@ func (o *CLBOperator) QueryLB(req *provider.QueryLBRequest) pager.Pager {
 
 // 查询一个地域的负载均衡实例列表。
 // 参考: https://console.cloud.tencent.com/api/explorer?Product=clb&Version=2018-03-17&Action=DescribeLoadBalancers&SignVersion=
-func (o *CLBOperator) queryCLB(ctx context.Context, req *clb.DescribeLoadBalancersRequest) (*lb.LBSet, error) {
+func (o *CLBOperator) queryCLB(ctx context.Context, req *clb.DescribeLoadBalancersRequest) (*lb.LoadBalancerSet, error) {
 	resp, err := o.client.DescribeLoadBalancersWithContext(ctx, req)
 	if err != nil {
 		return nil, err
@@ -29,16 +29,16 @@ func (o *CLBOperator) queryCLB(ctx context.Context, req *clb.DescribeLoadBalance
 	return o.transferCLBSet(resp.Response.LoadBalancerSet), nil
 }
 
-func (o *CLBOperator) transferCLBSet(items []*clb.LoadBalancer) *lb.LBSet {
-	set := lb.NewLBSet()
+func (o *CLBOperator) transferCLBSet(items []*clb.LoadBalancer) *lb.LoadBalancerSet {
+	set := lb.NewLoadBalancerSet()
 	for i := range items {
 		set.Add(o.transferLB(items[i]))
 	}
 	return set
 }
 
-func (o *CLBOperator) transferLB(ins *clb.LoadBalancer) *lb.LB {
-	r := lb.NewDefaultLB()
+func (o *CLBOperator) transferLB(ins *clb.LoadBalancer) *lb.LoadBalancer {
+	r := lb.NewDefaultLoadBalancer()
 
 	b := r.Base
 	b.Vendor = resource.VENDOR_TENCENT

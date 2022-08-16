@@ -1,6 +1,7 @@
 package elb
 
 import (
+	"context"
 	"strings"
 
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/elb/v2/model"
@@ -11,7 +12,12 @@ import (
 	"github.com/infraboard/mcube/pager"
 )
 
-func (o *ELBOperator) QueryLB(req *provider.QueryLBRequest) pager.Pager {
+func (o *ELBOperator) DescribeLoadBalancer(ctx context.Context, req *provider.DescribeRequest) (
+	*lb.LoadBalancer, error) {
+	return nil, nil
+}
+
+func (o *ELBOperator) PageQueryLoadBalancer(req *provider.QueryRequest) pager.Pager {
 	p := newPager(o)
 	p.SetRate(float64(req.Rate))
 	return p
@@ -19,14 +25,14 @@ func (o *ELBOperator) QueryLB(req *provider.QueryLBRequest) pager.Pager {
 
 // 查询负载均衡器
 // 参考文档: https://apiexplorer.developer.huaweicloud.com/apiexplorer/doc?product=ELB&api=ListLoadbalancers&version=v2
-func (o *ELBOperator) queryELB(req *model.ListLoadbalancersRequest) (*lb.LBSet, error) {
+func (o *ELBOperator) queryELB(req *model.ListLoadbalancersRequest) (*lb.LoadBalancerSet, error) {
 	resp, err := o.client.ListLoadbalancers(req)
 	if err != nil {
 		return nil, err
 	}
 
-	set := lb.NewLBSet()
-	set.Items = o.transferELBSet(resp.Loadbalancers).Items
+	set := lb.NewLoadBalancerSet()
+	set.Items = o.transferELoadBalancerSet(resp.Loadbalancers).Items
 
 	last := set.GetLast()
 	if last != nil {
@@ -36,8 +42,8 @@ func (o *ELBOperator) queryELB(req *model.ListLoadbalancersRequest) (*lb.LBSet, 
 	return set, nil
 }
 
-func (o *ELBOperator) transferELBSet(list *[]model.LoadbalancerResp) *lb.LBSet {
-	set := lb.NewLBSet()
+func (o *ELBOperator) transferELoadBalancerSet(list *[]model.LoadbalancerResp) *lb.LoadBalancerSet {
+	set := lb.NewLoadBalancerSet()
 
 	if list == nil {
 		return set
@@ -51,8 +57,8 @@ func (o *ELBOperator) transferELBSet(list *[]model.LoadbalancerResp) *lb.LBSet {
 	return set
 }
 
-func (o *ELBOperator) transferELB(ins model.LoadbalancerResp) *lb.LB {
-	r := lb.NewDefaultLB()
+func (o *ELBOperator) transferELB(ins model.LoadbalancerResp) *lb.LoadBalancer {
+	r := lb.NewDefaultLoadBalancer()
 	b := r.Base
 	b.Vendor = resource.VENDOR_HUAWEI
 	b.CreateAt = utils.ParseTime("2006-01-02T15:04:05", ins.CreatedAt)

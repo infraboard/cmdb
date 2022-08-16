@@ -7,11 +7,11 @@ import "apps/resource/pb/resource.proto";
 import "github.com/infraboard/mcube/pb/page/page.proto";
 
 service Service {
-    rpc SyncSLB(LB) returns(LB) {}
-    rpc QuerySLB(QuerySLBRequest) returns(LBSet) {}
+    rpc SyncSLB(LoadBalancer) returns(LoadBalancer) {}
+    rpc QuerySLB(QuerySLBRequest) returns(LoadBalancer) {}
 }
 
-message LB {
+message LoadBalancer {
     infraboard.cmdb.resource.Base base = 1;
     infraboard.cmdb.resource.Information information = 2;
     Describe describe = 3;
@@ -35,9 +35,9 @@ message Describe {
     int32 band_width = 5;
 }
 
-message LBSet {
+message LoadBalancerSet {
     // 列表项
-    repeated LB items = 1;
+    repeated LoadBalancer items = 1;
     // 总数量
     int64 total = 2;
 }

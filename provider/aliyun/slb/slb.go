@@ -1,6 +1,8 @@
 package slb
 
 import (
+	"context"
+
 	slb "github.com/alibabacloud-go/slb-20140515/v3/client"
 	"github.com/alibabacloud-go/tea/tea"
 
@@ -10,7 +12,12 @@ import (
 	"github.com/infraboard/mcube/pager"
 )
 
-func (o *SLBOperator) QueryLB(req *provider.QueryLBRequest) pager.Pager {
+func (o *SLBOperator) DescribeLoadBalancer(ctx context.Context, req *provider.DescribeRequest) (
+	*lb.LoadBalancer, error) {
+	return nil, nil
+}
+
+func (o *SLBOperator) PageQueryLoadBalancer(req *provider.QueryRequest) pager.Pager {
 	p := newPager(o)
 	p.SetRate(float64(req.Rate))
 	return p
@@ -18,27 +25,27 @@ func (o *SLBOperator) QueryLB(req *provider.QueryLBRequest) pager.Pager {
 
 // 查询已创建的负载均衡实例
 // 参考: https://next.api.aliyun.com/api/Slb/2014-05-15/DescribeLoadBalancers?params={}
-func (o *SLBOperator) Query(req *slb.DescribeLoadBalancersRequest) (*lb.LBSet, error) {
+func (o *SLBOperator) Query(req *slb.DescribeLoadBalancersRequest) (*lb.LoadBalancerSet, error) {
 	resp, err := o.client.DescribeLoadBalancers(req)
 	if err != nil {
 		return nil, err
 	}
-	set := lb.NewLBSet()
+	set := lb.NewLoadBalancerSet()
 	set.Total = int64(tea.Int32Value(resp.Body.TotalCount))
 	set.Items = o.transferLBSet(resp.Body.LoadBalancers).Items
 	return set, nil
 }
 
-func (o *SLBOperator) transferLBSet(items *slb.DescribeLoadBalancersResponseBodyLoadBalancers) *lb.LBSet {
-	set := lb.NewLBSet()
+func (o *SLBOperator) transferLBSet(items *slb.DescribeLoadBalancersResponseBodyLoadBalancers) *lb.LoadBalancerSet {
+	set := lb.NewLoadBalancerSet()
 	for i := range items.LoadBalancer {
 		set.Add(o.transferLB(items.LoadBalancer[i]))
 	}
 	return set
 }
 
-func (o *SLBOperator) transferLB(ins *slb.DescribeLoadBalancersResponseBodyLoadBalancersLoadBalancer) *lb.LB {
-	r := lb.NewDefaultLB()
+func (o *SLBOperator) transferLB(ins *slb.DescribeLoadBalancersResponseBodyLoadBalancersLoadBalancer) *lb.LoadBalancer {
+	r := lb.NewDefaultLoadBalancer()
 	b := r.Base
 	b.Vendor = resource.VENDOR_ALIYUN
 	b.Region = tea.StringValue(ins.RegionId)

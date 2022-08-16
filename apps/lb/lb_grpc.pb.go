@@ -22,8 +22,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ServiceClient interface {
-	SyncSLB(ctx context.Context, in *LB, opts ...grpc.CallOption) (*LB, error)
-	QuerySLB(ctx context.Context, in *QuerySLBRequest, opts ...grpc.CallOption) (*LBSet, error)
+	SyncSLB(ctx context.Context, in *LoadBalancer, opts ...grpc.CallOption) (*LoadBalancer, error)
+	QuerySLB(ctx context.Context, in *QuerySLBRequest, opts ...grpc.CallOption) (*LoadBalancer, error)
 }
 
 type serviceClient struct {
@@ -34,8 +34,8 @@ func NewServiceClient(cc grpc.ClientConnInterface) ServiceClient {
 	return &serviceClient{cc}
 }
 
-func (c *serviceClient) SyncSLB(ctx context.Context, in *LB, opts ...grpc.CallOption) (*LB, error) {
-	out := new(LB)
+func (c *serviceClient) SyncSLB(ctx context.Context, in *LoadBalancer, opts ...grpc.CallOption) (*LoadBalancer, error) {
+	out := new(LoadBalancer)
 	err := c.cc.Invoke(ctx, "/infraboard.cmdb.slb.Service/SyncSLB", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -43,8 +43,8 @@ func (c *serviceClient) SyncSLB(ctx context.Context, in *LB, opts ...grpc.CallOp
 	return out, nil
 }
 
-func (c *serviceClient) QuerySLB(ctx context.Context, in *QuerySLBRequest, opts ...grpc.CallOption) (*LBSet, error) {
-	out := new(LBSet)
+func (c *serviceClient) QuerySLB(ctx context.Context, in *QuerySLBRequest, opts ...grpc.CallOption) (*LoadBalancer, error) {
+	out := new(LoadBalancer)
 	err := c.cc.Invoke(ctx, "/infraboard.cmdb.slb.Service/QuerySLB", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -56,8 +56,8 @@ func (c *serviceClient) QuerySLB(ctx context.Context, in *QuerySLBRequest, opts 
 // All implementations must embed UnimplementedServiceServer
 // for forward compatibility
 type ServiceServer interface {
-	SyncSLB(context.Context, *LB) (*LB, error)
-	QuerySLB(context.Context, *QuerySLBRequest) (*LBSet, error)
+	SyncSLB(context.Context, *LoadBalancer) (*LoadBalancer, error)
+	QuerySLB(context.Context, *QuerySLBRequest) (*LoadBalancer, error)
 	mustEmbedUnimplementedServiceServer()
 }
 
@@ -65,10 +65,10 @@ type ServiceServer interface {
 type UnimplementedServiceServer struct {
 }
 
-func (UnimplementedServiceServer) SyncSLB(context.Context, *LB) (*LB, error) {
+func (UnimplementedServiceServer) SyncSLB(context.Context, *LoadBalancer) (*LoadBalancer, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SyncSLB not implemented")
 }
-func (UnimplementedServiceServer) QuerySLB(context.Context, *QuerySLBRequest) (*LBSet, error) {
+func (UnimplementedServiceServer) QuerySLB(context.Context, *QuerySLBRequest) (*LoadBalancer, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QuerySLB not implemented")
 }
 func (UnimplementedServiceServer) mustEmbedUnimplementedServiceServer() {}
@@ -85,7 +85,7 @@ func RegisterServiceServer(s grpc.ServiceRegistrar, srv ServiceServer) {
 }
 
 func _Service_SyncSLB_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(LB)
+	in := new(LoadBalancer)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -97,7 +97,7 @@ func _Service_SyncSLB_Handler(srv interface{}, ctx context.Context, dec func(int
 		FullMethod: "/infraboard.cmdb.slb.Service/SyncSLB",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).SyncSLB(ctx, req.(*LB))
+		return srv.(ServiceServer).SyncSLB(ctx, req.(*LoadBalancer))
 	}
 	return interceptor(ctx, in, info, handler)
 }

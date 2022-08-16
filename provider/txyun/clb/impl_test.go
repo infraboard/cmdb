@@ -17,11 +17,11 @@ var (
 )
 
 func TestQueryCLB(t *testing.T) {
-	req := provider.NewQueryLBRequest()
-	pager := operator.QueryLB(req)
+	req := provider.NewQueryRequest()
+	pager := operator.PageQueryLoadBalancer(req)
 
 	for pager.Next() {
-		set := lb.NewLBSet()
+		set := lb.NewLoadBalancerSet()
 		if err := pager.Scan(context.Background(), set); err != nil {
 			panic(err)
 		}
