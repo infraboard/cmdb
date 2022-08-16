@@ -13,6 +13,12 @@ import (
 	"github.com/infraboard/cmdb/utils"
 )
 
+func (o *EcsOperator) PageQueryEip(req *provider.QueryEipRequest) pager.Pager {
+	p := newEipPager(o)
+	p.SetRate(req.Rate)
+	return p
+}
+
 // 查询弹性公网IP列表
 // 参考文档: https://apiexplorer.developer.huaweicloud.com/apiexplorer/sdk?product=EIP&api=ListPublicips&version=v2
 func (o *EcsOperator) queryEip(req *model.ListPublicipsRequest) (*eip.EIPSet, error) {
@@ -73,10 +79,4 @@ func (o *EcsOperator) transferEip(ins model.PublicipShowResp) *eip.EIP {
 	desc := h.Describe
 	desc.BandWidth = int64(tea.Int32Value(ins.BandwidthSize))
 	return h
-}
-
-func (o *EcsOperator) QueryEip(req *provider.QueryEipRequest) pager.Pager {
-	p := newEipPager(o)
-	p.SetRate(req.Rate)
-	return p
 }

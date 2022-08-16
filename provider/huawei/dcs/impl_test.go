@@ -15,11 +15,12 @@ import (
 
 var (
 	operator provider.RedisOperator
+	ctx      = context.Background()
 )
 
-func TestQuery(t *testing.T) {
+func TestPageQueryRedis(t *testing.T) {
 	req := provider.NewQueryRedisWithRate(5)
-	pager := operator.QueryRedis(req)
+	pager := operator.PageQueryRedis(req)
 
 	set := redis.NewSet()
 	for pager.Next() {
@@ -28,6 +29,15 @@ func TestQuery(t *testing.T) {
 		}
 		fmt.Println(set)
 	}
+}
+
+func TestDescribeRedis(t *testing.T) {
+	req := provider.NewDescribeRequest("xxx")
+	ins, err := operator.DescribeRedis(ctx, req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(ins)
 }
 
 func init() {

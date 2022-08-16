@@ -12,7 +12,7 @@ import (
 	cbs "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cbs/v20170312"
 )
 
-func (o *CVMOperator) QueryDisk(req *provider.QueryDiskRequest) pager.Pager {
+func (o *CVMOperator) PageQueryDisk(req *provider.QueryDiskRequest) pager.Pager {
 	p := newDiskPager(o)
 	p.SetRate(req.Rate)
 	return p

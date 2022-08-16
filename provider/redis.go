@@ -8,18 +8,8 @@ import (
 )
 
 type RedisOperator interface {
-	QueryRedis(req *QueryRedisRequest) pager.Pager
-	DescribeRedis(context.Context, *DescribeRedisRequest) (*redis.Redis, error)
-}
-
-func NewDescribeRedisRequest(id string) *DescribeRedisRequest {
-	return &DescribeRedisRequest{
-		Id: id,
-	}
-}
-
-type DescribeRedisRequest struct {
-	Id string `json:"id"`
+	PageQueryRedis(req *QueryRedisRequest) pager.Pager
+	DescribeRedis(context.Context, *DescribeRequest) (*redis.Redis, error)
 }
 
 func NewQueryRedisWithRate(rate int32) *QueryRedisRequest {

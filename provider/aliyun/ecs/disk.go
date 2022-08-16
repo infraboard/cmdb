@@ -10,7 +10,7 @@ import (
 	"github.com/infraboard/mcube/pager"
 )
 
-func (o *EcsOperator) QueryDisk(req *provider.QueryDiskRequest) pager.Pager {
+func (o *EcsOperator) PageQueryDisk(req *provider.QueryDiskRequest) pager.Pager {
 	p := newDiskPager(o)
 	p.SetRate(req.Rate)
 	return p

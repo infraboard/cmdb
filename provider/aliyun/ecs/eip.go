@@ -12,7 +12,7 @@ import (
 	"github.com/infraboard/mcube/pager"
 )
 
-func (o *EcsOperator) QueryEip(req *provider.QueryEipRequest) pager.Pager {
+func (o *EcsOperator) PageQueryEip(req *provider.QueryEipRequest) pager.Pager {
 	p := newEipPager(o)
 	p.SetRate(req.Rate)
 	return p

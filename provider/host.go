@@ -8,9 +8,9 @@ import (
 )
 
 type HostOperator interface {
-	QueryHost(req *QueryHostRequest) pager.Pager
-	QueryDisk(req *QueryDiskRequest) pager.Pager
-	QueryEip(req *QueryEipRequest) pager.Pager
+	PageQueryHost(req *QueryHostRequest) pager.Pager
+	PageQueryDisk(req *QueryDiskRequest) pager.Pager
+	PageQueryEip(req *QueryEipRequest) pager.Pager
 	DescribeHost(ctx context.Context, req *DescribeHostRequest) (*host.Host, error)
 }
 

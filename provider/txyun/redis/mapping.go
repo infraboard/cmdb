@@ -2,6 +2,7 @@ package redis
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/infraboard/cmdb/apps/redis"
 )
@@ -31,4 +32,50 @@ func praseStatus(s *int64) string {
 	}
 
 	return fmt.Sprintf("%d", *s)
+}
+
+var (
+	typeMap = map[int64]string{
+		1: "Redis2.8内存版（集群架构）",
+		2: "Redis2.8内存版（标准架构）",
+		3: "CKV 3.2内存版(标准架构)",
+		4: "CKV 3.2内存版(集群架构)",
+		5: "Redis2.8内存版（单机）",
+		6: "Redis4.0内存版（标准架构）",
+		7: "Redis4.0内存版（集群架构）",
+		8: "Redis5.0内存版（标准架构）",
+		9: "Redis5.0内存版（集群架构）",
+	}
+)
+
+func (o *RedisOperator) ParseType(t *int64) string {
+	if t == nil {
+		return ""
+	}
+	return typeMap[*t]
+}
+
+var (
+	billModMap = map[int64]string{
+		0: "按量计费",
+		1: "包年包月",
+	}
+)
+
+func (o *RedisOperator) ParseBillMode(t *int64) string {
+	if t == nil {
+		return ""
+	}
+
+	return billModMap[*t]
+}
+
+func (o *RedisOperator) parseTime(t string) int64 {
+	ts, err := time.Parse("2006-01-02 15:04:05", t)
+	if err != nil {
+		o.log.Errorf("parse time %s error, %s", t, err)
+		return 0
+	}
+
+	return ts.UnixMilli()
 }

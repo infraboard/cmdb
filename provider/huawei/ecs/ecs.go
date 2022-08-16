@@ -15,6 +15,12 @@ import (
 	"github.com/infraboard/mcube/pager"
 )
 
+func (o *EcsOperator) PageQueryHost(req *provider.QueryHostRequest) pager.Pager {
+	p := newPager(o)
+	p.SetRate(req.Rate)
+	return p
+}
+
 // 查询云服务器详情列表
 // 参考文档: https://apiexplorer.developer.huaweicloud.com/apiexplorer/doc?product=ECS&api=ListServersDetails
 func (o *EcsOperator) queryInstance(req *model.ListServersDetailsRequest) (*host.HostSet, error) {
@@ -28,12 +34,6 @@ func (o *EcsOperator) queryInstance(req *model.ListServersDetailsRequest) (*host
 	set.Items = o.transferInstanceSet(resp.Servers).Items
 
 	return set, nil
-}
-
-func (o *EcsOperator) QueryHost(req *provider.QueryHostRequest) pager.Pager {
-	p := newPager(o)
-	p.SetRate(req.Rate)
-	return p
 }
 
 func (o *EcsOperator) DescribeHost(ctx context.Context, req *provider.DescribeHostRequest) (*host.Host, error) {

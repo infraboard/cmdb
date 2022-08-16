@@ -17,7 +17,7 @@ var (
 )
 
 func TestQuery(t *testing.T) {
-	pager := operator.QueryHost(provider.NewQueryHostRequest())
+	pager := operator.PageQueryHost(provider.NewQueryHostRequest())
 
 	for pager.Next() {
 		set := host.NewHostSet()

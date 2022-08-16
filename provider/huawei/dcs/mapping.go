@@ -36,3 +36,17 @@ func praseStatus(s *string) string {
 
 	return *s
 }
+
+var (
+	chargeModeMap = map[int32]string{
+		0: "按需计费",
+		1: "包年/包月计费",
+	}
+)
+
+func (o *DcsOperator) parseChargeMod(t *int32) string {
+	if t == nil {
+		return ""
+	}
+	return chargeModeMap[*t]
+}

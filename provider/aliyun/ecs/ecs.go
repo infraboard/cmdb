@@ -14,6 +14,12 @@ import (
 	"github.com/infraboard/mcube/pager"
 )
 
+func (o *EcsOperator) PageQueryHost(req *provider.QueryHostRequest) pager.Pager {
+	p := newEcsPager(o)
+	p.SetRate(req.Rate)
+	return p
+}
+
 // 查询一台或多台ECS实例的详细信息
 // 参考文档: https://next.api.aliyun.com/api/Ecs/2014-05-26/DescribeInstances?params={}
 func (o *EcsOperator) queryInstance(req *ecs.DescribeInstancesRequest) (*host.HostSet, error) {
@@ -35,12 +41,6 @@ func (o *EcsOperator) queryInstance(req *ecs.DescribeInstancesRequest) (*host.Ho
 	}
 
 	return set, nil
-}
-
-func (o *EcsOperator) QueryHost(req *provider.QueryHostRequest) pager.Pager {
-	p := newEcsPager(o)
-	p.SetRate(req.Rate)
-	return p
 }
 
 func (o *EcsOperator) DescribeHost(ctx context.Context, req *provider.DescribeHostRequest) (*host.Host, error) {

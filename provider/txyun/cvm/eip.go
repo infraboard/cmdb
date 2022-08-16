@@ -12,6 +12,12 @@ import (
 	vpc "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/vpc/v20170312"
 )
 
+func (o *CVMOperator) PageQueryEip(req *provider.QueryEipRequest) pager.Pager {
+	p := newEipPager(o)
+	p.SetRate(req.Rate)
+	return p
+}
+
 // 查询弹性公网IP列表 (VPC)
 // 参考文档: https://console.cloud.tencent.com/api/explorer?Product=vpc&Version=2017-03-12&Action=DescribeAddresses&SignVersion=
 func (o *CVMOperator) queryEip(ctx context.Context, req *vpc.DescribeAddressesRequest) (*eip.EIPSet, error) {
@@ -53,10 +59,4 @@ func (o *CVMOperator) transferEip(ins *vpc.Address) *eip.EIP {
 	desc.InstanceId = tea.StringValue(ins.InstanceId)
 	desc.Isp = tea.StringValue(ins.InternetServiceProvider)
 	return h
-}
-
-func (o *CVMOperator) QueryEip(req *provider.QueryEipRequest) pager.Pager {
-	p := newEipPager(o)
-	p.SetRate(req.Rate)
-	return p
 }

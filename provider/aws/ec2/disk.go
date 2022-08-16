@@ -5,6 +5,6 @@ import (
 	"github.com/infraboard/mcube/pager"
 )
 
-func (o *Ec2operator) PageQueryEip(req *provider.QueryEipRequest) pager.Pager {
+func (o *Ec2operator) PageQueryDisk(req *provider.QueryDiskRequest) pager.Pager {
 	return nil
 }

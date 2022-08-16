@@ -13,6 +13,12 @@ import (
 	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 )
 
+func (o *CVMOperator) PageQueryHost(req *provider.QueryHostRequest) pager.Pager {
+	p := newPager(o)
+	p.SetRate(req.Rate)
+	return p
+}
+
 // 查看实例列表
 // 查看实例列表: https://console.cloud.tencent.com/api/explorer?Product=cvm&Version=2017-03-12&Action=DescribeInstances&SignVersion=
 func (o *CVMOperator) QueryCVM(ctx context.Context, req *cvm.DescribeInstancesRequest) (*host.HostSet, error) {
@@ -24,12 +30,6 @@ func (o *CVMOperator) QueryCVM(ctx context.Context, req *cvm.DescribeInstancesRe
 	set := o.transferSet(resp.Response.InstanceSet)
 	set.Total = utils.PtrInt64(resp.Response.TotalCount)
 	return set, nil
-}
-
-func (o *CVMOperator) QueryHost(req *provider.QueryHostRequest) pager.Pager {
-	p := newPager(o)
-	p.SetRate(req.Rate)
-	return p
 }
 
 func (o *CVMOperator) DescribeHost(ctx context.Context, req *provider.DescribeHostRequest) (*host.Host, error) {

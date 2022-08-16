@@ -47,7 +47,7 @@ func (s *service) syncHost(ctx context.Context, credentialIns *credential.Secret
 			t.Failed(err.Error())
 			return
 		}
-		pager = op.HostOperator().QueryHost(req)
+		pager = op.HostOperator().PageQueryHost(req)
 	case resource.VENDOR_TENCENT:
 		s.log.Debugf("sync txyun cvm ...")
 		op, err := txyun.NewOperator(credential.ApiKey, credential.ApiSecret, t.Data.Region)
@@ -55,7 +55,7 @@ func (s *service) syncHost(ctx context.Context, credentialIns *credential.Secret
 			t.Failed(err.Error())
 			return
 		}
-		pager = op.HostOperator().QueryHost(req)
+		pager = op.HostOperator().PageQueryHost(req)
 	case resource.VENDOR_HUAWEI:
 		s.log.Debugf("sync hwyun ecs ...")
 		op, err := huawei.NewOperator(credential.ApiKey, credential.ApiSecret, t.Data.Region)
@@ -63,11 +63,11 @@ func (s *service) syncHost(ctx context.Context, credentialIns *credential.Secret
 			t.Failed(err.Error())
 			return
 		}
-		pager = op.HostOperator().QueryHost(req)
+		pager = op.HostOperator().PageQueryHost(req)
 	case resource.VENDOR_AMAZON:
 		s.log.Debugf("sync aws ec2 ...")
 		op := aws.NewOperator(credential.ApiKey, credential.ApiSecret, t.Data.Region)
-		pager = op.HostOperator().QueryHost(req)
+		pager = op.HostOperator().PageQueryHost(req)
 	case resource.VENDOR_VSPHERE:
 		s.log.Debugf("sync vshpere vm ...")
 		client := vsConn.NewVsphereClient(credential.Address, credential.ApiKey, credential.ApiSecret)

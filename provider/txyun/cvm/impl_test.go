@@ -21,8 +21,8 @@ var (
 	operator *op.CVMOperator
 )
 
-func TestQueryCVM(t *testing.T) {
-	pager := operator.QueryHost(provider.NewQueryHostRequest())
+func TestPageQueryHost(t *testing.T) {
+	pager := operator.PageQueryHost(provider.NewQueryHostRequest())
 
 	for pager.Next() {
 		set := host.NewHostSet()
@@ -33,8 +33,8 @@ func TestQueryCVM(t *testing.T) {
 	}
 }
 
-func TestQueryDisk(t *testing.T) {
-	pager := operator.QueryDisk(provider.NewQueryDiskRequest())
+func TestPageQueryDisk(t *testing.T) {
+	pager := operator.PageQueryDisk(provider.NewQueryDiskRequest())
 
 	for pager.Next() {
 		set := disk.NewDiskSet()
@@ -45,8 +45,8 @@ func TestQueryDisk(t *testing.T) {
 	}
 }
 
-func TestQueryEip(t *testing.T) {
-	pager := operator.QueryEip(provider.NewQueryEipRequest())
+func TestPageQueryEip(t *testing.T) {
+	pager := operator.PageQueryEip(provider.NewQueryEipRequest())
 
 	for pager.Next() {
 		set := eip.NewEIPSet()

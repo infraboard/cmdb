@@ -14,27 +14,8 @@ import (
 	"github.com/infraboard/cmdb/provider"
 )
 
-// 查询一个或多个Redis实例的信息
-// 参考文档: https://next.api.aliyun.com/api/R-kvstore/2015-01-01/DescribeInstances?params={}
-func (o *RedisOperator) query(req *redis.DescribeInstancesRequest) (*cmdbRedis.Set, error) {
-	resp, err := o.client.DescribeInstances(req)
-	if err != nil {
-		return nil, err
-	}
-
-	set := cmdbRedis.NewSet()
-	set.Total = int64(tea.Int32Value(resp.Body.TotalCount))
-	set.Items = o.transferSet(resp.Body.Instances).Items
-	return set, nil
-}
-
-func (o *RedisOperator) QueryRedis(req *provider.QueryRedisRequest) pager.Pager {
-	p := newPager(o)
-	p.SetRate(float64(req.Rate))
-	return p
-}
-
-func (o *RedisOperator) DescribeRedis(ctx context.Context, req *provider.DescribeRedisRequest) (*cmdbRedis.Redis, error) {
+func (o *RedisOperator) DescribeRedis(ctx context.Context, req *provider.DescribeRequest) (
+	*cmdbRedis.Redis, error) {
 	descReq := &redis.DescribeInstanceAttributeRequest{
 		InstanceId: &req.Id,
 	}
@@ -50,6 +31,26 @@ func (o *RedisOperator) DescribeRedis(ctx context.Context, req *provider.Describ
 	}
 
 	return set.Items[0], nil
+}
+
+func (o *RedisOperator) PageQueryRedis(req *provider.QueryRedisRequest) pager.Pager {
+	p := newPager(o)
+	p.SetRate(float64(req.Rate))
+	return p
+}
+
+// 查询一个或多个Redis实例的信息
+// 参考文档: https://next.api.aliyun.com/api/R-kvstore/2015-01-01/DescribeInstances?params={}
+func (o *RedisOperator) query(req *redis.DescribeInstancesRequest) (*cmdbRedis.Set, error) {
+	resp, err := o.client.DescribeInstances(req)
+	if err != nil {
+		return nil, err
+	}
+
+	set := cmdbRedis.NewSet()
+	set.Total = int64(tea.Int32Value(resp.Body.TotalCount))
+	set.Items = o.transferSet(resp.Body.Instances).Items
+	return set, nil
 }
 
 func (o *RedisOperator) transferSet(items *redis.DescribeInstancesResponseBodyInstances) *cmdbRedis.Set {
