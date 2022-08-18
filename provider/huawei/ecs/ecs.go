@@ -12,6 +12,7 @@ import (
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/cmdb/utils"
+	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/pager"
 )
 
@@ -41,11 +42,21 @@ func (o *EcsOperator) DescribeHost(ctx context.Context, req *provider.DescribeHo
 		ServerId: req.Id,
 	})
 	if err != nil {
+		if strings.Contains(err.Error(), "could not be found.") {
+			return nil, exception.NewNotFound(err.Error())
+		}
 		return nil, err
 	}
 
-	h := o.transferInstance(*resp.Server)
+	if resp.Server.Status == "DELETED" {
+		return nil, exception.NewNotFound("%s not found", req.Id)
+	}
 
+	if resp.Server.Id != req.Id {
+		return nil, exception.NewNotFound("%s not found", req.Id)
+	}
+
+	h := o.transferInstance(*resp.Server)
 	return h, nil
 }
 

@@ -27,7 +27,7 @@ func (o *EcsOperator) DescribeHost(ctx context.Context, req *provider.DescribeHo
 		return nil, err
 	}
 	if hs.Length() == 0 {
-		return nil, exception.NewNotFound("instance %s not found", err)
+		return nil, exception.NewNotFound("instance %s not found", req.Id)
 	}
 
 	return hs.Items[0], nil

@@ -24,6 +24,11 @@ func (o *RdsOperator) DescribeRds(ctx context.Context, req *provider.DescribeReq
 
 	detail, err := o.client.DescribeDBInstanceAttribute(descReq)
 	if err != nil {
+		if v, ok := err.(*tea.SDKError); ok {
+			if tea.IntValue(v.StatusCode) == 404 {
+				return nil, exception.NewNotFound(tea.StringValue(v.Message)).WithData(v.Data)
+			}
+		}
 		return nil, err
 	}
 

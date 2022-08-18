@@ -2,6 +2,7 @@ package redis
 
 import (
 	"context"
+	"strings"
 
 	"github.com/alibabacloud-go/tea/tea"
 	redis "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/redis/v20180412"
@@ -25,8 +26,12 @@ func (o *RedisOperator) DescribeRedis(ctx context.Context, r *provider.DescribeR
 
 	set, err := o.Query(ctx, req)
 	if err != nil {
+		if strings.Contains(err.Error(), "No instance found") {
+			return nil, exception.NewNotFound(err.Error())
+		}
 		return nil, err
 	}
+
 	if set.Length() == 0 {
 		return nil, exception.NewNotFound("redis %s not found", r.Id)
 	}
