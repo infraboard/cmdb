@@ -28,6 +28,7 @@ enum TYPE {
     LB = 5;
     DOMAIN = 6;
     EIP = 7;
+    MONGODB = 8;
     BILL = 100;
     ORDER = 101;
 }

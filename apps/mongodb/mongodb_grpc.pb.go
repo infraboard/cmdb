@@ -23,7 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ServiceClient interface {
 	SyncMongoDB(ctx context.Context, in *MongoDB, opts ...grpc.CallOption) (*MongoDB, error)
-	QueryMongoDB(ctx context.Context, in *QueryMongoDBRequest, opts ...grpc.CallOption) (*Set, error)
+	QueryMongoDB(ctx context.Context, in *QueryMongoDBRequest, opts ...grpc.CallOption) (*MongoDBSet, error)
 }
 
 type serviceClient struct {
@@ -43,8 +43,8 @@ func (c *serviceClient) SyncMongoDB(ctx context.Context, in *MongoDB, opts ...gr
 	return out, nil
 }
 
-func (c *serviceClient) QueryMongoDB(ctx context.Context, in *QueryMongoDBRequest, opts ...grpc.CallOption) (*Set, error) {
-	out := new(Set)
+func (c *serviceClient) QueryMongoDB(ctx context.Context, in *QueryMongoDBRequest, opts ...grpc.CallOption) (*MongoDBSet, error) {
+	out := new(MongoDBSet)
 	err := c.cc.Invoke(ctx, "/infraboard.cmdb.mongodb.Service/QueryMongoDB", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -57,7 +57,7 @@ func (c *serviceClient) QueryMongoDB(ctx context.Context, in *QueryMongoDBReques
 // for forward compatibility
 type ServiceServer interface {
 	SyncMongoDB(context.Context, *MongoDB) (*MongoDB, error)
-	QueryMongoDB(context.Context, *QueryMongoDBRequest) (*Set, error)
+	QueryMongoDB(context.Context, *QueryMongoDBRequest) (*MongoDBSet, error)
 	mustEmbedUnimplementedServiceServer()
 }
 
@@ -68,7 +68,7 @@ type UnimplementedServiceServer struct {
 func (UnimplementedServiceServer) SyncMongoDB(context.Context, *MongoDB) (*MongoDB, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SyncMongoDB not implemented")
 }
-func (UnimplementedServiceServer) QueryMongoDB(context.Context, *QueryMongoDBRequest) (*Set, error) {
+func (UnimplementedServiceServer) QueryMongoDB(context.Context, *QueryMongoDBRequest) (*MongoDBSet, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryMongoDB not implemented")
 }
 func (UnimplementedServiceServer) mustEmbedUnimplementedServiceServer() {}
