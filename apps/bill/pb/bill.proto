@@ -23,10 +23,10 @@ message Bill {
     string task_id = 1;
     // 厂商
     // @gotags: json:"vendor"
-    infraboard.cmdb.resource.VENDOR vendor = 2;
+    resource.VENDOR vendor = 2;
     // 资源类型
     // @gotags: json:"type"
-    infraboard.cmdb.resource.TYPE type = 3;
+    resource.TYPE type = 3;
     // 账单的月份
     // @gotags: json:"month"
     string month = 4;
@@ -47,7 +47,7 @@ message Bill {
     string product_detail = 9;
     // 计费方式，比如：月95，日均峰值
     // @gotags: json:"pay_mode"
-    string pay_mode = 10;
+    resource.PayMode pay_mode = 10;
     // 计费方式详情  云服务器ECS-按量付费
     // @gotags: json:"pay_mode_detail"
     string pay_mode_detail = 11;

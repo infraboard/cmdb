@@ -2,6 +2,7 @@ package cdb
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/alibabacloud-go/tea/tea"
@@ -11,6 +12,7 @@ import (
 	cmdbRds "github.com/infraboard/cmdb/apps/rds"
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
+	"github.com/infraboard/cmdb/provider/txyun/mapping"
 	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/pager"
@@ -75,7 +77,7 @@ func (o *CDBOperator) transferOne(ins *cdb.InstanceInfo) *rds.Rds {
 	info.Name = utils.PtrStrV(ins.InstanceName)
 	info.Category = utils.PtrStrV(ins.DeviceType)
 	info.Status = praseStatus(ins.Status)
-	info.PayType = o.ParsePayType(ins.PayType)
+	info.PayMode = mapping.PrasePayMode(fmt.Sprintf("%d", tea.Int64Value(ins.PayType)))
 
 	// 补充其他状态
 	if ins.TaskStatus != nil && *ins.TaskStatus != 0 {
@@ -121,7 +123,7 @@ func (o *CDBOperator) ParseType(id *int64) string {
 }
 
 // 付费类型，可能的返回值：0-包年包月；1-包年包月
-func (o *CDBOperator) ParsePayType(id *int64) string {
+func (o *CDBOperator) ParsePayMode(id *int64) string {
 	if id == nil {
 		return ""
 	}

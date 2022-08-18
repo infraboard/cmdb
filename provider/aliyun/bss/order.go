@@ -10,6 +10,7 @@ import (
 	"github.com/infraboard/cmdb/apps/order"
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
+	"github.com/infraboard/cmdb/provider/aliyun/mapping"
 	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/pager"
 )
@@ -97,7 +98,7 @@ func (o *BssOperator) transferOrder(ins *bssopenapi.GetOrderDetailResponseBodyDa
 	b.Status = praseOrderStatus(ins.PaymentStatus)
 	b.CreateAt = utils.ParseDefaultSecondTime(tea.StringValue(ins.CreateTime))
 	b.PayAt = utils.ParseDefaultSecondTime(tea.StringValue(ins.PaymentTime))
-	b.PayMode = tea.StringValue(ins.SubscriptionType)
+	b.PayMode = mapping.PrasePayMode(ins.SubscriptionType)
 	b.ProductCode = tea.StringValue(ins.ProductCode)
 	b.ProductInfo = tea.StringValue(ins.OriginalConfig)
 

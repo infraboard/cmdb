@@ -9,6 +9,7 @@ import (
 	"github.com/infraboard/cmdb/apps/lb"
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
+	"github.com/infraboard/cmdb/provider/aliyun/mapping"
 	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/pager"
 )
@@ -78,7 +79,7 @@ func (o *SLBOperator) transferLoadBalancer(ins *slb.DescribeLoadBalancersRespons
 	info.Name = tea.StringValue(ins.LoadBalancerName)
 	info.Type = tea.StringValue(ins.NetworkType)
 	info.Status = praseSlbStatus(ins.LoadBalancerStatus)
-	info.PayType = tea.StringValue(ins.PayType)
+	info.PayMode = mapping.PrasePayMode(ins.PayType)
 	info.PrivateIp = []string{tea.StringValue(ins.Address)}
 
 	desc := r.Describe

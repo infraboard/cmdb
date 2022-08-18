@@ -12,6 +12,7 @@ import (
 	"github.com/infraboard/cmdb/apps/bill"
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
+	"github.com/infraboard/cmdb/provider/aliyun/mapping"
 )
 
 func (o *BssOperator) QueryBill(req *provider.QueryBillRequest) pager.Pager {
@@ -54,8 +55,8 @@ func (o *BssOperator) transferBill(ins *bssopenapi.DescribeInstanceBillResponseB
 	b.ProductType = tea.StringValue(ins.ProductType)
 	b.ProductCode = tea.StringValue(ins.ProductCode)
 	b.ProductDetail = tea.StringValue(ins.ProductDetail)
-	b.PayMode = tea.StringValue(ins.Item)
-	b.PayModeDetail = tea.StringValue(ins.BillingType)
+	b.PayMode = mapping.PrasePayMode(ins.Item)
+	b.PayModeDetail = tea.StringValue(ins.Item) + "_" + tea.StringValue(ins.BillingType)
 	b.InstanceId = tea.StringValue(ins.InstanceID)
 	b.InstanceName = tea.StringValue(ins.NickName)
 	b.PublicIp = tea.StringValue(ins.InternetIP)

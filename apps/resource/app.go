@@ -29,16 +29,16 @@ func NewSearchRequest() *SearchRequest {
 func NewSearchRequestFromHTTP(r *http.Request) (*SearchRequest, error) {
 	qs := r.URL.Query()
 	req := &SearchRequest{
-		Page:        request.NewPageRequestFromHTTP(r),
-		Keywords:    qs.Get("keywords"),
-		ExactMatch:  qs.Get("exact_match") == "true",
-		Domain:      qs.Get("domain"),
-		Namespace:   qs.Get("namespace"),
-		Env:         qs.Get("env"),
-		Status:      qs.Get("status"),
-		SyncAccount: qs.Get("sync_account"),
-		WithTags:    qs.Get("with_tags") == "true",
-		Tags:        []*TagSelector{},
+		Page:       request.NewPageRequestFromHTTP(r),
+		Keywords:   qs.Get("keywords"),
+		ExactMatch: qs.Get("exact_match") == "true",
+		Domain:     qs.Get("domain"),
+		Namespace:  qs.Get("namespace"),
+		Env:        qs.Get("env"),
+		Status:     qs.Get("status"),
+		Owner:      qs.Get("owner"),
+		WithTags:   qs.Get("with_tags") == "true",
+		Tags:       []*TagSelector{},
 	}
 
 	umStr := qs.Get("usage_mode")

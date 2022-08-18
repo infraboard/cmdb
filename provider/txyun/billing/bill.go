@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/alibabacloud-go/tea/tea"
 	billing "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/billing/v20180709"
 
 	"github.com/infraboard/cmdb/apps/bill"
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
+	"github.com/infraboard/cmdb/provider/txyun/mapping"
 	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/pager"
 )
@@ -50,7 +52,7 @@ func (o *BillOperator) transferOne(ins *billing.BillResourceSummary) *bill.Bill 
 	b.OwnerId = utils.PtrStrV(ins.OwnerUin)
 	b.ProductCode = utils.PtrStrV(ins.ProductCode)
 	b.ProductType = utils.PtrStrV(ins.ProductCodeName)
-	b.PayMode = utils.PtrStrV(ins.PayModeName)
+	b.PayMode = mapping.PrasePayMode(tea.StringValue(ins.PayModeName))
 	b.PayModeDetail = utils.PtrStrV(ins.ActionTypeName)
 	b.OrderId = utils.PtrStrV(ins.OrderId)
 	b.InstanceId = utils.PtrStrV(ins.ResourceId)

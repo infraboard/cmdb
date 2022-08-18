@@ -180,7 +180,7 @@ CREATE TABLE IF NOT EXISTS `resource` (
   `status` varchar(255) NOT NULL COMMENT '服务商中的状态',
   `update_at` bigint(13) DEFAULT NULL COMMENT '更新时间',
   `sync_at` bigint(13) DEFAULT NULL COMMENT '同步时间',
-  `sync_accout` varchar(255) DEFAULT NULL COMMENT '同步账号',
+  `owner` varchar(255) DEFAULT NULL COMMENT '资源所属账号',
   `public_ip` varchar(64) DEFAULT NULL COMMENT '公网IP',
   `private_ip` varchar(64) DEFAULT NULL COMMENT '内网IP',
   `pay_type` varchar(255) DEFAULT NULL COMMENT '实例付费方式',

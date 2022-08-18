@@ -8,6 +8,7 @@ import (
 	"github.com/infraboard/cmdb/apps/eip"
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
+	"github.com/infraboard/cmdb/provider/aliyun/mapping"
 	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/pager"
 )
@@ -61,8 +62,8 @@ func (o *EcsOperator) transferEip(ins *ecs.DescribeEipAddressesResponseBodyEipAd
 	h.Information.Type = tea.StringValue(ins.InstanceType)
 	h.Information.Status = praseEcsStatus(ins.Status)
 	h.Information.PublicIp = []string{tea.StringValue(ins.IpAddress)}
-	h.Information.PayType = tea.StringValue(ins.ChargeType)
-	h.Information.SyncAccount = o.GetAccountId()
+	h.Information.PayMode = mapping.PrasePayMode(ins.ChargeType)
+	h.Information.Owner = o.GetAccountId()
 
 	h.Describe.BandWidth, _ = strconv.ParseInt(tea.StringValue(ins.Bandwidth), 10, 64)
 	h.Describe.InstanceId = tea.StringValue(ins.InstanceId)

@@ -99,6 +99,51 @@ func (t *TYPE) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// ParsePayModeFromString Parse PayMode from string
+func ParsePayModeFromString(str string) (PayMode, error) {
+	key := strings.Trim(string(str), `"`)
+	v, ok := PayMode_value[strings.ToUpper(key)]
+	if !ok {
+		return 0, fmt.Errorf("unknown PayMode: %s", str)
+	}
+
+	return PayMode(v), nil
+}
+
+// Equal type compare
+func (t PayMode) Equal(target PayMode) bool {
+	return t == target
+}
+
+// IsIn todo
+func (t PayMode) IsIn(targets ...PayMode) bool {
+	for _, target := range targets {
+		if t.Equal(target) {
+			return true
+		}
+	}
+
+	return false
+}
+
+// MarshalJSON todo
+func (t PayMode) MarshalJSON() ([]byte, error) {
+	b := bytes.NewBufferString(`"`)
+	b.WriteString(strings.ToUpper(t.String()))
+	b.WriteString(`"`)
+	return b.Bytes(), nil
+}
+
+// UnmarshalJSON todo
+func (t *PayMode) UnmarshalJSON(b []byte) error {
+	ins, err := ParsePayModeFromString(string(b))
+	if err != nil {
+		return err
+	}
+	*t = ins
+	return nil
+}
+
 // ParseUsageModeFromString Parse UsageMode from string
 func ParseUsageModeFromString(str string) (UsageMode, error) {
 	key := strings.Trim(string(str), `"`)

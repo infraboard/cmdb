@@ -8,6 +8,7 @@ import (
 	"github.com/infraboard/cmdb/apps/disk"
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
+	"github.com/infraboard/cmdb/provider/aliyun/mapping"
 	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/pager"
@@ -83,8 +84,8 @@ func (o *EcsOperator) transferDisk(ins *ecs.DescribeDisksResponseBodyDisksDisk) 
 	h.Information.Description = tea.StringValue(ins.Description)
 	h.Information.Status = praseDiskStatus(ins.Status)
 	h.Information.Tags = o.transferDiskTags(ins.Tags)
-	h.Information.PayType = tea.StringValue(ins.DiskChargeType)
-	h.Information.SyncAccount = o.GetAccountId()
+	h.Information.PayMode = mapping.PrasePayMode(ins.DiskChargeType)
+	h.Information.Owner = o.GetAccountId()
 
 	h.Describe.InstanceId = tea.StringValue(ins.InstanceId)
 	h.Describe.Size = uint64(tea.Int32Value(ins.Size))

@@ -9,6 +9,7 @@ import (
 	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
+	"github.com/infraboard/cmdb/provider/aliyun/mapping"
 	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/pager"
@@ -86,8 +87,8 @@ func (o *EcsOperator) transferInstance(ins *ecs.DescribeInstancesResponseBodyIns
 	h.Information.Tags = o.transferTags(ins.Tags)
 	h.Information.PublicIp = tea.StringSliceValue(ins.PublicIpAddress.IpAddress)
 	h.Information.PrivateIp = o.parsePrivateIp(ins)
-	h.Information.PayType = tea.StringValue(ins.InstanceChargeType)
-	h.Information.SyncAccount = o.GetAccountId()
+	h.Information.PayMode = mapping.PrasePayMode(ins.InstanceChargeType)
+	h.Information.Owner = o.GetAccountId()
 
 	h.Describe.Cpu = int64(tea.Int32Value(ins.Cpu))
 	h.Describe.Memory = int64(tea.Int32Value(ins.Memory))

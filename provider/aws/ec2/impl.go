@@ -52,7 +52,7 @@ func (o *Ec2operator) transferOne(ins types.Instance) *host.Host {
 	h.Information.Tags = ParseTag(ins.Tags)
 	h.Information.PublicIp = []string{*ins.PublicIpAddress}
 	h.Information.PrivateIp = []string{*ins.PrivateIpAddress}
-	h.Information.PayType = string(ins.Placement.Tenancy)
+	// h.Information.PayType = string(ins.Placement.Tenancy)
 	h.Describe.Cpu = int64((*ins.CpuOptions.ThreadsPerCore) * (*ins.CpuOptions.CoreCount))
 	h.Describe.OsName = *ins.PlatformDetails
 	h.Describe.ImageId = *ins.ImageId

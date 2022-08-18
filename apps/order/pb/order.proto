@@ -50,7 +50,7 @@ message Order {
     string task_id = 1;
     // 厂商
     // @gotags: json:"vendor"
-    infraboard.cmdb.resource.VENDOR vendor = 2;
+    resource.VENDOR vendor = 2;
     // 大订单号
     // @gotags: json:"big_order_id"
     string big_order_id = 3;
@@ -77,7 +77,7 @@ message Order {
     string create_by = 10;
     // 计费方式，比如：月95，日均峰值
     // @gotags: json:"pay_mode"
-    string pay_mode = 11;
+    resource.PayMode pay_mode = 11;
     // 定义费用
     // @gotags: json:"cost"
     Cost cost = 12;

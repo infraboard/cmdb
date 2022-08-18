@@ -7,6 +7,7 @@ import (
 	"github.com/infraboard/cmdb/apps/lb"
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
+	"github.com/infraboard/cmdb/provider/txyun/mapping"
 	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/pager"
@@ -74,7 +75,7 @@ func (o *CLBOperator) transferLB(ins *clb.LoadBalancer) *lb.LoadBalancer {
 	info.Name = tea.StringValue(ins.LoadBalancerName)
 	info.Type = tea.StringValue(ins.LoadBalancerType)
 	info.ExpireAt = utils.ParseTime("2006-01-02 15:04:05", utils.PtrStrV(ins.ExpireTime))
-	info.PayType = tea.StringValue(ins.ChargeType)
+	info.PayMode = mapping.PrasePayMode(tea.StringValue(ins.ChargeType))
 	info.PrivateIp = tea.StringSliceValue(ins.LoadBalancerVips)
 	info.Status = praseClbStatus(ins.Status)
 

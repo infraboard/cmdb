@@ -28,7 +28,19 @@ enum TYPE {
     LB = 5;
     DOMAIN = 6;
     EIP = 7;
-    BILL = 99;
+    BILL = 100;
+    ORDER = 101;
+}
+
+enum PayMode {
+    // 预付费, 包年包月
+    PRE_PAY = 0;
+    // 按需
+    POST_PAY = 1;
+    // 预定
+    RESERVED_PAY = 2;
+    // 没有标识
+    NULL = 9;
 }
 
 // 使用方式
@@ -172,9 +184,9 @@ message Information {
     // 更新时间
     // @gotags: json:"update_at"
     int64 update_at = 8;
-    // 同步的账号
-    // @gotags: json:"sync_account"
-    string sync_account = 9;
+    // 资源所属账号
+    // @gotags: json:"owner"
+    string owner = 9;
     // 公网IP, 或者域名
     // @gotags: json:"public_ip"
     repeated string public_ip = 10;
@@ -182,8 +194,11 @@ message Information {
     // @gotags: json:"private_ip"
     repeated string private_ip = 11;
     // 实例付费方式
-    // @gotags: json:"pay_type"
-    string pay_type = 12;
+    // @gotags: json:"pay_mode"
+    PayMode pay_mode = 12;
+    // 付费方式详情
+    // @gotags: json:"pay_mode_detail"
+    string pay_mode_detail = 13;
 }
 
 enum TAG_TYPE {
@@ -272,9 +287,9 @@ message SearchRequest {
     // 厂商
     // @gotags: json:"vendor"
     optional VENDOR vendor = 6;
-    // 同步的账号
-    // @gotags: json:"sync_account"
-    string sync_account = 7;
+    // 资源所属账号
+    // @gotags: json:"owner"
+    string owner = 7;
     // 资源类型
     // @gotags: json:"type"
     optional TYPE type = 8;

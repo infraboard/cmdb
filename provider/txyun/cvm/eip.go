@@ -7,6 +7,7 @@ import (
 	"github.com/infraboard/cmdb/apps/eip"
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
+	"github.com/infraboard/cmdb/provider/txyun/mapping"
 	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/pager"
 	vpc "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/vpc/v20170312"
@@ -49,10 +50,11 @@ func (o *CVMOperator) transferEip(ins *vpc.Address) *eip.EIP {
 	h.Information.Type = utils.PtrStrV(ins.AddressType)
 	h.Information.Name = utils.PtrStrV(ins.AddressName)
 	h.Information.Status = praseDiskStatus(ins.AddressStatus)
-	h.Information.PayType = utils.PtrStrV(ins.InternetChargeType)
+	h.Information.PayMode = mapping.PrasePayMode(utils.PtrStrV(ins.InternetChargeType))
+	h.Information.PayModeDetail = tea.StringValue(ins.InternetChargeType)
 	h.Information.PublicIp = []string{tea.StringValue(ins.AddressIp)}
 	h.Information.PrivateIp = []string{tea.StringValue(ins.PrivateAddressIp)}
-	h.Information.SyncAccount = o.GetAccountId()
+	h.Information.Owner = o.GetAccountId()
 
 	desc := h.Describe
 	desc.BandWidth = int64(tea.Uint64Value(ins.Bandwidth))

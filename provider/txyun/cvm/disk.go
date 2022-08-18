@@ -7,6 +7,7 @@ import (
 	"github.com/infraboard/cmdb/apps/disk"
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
+	"github.com/infraboard/cmdb/provider/txyun/mapping"
 	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/pager"
@@ -74,8 +75,8 @@ func (o *CVMOperator) transferDisk(ins *cbs.Disk) *disk.Disk {
 	h.Information.Type = utils.PtrStrV(ins.DiskType)
 	h.Information.Name = utils.PtrStrV(ins.DiskName)
 	h.Information.Status = praseDiskStatus(ins.DiskState)
-	h.Information.PayType = utils.PtrStrV(ins.DiskChargeType)
-	h.Information.SyncAccount = o.GetAccountId()
+	h.Information.PayMode = mapping.PrasePayMode(tea.StringValue(ins.DiskChargeType))
+	h.Information.Owner = o.GetAccountId()
 
 	desc := h.Describe
 	desc.Type = tea.StringValue(ins.DiskUsage)

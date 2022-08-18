@@ -71,7 +71,7 @@ func (o *RedisOperator) transferOne(ins *redis.InstanceSet) *cmdbRedis.Redis {
 	info.Type = o.ParseType(ins.Type)
 	info.Name = tea.StringValue(ins.InstanceName)
 	info.Status = praseStatus(ins.Status)
-	info.PayType = o.ParseBillMode(ins.BillingMode)
+	info.PayMode = o.parsePayMode(ins.BillingMode)
 	info.PrivateIp = []string{tea.StringValue(ins.WanIp)}
 
 	desc := r.Describe

@@ -20,8 +20,8 @@ func SaveResource(ctx context.Context, tx *sql.Tx, base *resource.Base, info *re
 	// 保存资源数据
 	_, err = stmt.ExecContext(ctx,
 		base.Id, base.ResourceType, base.Vendor, base.Region, base.Zone, base.CreateAt, info.ExpireAt, info.Category, info.Type,
-		info.Name, info.Description, info.Status, info.UpdateAt, base.SyncAt, info.SyncAccount, info.PublicIPToString(),
-		info.PrivateIPToString(), info.PayType, base.DescribeHash, base.ResourceHash, base.CredentialId,
+		info.Name, info.Description, info.Status, info.UpdateAt, base.SyncAt, info.Owner, info.PublicIPToString(),
+		info.PrivateIPToString(), info.PayMode, base.DescribeHash, base.ResourceHash, base.CredentialId,
 		base.Domain, base.Namespace, base.Env, base.UsageMode,
 	)
 	if err != nil {
@@ -45,8 +45,8 @@ func UpdateResource(ctx context.Context, tx *sql.Tx, base *resource.Base, info *
 
 	_, err = stmt.ExecContext(ctx,
 		info.ExpireAt, info.Category, info.Type, info.Name, info.Description,
-		info.Status, info.UpdateAt, base.SyncAt, info.SyncAccount,
-		info.PublicIPToString(), info.PrivateIPToString(), info.PayType, base.DescribeHash, base.ResourceHash,
+		info.Status, info.UpdateAt, base.SyncAt, info.Owner,
+		info.PublicIPToString(), info.PrivateIPToString(), info.PayMode, base.DescribeHash, base.ResourceHash,
 		base.CredentialId, base.Namespace, base.Env, base.UsageMode,
 		base.Id,
 	)

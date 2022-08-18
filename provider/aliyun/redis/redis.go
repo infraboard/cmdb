@@ -2,32 +2,33 @@ package redis
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	redis "github.com/alibabacloud-go/r-kvstore-20150101/v2/client"
 	"github.com/alibabacloud-go/tea/tea"
 	cmdbRedis "github.com/infraboard/cmdb/apps/redis"
 	"github.com/infraboard/cmdb/apps/resource"
-	"github.com/infraboard/mcube/exception"
+	"github.com/infraboard/cmdb/provider/aliyun/mapping"
 	"github.com/infraboard/mcube/pager"
 
 	"github.com/infraboard/cmdb/provider"
 )
 
-func (o *RedisOperator) DescribeRedis(ctx context.Context, req *provider.DescribeRequest) (
-	*cmdbRedis.Redis, error) {
-	descReq := &redis.DescribeInstanceAttributeRequest{
-		InstanceId: &req.Id,
+func (o *RedisOperator) DescribeRedis(ctx context.Context, r *provider.DescribeRequest) (*cmdbRedis.Redis, error) {
+	req := &redis.DescribeInstancesRequest{
+		RegionId:    o.client.RegionId,
+		InstanceIds: tea.String(r.Id),
+		PageSize:    tea.Int32(1),
 	}
 
-	detail, err := o.client.DescribeInstanceAttribute(descReq)
+	set, err := o.query(req)
 	if err != nil {
 		return nil, err
 	}
 
-	set := o.transferAttrSet(detail.Body.Instances)
 	if set.Length() == 0 {
-		return nil, exception.NewNotFound("ins %s not found", req.Id)
+		return nil, fmt.Errorf("redis %s not found", r.Id)
 	}
 
 	return set.Items[0], nil
@@ -77,7 +78,7 @@ func (o *RedisOperator) transferOne(ins *redis.DescribeInstancesResponseBodyInst
 	info.Type = tea.StringValue(ins.EditionType)
 	info.Category = tea.StringValue(ins.ArchitectureType)
 	info.Status = praseStatus(ins.InstanceStatus)
-	info.PayType = tea.StringValue(ins.ChargeType)
+	info.PayMode = mapping.PrasePayMode(ins.ChargeType)
 	info.PrivateIp = []string{tea.StringValue(ins.PrivateIp)}
 
 	desc := r.Describe
@@ -106,25 +107,4 @@ func (o *RedisOperator) parseTime(t string) int64 {
 	}
 
 	return ts.UnixNano() / 1000000
-}
-
-func (o *RedisOperator) transferAttrSet(items *redis.DescribeInstanceAttributeResponseBodyInstances) *cmdbRedis.Set {
-	set := cmdbRedis.NewSet()
-	for i := range items.DBInstanceAttribute {
-		set.Add(o.transferAttrOne(items.DBInstanceAttribute[i]))
-	}
-	return set
-}
-
-func (o *RedisOperator) transferAttrOne(ins *redis.DescribeInstanceAttributeResponseBodyInstancesDBInstanceAttribute) *cmdbRedis.Redis {
-	r := cmdbRedis.NewDefaultRedis()
-
-	b := r.Base
-	b.Vendor = resource.VENDOR_ALIYUN
-	b.Region = tea.StringValue(ins.RegionId)
-	b.Zone = tea.StringValue(ins.ZoneId)
-	b.CreateAt = o.parseTime(tea.StringValue(ins.CreateTime))
-	b.Id = tea.StringValue(ins.InstanceId)
-
-	return r
 }

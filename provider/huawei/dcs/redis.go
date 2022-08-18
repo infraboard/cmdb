@@ -10,6 +10,7 @@ import (
 	"github.com/infraboard/cmdb/apps/redis"
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
+	"github.com/infraboard/cmdb/provider/huawei/mapping"
 	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/pager"
 )
@@ -77,7 +78,7 @@ func (o *DcsOperator) transferOne(ins model.InstanceListInfo) *redis.Redis {
 	info := r.Information
 	info.Name = tea.StringValue(ins.Name)
 	info.Category = tea.StringValue(ins.SpecCode)
-	info.PayType = o.parseChargeMod(ins.ChargingMode)
+	info.PayMode = mapping.PrasePayMode(ins.ChargingMode)
 	info.Status = praseStatus(ins.Status)
 
 	d := r.Describe

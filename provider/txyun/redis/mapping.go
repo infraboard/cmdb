@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/infraboard/cmdb/apps/redis"
+	"github.com/infraboard/cmdb/apps/resource"
 )
 
 // + 0-待初始化
@@ -55,19 +56,21 @@ func (o *RedisOperator) ParseType(t *int64) string {
 	return typeMap[*t]
 }
 
-var (
-	billModMap = map[int64]string{
-		0: "按量计费",
-		1: "包年包月",
-	}
-)
-
-func (o *RedisOperator) ParseBillMode(t *int64) string {
+func (o *RedisOperator) parsePayMode(t *int64) resource.PayMode {
 	if t == nil {
-		return ""
+		return resource.PayMode_NULL
 	}
 
-	return billModMap[*t]
+	switch *t {
+	case 0:
+		return resource.PayMode_POST_PAY
+	case 1:
+		return resource.PayMode_PRE_PAY
+	default:
+
+	}
+
+	return resource.PayMode_NULL
 }
 
 func (o *RedisOperator) parseTime(t string) int64 {

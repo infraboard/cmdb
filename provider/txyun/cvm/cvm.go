@@ -7,6 +7,7 @@ import (
 	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
+	"github.com/infraboard/cmdb/provider/txyun/mapping"
 	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/pager"
@@ -70,8 +71,8 @@ func (o *CVMOperator) transferOne(ins *cvm.Instance) *host.Host {
 	h.Information.Tags = transferTags(ins.Tags)
 	h.Information.PublicIp = utils.SlicePtrStrv(ins.PublicIpAddresses)
 	h.Information.PrivateIp = utils.SlicePtrStrv(ins.PrivateIpAddresses)
-	h.Information.PayType = utils.PtrStrV(ins.InstanceChargeType)
-	h.Information.SyncAccount = o.GetAccountId()
+	h.Information.PayMode = mapping.PrasePayMode(tea.StringValue(ins.InstanceChargeType))
+	h.Information.Owner = o.GetAccountId()
 
 	h.Describe.Cpu = utils.PtrInt64(ins.CPU)
 	h.Describe.Memory = utils.PtrInt64(ins.Memory)

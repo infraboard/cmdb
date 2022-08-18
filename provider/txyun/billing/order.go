@@ -8,6 +8,7 @@ import (
 	"github.com/infraboard/cmdb/apps/order"
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
+	"github.com/infraboard/cmdb/provider/aliyun/mapping"
 	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/pager"
 	billing "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/billing/v20180709"
@@ -51,7 +52,7 @@ func (o *BillOperator) transferOrder(ins *billing.Deal) *order.Order {
 	b.Payer = tea.StringValue(ins.Payer)
 	b.CreateAt = utils.ParseSecondMod1Time(tea.StringValue(ins.CreateTime))
 	b.CreateBy = tea.StringValue(ins.Creator)
-	b.PayMode = tea.StringValue(ins.PayMode)
+	b.PayMode = mapping.PrasePayMode(ins.PayMode)
 	b.ProductCode = tea.StringValue(ins.ProductCode)
 	b.ProductName = tea.StringValue(ins.ProductName)
 	b.SubProductCode = tea.StringValue(ins.SubProductCode)

@@ -226,11 +226,11 @@ func (c *AliCloudClient) Account() (string, error) {
 	args := sts.CreateGetCallerIdentityRequest()
 
 	stsClient, err := sts.NewClientWithAccessKey(c.Region, c.AccessKey, c.AccessSecret)
-	stsClient.GetConfig().WithScheme("HTTPS")
-
 	if err != nil {
 		return "", fmt.Errorf("unable to initialize the STS client: %#v", err)
 	}
+
+	stsClient.GetConfig().WithScheme("HTTPS")
 	stsClient.AppendUserAgent("Infraboard", "1.0")
 	identity, err := stsClient.GetCallerIdentity(args)
 	if err != nil {

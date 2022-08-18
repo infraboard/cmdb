@@ -74,8 +74,8 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 		err := rows.Scan(
 			&base.Id, &base.ResourceType, &base.Vendor, &base.Region, &base.Zone, &base.CreateAt, &info.ExpireAt,
 			&info.Category, &info.Type, &info.Name, &info.Description,
-			&info.Status, &info.UpdateAt, &base.SyncAt, &info.SyncAccount,
-			&publicIPList, &privateIPList, &info.PayType, &base.DescribeHash, &base.ResourceHash,
+			&info.Status, &info.UpdateAt, &base.SyncAt, &info.Owner,
+			&publicIPList, &privateIPList, &info.PayMode, &base.DescribeHash, &base.ResourceHash,
 			&base.CredentialId, &base.Domain, &base.Namespace, &base.Env, &base.UsageMode,
 		)
 		if err != nil {
@@ -134,8 +134,8 @@ func (s *service) buildQuery(query *sqlbuilder.Builder, req *resource.SearchRequ
 	if req.Vendor != nil {
 		query.Where("r.vendor = ?", req.Vendor)
 	}
-	if req.SyncAccount != "" {
-		query.Where("r.sync_accout = ?", req.SyncAccount)
+	if req.Owner != "" {
+		query.Where("r.owner = ?", req.Owner)
 	}
 	if req.Type != nil {
 		query.Where("r.resource_type = ?", req.Type)

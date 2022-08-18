@@ -46,7 +46,7 @@ func (r *Resource) PrometheusTarget() (*PrometheusTarget, error) {
 			"domain":      r.Base.Domain,
 			"namespace":   r.Base.Namespace,
 			"env":         r.Base.Env,
-			"accout":      r.Information.SyncAccount,
+			"accout":      r.Information.Owner,
 			"vendor":      r.Base.Vendor.String(),
 			"region":      r.Base.Region,
 			"instance_id": r.Base.Id,

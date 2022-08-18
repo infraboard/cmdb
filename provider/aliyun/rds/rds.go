@@ -12,6 +12,7 @@ import (
 	cmdbRds "github.com/infraboard/cmdb/apps/rds"
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
+	"github.com/infraboard/cmdb/provider/aliyun/mapping"
 	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/pager"
 )
@@ -89,7 +90,7 @@ func (o *RdsOperator) transferOne(ins *rds.DescribeDBInstanceAttributeResponseBo
 	info.Type = tea.StringValue(ins.DBInstanceType)
 	info.Description = tea.StringValue(ins.DBInstanceDescription)
 	info.Status = tea.StringValue(ins.DBInstanceStatus)
-	info.PayType = tea.StringValue(ins.PayType)
+	info.PayMode = mapping.PrasePayMode(ins.PayType)
 	info.Category = tea.StringValue(ins.Category)
 
 	desc := r.Describe

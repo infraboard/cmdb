@@ -83,8 +83,15 @@ func (o *RdsOperator) transferOne(ins model.InstanceResponse) *rds.Rds {
 	i.Status = ins.Status
 	i.Tags = o.transferTags(ins.Tags)
 	i.PrivateIp, i.PublicIp = ins.PrivateIps, ins.PublicIps
-	i.PayType = o.getEnumValue(ins.ChargeInfo.ChargeMode)
 	i.Category = ins.FlavorRef
+
+	cmEnums := model.GetChargeInfoResponseChargeModeEnum()
+	switch ins.ChargeInfo.ChargeMode {
+	case cmEnums.PRE_PAID:
+		i.PayMode = resource.PayMode_PRE_PAY
+	case cmEnums.POST_PAID:
+		i.PayMode = resource.PayMode_POST_PAY
+	}
 
 	d := h.Describe
 	cpu, _ := strconv.ParseInt(utils.PtrStrV(ins.Cpu), 10, 32)

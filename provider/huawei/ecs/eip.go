@@ -74,7 +74,7 @@ func (o *EcsOperator) transferEip(ins model.PublicipShowResp) *eip.EIP {
 	info.Type = tea.StringValue(ins.Type)
 	info.PublicIp = []string{tea.StringValue(ins.PublicIpAddress)}
 	info.PrivateIp = []string{tea.StringValue(ins.PrivateIpAddress)}
-	info.SyncAccount = tea.StringValue(ins.Profile.UserId)
+	info.Owner = tea.StringValue(ins.Profile.UserId)
 
 	desc := h.Describe
 	desc.BandWidth = int64(tea.Int32Value(ins.BandwidthSize))
