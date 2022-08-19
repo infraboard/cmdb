@@ -12,7 +12,7 @@ import (
 
 func newMongoPager(operator *Operator) pager.Pager {
 	bp := pager.NewBasePager()
-	//每页记录数，取值：30, 50, 100
+	//每页记录数，阿里仅支持取值：30, 50, 100
 	bp.SetPageSize(50)
 	return &mongoPager{
 		BasePager: bp,

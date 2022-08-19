@@ -28,6 +28,7 @@ func (o *BillOperator) DescribeOrder(ctx context.Context, r *provider.DescribeRe
 	req.StartTime = tea.String(time.Now().Add(-10 * 365 * 25 * time.Hour).Format(utils.TIME_SECOND_FORMAT_MOD1))
 	req.EndTime = tea.String(time.Now().Format(utils.TIME_SECOND_FORMAT_MOD1))
 	req.Limit = tea.Int64(1)
+	req.BigDealId = tea.String(r.Id)
 	set, err := o.QueryOrder(ctx, req)
 	if err != nil {
 		return nil, err

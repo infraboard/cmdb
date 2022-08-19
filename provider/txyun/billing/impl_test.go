@@ -48,7 +48,7 @@ func TestQueryOrder(t *testing.T) {
 }
 
 func TestDescribeOrder(t *testing.T) {
-	req := provider.NewDescribeRequest("xx")
+	req := provider.NewDescribeRequest("xxx")
 	ins, err := operator.DescribeOrder(ctx, req)
 	if err != nil {
 		t.Fatal(err)
