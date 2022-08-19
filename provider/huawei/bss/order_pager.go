@@ -46,8 +46,7 @@ func (p *orderPager) Scan(ctx context.Context, set pager.Set) error {
 }
 
 func (p *orderPager) nextReq() *model.ListCustomerOrdersRequest {
-	// 注意: 华为云的Offse表示的是页码
-	p.req.Offset = utils.Int32Ptr(int32(p.PageNumber()))
+	p.req.Offset = utils.Int32Ptr(int32(p.Offset()))
 	p.req.Limit = utils.Int32Ptr(int32(p.PageSize()))
 	p.log.Debugf("请求第%d页数据, 开始时间: %s, 结束时间: %s", p.PageNumber(),
 		tea.StringValue(p.req.CreateTimeBegin),

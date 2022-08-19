@@ -41,8 +41,6 @@ func (p *rdsPager) Scan(ctx context.Context, set pager.Set) error {
 
 func (p *rdsPager) nextReq() *model.ListInstancesRequest {
 	p.log.Debugf("请求第%d页数据", p.PageNumber())
-
-	// 注意: 华为云的Offse表示的是页码
 	p.req.Offset = utils.Int32Ptr(int32(p.Offset()))
 	p.req.Limit = utils.Int32Ptr(int32(p.PageSize()))
 	return p.req
