@@ -8,13 +8,16 @@ var (
 	// PrePaid：包年包月。
 	// PostPaid：按量付费
 	// 账单:
-	// SubscriptionOrder (预付订单)。
-	// PayAsYouGoBill (后付账单)。
-	// Refund (退款)。
-	// Adjustment (调账)。
+	// 	 SubscriptionOrder (预付订单)。
+	// 	 PayAsYouGoBill (后付账单)。
+	// 	 Refund (退款)。
+	// 	 Adjustment (调账)。
 	// 订单
-	// Subscription：预付费。
-	// PayAsYouGo：按量付费。
+	// 	 Subscription：预付费。
+	// 	 PayAsYouGo：按量付费。
+	// MongoDB:
+	//	 PrePaid：预付费，包年包月。
+	// 	 PostPaid：按量付费。
 	PAY_TYPE_STATUS_MAP = map[string]resource.PayMode{
 		"SubscriptionOrder": resource.PayMode_PRE_PAY,
 		"Subscription":      resource.PayMode_PRE_PAY,

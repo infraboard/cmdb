@@ -7,7 +7,10 @@ import (
 	"github.com/alibabacloud-go/tea/tea"
 
 	"github.com/infraboard/cmdb/apps/mongodb"
+	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
+	"github.com/infraboard/cmdb/provider/aliyun/mapping"
+	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/pager"
 )
 
@@ -38,11 +41,25 @@ func (o *Operator) transferMongoDBSet(items *dds.DescribeDBInstancesResponseBody
 	for i := range items.DBInstance {
 		set.Add(o.transferMongoDB(items.DBInstance[i]))
 	}
-
 	return set
 }
 
 func (o *Operator) transferMongoDB(ins *dds.DescribeDBInstancesResponseBodyDBInstancesDBInstance) *mongodb.MongoDB {
 	r := mongodb.NewDefaultMongoDB()
+	b := r.Base
+	b.Vendor = resource.VENDOR_ALIYUN
+	b.Region = tea.StringValue(ins.RegionId)
+	b.Zone = tea.StringValue(ins.ZoneId)
+	b.CreateAt = utils.ParseDefaultSecondTime(tea.StringValue(ins.CreationTime))
+	b.Id = tea.StringValue(ins.DBInstanceId)
+
+	info := r.Information
+	info.ExpireAt = utils.ParseDefaultMiniteTime(tea.StringValue(ins.ExpireTime))
+	info.Name = tea.StringValue(ins.DBInstanceDescription)
+	info.Type = tea.StringValue(ins.DBInstanceClass)
+	info.Category = tea.StringValue(ins.KindCode)
+	info.Status = tea.StringValue(ins.DBInstanceStatus)
+	info.PayMode = mapping.PrasePayMode(ins.ChargeType)
+
 	return r
 }
