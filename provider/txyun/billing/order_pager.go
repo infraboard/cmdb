@@ -36,7 +36,7 @@ type orderPager struct {
 }
 
 func (p *orderPager) Scan(ctx context.Context, set pager.Set) error {
-	resp, err := p.operator.doQueryOrder(ctx, p.nextReq())
+	resp, err := p.operator.QueryOrder(ctx, p.nextReq())
 	if err != nil {
 		return err
 	}

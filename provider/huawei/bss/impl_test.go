@@ -23,7 +23,7 @@ func TestQueryBill(t *testing.T) {
 	req := provider.NewQueryBillRequest()
 	req.Month = "2022-04"
 
-	pager := operator.QueryBill(req)
+	pager := operator.PageQueryBill(req)
 	for pager.Next() {
 		set := bill.NewBillSet()
 		if err := pager.Scan(context.Background(), set); err != nil {
@@ -36,7 +36,7 @@ func TestQueryBill(t *testing.T) {
 func TestQueryOrder(t *testing.T) {
 	req := provider.NewQueryOrderRequest()
 	req.StartTime = time.Now().Add(-12 * time.Hour)
-	pager := operator.QueryOrder(req)
+	pager := operator.PageQueryOrder(req)
 	for pager.Next() {
 		set := order.NewOrderSet()
 		if err := pager.Scan(context.Background(), set); err != nil {

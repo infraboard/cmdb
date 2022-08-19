@@ -6,6 +6,7 @@ import (
 	"github.com/infraboard/cmdb/provider/aliyun/bss"
 	"github.com/infraboard/cmdb/provider/aliyun/cms"
 	"github.com/infraboard/cmdb/provider/aliyun/connectivity"
+	"github.com/infraboard/cmdb/provider/aliyun/dds"
 	"github.com/infraboard/cmdb/provider/aliyun/dns"
 	"github.com/infraboard/cmdb/provider/aliyun/ecs"
 	"github.com/infraboard/cmdb/provider/aliyun/oss"
@@ -90,6 +91,14 @@ func (o *Operator) RdsOperator() provider.RdsOperator {
 		panic(err)
 	}
 	return rds.NewRdsOperator(c)
+}
+
+func (o *Operator) MongoOperator() provider.MongoOperator {
+	c, err := o.client.MongoDBClient()
+	if err != nil {
+		panic(err)
+	}
+	return dds.NewOperator(c)
 }
 
 func (o *Operator) RedisOperator() provider.RedisOperator {

@@ -3,18 +3,44 @@ package billing
 import (
 	"context"
 	"encoding/json"
+	"fmt"
+	"time"
 
 	"github.com/alibabacloud-go/tea/tea"
 	"github.com/infraboard/cmdb/apps/order"
+	"github.com/infraboard/mcube/exception"
+	"github.com/infraboard/mcube/pager"
+	billing "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/billing/v20180709"
+
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/cmdb/provider/aliyun/mapping"
 	"github.com/infraboard/cmdb/utils"
-	"github.com/infraboard/mcube/pager"
-	billing "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/billing/v20180709"
 )
 
-func (o *BillOperator) QueryOrder(req *provider.QueryOrderRequest) pager.Pager {
+// 默认查询最近10年内订单
+func (o *BillOperator) DescribeOrder(ctx context.Context, r *provider.DescribeRequest) (*order.Order, error) {
+	if err := r.Validate(); err != nil {
+		return nil, exception.NewBadRequest(err.Error())
+	}
+
+	req := billing.NewDescribeDealsByCondRequest()
+	req.StartTime = tea.String(time.Now().Add(-10 * 365 * 25 * time.Hour).Format(utils.TIME_SECOND_FORMAT_MOD1))
+	req.EndTime = tea.String(time.Now().Format(utils.TIME_SECOND_FORMAT_MOD1))
+	req.Limit = tea.Int64(1)
+	set, err := o.QueryOrder(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	if set.Length() == 0 {
+		return nil, exception.NewNotFound("order %s not found", r.Id)
+	}
+
+	return set.Items[0], nil
+}
+
+func (o *BillOperator) PageQueryOrder(req *provider.QueryOrderRequest) pager.Pager {
 	p := newOrderPager(o, req)
 	p.SetRate(req.Rate)
 	return p
@@ -22,11 +48,13 @@ func (o *BillOperator) QueryOrder(req *provider.QueryOrderRequest) pager.Pager {
 
 // 查询订单数据
 // 参考: https://console.cloud.tencent.com/api/explorer?Product=billing&Version=2018-07-09&Action=DescribeDealsByCond&SignVersion=
-func (o *BillOperator) doQueryOrder(ctx context.Context, req *billing.DescribeDealsByCondRequest) (*order.OrderSet, error) {
+func (o *BillOperator) QueryOrder(ctx context.Context, req *billing.DescribeDealsByCondRequest) (*order.OrderSet, error) {
 	resp, err := o.client.DescribeDealsByCondWithContext(ctx, req)
 	if err != nil {
 		return nil, err
 	}
+
+	fmt.Println(resp.ToJsonString())
 
 	set := o.transferOrderSet(resp.Response.Deals)
 	set.Total = utils.PtrInt64(resp.Response.TotalCount)

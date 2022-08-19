@@ -37,7 +37,7 @@ func (s *service) syncBill(ctx context.Context, credentialIns *credential.Secret
 			t.Failed(err.Error())
 			return
 		}
-		pager = op.BillOperator().QueryBill(req)
+		pager = op.BillOperator().PageQueryBill(req)
 	case resource.VENDOR_TENCENT:
 		s.log.Debugf("sync txyun bill ...")
 		op, err := txyun.NewOperator(credential.ApiKey, credential.ApiSecret, t.Data.Region)
@@ -45,7 +45,7 @@ func (s *service) syncBill(ctx context.Context, credentialIns *credential.Secret
 			t.Failed(err.Error())
 			return
 		}
-		pager = op.BillOperator().QueryBill(req)
+		pager = op.BillOperator().PageQueryBill(req)
 	case resource.VENDOR_HUAWEI:
 		s.log.Debugf("sync hwyun bill ...")
 		op, err := huawei.NewOperator(credential.ApiKey, credential.ApiSecret, t.Data.Region)
@@ -53,7 +53,7 @@ func (s *service) syncBill(ctx context.Context, credentialIns *credential.Secret
 			t.Failed(err.Error())
 			return
 		}
-		pager = op.BillOperator().QueryBill(req)
+		pager = op.BillOperator().PageQueryBill(req)
 	default:
 		t.Failed(fmt.Sprintf("unsuport bill syncing vendor %s", credential.Vendor))
 		return

@@ -1,6 +1,7 @@
 package bss
 
 import (
+	"context"
 	"encoding/json"
 	"strconv"
 	"sync"
@@ -15,7 +16,12 @@ import (
 	"github.com/infraboard/mcube/pager"
 )
 
-func (o *BssOperator) QueryOrder(req *provider.QueryOrderRequest) pager.Pager {
+func (o *BssOperator) DescribeOrder(ctx context.Context, r *provider.DescribeRequest) (
+	*order.Order, error) {
+	return nil, nil
+}
+
+func (o *BssOperator) PageQueryOrder(req *provider.QueryOrderRequest) pager.Pager {
 	p := newOrderPager(o, req)
 	p.SetRate(req.Rate)
 	return p

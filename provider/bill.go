@@ -5,13 +5,15 @@ import (
 	"time"
 
 	"github.com/infraboard/cmdb/apps/bill"
+	"github.com/infraboard/cmdb/apps/order"
 	"github.com/infraboard/mcube/pager"
 )
 
 type BillOperator interface {
-	QueryBill(*QueryBillRequest) pager.Pager
+	PageQueryBill(*QueryBillRequest) pager.Pager
 	QuerySummary(context.Context, *QueryBillSummaryRequeset) (*bill.SummaryRecordSet, error)
-	QueryOrder(*QueryOrderRequest) pager.Pager
+	PageQueryOrder(*QueryOrderRequest) pager.Pager
+	DescribeOrder(context.Context, *DescribeRequest) (*order.Order, error)
 }
 
 func NewQueryBillRequest() *QueryBillRequest {

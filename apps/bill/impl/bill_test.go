@@ -28,7 +28,7 @@ func TestSyncBill(t *testing.T) {
 	req := provider.NewQueryBillRequest()
 	req.Month = "2022-05"
 
-	pager := operator.QueryBill(req)
+	pager := operator.PageQueryBill(req)
 
 	ctx := context.Background()
 	for pager.Next() {

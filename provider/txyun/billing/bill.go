@@ -16,7 +16,7 @@ import (
 	"github.com/infraboard/mcube/pager"
 )
 
-func (o *BillOperator) QueryBill(req *provider.QueryBillRequest) pager.Pager {
+func (o *BillOperator) PageQueryBill(req *provider.QueryBillRequest) pager.Pager {
 	p := newPager(o, req.Month)
 	p.SetRate(req.Rate)
 	return p
