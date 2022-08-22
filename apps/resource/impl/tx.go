@@ -50,6 +50,7 @@ func UpdateResource(ctx context.Context, tx *sql.Tx, base *resource.Base, info *
 		base.CredentialId, base.Namespace, base.Env, base.UsageMode,
 		base.Id,
 	)
+
 	if err != nil {
 		return fmt.Errorf("update resource base info error, %s", err)
 	}
