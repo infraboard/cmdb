@@ -29,9 +29,17 @@ func NewQueryBillRequestWithRate(rate int32) *QueryBillRequest {
 }
 
 type QueryBillRequest struct {
-	Rate        float64
-	Month       string
+	Rate float64
+	// 格式为YYYY-MM-DD
+	Date        string
 	ProductCode string
+}
+
+func (req *QueryBillRequest) Month() string {
+	if len(req.Date) > 7 {
+		return req.Date[:7]
+	}
+	return ""
 }
 
 func NewQueryBillSummaryRequeset() *QueryBillSummaryRequeset {

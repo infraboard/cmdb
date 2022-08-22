@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/bss/v2/model"
+	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/cmdb/utils"
 
 	"github.com/infraboard/mcube/logger"
@@ -11,9 +12,9 @@ import (
 	"github.com/infraboard/mcube/pager"
 )
 
-func newPager(operator *BssOperator, month string) pager.Pager {
+func newPager(operator *BssOperator, r *provider.QueryBillRequest) pager.Pager {
 	req := &model.ListCustomerselfResourceRecordsRequest{}
-	req.Cycle = month
+	req.Cycle = r.Month()
 
 	return &bssPager{
 		BasePager: pager.NewBasePager(),

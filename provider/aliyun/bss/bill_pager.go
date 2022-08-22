@@ -13,8 +13,13 @@ import (
 )
 
 func newPager(operator *BssOperator, r *provider.QueryBillRequest) pager.Pager {
-	req := &bssopenapi.DescribeInstanceBillRequest{}
-	req.BillingCycle = tea.String(r.Month)
+	req := &bssopenapi.DescribeInstanceBillRequest{
+		BillingCycle:  tea.String(r.Month()),
+		IsBillingItem: tea.Bool(false),
+		BillingDate:   tea.String(r.Date),
+		Granularity:   tea.String("DAILY"),
+	}
+
 	if r.ProductCode != "" {
 		req.ProductCode = tea.String(r.ProductCode)
 	}

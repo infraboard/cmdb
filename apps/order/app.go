@@ -1,5 +1,7 @@
 package order
 
+import "github.com/alibabacloud-go/tea/tea"
+
 const (
 	AppName = "order"
 )
@@ -42,4 +44,8 @@ func (s *OrderSet) GetOrderById(orderId string) *Order {
 
 func (s *OrderSet) Length() int64 {
 	return int64(len(s.Items))
+}
+
+func (o *Order) ToJsonString() string {
+	return tea.Prettify(o)
 }

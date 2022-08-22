@@ -22,7 +22,7 @@ var (
 
 func TestQueryBill(t *testing.T) {
 	req := provider.NewQueryBillRequest()
-	req.Month = "2022-04"
+	req.Date = "2022-04-01"
 
 	pager := operator.PageQueryBill(req)
 	for pager.Next() {

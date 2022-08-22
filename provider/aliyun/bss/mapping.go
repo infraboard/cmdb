@@ -2,6 +2,7 @@ package bss
 
 import (
 	"github.com/infraboard/cmdb/apps/order"
+	"github.com/infraboard/cmdb/apps/resource"
 )
 
 // New：新购。
@@ -54,4 +55,27 @@ func praseOrderStatus(s *string) string {
 	}
 
 	return *s
+}
+
+var (
+	RESOURCE_TYPE_MAP = map[string]resource.TYPE{
+		"ecs":     resource.TYPE_HOST,
+		"eip":     resource.TYPE_EIP,
+		"yundisk": resource.TYPE_DISK,
+		"rds":     resource.TYPE_RDS,
+		"kvstore": resource.TYPE_REDIS,
+		"redisa":  resource.TYPE_REDIS,
+		"slb":     resource.TYPE_LB,
+	}
+)
+
+func parseResourceType(s *string) resource.TYPE {
+	if s == nil {
+		return resource.TYPE_OTHER
+	}
+	if v, ok := RESOURCE_TYPE_MAP[*s]; ok {
+		return v
+	}
+
+	return resource.TYPE_OTHER
 }

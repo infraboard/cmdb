@@ -27,7 +27,7 @@ func (s *service) syncBill(ctx context.Context, credentialIns *credential.Secret
 
 	credential := credentialIns.Data
 	req := provider.NewQueryBillRequestWithRate(credential.RequestRate)
-	req.Month = t.Data.Params["month"]
+	req.Date = t.Data.Params["date"]
 
 	switch credential.Vendor {
 	case resource.VENDOR_ALIYUN:

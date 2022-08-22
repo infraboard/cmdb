@@ -21,7 +21,7 @@ func (s *service) SyncBill(ctx context.Context, req *bill.Bill) (
 
 	_, err = stmt.ExecContext(ctx,
 		req.Vendor, y, m, req.OwnerId, req.OwnerName, req.ProductType, req.ProductCode, req.ProductDetail,
-		req.PayMode, req.OrderId, req.InstanceId, req.InstanceName, req.PublicIp, req.PrivateIp, req.InstanceConfig,
+		req.PayMode, req.OrderId, req.InstanceId, req.InstanceName, req.Year, req.Day, req.InstanceConfig,
 		req.RegionCode, req.RegionName, req.Cost.SalePrice, req.Cost.SaveCost, req.Cost.RealCost, req.Cost.CreditPay,
 		req.Cost.VoucherPay, req.Cost.CashPay, req.Cost.StoredcardPay, req.Cost.OutstandingAmount, req.TaskId,
 	)

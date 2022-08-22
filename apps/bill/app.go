@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/alibabacloud-go/tea/tea"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -63,6 +64,10 @@ func (b *Bill) YearMonth() (int, int) {
 
 func (b *Bill) ShortDesc() string {
 	return fmt.Sprintf("%s %s", b.InstanceId, b.InstanceName)
+}
+
+func (b *Bill) ToJsonString() string {
+	return tea.Prettify(b)
 }
 
 func NewDeleteBillRequest(taskId string) *DeleteBillRequest {

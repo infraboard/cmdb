@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"strings"
 
 	bssopenapi "github.com/alibabacloud-go/bssopenapi-20171214/v2/client"
 	"github.com/alibabacloud-go/tea/tea"
@@ -13,6 +14,7 @@ import (
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/cmdb/provider/aliyun/mapping"
+	"github.com/infraboard/cmdb/utils"
 )
 
 func (o *BssOperator) PageQueryBill(req *provider.QueryBillRequest) pager.Pager {
@@ -41,8 +43,6 @@ func (o *BssOperator) transferSet(list *bssopenapi.DescribeInstanceBillResponseB
 	items := list.Items
 	for i := range items {
 		ins := o.transferBill(items[i])
-		ins.Vendor = resource.VENDOR_ALIYUN
-		ins.Month = tea.StringValue(list.BillingCycle)
 		set.Add(ins)
 	}
 	return set
@@ -50,6 +50,7 @@ func (o *BssOperator) transferSet(list *bssopenapi.DescribeInstanceBillResponseB
 
 func (o *BssOperator) transferBill(ins *bssopenapi.DescribeInstanceBillResponseBodyDataItems) *bill.Bill {
 	b := bill.NewDefaultBill()
+	b.Vendor = resource.VENDOR_ALIYUN
 	b.OwnerId = tea.StringValue(ins.OwnerID)
 	b.OwnerName = tea.StringValue(ins.BillAccountName)
 	b.ProductType = tea.StringValue(ins.ProductType)
@@ -59,10 +60,21 @@ func (o *BssOperator) transferBill(ins *bssopenapi.DescribeInstanceBillResponseB
 	b.PayModeDetail = tea.StringValue(ins.Item) + "_" + tea.StringValue(ins.BillingType)
 	b.InstanceId = tea.StringValue(ins.InstanceID)
 	b.InstanceName = tea.StringValue(ins.NickName)
-	b.PublicIp = tea.StringValue(ins.InternetIP)
-	b.PrivateIp = tea.StringValue(ins.IntranetIP)
 	b.InstanceConfig = tea.StringValue(ins.InstanceConfig)
 	b.RegionName = tea.StringValue(ins.Region)
+	b.Day = tea.StringValue(ins.BillingDate)
+	b.Id = utils.Hash(fmt.Sprintf("%s_%s_%s_%s", b.OwnerId, b.ProductCode, b.InstanceId, b.Day))
+	b.Type = parseResourceType(ins.ProductCode)
+
+	// 获取实例日账单日期
+	if b.Day != "" {
+		bdArray := strings.Split(b.Day, "-")
+		if len(bdArray) >= 3 {
+			b.Year = bdArray[0]
+			b.Month = bdArray[1]
+			b.Day = bdArray[2]
+		}
+	}
 
 	cost := b.Cost
 	cost.SalePrice = float64(tea.Float32Value(ins.PretaxGrossAmount))
@@ -95,3 +107,6 @@ func (o *BssOperator) QuerySummary(ctx context.Context, req *provider.QueryBillS
 	fmt.Println(resp.String())
 	return nil, nil
 }
+
+// 导出日账单到Oss
+// 参考文档: https://next.api.aliyun.com/api/BssOpenApi/2017-12-14/SubscribeBillToOSS?params={}

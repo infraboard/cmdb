@@ -3,7 +3,9 @@ package bss
 import (
 	"context"
 	"fmt"
+	"strings"
 
+	"github.com/alibabacloud-go/tea/tea"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/bss/v2/model"
 	"github.com/infraboard/cmdb/apps/bill"
 	"github.com/infraboard/cmdb/apps/resource"
@@ -13,12 +15,12 @@ import (
 )
 
 func (o *BssOperator) PageQueryBill(req *provider.QueryBillRequest) pager.Pager {
-	p := newPager(o, req.Month)
+	p := newPager(o, req)
 	p.SetRate(req.Rate)
 	return p
 }
 
-// 查询资源消费记录
+// 客户在自建平台查询每个资源的消费明细数据
 // 参考文档: https://apiexplorer.developer.huaweicloud.com/apiexplorer/doc?product=BSS&api=ListCustomerselfResourceRecords
 func (o *BssOperator) Query(req *model.ListCustomerselfResourceRecordsRequest) (*bill.BillSet, error) {
 	set := bill.NewBillSet()
@@ -28,20 +30,20 @@ func (o *BssOperator) Query(req *model.ListCustomerselfResourceRecordsRequest) (
 		return nil, err
 	}
 	set.Total = int64(*resp.TotalCount)
-	set.Items = o.transferSet(resp.FeeRecords).Items
+	set.Items = o.transferBillSet(resp.FeeRecords).Items
 	return set, nil
 }
 
-func (o *BssOperator) transferSet(list *[]model.ResFeeRecordV2) *bill.BillSet {
+func (o *BssOperator) transferBillSet(list *[]model.ResFeeRecordV2) *bill.BillSet {
 	set := bill.NewBillSet()
 	items := *list
 	for i := range items {
-		set.Add(o.transferOne(items[i]))
+		set.Add(o.transferBill(items[i]))
 	}
 	return set
 }
 
-func (o *BssOperator) transferOne(ins model.ResFeeRecordV2) *bill.Bill {
+func (o *BssOperator) transferBill(ins model.ResFeeRecordV2) *bill.Bill {
 	b := bill.NewDefaultBill()
 	b.Vendor = resource.VENDOR_HUAWEI
 	b.Month = utils.PtrStrV(ins.BillDate)
@@ -56,6 +58,17 @@ func (o *BssOperator) transferOne(ins model.ResFeeRecordV2) *bill.Bill {
 	b.InstanceName = utils.PtrStrV(ins.ResourceName)
 	b.RegionCode = utils.PtrStrV(ins.Region)
 	b.RegionName = utils.PtrStrV(ins.RegionName)
+
+	// 获取实例日账单日期
+	bd := tea.StringValue(ins.BillDate)
+	if bd != "" {
+		bdArray := strings.Split(bd, "-")
+		if len(bdArray) > 3 {
+			b.Year = bdArray[0]
+			b.Month = bdArray[1]
+			b.Day = bdArray[2]
+		}
+	}
 
 	// 金额信息
 	cost := b.Cost
@@ -91,3 +104,6 @@ func (o *BssOperator) QuerySummary(ctx context.Context, req *provider.QueryBillS
 	*bill.SummaryRecordSet, error) {
 	return nil, nil
 }
+
+// 查询流水账单, 注意: trade_id, 订单ID或交易ID,扣费维度的唯一标识
+// 参考文档: https://apiexplorer.developer.huaweicloud.com/apiexplorer/doc?product=BSS&api=ListCustomerBillsFeeRecords
