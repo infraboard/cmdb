@@ -20,6 +20,7 @@ enum VENDOR {
 }
 
 enum TYPE {
+    // 业务资源
     HOST = 0;
     RDS = 1;
     REDIS = 2;
@@ -29,9 +30,11 @@ enum TYPE {
     DOMAIN = 6;
     EIP = 7;
     MONGODB = 8;
-    BILL = 100;
-    ORDER = 101;
-    OTHER = 255;
+    OTHER = 199;
+    // 辅助资源
+    BILL = 200;
+    ORDER = 201;
+
 }
 
 enum PayMode {
@@ -256,18 +259,15 @@ message Cost {
     // 官网价,原价（分）
     // @gotags: json:"sale_price"
     double sale_price = 1;
-    // 折扣率
-    // @gotags: json:"policy"
-    double policy = 2;
-    // 单价（分）
-    // @gotags: json:"unit_price"
-    double unit_price = 3;
     // 实际支付金额（分）
     // @gotags: json:"real_cost"
-    double real_cost = 4;
-    // 代金券抵扣金额（分）
-    // @gotags: json:"voucher_pay"
-    double voucher_pay = 5;
+    double real_cost = 2;
+    // 折扣率
+    // @gotags: json:"policy"
+    double policy = 3;
+    // 单价（分）
+    // @gotags: json:"unit_price"
+    double unit_price = 4;
 }
 
 message SearchRequest {
