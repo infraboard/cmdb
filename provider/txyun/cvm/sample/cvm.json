@@ -1,0 +1,79 @@
+{
+    "Response": {
+        "TotalCount": 1,
+        "InstanceSet": [
+            {
+                "Placement": {
+                    "Zone": "xxx",
+                    "ProjectId": 11111
+                },
+                "InstanceId": "ins-xxx",
+                "InstanceType": "S4.xxx",
+                "CPU": 8,
+                "Memory": 32,
+                "RestrictState": "NORMAL",
+                "InstanceName": "xxxxx",
+                "InstanceChargeType": "PREPAID",
+                "SystemDisk": {
+                    "DiskType": "CLOUD_PREMIUM",
+                    "DiskId": "disk-xxxx",
+                    "DiskSize": 100
+                },
+                "DataDisks": [
+                    {
+                        "DiskSize": 300,
+                        "DiskType": "CLOUD_PREMIUM",
+                        "DiskId": "disk-xxxx",
+                        "DeleteWithInstance": false,
+                        "Encrypt": false,
+                        "ThroughputPerformance": 0
+                    },
+                    {
+                        "DiskSize": 300,
+                        "DiskType": "CLOUD_PREMIUM",
+                        "DiskId": "disk-xxxxx",
+                        "DeleteWithInstance": true,
+                        "Encrypt": false,
+                        "ThroughputPerformance": 0
+                    }
+                ],
+                "PrivateIpAddresses": [
+                    "11111111"
+                ],
+                "InternetAccessible": {
+                    "InternetChargeType": "BANDWIDTH_PREPAID",
+                    "InternetMaxBandwidthOut": 1
+                },
+                "VirtualPrivateCloud": {
+                    "VpcId": "vpc-xxxx",
+                    "SubnetId": "subnet-xxx",
+                    "AsVpcGateway": false
+                },
+                "ImageId": "img-xxxx",
+                "RenewFlag": "NOTIFY_AND_AUTO_RENEW",
+                "CreatedTime": "2020-03-04T07:20:44Z",
+                "ExpiredTime": "2022-09-04T07:20:44Z",
+                "OsName": "CentOS 7.6 64bit",
+                "SecurityGroupIds": [
+                    "sg-xxxx"
+                ],
+                "LoginSettings": {
+                    "KeyIds": [
+                        "skey-xxxxx"
+                    ]
+                },
+                "InstanceState": "RUNNING",
+                "StopChargingMode": "NOT_APPLICABLE",
+                "Uuid": "09xxxx",
+                "LatestOperation": "RenewInstances",
+                "LatestOperationState": "SUCCESS",
+                "LatestOperationRequestId": "f6b52xxxx",
+                "DisasterRecoverGroupId": "",
+                "CamRoleName": "",
+                "HpcClusterId": "",
+                "IsolatedSource": "NOTISOLATED"
+            }
+        ],
+        "RequestId": "3xxxx"
+    }
+}

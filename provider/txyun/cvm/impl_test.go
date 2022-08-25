@@ -69,7 +69,7 @@ func TestPageQueryEip(t *testing.T) {
 }
 
 func TestDescribeEcs(t *testing.T) {
-	req := provider.NewDescribeHostRequest("ins-1wxeveeb")
+	req := provider.NewDescribeHostRequest("xxxx")
 	ins, err := operator.DescribeHost(context.Background(), req)
 	if err != nil {
 		t.Fatal(err)
