@@ -12,10 +12,10 @@ service Service {
 }
 
 message Domain {
-    infraboard.cmdb.resource.Base base = 1;
-    infraboard.cmdb.resource.Information information = 2;
-    Describe describe = 3;
-    RecordSet records = 4;
+    // @gotags: json:"resource"
+    resource.Resource resource = 1;
+    // @gotags: json:"describe"
+    RecordSet records = 2;
 }
 
 message Describe {

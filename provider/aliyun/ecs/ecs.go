@@ -72,23 +72,24 @@ func (o *EcsOperator) transferInstanceSet(items []*ecs.DescribeInstancesResponse
 
 func (o *EcsOperator) transferInstance(ins *ecs.DescribeInstancesResponseBodyInstancesInstance) *host.Host {
 	h := host.NewDefaultHost()
-	h.Base.Vendor = resource.VENDOR_ALIYUN
-	h.Base.Region = tea.StringValue(ins.RegionId)
-	h.Base.Zone = tea.StringValue(ins.ZoneId)
+	h.Resource.Base.Vendor = resource.VENDOR_ALIYUN
+	h.Resource.Base.Region = tea.StringValue(ins.RegionId)
+	h.Resource.Base.Zone = tea.StringValue(ins.ZoneId)
 
-	h.Base.CreateAt = utils.ParseDefaultMiniteTime(tea.StringValue(ins.CreationTime))
-	h.Base.Id = tea.StringValue(ins.InstanceId)
+	h.Resource.Base.CreateAt = utils.ParseDefaultMiniteTime(tea.StringValue(ins.CreationTime))
+	h.Resource.Base.Id = tea.StringValue(ins.InstanceId)
 
-	h.Information.ExpireAt = utils.ParseDefaultMiniteTime(tea.StringValue(ins.ExpiredTime))
-	h.Information.Type = tea.StringValue(ins.InstanceType)
-	h.Information.Name = tea.StringValue(ins.InstanceName)
-	h.Information.Description = tea.StringValue(ins.Description)
-	h.Information.Status = praseEcsStatus(ins.Status)
-	h.Information.Tags = o.transferTags(ins.Tags)
-	h.Information.PublicIp = tea.StringSliceValue(ins.PublicIpAddress.IpAddress)
-	h.Information.PrivateIp = o.parsePrivateIp(ins)
-	h.Information.PayMode = mapping.PrasePayMode(ins.InstanceChargeType)
-	h.Information.Owner = o.GetAccountId()
+	h.Resource.Information.ExpireAt = utils.ParseDefaultMiniteTime(tea.StringValue(ins.ExpiredTime))
+	h.Resource.Information.Type = tea.StringValue(ins.InstanceType)
+	h.Resource.Information.Name = tea.StringValue(ins.InstanceName)
+	h.Resource.Information.Description = tea.StringValue(ins.Description)
+	h.Resource.Information.Status = praseEcsStatus(ins.Status)
+	h.Resource.Information.PublicIp = tea.StringSliceValue(ins.PublicIpAddress.IpAddress)
+	h.Resource.Information.PrivateIp = o.parsePrivateIp(ins)
+	h.Resource.Information.PayMode = mapping.PrasePayMode(ins.InstanceChargeType)
+	h.Resource.Information.Owner = o.GetAccountId()
+
+	h.Resource.Tags = o.transferTags(ins.Tags)
 
 	h.Describe.Cpu = int64(tea.Int32Value(ins.Cpu))
 	h.Describe.Memory = int64(tea.Int32Value(ins.Memory))

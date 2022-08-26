@@ -65,18 +65,18 @@ func (o *CVMOperator) transferDiskSet(items *cbs.DescribeDisksResponseParams) *d
 
 func (o *CVMOperator) transferDisk(ins *cbs.Disk) *disk.Disk {
 	h := disk.NewDefaultDisk()
-	h.Base.Vendor = resource.VENDOR_TENCENT
-	h.Base.Region = o.client.GetRegion()
-	h.Base.Zone = utils.PtrStrV(ins.Placement.Zone)
-	h.Base.CreateAt = utils.ParseTime("2006-01-02 15:04:05", utils.PtrStrV(ins.CreateTime))
-	h.Base.Id = utils.PtrStrV(ins.DiskId)
+	h.Resource.Base.Vendor = resource.VENDOR_TENCENT
+	h.Resource.Base.Region = o.client.GetRegion()
+	h.Resource.Base.Zone = utils.PtrStrV(ins.Placement.Zone)
+	h.Resource.Base.CreateAt = utils.ParseTime("2006-01-02 15:04:05", utils.PtrStrV(ins.CreateTime))
+	h.Resource.Base.Id = utils.PtrStrV(ins.DiskId)
 
-	h.Information.ExpireAt = utils.ParseTime("2006-01-02 15:04:05", utils.PtrStrV(ins.DeadlineTime))
-	h.Information.Type = utils.PtrStrV(ins.DiskType)
-	h.Information.Name = utils.PtrStrV(ins.DiskName)
-	h.Information.Status = praseDiskStatus(ins.DiskState)
-	h.Information.PayMode = mapping.PrasePayMode(tea.StringValue(ins.DiskChargeType))
-	h.Information.Owner = o.GetAccountId()
+	h.Resource.Information.ExpireAt = utils.ParseTime("2006-01-02 15:04:05", utils.PtrStrV(ins.DeadlineTime))
+	h.Resource.Information.Type = utils.PtrStrV(ins.DiskType)
+	h.Resource.Information.Name = utils.PtrStrV(ins.DiskName)
+	h.Resource.Information.Status = praseDiskStatus(ins.DiskState)
+	h.Resource.Information.PayMode = mapping.PrasePayMode(tea.StringValue(ins.DiskChargeType))
+	h.Resource.Information.Owner = o.GetAccountId()
 
 	desc := h.Describe
 	desc.Type = tea.StringValue(ins.DiskUsage)

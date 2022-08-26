@@ -36,14 +36,14 @@ type VMOperator struct {
 
 func (o *VMOperator) transferOne(ins *mo.VirtualMachine, dcName string) *host.Host {
 	h := host.NewDefaultHost()
-	h.Base.Vendor = resource.VENDOR_VSPHERE
-	h.Base.Region = o.client.URL().Host
-	h.Base.Zone = dcName
-	h.Base.CreateAt = ins.Config.CreateDate.UnixMilli()
-	h.Base.Id = ins.Config.Uuid
+	h.Resource.Base.Vendor = resource.VENDOR_VSPHERE
+	h.Resource.Base.Region = o.client.URL().Host
+	h.Resource.Base.Zone = dcName
+	h.Resource.Base.CreateAt = ins.Config.CreateDate.UnixMilli()
+	h.Resource.Base.Id = ins.Config.Uuid
 
-	h.Information.Name = ins.Name
-	h.Information.Status = praseStatus(string(ins.Summary.Runtime.PowerState))
+	h.Resource.Information.Name = ins.Name
+	h.Resource.Information.Status = praseStatus(string(ins.Summary.Runtime.PowerState))
 
 	h.Describe.Cpu = int64(ins.Config.Hardware.NumCPU)
 	h.Describe.Memory = int64(ins.Config.Hardware.MemoryMB)
@@ -56,7 +56,7 @@ func (o *VMOperator) transferOne(ins *mo.VirtualMachine, dcName string) *host.Ho
 	if privateIP == "" {
 		privateIP = ins.Guest.IpAddress
 	}
-	h.Information.PrivateIp = []string{privateIP}
+	h.Resource.Information.PrivateIp = []string{privateIP}
 	return h
 }
 

@@ -58,21 +58,22 @@ func (o *CVMOperator) transferSet(items []*cvm.Instance) *host.HostSet {
 
 func (o *CVMOperator) transferOne(ins *cvm.Instance) *host.Host {
 	h := host.NewDefaultHost()
-	h.Base.Vendor = resource.VENDOR_TENCENT
-	h.Base.Region = o.client.GetRegion()
-	h.Base.Zone = utils.PtrStrV(ins.Placement.Zone)
-	h.Base.CreateAt = utils.ParseDefaultSecondTime(utils.PtrStrV(ins.CreatedTime))
-	h.Base.Id = utils.PtrStrV(ins.InstanceId)
+	h.Resource.Base.Vendor = resource.VENDOR_TENCENT
+	h.Resource.Base.Region = o.client.GetRegion()
+	h.Resource.Base.Zone = utils.PtrStrV(ins.Placement.Zone)
+	h.Resource.Base.CreateAt = utils.ParseDefaultSecondTime(utils.PtrStrV(ins.CreatedTime))
+	h.Resource.Base.Id = utils.PtrStrV(ins.InstanceId)
 
-	h.Information.ExpireAt = utils.ParseDefaultSecondTime(utils.PtrStrV(ins.ExpiredTime))
-	h.Information.Type = utils.PtrStrV(ins.InstanceType)
-	h.Information.Name = utils.PtrStrV(ins.InstanceName)
-	h.Information.Status = praseCvmStatus(ins.InstanceState)
-	h.Information.Tags = transferTags(ins.Tags)
-	h.Information.PublicIp = utils.SlicePtrStrv(ins.PublicIpAddresses)
-	h.Information.PrivateIp = utils.SlicePtrStrv(ins.PrivateIpAddresses)
-	h.Information.PayMode = mapping.PrasePayMode(tea.StringValue(ins.InstanceChargeType))
-	h.Information.Owner = o.GetAccountId()
+	h.Resource.Information.ExpireAt = utils.ParseDefaultSecondTime(utils.PtrStrV(ins.ExpiredTime))
+	h.Resource.Information.Type = utils.PtrStrV(ins.InstanceType)
+	h.Resource.Information.Name = utils.PtrStrV(ins.InstanceName)
+	h.Resource.Information.Status = praseCvmStatus(ins.InstanceState)
+	h.Resource.Information.PublicIp = utils.SlicePtrStrv(ins.PublicIpAddresses)
+	h.Resource.Information.PrivateIp = utils.SlicePtrStrv(ins.PrivateIpAddresses)
+	h.Resource.Information.PayMode = mapping.PrasePayMode(tea.StringValue(ins.InstanceChargeType))
+	h.Resource.Information.Owner = o.GetAccountId()
+
+	h.Resource.Tags = transferTags(ins.Tags)
 
 	h.Describe.Cpu = utils.PtrInt64(ins.CPU)
 	h.Describe.Memory = utils.PtrInt64(ins.Memory)

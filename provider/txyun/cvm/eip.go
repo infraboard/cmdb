@@ -42,19 +42,21 @@ func (o *CVMOperator) transferEipSet(items *vpc.DescribeAddressesResponseParams)
 
 func (o *CVMOperator) transferEip(ins *vpc.Address) *eip.EIP {
 	h := eip.NewDefaultEip()
-	h.Base.Vendor = resource.VENDOR_TENCENT
-	h.Base.Region = o.client.GetRegion()
-	h.Base.CreateAt = utils.ParseDefaultSecondTime(utils.PtrStrV(ins.CreatedTime))
-	h.Base.Id = utils.PtrStrV(ins.AddressId)
+	base := h.Resource.Base
+	base.Vendor = resource.VENDOR_TENCENT
+	base.Region = o.client.GetRegion()
+	base.CreateAt = utils.ParseDefaultSecondTime(utils.PtrStrV(ins.CreatedTime))
+	base.Id = utils.PtrStrV(ins.AddressId)
 
-	h.Information.Type = utils.PtrStrV(ins.AddressType)
-	h.Information.Name = utils.PtrStrV(ins.AddressName)
-	h.Information.Status = praseDiskStatus(ins.AddressStatus)
-	h.Information.PayMode = mapping.PrasePayMode(utils.PtrStrV(ins.InternetChargeType))
-	h.Information.PayModeDetail = tea.StringValue(ins.InternetChargeType)
-	h.Information.PublicIp = []string{tea.StringValue(ins.AddressIp)}
-	h.Information.PrivateIp = []string{tea.StringValue(ins.PrivateAddressIp)}
-	h.Information.Owner = o.GetAccountId()
+	info := h.Resource.Information
+	info.Type = utils.PtrStrV(ins.AddressType)
+	info.Name = utils.PtrStrV(ins.AddressName)
+	info.Status = praseDiskStatus(ins.AddressStatus)
+	info.PayMode = mapping.PrasePayMode(utils.PtrStrV(ins.InternetChargeType))
+	info.PayModeDetail = tea.StringValue(ins.InternetChargeType)
+	info.PublicIp = []string{tea.StringValue(ins.AddressIp)}
+	info.PrivateIp = []string{tea.StringValue(ins.PrivateAddressIp)}
+	info.Owner = o.GetAccountId()
 
 	desc := h.Describe
 	desc.BandWidth = int64(tea.Uint64Value(ins.Bandwidth))

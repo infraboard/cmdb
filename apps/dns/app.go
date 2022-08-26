@@ -12,11 +12,8 @@ const (
 
 func NewDefaultDomain() *Domain {
 	return &Domain{
-		Base: &resource.Base{
-			ResourceType: resource.TYPE_DOMAIN,
-		},
-		Information: &resource.Information{},
-		Describe:    &Describe{},
+		Resource: resource.NewDefaultResource(resource.TYPE_DOMAIN),
+		Records:  NewRecordSet(),
 	}
 }
 
@@ -43,7 +40,7 @@ func (s *DomainSet) Add(items ...any) {
 
 func (s *DomainSet) ResourceIds() (ids []string) {
 	for i := range s.Items {
-		ids = append(ids, s.Items[i].Base.Id)
+		ids = append(ids, s.Items[i].Resource.Base.Id)
 	}
 	return
 }

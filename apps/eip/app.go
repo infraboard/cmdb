@@ -12,11 +12,8 @@ const (
 
 func NewDefaultEip() *EIP {
 	return &EIP{
-		Base: &resource.Base{
-			ResourceType: resource.TYPE_EIP,
-		},
-		Information: &resource.Information{},
-		Describe:    &Describe{},
+		Resource: resource.NewDefaultResource(resource.TYPE_EIP),
+		Describe: &Describe{},
 	}
 }
 
@@ -34,7 +31,7 @@ func (s *EIPSet) Add(items ...any) {
 
 func (s *EIPSet) ResourceIds() (ids []string) {
 	for i := range s.Items {
-		ids = append(ids, s.Items[i].Base.Id)
+		ids = append(ids, s.Items[i].Resource.Base.Id)
 	}
 	return
 }

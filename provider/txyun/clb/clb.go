@@ -64,14 +64,14 @@ func (o *CLBOperator) transferCLBSet(items []*clb.LoadBalancer) *lb.LoadBalancer
 func (o *CLBOperator) transferLB(ins *clb.LoadBalancer) *lb.LoadBalancer {
 	r := lb.NewDefaultLoadBalancer()
 
-	b := r.Base
+	b := r.Resource.Base
 	b.Vendor = resource.VENDOR_TENCENT
 	b.CreateAt = utils.ParseTime("2006-01-02 15:04:05", utils.PtrStrV(ins.CreateTime))
 	b.Region = tea.StringValue(ins.TargetRegionInfo.Region)
 	b.Zone = tea.StringValue(ins.AnycastZone)
 	b.Id = utils.PtrStrV(ins.LoadBalancerId)
 
-	info := r.Information
+	info := r.Resource.Information
 	info.Name = tea.StringValue(ins.LoadBalancerName)
 	info.Type = tea.StringValue(ins.LoadBalancerType)
 	info.ExpireAt = utils.ParseTime("2006-01-02 15:04:05", utils.PtrStrV(ins.ExpireTime))

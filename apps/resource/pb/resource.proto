@@ -73,31 +73,9 @@ message Resource {
     // 资源费用
     // @gotags: json:"cost"
     Cost cost = 3;
-    // 资源释放计划
-    // @gotags: json:"release_plan"
-    ReleasePlan release_plan = 4;
-}
-
-// 资源释放计划
-message ReleasePlan {
-    // 释放原因
-    // @gotags: json:"reason"
-    string reason = 1;
-    // 是否立即释放
-    // @gotags: json:"immediately"
-    bool immediately = 2;
-    // 计划时间
-    // @gotags: json:"plan_at"
-    int64 plan_at = 3;
-    // 执行时间
-    // @gotags: json:"exec_at"
-    int64 exec_at = 4;
-    // 释放前 提前几天通知, 过期后 云商会自动释放的也需要提前通知
-    // @gotags: json:"notice_before_days"
-    int64 notice_before_days = 5;
-    // 资源释放后, 什么时候销毁该数据
-    // @gotags: json:"destory_at"
-    int64 destory_at = 6;
+    // 标签
+    // @gotags: json:"tags"
+    repeated Tag tags = 4;
 }
 
 message Base {
@@ -183,27 +161,24 @@ message Information {
     // 服务商中的状态
     // @gotags: json:"status"
     string status = 6;
-    // 标签
-    // @gotags: json:"tags"
-    repeated Tag tags = 7;
     // 更新时间
     // @gotags: json:"update_at"
-    int64 update_at = 8;
+    int64 update_at = 7;
     // 资源所属账号
     // @gotags: json:"owner"
-    string owner = 9;
+    string owner = 8;
     // 公网IP, 或者域名
     // @gotags: json:"public_ip"
-    repeated string public_ip = 10;
+    repeated string public_ip = 9;
     // 内网IP, 或者域名
     // @gotags: json:"private_ip"
-    repeated string private_ip = 11;
+    repeated string private_ip = 10;
     // 实例付费方式
     // @gotags: json:"pay_mode"
-    PayMode pay_mode = 12;
+    PayMode pay_mode = 11;
     // 付费方式详情
     // @gotags: json:"pay_mode_detail"
-    string pay_mode_detail = 13;
+    string pay_mode_detail = 12;
 }
 
 enum TAG_TYPE {

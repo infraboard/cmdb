@@ -11,8 +11,8 @@ import (
 )
 
 func (s *service) save(ctx context.Context, h *host.Host) error {
-	if h.Base.SyncAt != 0 {
-		h.Base.SyncAt = time.Now().UnixMicro()
+	if h.Resource.Base.SyncAt != 0 {
+		h.Resource.Base.SyncAt = time.Now().UnixMicro()
 	}
 
 	var (
@@ -50,7 +50,7 @@ func (s *service) save(ctx context.Context, h *host.Host) error {
 	}
 
 	// 保存资源基础信息
-	err = impl.SaveResource(ctx, tx, h.Base, h.Information)
+	err = impl.SaveResource(ctx, tx, h.Resource)
 	if err != nil {
 		return err
 	}
@@ -64,7 +64,7 @@ func (s *service) save(ctx context.Context, h *host.Host) error {
 
 	desc := h.Describe
 	_, err = stmt.ExecContext(ctx,
-		h.Base.Id, desc.Cpu, desc.Memory, desc.GpuAmount, desc.GpuSpec, desc.OsType, desc.OsName,
+		h.Resource.Base.Id, desc.Cpu, desc.Memory, desc.GpuAmount, desc.GpuSpec, desc.OsType, desc.OsName,
 		desc.SerialNumber, desc.ImageId, desc.InternetMaxBandwidthOut,
 		desc.InternetMaxBandwidthIn, desc.KeyPairNameToString(), desc.SecurityGroupsToString(),
 	)
@@ -94,8 +94,8 @@ func (s *service) update(ctx context.Context, ins *host.Host) error {
 	}()
 
 	// 更新资源基本信息
-	if ins.Base.ResourceHashChanged {
-		if err := impl.UpdateResource(ctx, tx, ins.Base, ins.Information); err != nil {
+	if ins.Resource.Base.ResourceHashChanged {
+		if err := impl.UpdateResource(ctx, tx, ins.Resource.Base, ins.Resource.Information, ins.Resource.Tags); err != nil {
 			return err
 		}
 	} else {
@@ -103,14 +103,14 @@ func (s *service) update(ctx context.Context, ins *host.Host) error {
 	}
 
 	// 更新实例信息
-	if ins.Base.DescribeHashChanged {
+	if ins.Resource.Base.DescribeHashChanged {
 		stmt, err = tx.PrepareContext(ctx, updateHostSQL)
 		if err != nil {
 			return fmt.Errorf("prepare update host sql error, %s", err)
 		}
 		defer stmt.Close()
 
-		base := ins.Base
+		base := ins.Resource.Base
 		desc := ins.Describe
 		_, err = stmt.ExecContext(ctx,
 			desc.Cpu, desc.Memory, desc.GpuAmount, desc.GpuSpec, desc.OsType, desc.OsName,

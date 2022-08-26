@@ -43,21 +43,24 @@ func (s *Set) Length() int64 {
 
 func NewDefaultRDS() *Rds {
 	return &Rds{
-		Base: &resource.Base{
-			ResourceType: resource.TYPE_RDS,
+		Resource: &resource.Resource{
+			Base: &resource.Base{
+				ResourceType: resource.TYPE_RDS,
+			},
+			Information: &resource.Information{},
+			Tags:        []*resource.Tag{},
 		},
-		Information: &resource.Information{},
-		Describe:    &Describe{},
+		Describe: &Describe{},
 	}
 }
 
 func (r *Rds) ShortDesc() string {
-	return fmt.Sprintf("%s [%s]", r.Information.Name, r.Base.Id)
+	return fmt.Sprintf("%s [%s]", r.Resource.Information.Name, r.Resource.Base.Id)
 }
 
 func (r *Rds) GenHash() error {
-	r.Base.ResourceHash = r.Information.Hash()
-	r.Base.DescribeHash = utils.Hash(r.Describe)
+	r.Resource.Base.ResourceHash = r.Resource.Information.Hash()
+	r.Resource.Base.DescribeHash = utils.Hash(r.Describe)
 	return nil
 }
 

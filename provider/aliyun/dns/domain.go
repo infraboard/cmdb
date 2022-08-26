@@ -41,12 +41,12 @@ func (o *DnsOperator) transferDomainSet(items *dom.QueryDomainListResponseBodyDa
 func (o *DnsOperator) transferDomain(ins *dom.QueryDomainListResponseBodyDataDomain) *dns.Domain {
 	r := dns.NewDefaultDomain()
 
-	b := r.Base
+	b := r.Resource.Base
 	b.Vendor = resource.VENDOR_ALIYUN
 	b.CreateAt = tea.Int64Value(ins.RegistrationDateLong) / 1000
 	b.Id = tea.StringValue(ins.InstanceId)
 
-	info := r.Information
+	info := r.Resource.Information
 	info.ExpireAt = tea.Int64Value(ins.ExpirationDateLong) / 1000
 	info.Name = tea.StringValue(ins.DomainName)
 	info.Type = tea.StringValue(ins.RegistrantType)

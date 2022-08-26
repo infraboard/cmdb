@@ -9,7 +9,7 @@ import (
 	"github.com/infraboard/cmdb/apps/resource"
 )
 
-func SaveResource(ctx context.Context, tx *sql.Tx, base *resource.Base, info *resource.Information) error {
+func SaveResource(ctx context.Context, tx *sql.Tx, ins *resource.Resource) error {
 	// 避免SQL注入, 请使用Prepare
 	stmt, err := tx.PrepareContext(ctx, sqlInsertResource)
 	if err != nil {
@@ -17,6 +17,8 @@ func SaveResource(ctx context.Context, tx *sql.Tx, base *resource.Base, info *re
 	}
 	defer stmt.Close()
 
+	base := ins.Base
+	info := ins.Information
 	// 保存资源数据
 	_, err = stmt.ExecContext(ctx,
 		base.Id, base.ResourceType, base.Vendor, base.Region, base.Zone, base.CreateAt, info.ExpireAt, info.Category, info.Type,
@@ -28,14 +30,14 @@ func SaveResource(ctx context.Context, tx *sql.Tx, base *resource.Base, info *re
 		return fmt.Errorf("save host resource info error, %s", err)
 	}
 
-	if err := updateResourceTag(ctx, tx, base.Id, info.Tags); err != nil {
+	if err := updateResourceTag(ctx, tx, base.Id, ins.Tags); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func UpdateResource(ctx context.Context, tx *sql.Tx, base *resource.Base, info *resource.Information) error {
+func UpdateResource(ctx context.Context, tx *sql.Tx, base *resource.Base, info *resource.Information, tags []*resource.Tag) error {
 	// 避免SQL注入, 请使用Prepare
 	stmt, err := tx.PrepareContext(ctx, sqlUpdateResource)
 	if err != nil {
@@ -55,7 +57,7 @@ func UpdateResource(ctx context.Context, tx *sql.Tx, base *resource.Base, info *
 		return fmt.Errorf("update resource base info error, %s", err)
 	}
 
-	if err := updateResourceTag(ctx, tx, base.Id, info.Tags); err != nil {
+	if err := updateResourceTag(ctx, tx, base.Id, tags); err != nil {
 		return fmt.Errorf("update resource tag error, %s", err)
 	}
 

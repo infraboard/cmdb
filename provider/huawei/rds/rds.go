@@ -69,21 +69,22 @@ func (o *RdsOperator) transferSet(list *[]model.InstanceResponse) *rds.Set {
 
 func (o *RdsOperator) transferOne(ins model.InstanceResponse) *rds.Rds {
 	h := rds.NewDefaultRDS()
-	b := h.Base
+	b := h.Resource.Base
 	b.Vendor = resource.VENDOR_HUAWEI
 	b.Region = ins.Region
 	b.CreateAt = o.parseTime(ins.Created)
 	b.Id = ins.Id
 
-	i := h.Information
+	i := h.Resource.Information
 	i.ExpireAt = o.parseTime(utils.PtrStrV(ins.ExpirationTime))
 	i.Category = ins.Type
 	i.Name = ins.Name
 	i.Description = utils.PtrStrV(ins.Alias)
 	i.Status = ins.Status
-	i.Tags = o.transferTags(ins.Tags)
 	i.PrivateIp, i.PublicIp = ins.PrivateIps, ins.PublicIps
 	i.Category = ins.FlavorRef
+
+	h.Resource.Tags = o.transferTags(ins.Tags)
 
 	cmEnums := model.GetChargeInfoResponseChargeModeEnum()
 	switch ins.ChargeInfo.ChargeMode {

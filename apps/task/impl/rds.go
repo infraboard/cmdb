@@ -74,7 +74,7 @@ func (s *service) syncRds(ctx context.Context, credentialIns *credential.Secret,
 			for i := range set.Items {
 				target := set.Items[i]
 				// 补充管理信息
-				InjectBaseFromSecret(target.Base, credentialIns)
+				InjectBaseFromSecret(target.Resource.Base, credentialIns)
 				s.SaveOrUpdateRds(ctx, target, t)
 			}
 		}
@@ -83,16 +83,16 @@ func (s *service) syncRds(ctx context.Context, credentialIns *credential.Secret,
 
 // Rds数据入库
 func (s *service) SaveOrUpdateRds(ctx context.Context, ins *rds.Rds, t *task.Task) {
-	ins.Base.SyncAt = time.Now().Unix()
+	ins.Resource.Base.SyncAt = time.Now().Unix()
 	b, err := s.rds.SyncRDS(ctx, ins)
 
 	var detail *task.Record
 	if err != nil {
 		s.log.Warnf("save rds error, %s", err)
-		detail = task.NewSyncFailedRecord(t.Id, ins.Base.Id, ins.Information.Name, err.Error())
+		detail = task.NewSyncFailedRecord(t.Id, ins.Resource.Base.Id, ins.Resource.Information.Name, err.Error())
 	} else {
 		s.log.Debugf("save rds %s to db", b.ShortDesc())
-		detail = task.NewSyncSucceedRecord(t.Id, ins.Base.Id, ins.Information.Name)
+		detail = task.NewSyncSucceedRecord(t.Id, ins.Resource.Base.Id, ins.Resource.Information.Name)
 	}
 
 	t.AddDetail(detail)

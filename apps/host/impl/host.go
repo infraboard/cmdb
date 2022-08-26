@@ -14,7 +14,7 @@ import (
 
 func (s *service) SyncHost(ctx context.Context, ins *host.Host) (
 	*host.Host, error) {
-	exist, err := s.DescribeHost(ctx, host.NewDescribeHostRequestWithID(ins.Base.Id))
+	exist, err := s.DescribeHost(ctx, host.NewDescribeHostRequestWithID(ins.Resource.Base.Id))
 	if err != nil {
 		// 如果不是Not Found则直接返回
 		if !exception.IsNotFoundError(err) {
@@ -24,7 +24,7 @@ func (s *service) SyncHost(ctx context.Context, ins *host.Host) (
 
 	// 检查ins已经存在 我们则需要更新ins
 	if exist != nil {
-		s.log.Debugf("update host: %s", ins.Base.Id)
+		s.log.Debugf("update host: %s", ins.Resource.Base.Id)
 		exist.Put(host.NewUpdateHostDataByIns(ins))
 		if err := s.update(ctx, exist); err != nil {
 			return nil, err
@@ -33,7 +33,7 @@ func (s *service) SyncHost(ctx context.Context, ins *host.Host) (
 	}
 
 	// 如果没有我们则直接保存
-	s.log.Debugf("insert host: %s", ins.Base.Id)
+	s.log.Debugf("insert host: %s", ins.Resource.Base.Id)
 	if err := s.save(ctx, ins); err != nil {
 		return nil, err
 	}
@@ -97,8 +97,8 @@ func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 	)
 	for rows.Next() {
 		ins := host.NewDefaultHost()
-		base := ins.Base
-		info := ins.Information
+		base := ins.Resource.Base
+		info := ins.Resource.Information
 		desc := ins.Describe
 		err := rows.Scan(
 			&base.Id, &base.ResourceType, &base.Vendor, &base.Region, &base.Zone, &base.CreateAt, &info.ExpireAt,
@@ -147,8 +147,8 @@ func (s *service) DescribeHost(ctx context.Context, req *host.DescribeHostReques
 	var (
 		publicIPList, privateIPList, keyPairNameList, securityGroupsList string
 	)
-	base := ins.Base
-	info := ins.Information
+	base := ins.Resource.Base
+	info := ins.Resource.Information
 	desc := ins.Describe
 	err = queryStmt.QueryRowContext(ctx, args...).Scan(
 		&base.Id, &base.ResourceType, &base.Vendor, &base.Region, &base.Zone, &base.CreateAt, &info.ExpireAt,

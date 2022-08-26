@@ -71,22 +71,23 @@ func (o *EcsOperator) transferInstanceSet(list *[]model.ServerDetail) *host.Host
 
 func (o *EcsOperator) transferInstance(ins model.ServerDetail) *host.Host {
 	h := host.NewDefaultHost()
-	h.Base.Vendor = resource.VENDOR_HUAWEI
-	h.Base.Zone = ins.OSEXTAZavailabilityZone
-	h.Base.CreateAt = o.parseTime(ins.Created)
-	h.Base.Id = ins.Id
+	h.Resource.Base.Vendor = resource.VENDOR_HUAWEI
+	h.Resource.Base.Zone = ins.OSEXTAZavailabilityZone
+	h.Resource.Base.CreateAt = o.parseTime(ins.Created)
+	h.Resource.Base.Id = ins.Id
 
-	h.Information.Category = ins.Flavor.Name
-	h.Information.ExpireAt = o.parseTime(ins.AutoTerminateTime)
-	h.Information.Name = ins.Name
-	h.Information.Description = utils.PtrStrV(ins.Description)
-	h.Information.Status = praseEcsStatus(ins.Status)
+	h.Resource.Information.Category = ins.Flavor.Name
+	h.Resource.Information.ExpireAt = o.parseTime(ins.AutoTerminateTime)
+	h.Resource.Information.Name = ins.Name
+	h.Resource.Information.Description = utils.PtrStrV(ins.Description)
+	h.Resource.Information.Status = praseEcsStatus(ins.Status)
+	h.Resource.Information.PrivateIp, h.Resource.Information.PublicIp = o.parseIp(ins.Addresses)
+	h.Resource.Information.PayMode = o.ParseChangeMode(ins.Metadata["charging_mode"])
+	h.Resource.Information.Owner = o.GetAccountId()
+
 	if ins.Tags != nil {
-		h.Information.Tags = o.transferTags(*ins.Tags)
+		h.Resource.Tags = o.transferTags(*ins.Tags)
 	}
-	h.Information.PrivateIp, h.Information.PublicIp = o.parseIp(ins.Addresses)
-	h.Information.PayMode = o.ParseChangeMode(ins.Metadata["charging_mode"])
-	h.Information.Owner = o.GetAccountId()
 
 	h.Describe.SerialNumber = ins.Id
 	h.Describe.Cpu, _ = strconv.ParseInt(ins.Flavor.Vcpus, 10, 64)

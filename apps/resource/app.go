@@ -82,14 +82,17 @@ func (req *SearchRequest) AddTag(t ...*TagSelector) {
 	req.Tags = append(req.Tags, t...)
 }
 
-func NewDefaultResource() *Resource {
+func NewDefaultResource(rt TYPE) *Resource {
 	return &Resource{
-		Base:        &Base{},
+		Base: &Base{
+			ResourceType: rt,
+		},
 		Information: &Information{},
+		Tags:        []*Tag{},
 	}
 }
 
-func (r *Information) AddTag(t *Tag) {
+func (r *Resource) AddTag(t *Tag) {
 	r.Tags = append(r.Tags, t)
 }
 
@@ -113,7 +116,7 @@ func (i *Information) LoadPublicIPString(s string) {
 	}
 }
 
-func (i *Information) SortTag() {
+func (i *Resource) SortTag() {
 	sort.Slice(i.Tags, func(m, n int) bool {
 		return i.Tags[m].Weight < i.Tags[n].Weight
 	})
@@ -124,7 +127,7 @@ func (i *Information) Hash() string {
 }
 
 func (r *Resource) GetTagValueOne(key string) string {
-	tags := r.Information.Tags
+	tags := r.Tags
 	for i := range tags {
 		if tags[i].Key == key {
 			return tags[i].Value
@@ -156,7 +159,7 @@ func (s *ResourceSet) UpdateTag(tags []*Tag) {
 	for i := range tags {
 		for j := range s.Items {
 			if s.Items[j].Base.Id == tags[i].ResourceId {
-				s.Items[j].Information.AddTag(tags[i])
+				s.Items[j].AddTag(tags[i])
 			}
 		}
 	}

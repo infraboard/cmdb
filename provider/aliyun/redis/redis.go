@@ -65,14 +65,14 @@ func (o *RedisOperator) transferSet(items *redis.DescribeInstancesResponseBodyIn
 func (o *RedisOperator) transferOne(ins *redis.DescribeInstancesResponseBodyInstancesKVStoreInstance) *cmdbRedis.Redis {
 	r := cmdbRedis.NewDefaultRedis()
 
-	b := r.Base
+	b := r.Resource.Base
 	b.Vendor = resource.VENDOR_ALIYUN
 	b.Region = tea.StringValue(ins.RegionId)
 	b.Zone = tea.StringValue(ins.ZoneId)
 	b.CreateAt = o.parseTime(tea.StringValue(ins.CreateTime))
 	b.Id = tea.StringValue(ins.InstanceId)
 
-	info := r.Information
+	info := r.Resource.Information
 	info.ExpireAt = o.parseTime(tea.StringValue(ins.EndTime))
 	info.Name = tea.StringValue(ins.InstanceName)
 	info.Type = tea.StringValue(ins.EditionType)

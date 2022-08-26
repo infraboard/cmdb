@@ -41,12 +41,12 @@ func (o *DnsOperator) transferDomainSet(items []*dnspod.DomainListItem) *dns.Dom
 func (o *DnsOperator) transferDomain(ins *dnspod.DomainListItem) *dns.Domain {
 	r := dns.NewDefaultDomain()
 
-	b := r.Base
+	b := r.Resource.Base
 	b.Vendor = resource.VENDOR_TENCENT
 	b.CreateAt = utils.ParseSecondMod1Time(tea.StringValue(ins.CreatedOn))
 	b.Id = fmt.Sprintf("%d", ins.DomainId)
 
-	info := r.Information
+	info := r.Resource.Information
 	info.ExpireAt = utils.ParseSecondMod1Time(tea.StringValue(ins.VipEndAt))
 	info.Name = tea.StringValue(ins.Name)
 	info.Type = tea.StringValue(ins.Grade)

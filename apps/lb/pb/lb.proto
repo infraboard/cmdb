@@ -12,8 +12,9 @@ service Service {
 }
 
 message LoadBalancer {
-    infraboard.cmdb.resource.Base base = 1;
-    infraboard.cmdb.resource.Information information = 2;
+    // @gotags: json:"resource"
+    resource.Resource resource = 1;
+    // @gotags: json:"describe"
     Describe describe = 3;
 }
 

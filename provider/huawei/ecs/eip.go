@@ -35,7 +35,7 @@ func (o *EcsOperator) queryEip(req *model.ListPublicipsRequest) (*eip.EIPSet, er
 	set.Items = o.transferEipSet(resp).Items
 
 	if set.Length() > 0 {
-		req.Marker = &set.Items[0].Base.Id
+		req.Marker = &set.Items[0].Resource.Base.Id
 	}
 
 	return set, nil
@@ -59,13 +59,13 @@ func (o *EcsOperator) transferEipSet(list *model.ListPublicipsResponse) *eip.EIP
 func (o *EcsOperator) transferEip(ins model.PublicipShowResp) *eip.EIP {
 	h := eip.NewDefaultEip()
 
-	b := h.Base
+	b := h.Resource.Base
 	b.Vendor = resource.VENDOR_HUAWEI
 	b.Id = tea.StringValue(ins.Id)
 	b.Region = tea.StringValue(ins.Profile.RegionId)
 	b.CreateAt = utils.ParseDefaultSecondTime(ins.CreateTime.String())
 
-	info := h.Information
+	info := h.Resource.Information
 	sd, _ := ins.Status.MarshalJSON()
 	info.Status = string(sd)
 	info.Name = tea.StringValue(ins.Alias)

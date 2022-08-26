@@ -12,11 +12,8 @@ const (
 
 func NewDefaultLoadBalancer() *LoadBalancer {
 	return &LoadBalancer{
-		Base: &resource.Base{
-			ResourceType: resource.TYPE_LB,
-		},
-		Information: &resource.Information{},
-		Describe:    &Describe{},
+		Resource: resource.NewDefaultResource(resource.TYPE_LB),
+		Describe: &Describe{},
 	}
 }
 
@@ -43,7 +40,7 @@ func (s *LoadBalancerSet) Add(items ...any) {
 
 func (s *LoadBalancerSet) ResourceIds() (ids []string) {
 	for i := range s.Items {
-		ids = append(ids, s.Items[i].Base.Id)
+		ids = append(ids, s.Items[i].Resource.Base.Id)
 	}
 	return
 }

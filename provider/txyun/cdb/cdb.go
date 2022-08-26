@@ -65,14 +65,14 @@ func (o *CDBOperator) transferSet(items []*cdb.InstanceInfo) *rds.Set {
 func (o *CDBOperator) transferOne(ins *cdb.InstanceInfo) *rds.Rds {
 	r := cmdbRds.NewDefaultRDS()
 
-	b := r.Base
+	b := r.Resource.Base
 	b.Vendor = resource.VENDOR_TENCENT
 	b.Region = utils.PtrStrV(ins.Region)
 	b.Zone = utils.PtrStrV(ins.Zone)
 	b.CreateAt = o.parseTime(utils.PtrStrV(ins.CreateTime))
 	b.Id = utils.PtrStrV(ins.InstanceId)
 
-	info := r.Information
+	info := r.Resource.Information
 	info.ExpireAt = o.parseTime(utils.PtrStrV(ins.DeadlineTime))
 	info.Name = utils.PtrStrV(ins.InstanceName)
 	info.Category = utils.PtrStrV(ins.DeviceType)

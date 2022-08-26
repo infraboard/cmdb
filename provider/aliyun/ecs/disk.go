@@ -71,21 +71,22 @@ func (o *EcsOperator) transferDiskSet(items *ecs.DescribeDisksResponseBodyDisks)
 
 func (o *EcsOperator) transferDisk(ins *ecs.DescribeDisksResponseBodyDisksDisk) *disk.Disk {
 	h := disk.NewDefaultDisk()
-	h.Base.Vendor = resource.VENDOR_ALIYUN
-	h.Base.Region = tea.StringValue(ins.RegionId)
-	h.Base.Zone = tea.StringValue(ins.ZoneId)
+	h.Resource.Base.Vendor = resource.VENDOR_ALIYUN
+	h.Resource.Base.Region = tea.StringValue(ins.RegionId)
+	h.Resource.Base.Zone = tea.StringValue(ins.ZoneId)
 
-	h.Base.CreateAt = utils.ParseDefaultSecondTime(tea.StringValue(ins.CreationTime))
-	h.Base.Id = tea.StringValue(ins.DiskId)
+	h.Resource.Base.CreateAt = utils.ParseDefaultSecondTime(tea.StringValue(ins.CreationTime))
+	h.Resource.Base.Id = tea.StringValue(ins.DiskId)
 
-	h.Information.ExpireAt = utils.ParseDefaultMiniteTime(tea.StringValue(ins.ExpiredTime))
-	h.Information.Type = tea.StringValue(ins.Type)
-	h.Information.Name = tea.StringValue(ins.DiskName)
-	h.Information.Description = tea.StringValue(ins.Description)
-	h.Information.Status = praseDiskStatus(ins.Status)
-	h.Information.Tags = o.transferDiskTags(ins.Tags)
-	h.Information.PayMode = mapping.PrasePayMode(ins.DiskChargeType)
-	h.Information.Owner = o.GetAccountId()
+	h.Resource.Information.ExpireAt = utils.ParseDefaultMiniteTime(tea.StringValue(ins.ExpiredTime))
+	h.Resource.Information.Type = tea.StringValue(ins.Type)
+	h.Resource.Information.Name = tea.StringValue(ins.DiskName)
+	h.Resource.Information.Description = tea.StringValue(ins.Description)
+	h.Resource.Information.Status = praseDiskStatus(ins.Status)
+	h.Resource.Information.PayMode = mapping.PrasePayMode(ins.DiskChargeType)
+	h.Resource.Information.Owner = o.GetAccountId()
+
+	h.Resource.Tags = o.transferDiskTags(ins.Tags)
 
 	h.Describe.InstanceId = tea.StringValue(ins.InstanceId)
 	h.Describe.Size = uint64(tea.Int32Value(ins.Size))

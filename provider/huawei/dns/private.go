@@ -38,7 +38,7 @@ func (o *DnsOperator) transferPrivateZoneSet(list *model.ListPrivateZonesRespons
 func (o *DnsOperator) transferPrivateZone(ins model.PrivateZoneResp) *dns.Domain {
 	r := dns.NewDefaultDomain()
 
-	b := r.Base
+	b := r.Resource.Base
 	b.Vendor = resource.VENDOR_HUAWEI
 	return r
 }

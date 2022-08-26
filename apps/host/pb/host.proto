@@ -21,12 +21,10 @@ service Service {
 }
 
 message Host {
-    // @gotags: json:"base"
-    infraboard.cmdb.resource.Base base = 1;
-    // @gotags: json:"information"
-    infraboard.cmdb.resource.Information information = 2;
+    // @gotags: json:"resource"
+    resource.Resource resource = 1;
     // @gotags: json:"describe"
-    Describe describe = 3;
+    Describe describe = 2;
 }
 
 message Describe {
@@ -120,9 +118,6 @@ message ReleaseHostRequest {
     // 主机Id
     // @gotags: json:"id" validate:"required"
     string id = 1;
-    // 释放计划
-    // @gotags: json:"release_plan"
-    infraboard.cmdb.resource.ReleasePlan release_plan = 2;
 }
 
 enum STATUS {

@@ -46,14 +46,14 @@ func (o *Operator) transferMongoDBSet(items *dds.DescribeDBInstancesResponseBody
 
 func (o *Operator) transferMongoDB(ins *dds.DescribeDBInstancesResponseBodyDBInstancesDBInstance) *mongodb.MongoDB {
 	r := mongodb.NewDefaultMongoDB()
-	b := r.Base
+	b := r.Resource.Base
 	b.Vendor = resource.VENDOR_ALIYUN
 	b.Region = tea.StringValue(ins.RegionId)
 	b.Zone = tea.StringValue(ins.ZoneId)
 	b.CreateAt = utils.ParseDefaultSecondTime(tea.StringValue(ins.CreationTime))
 	b.Id = tea.StringValue(ins.DBInstanceId)
 
-	info := r.Information
+	info := r.Resource.Information
 	info.ExpireAt = utils.ParseDefaultMiniteTime(tea.StringValue(ins.ExpireTime))
 	info.Name = tea.StringValue(ins.DBInstanceDescription)
 	info.Type = tea.StringValue(ins.DBInstanceClass)

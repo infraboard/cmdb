@@ -68,7 +68,7 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 	)
 
 	for rows.Next() {
-		ins := resource.NewDefaultResource()
+		ins := resource.NewDefaultResource(resource.TYPE_HOST)
 		base := ins.Base
 		info := ins.Information
 		err := rows.Scan(

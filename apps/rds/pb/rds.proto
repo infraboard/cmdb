@@ -12,15 +12,11 @@ service Service {
 }
 
 message Rds {
-    // 资源元数据信息
-    // @gotags: json:"base"
-    infraboard.cmdb.resource.Base base = 1;
-    // 资源基础信息
-    // @gotags: json:"information"
-    infraboard.cmdb.resource.Information information = 2;
+    // @gotags: json:"resource"
+    resource.Resource resource = 1;
     // Rds描述信息
     // @gotags: json:"describe"
-    Describe describe = 3;
+    Describe describe = 2;
 }
 
 message Describe {

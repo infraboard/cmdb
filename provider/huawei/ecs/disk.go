@@ -76,13 +76,13 @@ func (o *EcsOperator) transferDiskSet(list *model.ListVolumesResponse) *disk.Dis
 func (o *EcsOperator) transferDisk(ins model.VolumeDetail) *disk.Disk {
 	h := disk.NewDefaultDisk()
 
-	b := h.Base
+	b := h.Resource.Base
 	b.Vendor = resource.VENDOR_HUAWEI
 	b.Zone = ins.AvailabilityZone
 	b.Id = ins.Id
 	b.CreateAt = utils.ParseTime("2006-01-02T15:04:05.999999", ins.CreatedAt)
 
-	info := h.Information
+	info := h.Resource.Information
 	info.Name = ins.Name
 	info.Description = ins.Description
 	info.Status = praseDiskStatus(ins.Status)

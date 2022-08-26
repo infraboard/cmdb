@@ -80,7 +80,7 @@ func (s *service) syncHost(ctx context.Context, credentialIns *credential.Secret
 		// 通过回调直接保存
 		err = operator.QueryHost(func(h *host.Host) {
 			// 补充管理信息
-			h.Base.CredentialId = credentialIns.Id
+			h.Resource.Base.CredentialId = credentialIns.Id
 			s.doSyncHost(ctx, h, t)
 		})
 		if err != nil {
@@ -105,7 +105,7 @@ func (s *service) syncHost(ctx context.Context, credentialIns *credential.Secret
 			for i := range set.Items {
 				target := set.Items[i]
 				// 补充管理信息
-				InjectBaseFromSecret(target.Base, credentialIns)
+				InjectBaseFromSecret(target.Resource.Base, credentialIns)
 				s.doSyncHost(ctx, target, t)
 			}
 		}
@@ -115,17 +115,17 @@ func (s *service) syncHost(ctx context.Context, credentialIns *credential.Secret
 // Host主机数据入库
 func (s *service) doSyncHost(ctx context.Context, ins *host.Host, t *task.Task) {
 	// 添加Host
-	ins.Base.SyncAt = time.Now().Unix()
+	ins.Resource.Base.SyncAt = time.Now().Unix()
 	h, err := s.host.SyncHost(ctx, ins)
 
 	// 添加同步详情
 	var detail *task.Record
 	if err != nil {
 		s.log.Warnf("save host error, %s", err)
-		detail = task.NewSyncFailedRecord(t.Id, ins.Base.Id, ins.Information.Name, err.Error())
+		detail = task.NewSyncFailedRecord(t.Id, ins.Resource.Base.Id, ins.Resource.Information.Name, err.Error())
 	} else {
 		s.log.Debugf("save host %s to db", h.ShortDesc())
-		detail = task.NewSyncSucceedRecord(t.Id, ins.Base.Id, ins.Information.Name)
+		detail = task.NewSyncSucceedRecord(t.Id, ins.Resource.Base.Id, ins.Resource.Information.Name)
 	}
 
 	t.AddDetail(detail)

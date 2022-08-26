@@ -12,11 +12,14 @@ const (
 
 func NewDefaultDisk() *Disk {
 	return &Disk{
-		Base: &resource.Base{
-			ResourceType: resource.TYPE_DISK,
+		Resource: &resource.Resource{
+			Base: &resource.Base{
+				ResourceType: resource.TYPE_DISK,
+			},
+			Information: &resource.Information{},
+			Tags:        []*resource.Tag{},
 		},
-		Information: &resource.Information{},
-		Describe:    &Describe{},
+		Describe: &Describe{},
 	}
 }
 
@@ -34,7 +37,7 @@ func (s *DiskSet) Add(items ...any) {
 
 func (s *DiskSet) ResourceIds() (ids []string) {
 	for i := range s.Items {
-		ids = append(ids, s.Items[i].Base.Id)
+		ids = append(ids, s.Items[i].Resource.Base.Id)
 	}
 	return
 }

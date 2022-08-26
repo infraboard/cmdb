@@ -46,7 +46,7 @@ func (o *DnsOperator) transferPublicZoneSet(list *model.ListPublicZonesResponse)
 func (o *DnsOperator) transferPublicZone(ins model.PublicZoneResp) *dns.Domain {
 	r := dns.NewDefaultDomain()
 
-	b := r.Base
+	b := r.Resource.Base
 	b.Vendor = resource.VENDOR_HUAWEI
 	return r
 }

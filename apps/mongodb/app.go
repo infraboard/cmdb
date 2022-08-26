@@ -8,11 +8,8 @@ const (
 
 func NewDefaultMongoDB() *MongoDB {
 	return &MongoDB{
-		Base: &resource.Base{
-			ResourceType: resource.TYPE_MONGODB,
-		},
-		Information: &resource.Information{},
-		Describe:    &Describe{},
+		Resource: resource.NewDefaultResource(resource.TYPE_MONGODB),
+		Describe: &Describe{},
 	}
 }
 

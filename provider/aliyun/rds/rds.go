@@ -82,14 +82,14 @@ func (o *RdsOperator) transferSet(items *rds.DescribeDBInstanceAttributeResponse
 func (o *RdsOperator) transferOne(ins *rds.DescribeDBInstanceAttributeResponseBodyItemsDBInstanceAttribute) *cmdbRds.Rds {
 	r := cmdbRds.NewDefaultRDS()
 
-	b := r.Base
+	b := r.Resource.Base
 	b.Vendor = resource.VENDOR_ALIYUN
 	b.Region = tea.StringValue(ins.RegionId)
 	b.Zone = tea.StringValue(ins.ZoneId)
 	b.CreateAt = o.parseTime(tea.StringValue(ins.CreationTime))
 	b.Id = tea.StringValue(ins.DBInstanceId)
 
-	info := r.Information
+	info := r.Resource.Information
 	info.ExpireAt = o.parseTime(tea.StringValue(ins.ExpireTime))
 	info.Name = tea.StringValue(ins.DBInstanceDescription)
 	info.Type = tea.StringValue(ins.DBInstanceType)

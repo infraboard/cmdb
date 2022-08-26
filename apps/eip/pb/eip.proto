@@ -12,9 +12,10 @@ service Service {
 }
 
 message EIP {
-    infraboard.cmdb.resource.Base base = 1;
-    infraboard.cmdb.resource.Information information = 2;
-    Describe describe = 3;
+    // @gotags: json:"resource"
+    resource.Resource resource = 1;
+    // @gotags: json:"describe"
+    Describe describe = 2;
 }
 
 message Describe {

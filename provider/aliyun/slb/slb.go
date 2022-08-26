@@ -68,14 +68,14 @@ func (o *SLBOperator) transferLoadBalancerSet(items *slb.DescribeLoadBalancersRe
 
 func (o *SLBOperator) transferLoadBalancer(ins *slb.DescribeLoadBalancersResponseBodyLoadBalancersLoadBalancer) *lb.LoadBalancer {
 	r := lb.NewDefaultLoadBalancer()
-	b := r.Base
+	b := r.Resource.Base
 	b.Vendor = resource.VENDOR_ALIYUN
 	b.Region = tea.StringValue(ins.RegionId)
 	b.Zone = tea.StringValue(ins.MasterZoneId)
 	b.CreateAt = tea.Int64Value(ins.CreateTimeStamp) / 1000
 	b.Id = tea.StringValue(ins.LoadBalancerId)
 
-	info := r.Information
+	info := r.Resource.Information
 	info.Name = tea.StringValue(ins.LoadBalancerName)
 	info.Type = tea.StringValue(ins.NetworkType)
 	info.Status = praseSlbStatus(ins.LoadBalancerStatus)
