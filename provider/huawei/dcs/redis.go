@@ -80,9 +80,9 @@ func (o *DcsOperator) transferOne(ins model.InstanceListInfo) *redis.Redis {
 	info.Category = tea.StringValue(ins.SpecCode)
 	info.PayMode = mapping.PrasePayMode(ins.ChargingMode)
 	info.Status = praseStatus(ins.Status)
+	info.Memory = tea.Int32Value(ins.Capacity)
 
 	d := r.Describe
-	d.Memory = int64(tea.Int32Value(ins.Capacity))
 	d.ConnectAddr = tea.StringValue(ins.Ip)
 	d.ConnectPort = int64(tea.Int32Value(ins.Port))
 	d.ArchitectureType = tea.StringValue(ins.SpecCode)

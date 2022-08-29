@@ -80,14 +80,14 @@ func (o *RedisOperator) transferOne(ins *redis.DescribeInstancesResponseBodyInst
 	info.Status = praseStatus(ins.InstanceStatus)
 	info.PayMode = mapping.PrasePayMode(ins.ChargeType)
 	info.PrivateIp = []string{tea.StringValue(ins.PrivateIp)}
+	info.Memory = int32(tea.Int64Value(ins.Capacity))
+	info.BandWidth = int32(tea.Int64Value(ins.Bandwidth))
 
 	desc := r.Describe
-	desc.Memory = tea.Int64Value(ins.Capacity)
 	desc.ConnectAddr = tea.StringValue(ins.ConnectionDomain)
 	desc.ConnectPort = tea.Int64Value(ins.Port)
 	desc.ArchitectureType = tea.StringValue(ins.ArchitectureType)
 	desc.Qps = tea.Int64Value(ins.QPS)
-	desc.BandWidth = tea.Int64Value(ins.Bandwidth)
 	desc.MaxConnection = tea.Int64Value(ins.Connections)
 	desc.Config = tea.StringValue(ins.Config)
 	desc.NodeType = tea.StringValue(ins.NodeType)

@@ -19,9 +19,6 @@ message Redis {
 }
 
 message Describe {
-    // 存储容量，单位：MB
-    // @gotags: json:"memory"
-    int64 memory = 1;
     // 链接地址
     // @gotags: json:"connect_addr"
     string connect_addr = 2;
@@ -34,9 +31,6 @@ message Describe {
     // 理论最大QPS值
     // @gotags: json:"qps"
     int64 qps = 5;
-    // 带宽，单位：MB/s。
-    // @gotags: json:"band_width"
-    int64 band_width = 6;
     // 实例连接数限制，单位：个
     // @gotags: json:"max_connection"
     int64 max_connection = 7;

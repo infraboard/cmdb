@@ -78,10 +78,10 @@ func (o *RedisOperator) transferOne(ins *redis.InstanceSet) *cmdbRedis.Redis {
 	info.Status = praseStatus(ins.Status)
 	info.PayMode = o.parsePayMode(ins.BillingMode)
 	info.PrivateIp = []string{tea.StringValue(ins.WanIp)}
+	info.Memory = int32(tea.Float64Value(ins.Size))
+	info.BandWidth = int32(tea.Int64Value(ins.NetLimit))
 
 	desc := r.Describe
-	desc.Memory = int64(tea.Float64Value(ins.Size))
-	desc.BandWidth = tea.Int64Value(ins.NetLimit)
 	desc.MaxConnection = tea.Int64Value(ins.ClientLimitMax)
 	desc.EngineType = tea.StringValue(ins.Engine)
 	desc.EngineVersion = o.ParseType(ins.Type)
