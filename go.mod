@@ -40,7 +40,8 @@ require (
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cbs v1.0.451
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cdb v1.0.393
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/clb v1.0.447
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.466
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cloudaudit v1.0.484
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.484
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm v1.0.393
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod v1.0.447
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/redis v1.0.446

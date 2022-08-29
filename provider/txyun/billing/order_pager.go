@@ -2,7 +2,6 @@ package billing
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/alibabacloud-go/tea/tea"
 	billing "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/billing/v20180709"
@@ -19,7 +18,6 @@ func newOrderPager(operator *BillOperator, r *provider.QueryOrderRequest) pager.
 	req := billing.NewDescribeDealsByCondRequest()
 	req.StartTime = tea.String(r.StartTime.Format(utils.TIME_SECOND_FORMAT_MOD1))
 	req.EndTime = tea.String(r.EndTime.Format(utils.TIME_SECOND_FORMAT_MOD1))
-	fmt.Println(req.ToJsonString())
 	return &orderPager{
 		BasePager: pager.NewBasePager(),
 		operator:  operator,

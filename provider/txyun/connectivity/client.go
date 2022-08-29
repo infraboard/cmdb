@@ -10,6 +10,7 @@ import (
 	cbs "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cbs/v20170312"
 	cdb "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cdb/v20170320"
 	clb "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/clb/v20180317"
+	cloudaudit "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cloudaudit/v20190319"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
 	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
@@ -64,6 +65,7 @@ type TencentCloudClient struct {
 	clbConn   *clb.Client
 	dnsConn   *dnspod.Client
 	billConn  *billing.Client
+	auditConn *cloudaudit.Client
 }
 
 // UseCvmClient cvm
@@ -106,6 +108,27 @@ func (me *TencentCloudClient) DnsClient() *dnspod.Client {
 	dnsConn, _ := dnspod.NewClient(credential, me.Region, cpf)
 	me.dnsConn = dnsConn
 	return me.dnsConn
+}
+
+// UseCvmClient cvm
+func (me *TencentCloudClient) AuditClient() *cloudaudit.Client {
+	if me.auditConn != nil {
+		return me.auditConn
+	}
+
+	credential := common.NewCredential(
+		me.SecretID,
+		me.SecretKey,
+	)
+
+	cpf := profile.NewClientProfile()
+	cpf.HttpProfile.ReqMethod = "POST"
+	cpf.HttpProfile.ReqTimeout = 300
+	cpf.Language = "en-US"
+
+	auditConn, _ := cloudaudit.NewClient(credential, me.Region, cpf)
+	me.auditConn = auditConn
+	return me.auditConn
 }
 
 // UseCvmClient cvm
