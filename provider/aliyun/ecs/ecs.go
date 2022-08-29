@@ -72,37 +72,39 @@ func (o *EcsOperator) transferInstanceSet(items []*ecs.DescribeInstancesResponse
 
 func (o *EcsOperator) transferInstance(ins *ecs.DescribeInstancesResponseBodyInstancesInstance) *host.Host {
 	h := host.NewDefaultHost()
-	h.Resource.Base.Vendor = resource.VENDOR_ALIYUN
-	h.Resource.Base.Region = tea.StringValue(ins.RegionId)
-	h.Resource.Base.Zone = tea.StringValue(ins.ZoneId)
+	b := h.Resource.Base
+	b.Vendor = resource.VENDOR_ALIYUN
+	b.Region = tea.StringValue(ins.RegionId)
+	b.Zone = tea.StringValue(ins.ZoneId)
+	b.CreateAt = utils.ParseDefaultMiniteTime(tea.StringValue(ins.CreationTime))
+	b.Id = tea.StringValue(ins.InstanceId)
 
-	h.Resource.Base.CreateAt = utils.ParseDefaultMiniteTime(tea.StringValue(ins.CreationTime))
-	h.Resource.Base.Id = tea.StringValue(ins.InstanceId)
-
-	h.Resource.Information.ExpireAt = utils.ParseDefaultMiniteTime(tea.StringValue(ins.ExpiredTime))
-	h.Resource.Information.Type = tea.StringValue(ins.InstanceType)
-	h.Resource.Information.Name = tea.StringValue(ins.InstanceName)
-	h.Resource.Information.Description = tea.StringValue(ins.Description)
-	h.Resource.Information.Status = praseEcsStatus(ins.Status)
-	h.Resource.Information.PublicIp = tea.StringSliceValue(ins.PublicIpAddress.IpAddress)
-	h.Resource.Information.PrivateIp = o.parsePrivateIp(ins)
-	h.Resource.Information.PayMode = mapping.PrasePayMode(ins.InstanceChargeType)
-	h.Resource.Information.Owner = o.GetAccountId()
+	i := h.Resource.Information
+	i.ExpireAt = utils.ParseDefaultMiniteTime(tea.StringValue(ins.ExpiredTime))
+	i.Type = tea.StringValue(ins.InstanceType)
+	i.Name = tea.StringValue(ins.InstanceName)
+	i.Description = tea.StringValue(ins.Description)
+	i.Status = praseEcsStatus(ins.Status)
+	i.PublicIp = tea.StringSliceValue(ins.PublicIpAddress.IpAddress)
+	i.PrivateIp = o.parsePrivateIp(ins)
+	i.PayMode = mapping.PrasePayMode(ins.InstanceChargeType)
+	i.Owner = o.GetAccountId()
+	i.Cpu = tea.Int32Value(ins.Cpu)
+	i.Memory = tea.Int32Value(ins.Memory)
+	i.Gpu = tea.Int32Value(ins.GPUAmount)
+	i.SerialNumber = tea.StringValue(ins.SerialNumber)
 
 	if ins.EipAddress != nil {
-		h.Resource.Information.PublicIp = []string{tea.StringValue(ins.EipAddress.IpAddress)}
-		h.Resource.Information.BandWidth = tea.Int32Value(ins.EipAddress.Bandwidth)
+		i.PublicIp = []string{tea.StringValue(ins.EipAddress.IpAddress)}
+		i.BandWidth = tea.Int32Value(ins.EipAddress.Bandwidth)
 	}
 
 	h.Resource.Tags = o.transferTags(ins.Tags)
 
-	h.Describe.Cpu = int64(tea.Int32Value(ins.Cpu))
-	h.Describe.Memory = int64(tea.Int32Value(ins.Memory))
-	h.Describe.GpuAmount = tea.Int32Value(ins.GPUAmount)
 	h.Describe.GpuSpec = tea.StringValue(ins.GPUSpec)
 	h.Describe.OsType = tea.StringValue(ins.OSType)
 	h.Describe.OsName = tea.StringValue(ins.OSName)
-	h.Describe.SerialNumber = tea.StringValue(ins.SerialNumber)
+
 	h.Describe.ImageId = tea.StringValue(ins.ImageId)
 	h.Describe.InternetMaxBandwidthOut = int64(tea.Int32Value(ins.InternetMaxBandwidthOut))
 	h.Describe.InternetMaxBandwidthIn = int64(tea.Int32Value(ins.InternetMaxBandwidthIn))

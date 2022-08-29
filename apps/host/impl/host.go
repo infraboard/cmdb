@@ -106,8 +106,8 @@ func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 			&info.Status, &info.UpdateAt, &base.SyncAt, &info.Owner,
 			&publicIPList, &privateIPList, &info.PayMode, &base.DescribeHash, &base.ResourceHash,
 			&base.CredentialId, &base.Domain, &base.Namespace, &base.Env, &base.UsageMode, &base.Id,
-			&desc.Cpu, &desc.Memory, &desc.GpuAmount, &desc.GpuSpec, &desc.OsType, &desc.OsName,
-			&desc.SerialNumber, &desc.ImageId, &desc.InternetMaxBandwidthOut, &desc.InternetMaxBandwidthIn,
+			&desc.GpuSpec, &desc.OsType, &desc.OsName,
+			&desc.ImageId, &desc.InternetMaxBandwidthOut, &desc.InternetMaxBandwidthIn,
 			&keyPairNameList, &securityGroupsList,
 		)
 		if err != nil {
@@ -156,8 +156,8 @@ func (s *service) DescribeHost(ctx context.Context, req *host.DescribeHostReques
 		&info.Status, &info.UpdateAt, &base.SyncAt, &info.Owner,
 		&publicIPList, &privateIPList, &info.PayMode, &base.DescribeHash, &base.ResourceHash,
 		&base.CredentialId, &base.Domain, &base.Namespace, &base.Env, &base.UsageMode, &base.Id,
-		&desc.Cpu, &desc.Memory, &desc.GpuAmount, &desc.GpuSpec, &desc.OsType, &desc.OsName,
-		&desc.SerialNumber, &desc.ImageId, &desc.InternetMaxBandwidthOut, &desc.InternetMaxBandwidthIn,
+		&desc.GpuSpec, &desc.OsType, &desc.OsName,
+		&desc.ImageId, &desc.InternetMaxBandwidthOut, &desc.InternetMaxBandwidthIn,
 		&keyPairNameList, &securityGroupsList,
 	)
 

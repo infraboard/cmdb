@@ -78,6 +78,9 @@ func (o *CDBOperator) transferOne(ins *cdb.InstanceInfo) *rds.Rds {
 	info.Category = utils.PtrStrV(ins.DeviceType)
 	info.Status = praseStatus(ins.Status)
 	info.PayMode = mapping.PrasePayMode(fmt.Sprintf("%d", tea.Int64Value(ins.PayType)))
+	info.Cpu = int32(utils.PtrInt64(ins.Cpu))
+	info.Memory = int32(utils.PtrInt64(ins.Memory))
+	info.Storage = int32(utils.PtrInt64(ins.Volume))
 
 	// 补充其他状态
 	if ins.TaskStatus != nil && *ins.TaskStatus != 0 {
@@ -88,9 +91,7 @@ func (o *CDBOperator) transferOne(ins *cdb.InstanceInfo) *rds.Rds {
 	desc.EngineType = "MySQL"
 	desc.EngineVersion = utils.PtrStrV(ins.EngineVersion)
 	desc.Type = o.ParseType(ins.InstanceType)
-	desc.Cpu = int32(utils.PtrInt64(ins.Cpu))
-	desc.Memory = utils.PtrInt64(ins.Memory)
-	desc.StorageCapacity = utils.PtrInt64(ins.Volume)
+
 	desc.Port = utils.PtrInt64(ins.WanPort)
 
 	return r

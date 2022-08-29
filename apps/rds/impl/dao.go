@@ -52,9 +52,9 @@ func (s *service) save(ctx context.Context, h *rds.Rds) error {
 	desc := h.Describe
 	_, err = stmt.Exec(
 		h.Resource.Base.Id, desc.EngineType, desc.EngineVersion, desc.InstanceClass, desc.ClassType, desc.ExportType,
-		desc.NetworkType, desc.Type, desc.Cpu, desc.Memory, desc.DbMaxQuantity, desc.AccountMaxQuantity, desc.MaxConnections,
-		desc.MaxIops, desc.Collation, desc.TimeZone, desc.StorageCapacity, desc.StorageType, desc.SecurityIpMode,
-		desc.SecurityIpListToString(), desc.ConnectionMode, desc.IpType, desc.LockMode, desc.LockReason, desc.DeployMode,
+		desc.NetworkType, desc.Type, desc.DbMaxQuantity, desc.AccountMaxQuantity, desc.MaxConnections,
+		desc.MaxIops, desc.Collation, desc.TimeZone, desc.StorageType, desc.SecurityIpMode,
+		desc.SecurityIpListToString(), desc.ConnectionMode, desc.IpType, desc.DeployMode,
 		desc.Port, desc.ExtraToJson(),
 	)
 	if err != nil {

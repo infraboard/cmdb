@@ -36,20 +36,22 @@ type VMOperator struct {
 
 func (o *VMOperator) transferOne(ins *mo.VirtualMachine, dcName string) *host.Host {
 	h := host.NewDefaultHost()
-	h.Resource.Base.Vendor = resource.VENDOR_VSPHERE
-	h.Resource.Base.Region = o.client.URL().Host
-	h.Resource.Base.Zone = dcName
-	h.Resource.Base.CreateAt = ins.Config.CreateDate.UnixMilli()
-	h.Resource.Base.Id = ins.Config.Uuid
+	b := h.Resource.Base
+	b.Vendor = resource.VENDOR_VSPHERE
+	b.Region = o.client.URL().Host
+	b.Zone = dcName
+	b.CreateAt = ins.Config.CreateDate.UnixMilli()
+	b.Id = ins.Config.Uuid
 
-	h.Resource.Information.Name = ins.Name
-	h.Resource.Information.Status = praseStatus(string(ins.Summary.Runtime.PowerState))
+	i := h.Resource.Information
+	i.Name = ins.Name
+	i.Status = praseStatus(string(ins.Summary.Runtime.PowerState))
+	i.Cpu = ins.Config.Hardware.NumCPU
+	i.Memory = ins.Config.Hardware.MemoryMB
+	i.SerialNumber = ins.Config.Uuid
 
-	h.Describe.Cpu = int64(ins.Config.Hardware.NumCPU)
-	h.Describe.Memory = int64(ins.Config.Hardware.MemoryMB)
 	h.Describe.OsType = strings.TrimSuffix(ins.Guest.GuestFamily, "Guest")
 	h.Describe.OsName = ins.Guest.GuestFullName
-	h.Describe.SerialNumber = ins.Config.Uuid
 
 	// 获取主Ip
 	privateIP := o.GetMasterIp(ins.Guest.Net)

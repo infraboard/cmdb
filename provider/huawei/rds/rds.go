@@ -83,6 +83,11 @@ func (o *RdsOperator) transferOne(ins model.InstanceResponse) *rds.Rds {
 	i.Status = ins.Status
 	i.PrivateIp, i.PublicIp = ins.PrivateIps, ins.PublicIps
 	i.Category = ins.FlavorRef
+	cpu, _ := strconv.ParseInt(utils.PtrStrV(ins.Cpu), 10, 32)
+	mem, _ := strconv.ParseInt(utils.PtrStrV(ins.Mem), 10, 64)
+	i.Cpu = int32(cpu)
+	i.Memory = int32(mem * 1024)
+	i.Storage = ins.Volume.Size
 
 	h.Resource.Tags = o.transferTags(ins.Tags)
 
@@ -95,18 +100,15 @@ func (o *RdsOperator) transferOne(ins model.InstanceResponse) *rds.Rds {
 	}
 
 	d := h.Describe
-	cpu, _ := strconv.ParseInt(utils.PtrStrV(ins.Cpu), 10, 32)
-	mem, _ := strconv.ParseInt(utils.PtrStrV(ins.Mem), 10, 64)
 
 	d.EngineType = o.getEnumValue(ins.Datastore.Type)
 	d.EngineVersion = ins.Datastore.Version
-	d.Cpu = int32(cpu)
-	d.Memory = mem * 1024
+
 	d.TimeZone = ins.TimeZone
 	d.MaxIops = utils.PtrInt64(ins.MaxIops)
 
 	d.StorageType = o.getEnumValue(ins.Volume.Type)
-	d.StorageCapacity = int64(ins.Volume.Size)
+
 	d.Port = int64(ins.Port)
 	return h
 }

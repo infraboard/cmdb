@@ -158,48 +158,58 @@ message Information {
     // 描述
     // @gotags: json:"description"
     string description = 5;
-    // 服务商中的状态
-    // @gotags: json:"status"
-    string status = 6;
     // 更新时间
     // @gotags: json:"update_at"
-    int64 update_at = 7;
+    int64 update_at = 6;
     // 资源所属账号
     // @gotags: json:"owner"
-    string owner = 8;
+    string owner = 7;
+
+    // 服务商中的状态
+    // @gotags: json:"status"
+    string status = 8;
+    // 实例锁定模式; Unlock：正常；ManualLock：手动触发锁定；LockByExpiration：实例过期自动锁定；LockByRestoration：实例回滚前的自动锁定；LockByDiskQuota：实例空间满自动锁定
+    // @gotags: json:"lock_mode"
+    string lock_mode = 9;
+    // 锁定原因
+    // @gotags: json:"lock_reason"
+    string lock_reason = 10;
 
     // 资源通用配置
     // @gotags: json:"cpu"
     // 资源占用Cpu数量
-    int32 cpu = 9;
+    int32 cpu = 11;
+    // GPU数量
+    // @gotags: json:"gpu"
+    int32 gpu = 12;
     // 资源使用的内存
     // @gotags: json:"memory"
-    int32 memory = 10;
+    int32 memory = 13;
     // 资源使用的存储
     // @gotags: json:"storage"
-    int32 storage = 11;
+    int32 storage = 14;
 
     // 资源访问地址
     // 公网IP, 或者域名
     // @gotags: json:"public_ip"
-    repeated string public_ip = 12;
+    repeated string public_ip = 15;
     // 公网IP带宽, 单位M
     // @gotags: json:"band_width"
-    int32 band_width =13;
+    int32 band_width =16;
     // 内网IP, 或者域名
     // @gotags: json:"private_ip"
-    repeated string private_ip = 14;
+    repeated string private_ip = 17;
 
     // 实例付费方式
     // @gotags: json:"pay_mode"
-    PayMode pay_mode = 15;
+    PayMode pay_mode = 18;
     // 付费方式详情
     // @gotags: json:"pay_mode_detail"
-    string pay_mode_detail = 16;
+    string pay_mode_detail = 19;
     
     // 序列号
     // @gotags: json:"serial_number"
-    string serial_number = 17;
+    string serial_number = 20;
 
     // 额外的通用属性
     // @gotags: json:"extra"

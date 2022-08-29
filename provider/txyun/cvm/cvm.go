@@ -58,27 +58,33 @@ func (o *CVMOperator) transferSet(items []*cvm.Instance) *host.HostSet {
 
 func (o *CVMOperator) transferOne(ins *cvm.Instance) *host.Host {
 	h := host.NewDefaultHost()
-	h.Resource.Base.Vendor = resource.VENDOR_TENCENT
-	h.Resource.Base.Region = o.client.GetRegion()
-	h.Resource.Base.Zone = utils.PtrStrV(ins.Placement.Zone)
-	h.Resource.Base.CreateAt = utils.ParseDefaultSecondTime(utils.PtrStrV(ins.CreatedTime))
-	h.Resource.Base.Id = utils.PtrStrV(ins.InstanceId)
+	b := h.Resource.Base
+	b.Vendor = resource.VENDOR_TENCENT
+	b.Region = o.client.GetRegion()
+	b.Zone = utils.PtrStrV(ins.Placement.Zone)
+	b.CreateAt = utils.ParseDefaultSecondTime(utils.PtrStrV(ins.CreatedTime))
+	b.Id = utils.PtrStrV(ins.InstanceId)
 
-	h.Resource.Information.ExpireAt = utils.ParseDefaultSecondTime(utils.PtrStrV(ins.ExpiredTime))
-	h.Resource.Information.Type = utils.PtrStrV(ins.InstanceType)
-	h.Resource.Information.Name = utils.PtrStrV(ins.InstanceName)
-	h.Resource.Information.Status = praseCvmStatus(ins.InstanceState)
-	h.Resource.Information.PublicIp = utils.SlicePtrStrv(ins.PublicIpAddresses)
-	h.Resource.Information.PrivateIp = utils.SlicePtrStrv(ins.PrivateIpAddresses)
-	h.Resource.Information.PayMode = mapping.PrasePayMode(tea.StringValue(ins.InstanceChargeType))
-	h.Resource.Information.Owner = o.GetAccountId()
+	i := h.Resource.Information
+	i.ExpireAt = utils.ParseDefaultSecondTime(utils.PtrStrV(ins.ExpiredTime))
+	i.Type = utils.PtrStrV(ins.InstanceType)
+	i.Name = utils.PtrStrV(ins.InstanceName)
+	i.Status = praseCvmStatus(ins.InstanceState)
+	i.PublicIp = utils.SlicePtrStrv(ins.PublicIpAddresses)
+	if ins.InternetAccessible != nil {
+		i.BandWidth = int32(tea.Int64Value(ins.InternetAccessible.InternetMaxBandwidthOut))
+	}
+	i.PrivateIp = utils.SlicePtrStrv(ins.PrivateIpAddresses)
+	i.PayMode = mapping.PrasePayMode(tea.StringValue(ins.InstanceChargeType))
+	i.Owner = o.GetAccountId()
+	i.Cpu = int32(utils.PtrInt64(ins.CPU))
+	i.Memory = int32(utils.PtrInt64(ins.Memory))
+	i.SerialNumber = utils.PtrStrV(ins.Uuid)
 
 	h.Resource.Tags = transferTags(ins.Tags)
 
-	h.Describe.Cpu = utils.PtrInt64(ins.CPU)
-	h.Describe.Memory = utils.PtrInt64(ins.Memory)
 	h.Describe.OsName = utils.PtrStrV(ins.OsName)
-	h.Describe.SerialNumber = utils.PtrStrV(ins.Uuid)
+
 	h.Describe.ImageId = utils.PtrStrV(ins.ImageId)
 	if ins.InternetAccessible != nil {
 		h.Describe.InternetMaxBandwidthOut = utils.PtrInt64(ins.InternetAccessible.InternetMaxBandwidthOut)
