@@ -89,6 +89,11 @@ func (o *EcsOperator) transferInstance(ins *ecs.DescribeInstancesResponseBodyIns
 	h.Resource.Information.PayMode = mapping.PrasePayMode(ins.InstanceChargeType)
 	h.Resource.Information.Owner = o.GetAccountId()
 
+	if ins.EipAddress != nil {
+		h.Resource.Information.PublicIp = []string{tea.StringValue(ins.EipAddress.IpAddress)}
+		h.Resource.Information.BandWidth = tea.Int32Value(ins.EipAddress.Bandwidth)
+	}
+
 	h.Resource.Tags = o.transferTags(ins.Tags)
 
 	h.Describe.Cpu = int64(tea.Int32Value(ins.Cpu))

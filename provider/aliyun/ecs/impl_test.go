@@ -32,7 +32,7 @@ func TestPageQueryHost(t *testing.T) {
 }
 
 func TestDescribeEcs(t *testing.T) {
-	req := &provider.DescribeHostRequest{Id: "i-bp1ieov2ieftvjai48nf"}
+	req := &provider.DescribeHostRequest{Id: "i-xxx"}
 	ins, err := operator.DescribeHost(context.Background(), req)
 	if err != nil {
 		t.Fatal(err)

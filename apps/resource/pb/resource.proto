@@ -167,18 +167,43 @@ message Information {
     // 资源所属账号
     // @gotags: json:"owner"
     string owner = 8;
+
+    // 资源通用配置
+    // @gotags: json:"cpu"
+    // 资源占用Cpu数量
+    int32 cpu = 9;
+    // 资源使用的内存
+    // @gotags: json:"memory"
+    int32 memory = 10;
+    // 资源使用的存储
+    // @gotags: json:"storage"
+    int32 storage = 11;
+
+    // 资源访问地址
     // 公网IP, 或者域名
     // @gotags: json:"public_ip"
-    repeated string public_ip = 9;
+    repeated string public_ip = 12;
+    // 公网IP带宽, 单位M
+    // @gotags: json:"band_width"
+    int32 band_width =13;
     // 内网IP, 或者域名
     // @gotags: json:"private_ip"
-    repeated string private_ip = 10;
+    repeated string private_ip = 14;
+
     // 实例付费方式
     // @gotags: json:"pay_mode"
-    PayMode pay_mode = 11;
+    PayMode pay_mode = 15;
     // 付费方式详情
     // @gotags: json:"pay_mode_detail"
-    string pay_mode_detail = 12;
+    string pay_mode_detail = 16;
+    
+    // 序列号
+    // @gotags: json:"serial_number"
+    string serial_number = 17;
+
+    // 额外的通用属性
+    // @gotags: json:"extra"
+    map<string, string> extra = 26;
 }
 
 enum TAG_TYPE {
