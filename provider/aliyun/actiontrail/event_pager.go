@@ -20,14 +20,17 @@ func newPager(operator *Operator, r *provider.QueryEventRequest, logger logger.L
 	req.LookupAttribute = []*actiontrail.LookupEventsRequestLookupAttribute{
 		{
 			Key:   tea.String("ResourceType"),
-			Value: tea.String("Ecs"),
+			Value: tea.String("ACS::ECS::Instance"),
 		},
 	}
+	log := logger.Named("event")
+	log.Debugf("start: %s, end: %s", *req.StartTime, *req.EndTime)
+
 	return &eventPager{
 		BasePager: pager.NewBasePager(),
 		operator:  operator,
 		req:       req,
-		log:       logger.Named("event"),
+		log:       log,
 	}
 }
 

@@ -17,7 +17,7 @@ var (
 	ctx      = context.Background()
 )
 
-func TestPageQueryLoadBalancer(t *testing.T) {
+func TestPageQueryEvent(t *testing.T) {
 	req := provider.NewQueryEventRequest()
 	req.StartTime = time.Now().Add(-24 * 10 * time.Hour)
 	pager := operator.PageQueryEvent(req)

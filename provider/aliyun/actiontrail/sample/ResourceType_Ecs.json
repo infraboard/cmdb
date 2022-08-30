@@ -1,0 +1,65 @@
+[
+    {
+       "acsRegion": "cn-hangzhou",
+       "additionalEventData": {
+          "CallerBid": "xxxxx"
+       },
+       "apiVersion": "2014-05-26",
+       "eventId": "Axxxxx",
+       "eventName": "StopInstances",
+       "eventSource": "ecs-cn-hangzhou-share.aliyuncs.com",
+       "eventTime": "2022-08-30T07:13:05Z",
+       "eventType": "ApiCall",
+       "eventVersion": 1,
+       "isGlobal": false,
+       "referencedResources": {
+          "ACS::ECS::Instance": [
+             "i-xxxx"
+          ]
+       },
+       "requestId": "Axxxxxx",
+       "requestParameters": {
+          "AcceptLanguage": "zh-CN",
+          "AcsProduct": "Ecs",
+          "BatchOptimization": "SuccessFirst",
+          "ByShare": false,
+          "ConfirmStop": false,
+          "ForceReboot": false,
+          "ForceStop": false,
+          "Hibernate": false,
+          "InstanceId.1": "i-xxxxx",
+          "RegionId": "cn-hangzhou",
+          "StoppedMode": "StopCharging",
+          "UserAgent": "ecs.console.aliyun.com"
+       },
+       "responseElements": {
+          "InstanceResponses": {
+             "InstanceResponse": [
+                {
+                   "Code": "200",
+                   "CurrentStatus": "Stopped",
+                   "InstanceId": "i-xxxx",
+                   "Message": "success",
+                   "PreviousStatus": "Stopped"
+                }
+             ]
+          },
+          "RequestId": "xxxx"
+       },
+       "serviceName": "Ecs",
+       "sourceIpAddress": "10.10.10.10",
+       "userAgent": "ecs.console.aliyun.com",
+       "userIdentity": {
+          "accountId": "xxxx",
+          "principalId": "xxx",
+          "sessionContext": {
+             "attributes": {
+                "creationDate": "2022-08-30T07:13:05Z",
+                "mfaAuthenticated": "false"
+             }
+          },
+          "type": "ram-user",
+          "userName": "xxxx"
+       }
+    }
+ ]

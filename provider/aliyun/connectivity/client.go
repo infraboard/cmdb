@@ -204,7 +204,7 @@ func (c *AliCloudClient) ActionTrailClient() (*actiontrail.Client, error) {
 		AccessKeyId:     tea.String(c.AccessKey),
 		AccessKeySecret: tea.String(c.AccessSecret),
 		RegionId:        tea.String(c.Region),
-		Endpoint:        tea.String("actiontrail.aliyuncs.com"),
+		Endpoint:        tea.String("actiontrail." + c.Region + ".aliyuncs.com"),
 	})
 	if err != nil {
 		return nil, err
