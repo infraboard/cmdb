@@ -63,6 +63,8 @@ github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc/go.mod h1:LOuy
 github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
 github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf/go.mod h1:ybxpYRFXyAe+OPACYpWeL0wqObRcbAqCMya13uyzqw0=
 github.com/alecthomas/units v0.0.0-20190717042225-c3de453c63f4/go.mod h1:ybxpYRFXyAe+OPACYpWeL0wqObRcbAqCMya13uyzqw0=
+github.com/alibabacloud-go/actiontrail-20200706/v2 v2.1.0 h1:oFypNiUIQyss77qrETQBEV7q3zzcvphYZklaeUidGPU=
+github.com/alibabacloud-go/actiontrail-20200706/v2 v2.1.0/go.mod h1:P3tjgqLd9WMxcCuFjRq3VVZQ7ksB9iFEHaCMi7T0buo=
 github.com/alibabacloud-go/alibabacloud-gateway-spi v0.0.4 h1:iC9YFYKDGEy3n/FtqJnOkZsene9olVspKmkX5A2YBEo=
 github.com/alibabacloud-go/alibabacloud-gateway-spi v0.0.4/go.mod h1:sCavSAvdzOjul4cEqeVtvlSaSScfNsTQ+46HwlTL1hc=
 github.com/alibabacloud-go/alidns-20150109/v2 v2.0.1 h1:ZRIQVzRvb1HJA/kdGL8NSqVh3ZPK40gnr8iqALTBXoA=

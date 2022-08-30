@@ -8,13 +8,13 @@ import (
 )
 
 const (
-	DEFAULT_TIME_SECOND_FORMAT = "2006-01-02T15:04:05Z"
+	ISO8601_FORMAT             = "2006-01-02T15:04:05Z"
 	DEFAULT_TIME_MINITE_FORMAT = "2006-01-02T15:04Z"
 	TIME_SECOND_FORMAT_MOD1    = "2006-01-02 15:04:05"
 )
 
 func ParseDefaultSecondTime(t string) int64 {
-	return ParseTime(DEFAULT_TIME_SECOND_FORMAT, t)
+	return ParseTime(ISO8601_FORMAT, t)
 }
 
 func ParseDefaultMiniteTime(t string) int64 {

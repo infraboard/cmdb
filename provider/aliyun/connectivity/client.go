@@ -6,6 +6,7 @@ import (
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/sts"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 
+	actiontrail "github.com/alibabacloud-go/actiontrail-20200706/v2/client"
 	dns "github.com/alibabacloud-go/alidns-20150109/v2/client"
 	bssopenapi "github.com/alibabacloud-go/bssopenapi-20171214/v2/client"
 	cms "github.com/alibabacloud-go/cms-20190101/v7/client"
@@ -41,6 +42,7 @@ type AliCloudClient struct {
 	domConn   *domain.Client
 	dnsConn   *dns.Client
 	slbConn   *slb.Client
+	atConn    *actiontrail.Client
 	bssConn   *bssopenapi.Client
 }
 
@@ -190,6 +192,25 @@ func (c *AliCloudClient) MongoDBClient() (*dds.Client, error) {
 	}
 
 	c.ddsConn = client
+	return client, nil
+}
+
+func (c *AliCloudClient) ActionTrailClient() (*actiontrail.Client, error) {
+	if c.atConn != nil {
+		return c.atConn, nil
+	}
+
+	client, err := actiontrail.NewClient(&openapi.Config{
+		AccessKeyId:     tea.String(c.AccessKey),
+		AccessKeySecret: tea.String(c.AccessSecret),
+		RegionId:        tea.String(c.Region),
+		Endpoint:        tea.String("actiontrail.aliyuncs.com"),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	c.atConn = client
 	return client, nil
 }
 

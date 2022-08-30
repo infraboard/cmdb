@@ -15,8 +15,8 @@ import (
 
 func newOrderPager(operator *BssOperator, r *provider.QueryOrderRequest) pager.Pager {
 	req := &bssopenapi.QueryOrdersRequest{}
-	req.CreateTimeEnd = tea.String(r.EndTime.UTC().Format(utils.DEFAULT_TIME_SECOND_FORMAT))
-	req.CreateTimeStart = tea.String(r.StartTime.UTC().Format(utils.DEFAULT_TIME_SECOND_FORMAT))
+	req.CreateTimeEnd = tea.String(r.EndTime.UTC().Format(utils.ISO8601_FORMAT))
+	req.CreateTimeStart = tea.String(r.StartTime.UTC().Format(utils.ISO8601_FORMAT))
 	return &orderPager{
 		BasePager: pager.NewBasePager(),
 		operator:  operator,

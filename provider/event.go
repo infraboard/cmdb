@@ -1,6 +1,14 @@
 package provider
 
-import "time"
+import (
+	"time"
+
+	"github.com/infraboard/mcube/pager"
+)
+
+type EventOperator interface {
+	PageQueryEvent(req *QueryEventRequest) pager.Pager
+}
 
 func NewQueryEventRequest() *QueryEventRequest {
 	now := time.Now()

@@ -3,6 +3,7 @@ package aliyun
 import (
 	"github.com/caarlos0/env/v6"
 	"github.com/infraboard/cmdb/provider"
+	"github.com/infraboard/cmdb/provider/aliyun/actiontrail"
 	"github.com/infraboard/cmdb/provider/aliyun/bss"
 	"github.com/infraboard/cmdb/provider/aliyun/cms"
 	"github.com/infraboard/cmdb/provider/aliyun/connectivity"
@@ -75,6 +76,14 @@ func (o *Operator) BillOperator() provider.BillOperator {
 		panic(err)
 	}
 	return bss.NewBssOperator(c)
+}
+
+func (o *Operator) EventOperator() provider.EventOperator {
+	c, err := o.client.ActionTrailClient()
+	if err != nil {
+		panic(err)
+	}
+	return actiontrail.NewOperator(c)
 }
 
 func (o *Operator) CmsOperator() provider.CmsOperator {

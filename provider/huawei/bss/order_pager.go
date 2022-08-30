@@ -15,8 +15,8 @@ import (
 
 func newOrderPager(operator *BssOperator, r *provider.QueryOrderRequest) pager.Pager {
 	req := &model.ListCustomerOrdersRequest{
-		CreateTimeBegin: tea.String(r.StartTime.UTC().Format(utils.DEFAULT_TIME_SECOND_FORMAT)),
-		CreateTimeEnd:   tea.String(r.EndTime.UTC().Format(utils.DEFAULT_TIME_SECOND_FORMAT)),
+		CreateTimeBegin: tea.String(r.StartTime.UTC().Format(utils.ISO8601_FORMAT)),
+		CreateTimeEnd:   tea.String(r.EndTime.UTC().Format(utils.ISO8601_FORMAT)),
 	}
 
 	return &orderPager{
