@@ -16,7 +16,8 @@ func newPager(operator *Operator, r *provider.QueryEventRequest, log logger.Logg
 	req.From = tea.Int64(r.StartTime.UnixMilli())
 	req.To = tea.Int64(r.EndTime.UnixMilli())
 	req.TraceName = tea.String("createServer")
-	req.TraceType = model.GetListTracesRequestTraceTypeEnum().DATA
+	req.ResourceType = tea.String("server")
+	req.TraceType = model.GetListTracesRequestTraceTypeEnum().SYSTEM
 	return &eventPager{
 		BasePager: pager.NewBasePager(),
 		operator:  operator,

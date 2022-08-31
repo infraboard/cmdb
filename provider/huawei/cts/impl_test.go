@@ -21,7 +21,7 @@ var (
 
 func TestPageQueryRedis(t *testing.T) {
 	req := provider.NewQueryEventRequest()
-	req.StartTime = time.Now().Add(-24 * 6 * time.Hour)
+	req.StartTime = time.Now().Add(-24 * 1 * time.Hour)
 	pager := operator.PageQueryEvent(req)
 
 	set := redis.NewSet()

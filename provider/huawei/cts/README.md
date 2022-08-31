@@ -4,7 +4,11 @@
 
 ## ECS常用事件
 
+
+
 [弹性云服务器事件列表](https://support.huaweicloud.com/usermanual-cts/cts_03_0024.html)
+
+资源类型:ecs
 
 + createServer 创建云服务器
 + deleteServer 删除云服务器 
