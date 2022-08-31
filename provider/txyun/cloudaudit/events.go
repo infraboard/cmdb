@@ -17,7 +17,7 @@ func (o *Operator) PageQueryEvents(req *provider.QueryEventRequest) pager.Pager 
 }
 
 // 用于对操作日志进行检索，便于用户进行查询相关的操作信息
-// 参考: https://console.cloud.tencent.com/api/explorer?Product=cloudaudit&Version=2019-03-19&Action=LookUpEvents&SignVersion=
+// 参考: https://console.cloud.tencent.com/api/explorer?Product=cloudaudit&Version=2019-03-19&Action=DescribeEvents&SignVersion=
 func (o *Operator) QueryEvents(ctx context.Context, req *cloudaudit.DescribeEventsRequest) (*lb.LoadBalancerSet, error) {
 	resp, err := o.client.DescribeEventsWithContext(ctx, req)
 	if err != nil {

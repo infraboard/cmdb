@@ -19,8 +19,8 @@ func newPager(operator *Operator, r *provider.QueryEventRequest, logger logger.L
 	req.EndTime = tea.String(r.EndTime.UTC().Format(utils.ISO8601_FORMAT))
 	req.LookupAttribute = []*actiontrail.LookupEventsRequestLookupAttribute{
 		{
-			Key:   tea.String("ResourceType"),
-			Value: tea.String("ACS::ECS::Instance"),
+			Key:   tea.String("EventName"),
+			Value: tea.String("DeleteInstance"),
 		},
 	}
 	log := logger.Named("event")
