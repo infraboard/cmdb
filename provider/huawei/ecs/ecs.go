@@ -70,37 +70,39 @@ func (o *EcsOperator) transferInstanceSet(list *[]model.ServerDetail) *host.Host
 }
 
 func (o *EcsOperator) transferInstance(ins model.ServerDetail) *host.Host {
-	h := host.NewDefaultHost()
-	b := h.Resource.Base
-	b.Vendor = resource.VENDOR_HUAWEI
-	b.Zone = ins.OSEXTAZavailabilityZone
+	r := host.NewDefaultHost()
+	b := r.Resource.Meta
 	b.CreateAt = o.parseTime(ins.Created)
 	b.Id = ins.Id
+	b.SerialNumber = ins.Id
 
-	i := h.Resource.Information
+	i := r.Resource.Spec
+	i.Vendor = resource.VENDOR_HUAWEI
+	i.Zone = ins.OSEXTAZavailabilityZone
+	i.Owner = o.GetAccountId()
 	i.Category = ins.Flavor.Name
 	i.ExpireAt = o.parseTime(ins.AutoTerminateTime)
 	i.Name = ins.Name
 	i.Description = utils.PtrStrV(ins.Description)
-	i.Status = praseEcsStatus(ins.Status)
-	i.PrivateIp, h.Resource.Information.PublicIp = o.parseIp(ins.Addresses)
-	i.PayMode = o.ParseChangeMode(ins.Metadata["charging_mode"])
-	i.Owner = o.GetAccountId()
-	i.SerialNumber = ins.Id
+	r.Resource.Cost.PayMode = o.ParseChangeMode(ins.Metadata["charging_mode"])
+
+	r.Resource.Status.PrivateIp, r.Resource.Status.PublicIp = o.parseIp(ins.Addresses)
+	r.Resource.Status.Phase = praseEcsStatus(ins.Status)
+
 	cpu, _ := strconv.ParseInt(ins.Flavor.Vcpus, 10, 64)
 	i.Cpu = int32(cpu)
 	mem, _ := strconv.ParseInt(ins.Flavor.Ram, 10, 64)
 	i.Memory = int32(mem)
 
 	if ins.Tags != nil {
-		h.Resource.Tags = o.transferTags(*ins.Tags)
+		r.Resource.Tags = o.transferTags(*ins.Tags)
 	}
 
-	h.Describe.OsType = ins.Metadata["os_type"]
-	h.Describe.OsName = ins.Metadata["image_name"]
-	h.Describe.ImageId = ins.Image.Id
-	h.Describe.KeyPairName = []string{ins.KeyName}
-	return h
+	r.Describe.OsType = ins.Metadata["os_type"]
+	r.Describe.OsName = ins.Metadata["image_name"]
+	r.Describe.ImageId = ins.Image.Id
+	r.Describe.KeyPairName = []string{ins.KeyName}
+	return r
 }
 
 func (o *EcsOperator) parseTime(t string) int64 {

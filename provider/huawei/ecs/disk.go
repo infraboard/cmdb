@@ -74,22 +74,22 @@ func (o *EcsOperator) transferDiskSet(list *model.ListVolumesResponse) *disk.Dis
 }
 
 func (o *EcsOperator) transferDisk(ins model.VolumeDetail) *disk.Disk {
-	h := disk.NewDefaultDisk()
+	r := disk.NewDefaultDisk()
 
-	b := h.Resource.Base
-	b.Vendor = resource.VENDOR_HUAWEI
-	b.Zone = ins.AvailabilityZone
+	b := r.Resource.Meta
 	b.Id = ins.Id
 	b.CreateAt = utils.ParseTime("2006-01-02T15:04:05.999999", ins.CreatedAt)
 
-	info := h.Resource.Information
+	info := r.Resource.Spec
+	info.Vendor = resource.VENDOR_HUAWEI
+	info.Zone = ins.AvailabilityZone
 	info.Name = ins.Name
 	info.Description = ins.Description
-	info.Status = praseDiskStatus(ins.Status)
+	r.Resource.Status.Phase = praseDiskStatus(ins.Status)
 	info.Category = ins.ServiceType
 	info.Type = ins.VolumeType
 
-	desc := h.Describe
+	desc := r.Describe
 	if ins.Bootable == "true" {
 		desc.Type = "system"
 	} else {
@@ -104,5 +104,5 @@ func (o *EcsOperator) transferDisk(ins model.VolumeDetail) *disk.Disk {
 	desc.MultiAttach = ins.Multiattach
 	desc.Size = uint64(ins.Size)
 	desc.Encrypted = tea.BoolValue(ins.Encrypted)
-	return h
+	return r
 }

@@ -70,16 +70,17 @@ func (o *DcsOperator) transferSet(list *[]model.InstanceListInfo) *redis.Set {
 
 func (o *DcsOperator) transferOne(ins model.InstanceListInfo) *redis.Redis {
 	r := redis.NewDefaultRedis()
-	b := r.Resource.Base
-	b.Vendor = resource.VENDOR_HUAWEI
+	b := r.Resource.Meta
+
 	b.CreateAt = o.parseTime(tea.StringValue(ins.CreatedAt))
 	b.Id = tea.StringValue(ins.InstanceId)
 
-	info := r.Resource.Information
+	info := r.Resource.Spec
+	info.Vendor = resource.VENDOR_HUAWEI
 	info.Name = tea.StringValue(ins.Name)
 	info.Category = tea.StringValue(ins.SpecCode)
-	info.PayMode = mapping.PrasePayMode(ins.ChargingMode)
-	info.Status = praseStatus(ins.Status)
+	r.Resource.Cost.PayMode = mapping.PrasePayMode(ins.ChargingMode)
+	r.Resource.Status.Phase = praseStatus(ins.Status)
 	info.Memory = tea.Int32Value(ins.Capacity)
 
 	d := r.Describe

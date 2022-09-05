@@ -64,20 +64,22 @@ func (o *CLBOperator) transferCLBSet(items []*clb.LoadBalancer) *lb.LoadBalancer
 func (o *CLBOperator) transferLB(ins *clb.LoadBalancer) *lb.LoadBalancer {
 	r := lb.NewDefaultLoadBalancer()
 
-	b := r.Resource.Base
-	b.Vendor = resource.VENDOR_TENCENT
+	b := r.Resource.Meta
 	b.CreateAt = utils.ParseTime("2006-01-02 15:04:05", utils.PtrStrV(ins.CreateTime))
-	b.Region = tea.StringValue(ins.TargetRegionInfo.Region)
-	b.Zone = tea.StringValue(ins.AnycastZone)
+
 	b.Id = utils.PtrStrV(ins.LoadBalancerId)
 
-	info := r.Resource.Information
+	info := r.Resource.Spec
+	info.Region = tea.StringValue(ins.TargetRegionInfo.Region)
+	info.Zone = tea.StringValue(ins.AnycastZone)
+	info.Vendor = resource.VENDOR_TENCENT
 	info.Name = tea.StringValue(ins.LoadBalancerName)
 	info.Type = tea.StringValue(ins.LoadBalancerType)
 	info.ExpireAt = utils.ParseTime("2006-01-02 15:04:05", utils.PtrStrV(ins.ExpireTime))
-	info.PayMode = mapping.PrasePayMode(tea.StringValue(ins.ChargeType))
-	info.PrivateIp = tea.StringSliceValue(ins.LoadBalancerVips)
-	info.Status = praseClbStatus(ins.Status)
+	r.Resource.Cost.PayMode = mapping.PrasePayMode(tea.StringValue(ins.ChargeType))
+
+	r.Resource.Status.PrivateIp = tea.StringSliceValue(ins.LoadBalancerVips)
+	r.Resource.Status.Phase = praseClbStatus(ins.Status)
 
 	desc := r.Describe
 	desc.Domain = tea.StringValue(ins.Domain)

@@ -64,20 +64,23 @@ func (o *RedisOperator) transferSet(items *redis.DescribeInstancesResponseParams
 
 func (o *RedisOperator) transferOne(ins *redis.InstanceSet) *cmdbRedis.Redis {
 	r := cmdbRedis.NewDefaultRedis()
-	b := r.Resource.Base
-	b.Vendor = resource.VENDOR_TENCENT
-	b.Region = tea.StringValue(ins.Region)
+	b := r.Resource.Meta
+
 	b.CreateAt = o.parseTime(tea.StringValue(ins.Createtime))
 	b.Id = tea.StringValue(ins.InstanceId)
 
-	info := r.Resource.Information
+	info := r.Resource.Spec
+	info.Vendor = resource.VENDOR_TENCENT
+	info.Region = tea.StringValue(ins.Region)
 	info.ExpireAt = o.parseTime(tea.StringValue(ins.DeadlineTime))
 	info.Category = tea.StringValue(ins.ProductType)
 	info.Type = o.ParseType(ins.Type)
 	info.Name = tea.StringValue(ins.InstanceName)
-	info.Status = praseStatus(ins.Status)
-	info.PayMode = o.parsePayMode(ins.BillingMode)
-	info.PrivateIp = []string{tea.StringValue(ins.WanIp)}
+
+	r.Resource.Status.Phase = praseStatus(ins.Status)
+	r.Resource.Status.PrivateIp = []string{tea.StringValue(ins.WanIp)}
+	r.Resource.Cost.PayMode = o.parsePayMode(ins.BillingMode)
+
 	info.Memory = int32(tea.Float64Value(ins.Size))
 	info.BandWidth = int32(tea.Int64Value(ins.NetLimit))
 

@@ -5,7 +5,7 @@ import (
 	"github.com/infraboard/cmdb/apps/resource"
 )
 
-func InjectBaseFromSecret(b *resource.Base, s *credential.Secret) {
+func InjectBaseFromSecret(b *resource.Meta, s *credential.Secret) {
 	// 补充管理信息
 	b.CredentialId = s.Id
 	b.Domain = s.Data.Domain

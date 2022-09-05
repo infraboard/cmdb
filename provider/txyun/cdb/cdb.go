@@ -65,26 +65,27 @@ func (o *CDBOperator) transferSet(items []*cdb.InstanceInfo) *rds.Set {
 func (o *CDBOperator) transferOne(ins *cdb.InstanceInfo) *rds.Rds {
 	r := cmdbRds.NewDefaultRDS()
 
-	b := r.Resource.Base
-	b.Vendor = resource.VENDOR_TENCENT
-	b.Region = utils.PtrStrV(ins.Region)
-	b.Zone = utils.PtrStrV(ins.Zone)
+	b := r.Resource.Meta
+
 	b.CreateAt = o.parseTime(utils.PtrStrV(ins.CreateTime))
 	b.Id = utils.PtrStrV(ins.InstanceId)
 
-	info := r.Resource.Information
+	info := r.Resource.Spec
+	info.Vendor = resource.VENDOR_TENCENT
+	info.Region = utils.PtrStrV(ins.Region)
+	info.Zone = utils.PtrStrV(ins.Zone)
 	info.ExpireAt = o.parseTime(utils.PtrStrV(ins.DeadlineTime))
 	info.Name = utils.PtrStrV(ins.InstanceName)
 	info.Category = utils.PtrStrV(ins.DeviceType)
-	info.Status = praseStatus(ins.Status)
-	info.PayMode = mapping.PrasePayMode(fmt.Sprintf("%d", tea.Int64Value(ins.PayType)))
+	r.Resource.Status.Phase = praseStatus(ins.Status)
+	r.Resource.Cost.PayMode = mapping.PrasePayMode(fmt.Sprintf("%d", tea.Int64Value(ins.PayType)))
 	info.Cpu = int32(utils.PtrInt64(ins.Cpu))
 	info.Memory = int32(utils.PtrInt64(ins.Memory))
 	info.Storage = int32(utils.PtrInt64(ins.Volume))
 
 	// 补充其他状态
 	if ins.TaskStatus != nil && *ins.TaskStatus != 0 {
-		info.Status = praseTaskStatus(ins.TaskStatus)
+		r.Resource.Status.Phase = praseTaskStatus(ins.TaskStatus)
 	}
 
 	desc := r.Describe

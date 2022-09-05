@@ -65,71 +65,59 @@ message ResourceSet {
 
 message Resource {
     // 资源元数据信息
-    // @gotags: json:"base"
-    Base base = 1;
-    // 资源信息
-    // @gotags: json:"information"
-    Information information = 2;
+    // @gotags: json:"meta"
+    Meta meta = 1;
+    // 资源规格信息
+    // @gotags: json:"spec"
+    Spec spec = 2;
     // 资源费用
     // @gotags: json:"cost"
     Cost cost = 3;
-    // 标签
+   // 资源状态
+    // @gotags: json:"status"
+    Status status = 4;
+    // 资源标签
     // @gotags: json:"tags"
-    repeated Tag tags = 4;
+    repeated Tag tags = 5;
 }
 
-message Base {
+message Meta {
     // 全局唯一Id, 直接使用个云商自己的Id
     // @gotags: json:"id" validate:"required"
     string id = 1; 
+   // 资源所属域
+    // @gotags: json:"domain" validate:"required"
+    string domain = 2;
+    // 资源所属空间
+    // @gotags: json:"namespace" validate:"required"
+    string namespace = 3;
+    // 资源所属环境
+    // @gotags: json:"env"
+    string env = 4;
     // 同步时间
     // @gotags: json:"sync_at" validate:"required"
-    int64 sync_at = 2;  
+    int64 sync_at = 5;  
     // 用于同步的凭证ID
     // @gotags: json:"credential_id"
-    string credential_id = 3; 
-    // 厂商
-    // @gotags: json:"vendor"
-    VENDOR vendor = 4;
-    // 资源类型
-    // @gotags: json:"resource_type"
-    TYPE resource_type = 5;
-    // 地域
-    // @gotags: json:"region"
-    string region = 6; 
-    // 区域
-    // @gotags: json:"zone"
-    string zone = 7; 
+    string credential_id = 6; 
     // 创建时间
     // @gotags: json:"create_at"
-    int64  create_at = 8;
+    int64  create_at = 7;
+    // 序列号
+    // @gotags: json:"serial_number"
+    string serial_number = 9;
     // 基础数据Hash
     // @gotags: json:"resource_hash"
     string resource_hash = 10;
     // 描述数据Hash
     // @gotags: json:"describe_hash"
     string describe_hash = 11;
-    // Resource信息释放有变化
-    // @gotags: json:"resource_hash_changed,omitempty"
-    bool resource_hash_changed = 12;
-    // Describe信息释放有变化
-    // @gotags: json:"describe_hash_changed,omitempty"
-    bool describe_hash_changed = 13;
-    // 资源所属空间
-    // @gotags: json:"namespace" validate:"required"
-    string namespace = 14;
-    // 资源所属环境
-    // @gotags: json:"env"
-    string env = 15;
     // 使用方式
     // @gotags: json:"usage_mode"
-    UsageMode usage_mode = 16;
+    UsageMode usage_mode = 12;
     // 共享策略, 当一个资源被多个应用共享时, 可以指定允许的应用
     // @gotags: json:"shared_policy"
-    SharedPolicy shared_policy = 17;
-    // 资源所属域
-    // @gotags: json:"domain" validate:"required"
-    string domain = 18;
+    SharedPolicy shared_policy = 13;
 }
 
 // 共享策略
@@ -142,78 +130,80 @@ message SharedPolicy {
     repeated string tag_values = 2;
 }
 
-message Information {
-    // 过期时间
-    // @gotags: json:"expire_at"
-    int64 expire_at = 1;
-    // 种类
-    // @gotags: json:"category"
-    string category = 2;
-    // 规格
-    // @gotags: json:"type"
-    string type = 3;
-    // 名称
-    // @gotags: json:"name"
-    string name = 4;
-    // 描述
-    // @gotags: json:"description"
-    string description = 5;
-    // 更新时间
-    // @gotags: json:"update_at"
-    int64 update_at = 6;
+message Spec {
+    // 厂商
+    // @gotags: json:"vendor"
+    VENDOR vendor = 1;
+    // 资源类型
+    // @gotags: json:"resource_type"
+    TYPE resource_type = 2;
+    // 地域
+    // @gotags: json:"region"
+    string region = 3; 
+    // 区域
+    // @gotags: json:"zone"
+    string zone = 4; 
     // 资源所属账号
     // @gotags: json:"owner"
-    string owner = 7;
+    string owner = 5;
+    // 名称
+    // @gotags: json:"name"
+    string name = 6;
+    // 种类
+    // @gotags: json:"category"
+    string category = 7;
+    // 规格
+    // @gotags: json:"type"
+    string type = 8;
+    // 描述
+    // @gotags: json:"description"
+    string description = 9;
+    // 过期时间
+    // @gotags: json:"expire_at"
+    int64 expire_at = 10;
+    // 更新时间
+    // @gotags: json:"update_at"
+    int64 update_at = 11;
 
-    // 服务商中的状态
-    // @gotags: json:"status"
-    string status = 8;
-    // 实例锁定模式; Unlock：正常；ManualLock：手动触发锁定；LockByExpiration：实例过期自动锁定；LockByRestoration：实例回滚前的自动锁定；LockByDiskQuota：实例空间满自动锁定
-    // @gotags: json:"lock_mode"
-    string lock_mode = 9;
-    // 锁定原因
-    // @gotags: json:"lock_reason"
-    string lock_reason = 10;
-
-    // 资源通用配置
-    // @gotags: json:"cpu"
     // 资源占用Cpu数量
-    int32 cpu = 11;
+    // @gotags: json:"cpu"
+    int32 cpu = 15;
     // GPU数量
     // @gotags: json:"gpu"
-    int32 gpu = 12;
+    int32 gpu = 16;
     // 资源使用的内存
     // @gotags: json:"memory"
-    int32 memory = 13;
+    int32 memory = 17;
     // 资源使用的存储
     // @gotags: json:"storage"
-    int32 storage = 14;
-
-    // 资源访问地址
-    // 公网IP, 或者域名
-    // @gotags: json:"public_ip"
-    repeated string public_ip = 15;
+    int32 storage = 18;
     // 公网IP带宽, 单位M
     // @gotags: json:"band_width"
-    int32 band_width =16;
-    // 内网IP, 或者域名
-    // @gotags: json:"private_ip"
-    repeated string private_ip = 17;
-
-    // 实例付费方式
-    // @gotags: json:"pay_mode"
-    PayMode pay_mode = 18;
-    // 付费方式详情
-    // @gotags: json:"pay_mode_detail"
-    string pay_mode_detail = 19;
-    
-    // 序列号
-    // @gotags: json:"serial_number"
-    string serial_number = 20;
+    int32 band_width =19;
 
     // 额外的通用属性
     // @gotags: json:"extra"
     map<string, string> extra = 26;
+}
+
+// 资源当前状态
+message Status {
+    // 资源当前状态
+    // @gotags: json:"phase"
+    string phase = 1;
+    // 实例锁定模式; Unlock：正常；ManualLock：手动触发锁定；LockByExpiration：实例过期自动锁定；LockByRestoration：实例回滚前的自动锁定；LockByDiskQuota：实例空间满自动锁定
+    // @gotags: json:"lock_mode"
+    string lock_mode = 2;
+    // 锁定原因
+    // @gotags: json:"lock_reason"
+    string lock_reason = 3;
+    // 资源访问地址
+    // 公网IP, 或者域名
+    // @gotags: json:"public_ip"
+    repeated string public_ip = 4;
+    // 内网IP, 或者域名
+    // @gotags: json:"private_ip"
+    repeated string private_ip = 5;
 }
 
 enum TAG_TYPE {
@@ -266,18 +256,24 @@ message TagSet {
 
 // 资产价格, 包年包月 记录月
 message Cost {
+    // 实例付费方式
+    // @gotags: json:"pay_mode"
+    PayMode pay_mode = 1;
+    // 付费方式详情
+    // @gotags: json:"pay_mode_detail"
+    string pay_mode_detail = 2;
     // 官网价,原价（分）
     // @gotags: json:"sale_price"
-    double sale_price = 1;
+    double sale_price = 3;
     // 实际支付金额（分）
     // @gotags: json:"real_cost"
-    double real_cost = 2;
+    double real_cost = 4;
     // 折扣率
     // @gotags: json:"policy"
-    double policy = 3;
+    double policy = 5;
     // 单价（分）
     // @gotags: json:"unit_price"
-    double unit_price = 4;
+    double unit_price = 6;
 }
 
 message SearchRequest {

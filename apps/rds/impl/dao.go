@@ -51,7 +51,7 @@ func (s *service) save(ctx context.Context, h *rds.Rds) error {
 
 	desc := h.Describe
 	_, err = stmt.Exec(
-		h.Resource.Base.Id, desc.EngineType, desc.EngineVersion, desc.InstanceClass, desc.ClassType, desc.ExportType,
+		h.Resource.Meta.Id, desc.EngineType, desc.EngineVersion, desc.InstanceClass, desc.ClassType, desc.ExportType,
 		desc.NetworkType, desc.Type, desc.DbMaxQuantity, desc.AccountMaxQuantity, desc.MaxConnections,
 		desc.MaxIops, desc.Collation, desc.TimeZone, desc.StorageType, desc.SecurityIpMode,
 		desc.SecurityIpListToString(), desc.ConnectionMode, desc.IpType, desc.DeployMode,

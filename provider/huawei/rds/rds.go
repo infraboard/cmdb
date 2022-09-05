@@ -68,20 +68,19 @@ func (o *RdsOperator) transferSet(list *[]model.InstanceResponse) *rds.Set {
 }
 
 func (o *RdsOperator) transferOne(ins model.InstanceResponse) *rds.Rds {
-	h := rds.NewDefaultRDS()
-	b := h.Resource.Base
-	b.Vendor = resource.VENDOR_HUAWEI
-	b.Region = ins.Region
+	r := rds.NewDefaultRDS()
+	b := r.Resource.Meta
+
 	b.CreateAt = o.parseTime(ins.Created)
 	b.Id = ins.Id
 
-	i := h.Resource.Information
+	i := r.Resource.Spec
+	i.Vendor = resource.VENDOR_HUAWEI
+	i.Region = ins.Region
 	i.ExpireAt = o.parseTime(utils.PtrStrV(ins.ExpirationTime))
 	i.Category = ins.Type
 	i.Name = ins.Name
 	i.Description = utils.PtrStrV(ins.Alias)
-	i.Status = ins.Status
-	i.PrivateIp, i.PublicIp = ins.PrivateIps, ins.PublicIps
 	i.Category = ins.FlavorRef
 	cpu, _ := strconv.ParseInt(utils.PtrStrV(ins.Cpu), 10, 32)
 	mem, _ := strconv.ParseInt(utils.PtrStrV(ins.Mem), 10, 64)
@@ -89,17 +88,20 @@ func (o *RdsOperator) transferOne(ins model.InstanceResponse) *rds.Rds {
 	i.Memory = int32(mem * 1024)
 	i.Storage = ins.Volume.Size
 
-	h.Resource.Tags = o.transferTags(ins.Tags)
+	r.Resource.Status.PrivateIp, r.Resource.Status.PublicIp = ins.PrivateIps, ins.PublicIps
+	r.Resource.Status.Phase = praseStatus(ins.Status)
+
+	r.Resource.Tags = o.transferTags(ins.Tags)
 
 	cmEnums := model.GetChargeInfoResponseChargeModeEnum()
 	switch ins.ChargeInfo.ChargeMode {
 	case cmEnums.PRE_PAID:
-		i.PayMode = resource.PayMode_PRE_PAY
+		r.Resource.Cost.PayMode = resource.PayMode_PRE_PAY
 	case cmEnums.POST_PAID:
-		i.PayMode = resource.PayMode_POST_PAY
+		r.Resource.Cost.PayMode = resource.PayMode_POST_PAY
 	}
 
-	d := h.Describe
+	d := r.Describe
 
 	d.EngineType = o.getEnumValue(ins.Datastore.Type)
 	d.EngineVersion = ins.Datastore.Version
@@ -110,7 +112,7 @@ func (o *RdsOperator) transferOne(ins model.InstanceResponse) *rds.Rds {
 	d.StorageType = o.getEnumValue(ins.Volume.Type)
 
 	d.Port = int64(ins.Port)
-	return h
+	return r
 }
 
 func (o *RdsOperator) parseTime(t string) int64 {

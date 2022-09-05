@@ -35,31 +35,33 @@ type VMOperator struct {
 }
 
 func (o *VMOperator) transferOne(ins *mo.VirtualMachine, dcName string) *host.Host {
-	h := host.NewDefaultHost()
-	b := h.Resource.Base
-	b.Vendor = resource.VENDOR_VSPHERE
-	b.Region = o.client.URL().Host
-	b.Zone = dcName
+	r := host.NewDefaultHost()
+	b := r.Resource.Meta
+
 	b.CreateAt = ins.Config.CreateDate.UnixMilli()
 	b.Id = ins.Config.Uuid
+	b.SerialNumber = ins.Config.Uuid
 
-	i := h.Resource.Information
+	i := r.Resource.Spec
+	i.Vendor = resource.VENDOR_VSPHERE
+	i.Region = o.client.URL().Host
+	i.Zone = dcName
 	i.Name = ins.Name
-	i.Status = praseStatus(string(ins.Summary.Runtime.PowerState))
 	i.Cpu = ins.Config.Hardware.NumCPU
 	i.Memory = ins.Config.Hardware.MemoryMB
-	i.SerialNumber = ins.Config.Uuid
 
-	h.Describe.OsType = strings.TrimSuffix(ins.Guest.GuestFamily, "Guest")
-	h.Describe.OsName = ins.Guest.GuestFullName
+	r.Resource.Status.Phase = praseStatus(string(ins.Summary.Runtime.PowerState))
+
+	r.Describe.OsType = strings.TrimSuffix(ins.Guest.GuestFamily, "Guest")
+	r.Describe.OsName = ins.Guest.GuestFullName
 
 	// 获取主Ip
 	privateIP := o.GetMasterIp(ins.Guest.Net)
 	if privateIP == "" {
 		privateIP = ins.Guest.IpAddress
 	}
-	h.Resource.Information.PrivateIp = []string{privateIP}
-	return h
+	r.Resource.Status.PrivateIp = []string{privateIP}
+	return r
 }
 
 func (o *VMOperator) GetMasterIp(nics []types.GuestNicInfo) string {

@@ -10,8 +10,8 @@ import (
 
 func (s *service) SyncRDS(ctx context.Context, h *rds.Rds) (
 	*rds.Rds, error) {
-	h.Resource.Base.Id = xid.New().String()
-	h.Resource.Base.SyncAt = ftime.Now().Timestamp()
+	h.Resource.Meta.Id = xid.New().String()
+	h.Resource.Meta.SyncAt = ftime.Now().Timestamp()
 
 	if err := s.save(ctx, h); err != nil {
 		return nil, err

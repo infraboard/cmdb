@@ -82,27 +82,31 @@ func (o *RdsOperator) transferSet(items *rds.DescribeDBInstanceAttributeResponse
 func (o *RdsOperator) transferOne(ins *rds.DescribeDBInstanceAttributeResponseBodyItemsDBInstanceAttribute) *cmdbRds.Rds {
 	r := cmdbRds.NewDefaultRDS()
 
-	b := r.Resource.Base
-	b.Vendor = resource.VENDOR_ALIYUN
-	b.Region = tea.StringValue(ins.RegionId)
-	b.Zone = tea.StringValue(ins.ZoneId)
+	b := r.Resource.Meta
 	b.CreateAt = o.parseTime(tea.StringValue(ins.CreationTime))
 	b.Id = tea.StringValue(ins.DBInstanceId)
 
-	info := r.Resource.Information
+	info := r.Resource.Spec
+	info.Vendor = resource.VENDOR_ALIYUN
+	info.Region = tea.StringValue(ins.RegionId)
+	info.Zone = tea.StringValue(ins.ZoneId)
 	info.ExpireAt = o.parseTime(tea.StringValue(ins.ExpireTime))
 	info.Name = tea.StringValue(ins.DBInstanceDescription)
 	info.Type = tea.StringValue(ins.DBInstanceType)
 	info.Description = tea.StringValue(ins.DBInstanceDescription)
-	info.Status = tea.StringValue(ins.DBInstanceStatus)
-	info.PayMode = mapping.PrasePayMode(ins.PayType)
+
 	info.Category = tea.StringValue(ins.Category)
 	cpu, _ := strconv.Atoi(tea.StringValue(ins.DBInstanceCPU))
 	info.Cpu = int32(cpu)
 	info.Memory = int32(tea.Int64Value(ins.DBInstanceMemory))
-	info.LockMode = tea.StringValue(ins.LockMode)
-	info.LockReason = tea.StringValue(ins.LockReason)
+
 	info.Storage = tea.Int32Value(ins.DBInstanceStorage)
+
+	r.Resource.Cost.PayMode = mapping.PrasePayMode(ins.PayType)
+
+	r.Resource.Status.Phase = tea.StringValue(ins.DBInstanceStatus)
+	r.Resource.Status.LockMode = tea.StringValue(ins.LockMode)
+	r.Resource.Status.LockReason = tea.StringValue(ins.LockReason)
 
 	desc := r.Describe
 	desc.EngineType = tea.StringValue(ins.Engine)

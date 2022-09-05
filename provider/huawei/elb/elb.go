@@ -55,7 +55,7 @@ func (o *ELBOperator) QueryLoadBalancer(req *model.ListLoadbalancersRequest) (*l
 
 	last := set.GetLast()
 	if last != nil {
-		req.Marker = &last.Resource.Base.Id
+		req.Marker = &last.Resource.Meta.Id
 	}
 
 	return set, nil
@@ -78,15 +78,16 @@ func (o *ELBOperator) transferELoadBalancerSet(list *[]model.LoadbalancerResp) *
 
 func (o *ELBOperator) transferELB(ins model.LoadbalancerResp) *lb.LoadBalancer {
 	r := lb.NewDefaultLoadBalancer()
-	b := r.Resource.Base
-	b.Vendor = resource.VENDOR_HUAWEI
+	b := r.Resource.Meta
 	b.CreateAt = utils.ParseTime("2006-01-02T15:04:05", ins.CreatedAt)
 	b.Id = ins.Id
 
-	info := r.Resource.Information
+	info := r.Resource.Spec
+	info.Vendor = resource.VENDOR_HUAWEI
 	info.Name = ins.Name
 	st, _ := ins.OperatingStatus.MarshalJSON()
-	info.Status = praseElbStatus(strings.Trim(strings.TrimSpace(string(st)), `"`))
-	info.PrivateIp = []string{ins.VipAddress}
+
+	r.Resource.Status.Phase = praseElbStatus(strings.Trim(strings.TrimSpace(string(st)), `"`))
+	r.Resource.Status.PrivateIp = []string{ins.VipAddress}
 	return r
 }

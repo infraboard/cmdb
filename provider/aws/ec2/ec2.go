@@ -43,27 +43,27 @@ func (o *Ec2operator) transferSet(items []types.Reservation) *host.HostSet {
 
 func (o *Ec2operator) transferOne(ins types.Instance) *host.Host {
 	h := host.NewDefaultHost()
-	b := h.Resource.Base
-	b.Vendor = resource.VENDOR_AMAZON
-	b.Zone = *ins.Placement.AvailabilityZone
+	b := h.Resource.Meta
 	b.Id = *ins.InstanceId
 	b.CreateAt = ins.LaunchTime.Unix()
 
-	i := h.Resource.Information
+	i := h.Resource.Spec
+	i.Vendor = resource.VENDOR_AMAZON
+	i.Zone = *ins.Placement.AvailabilityZone
 	i.Type = string(ins.InstanceType)
-	// h.Information.PayType = string(ins.Placement.Tenancy)
+	// h.Spec.PayType = string(ins.Placement.Tenancy)
 	i.Cpu = (*ins.CpuOptions.ThreadsPerCore) * (*ins.CpuOptions.CoreCount)
 
 	// 判断tags中是否有NAME字段(实例名称), 不存在则取实例ID.
 	if ParseTagName(ins.Tags) == "" {
-		h.Resource.Information.Name = *ins.InstanceId
+		h.Resource.Spec.Name = *ins.InstanceId
 	} else {
-		h.Resource.Information.Name = ParseTagName(ins.Tags)
+		h.Resource.Spec.Name = ParseTagName(ins.Tags)
 	}
 
-	h.Resource.Information.Status = string(ins.State.Name)
-	h.Resource.Information.PublicIp = []string{*ins.PublicIpAddress}
-	h.Resource.Information.PrivateIp = []string{*ins.PrivateIpAddress}
+	h.Resource.Status.Phase = string(ins.State.Name)
+	h.Resource.Status.PublicIp = []string{*ins.PublicIpAddress}
+	h.Resource.Status.PrivateIp = []string{*ins.PrivateIpAddress}
 
 	h.Describe.OsName = *ins.PlatformDetails
 	h.Describe.ImageId = *ins.ImageId

@@ -17,13 +17,13 @@ func SaveResource(ctx context.Context, tx *sql.Tx, ins *resource.Resource) error
 	}
 	defer stmt.Close()
 
-	base := ins.Base
-	info := ins.Information
+	base := ins.Meta
+	info := ins.Spec
 	// 保存资源数据
 	_, err = stmt.ExecContext(ctx,
-		base.Id, base.ResourceType, base.Vendor, base.Region, base.Zone, base.CreateAt, info.ExpireAt, info.Category, info.Type,
-		info.Name, info.Description, info.Status, info.UpdateAt, base.SyncAt, info.Owner, info.PublicIPToString(),
-		info.PrivateIPToString(), info.PayMode, base.DescribeHash, base.ResourceHash, base.CredentialId,
+		base.Id, info.ResourceType, info.Vendor, info.Region, info.Zone, base.CreateAt, info.ExpireAt, info.Category, info.Type,
+		info.Name, info.Description, ins.Status.Phase, info.UpdateAt, base.SyncAt, info.Owner, ins.Status.PublicIPToString(),
+		ins.Status.PrivateIPToString(), ins.Cost.PayMode, base.DescribeHash, base.ResourceHash, base.CredentialId,
 		base.Domain, base.Namespace, base.Env, base.UsageMode,
 	)
 	if err != nil {
@@ -37,7 +37,7 @@ func SaveResource(ctx context.Context, tx *sql.Tx, ins *resource.Resource) error
 	return nil
 }
 
-func UpdateResource(ctx context.Context, tx *sql.Tx, base *resource.Base, info *resource.Information, tags []*resource.Tag) error {
+func UpdateResource(ctx context.Context, tx *sql.Tx, base *resource.Meta, info *resource.Spec, tags []*resource.Tag) error {
 	// 避免SQL注入, 请使用Prepare
 	stmt, err := tx.PrepareContext(ctx, sqlUpdateResource)
 	if err != nil {
@@ -47,8 +47,8 @@ func UpdateResource(ctx context.Context, tx *sql.Tx, base *resource.Base, info *
 
 	_, err = stmt.ExecContext(ctx,
 		info.ExpireAt, info.Category, info.Type, info.Name, info.Description,
-		info.Status, info.UpdateAt, base.SyncAt, info.Owner,
-		info.PublicIPToString(), info.PrivateIPToString(), info.PayMode, base.DescribeHash, base.ResourceHash,
+		"", info.UpdateAt, base.SyncAt, info.Owner,
+		"", "", "", base.DescribeHash, base.ResourceHash,
 		base.CredentialId, base.Namespace, base.Env, base.UsageMode,
 		base.Id,
 	)

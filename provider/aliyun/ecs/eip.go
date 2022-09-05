@@ -52,20 +52,21 @@ func (o *EcsOperator) transferEipSet(items *ecs.DescribeEipAddressesResponseBody
 
 func (o *EcsOperator) transferEip(ins *ecs.DescribeEipAddressesResponseBodyEipAddressesEipAddress) *eip.EIP {
 	h := eip.NewDefaultEip()
-	base := h.Resource.Base
-	base.Vendor = resource.VENDOR_ALIYUN
-	base.Region = tea.StringValue(ins.RegionId)
+	base := h.Resource.Meta
 
 	base.CreateAt = utils.ParseDefaultSecondTime(tea.StringValue(ins.AllocationTime))
 	base.Id = tea.StringValue(ins.AllocationId)
 
-	info := h.Resource.Information
+	info := h.Resource.Spec
+	info.Vendor = resource.VENDOR_ALIYUN
+	info.Region = tea.StringValue(ins.RegionId)
+	info.Owner = o.GetAccountId()
 	info.ExpireAt = utils.ParseDefaultSecondTime(tea.StringValue(ins.ExpiredTime))
 	info.Type = tea.StringValue(ins.InstanceType)
-	info.Status = praseEcsStatus(ins.Status)
-	info.PublicIp = []string{tea.StringValue(ins.IpAddress)}
-	info.PayMode = mapping.PrasePayMode(ins.ChargeType)
-	info.Owner = o.GetAccountId()
+
+	h.Resource.Status.PublicIp = []string{tea.StringValue(ins.IpAddress)}
+	h.Resource.Status.Phase = praseEcsStatus(ins.Status)
+	h.Resource.Cost.PayMode = mapping.PrasePayMode(ins.ChargeType)
 
 	h.Describe.BandWidth, _ = strconv.ParseInt(tea.StringValue(ins.Bandwidth), 10, 64)
 	h.Describe.InstanceId = tea.StringValue(ins.InstanceId)

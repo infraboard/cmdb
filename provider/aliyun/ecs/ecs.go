@@ -72,30 +72,34 @@ func (o *EcsOperator) transferInstanceSet(items []*ecs.DescribeInstancesResponse
 
 func (o *EcsOperator) transferInstance(ins *ecs.DescribeInstancesResponseBodyInstancesInstance) *host.Host {
 	h := host.NewDefaultHost()
-	b := h.Resource.Base
-	b.Vendor = resource.VENDOR_ALIYUN
-	b.Region = tea.StringValue(ins.RegionId)
-	b.Zone = tea.StringValue(ins.ZoneId)
+	b := h.Resource.Meta
+
 	b.CreateAt = utils.ParseDefaultMiniteTime(tea.StringValue(ins.CreationTime))
 	b.Id = tea.StringValue(ins.InstanceId)
+	b.SerialNumber = tea.StringValue(ins.SerialNumber)
 
-	i := h.Resource.Information
+	i := h.Resource.Spec
 	i.ExpireAt = utils.ParseDefaultMiniteTime(tea.StringValue(ins.ExpiredTime))
 	i.Type = tea.StringValue(ins.InstanceType)
 	i.Name = tea.StringValue(ins.InstanceName)
 	i.Description = tea.StringValue(ins.Description)
-	i.Status = praseEcsStatus(ins.Status)
-	i.PublicIp = tea.StringSliceValue(ins.PublicIpAddress.IpAddress)
-	i.PrivateIp = o.parsePrivateIp(ins)
-	i.PayMode = mapping.PrasePayMode(ins.InstanceChargeType)
+	i.Vendor = resource.VENDOR_ALIYUN
+	i.Region = tea.StringValue(ins.RegionId)
+	i.Zone = tea.StringValue(ins.ZoneId)
 	i.Owner = o.GetAccountId()
+
+	h.Resource.Status.PublicIp = tea.StringSliceValue(ins.PublicIpAddress.IpAddress)
+	h.Resource.Status.PrivateIp = o.parsePrivateIp(ins)
+
+	h.Resource.Status.Phase = praseEcsStatus(ins.Status)
+	h.Resource.Cost.PayMode = mapping.PrasePayMode(ins.InstanceChargeType)
+
 	i.Cpu = tea.Int32Value(ins.Cpu)
 	i.Memory = tea.Int32Value(ins.Memory)
 	i.Gpu = tea.Int32Value(ins.GPUAmount)
-	i.SerialNumber = tea.StringValue(ins.SerialNumber)
 
 	if ins.EipAddress != nil {
-		i.PublicIp = []string{tea.StringValue(ins.EipAddress.IpAddress)}
+		h.Resource.Status.PublicIp = []string{tea.StringValue(ins.EipAddress.IpAddress)}
 		i.BandWidth = tea.Int32Value(ins.EipAddress.Bandwidth)
 	}
 

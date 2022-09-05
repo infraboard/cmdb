@@ -16,14 +16,14 @@ func NewPrometheusScrapeTag() *TagSelector {
 }
 
 func (r *Resource) PrometheusEndpont() (string, error) {
-	if len(r.Information.PrivateIp) == 0 {
+	if len(r.Status.PrivateIp) == 0 {
 		return "", fmt.Errorf("instance no private ip")
 	}
 
-	ip := r.Information.PrivateIp[0]
+	ip := r.Status.PrivateIp[0]
 	port := r.GetTagValueOne(PROMETHEUS_PORT)
 	if port == "" {
-		switch r.Base.ResourceType {
+		switch r.Spec.ResourceType {
 		case TYPE_RDS:
 			port = "6221"
 		default:
@@ -43,13 +43,13 @@ func (r *Resource) PrometheusTarget() (*PrometheusTarget, error) {
 	t := &PrometheusTarget{
 		Targets: []string{ep},
 		Labels: map[string]string{
-			"domain":      r.Base.Domain,
-			"namespace":   r.Base.Namespace,
-			"env":         r.Base.Env,
-			"accout":      r.Information.Owner,
-			"vendor":      r.Base.Vendor.String(),
-			"region":      r.Base.Region,
-			"instance_id": r.Base.Id,
+			"domain":      r.Meta.Domain,
+			"namespace":   r.Meta.Namespace,
+			"env":         r.Meta.Env,
+			"accout":      r.Spec.Owner,
+			"vendor":      r.Spec.Vendor.String(),
+			"region":      r.Spec.Region,
+			"instance_id": r.Meta.Id,
 		},
 	}
 

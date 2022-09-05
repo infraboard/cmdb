@@ -35,7 +35,7 @@ func (o *EcsOperator) queryEip(req *model.ListPublicipsRequest) (*eip.EIPSet, er
 	set.Items = o.transferEipSet(resp).Items
 
 	if set.Length() > 0 {
-		req.Marker = &set.Items[0].Resource.Base.Id
+		req.Marker = &set.Items[0].Resource.Meta.Id
 	}
 
 	return set, nil
@@ -57,26 +57,27 @@ func (o *EcsOperator) transferEipSet(list *model.ListPublicipsResponse) *eip.EIP
 }
 
 func (o *EcsOperator) transferEip(ins model.PublicipShowResp) *eip.EIP {
-	h := eip.NewDefaultEip()
+	r := eip.NewDefaultEip()
 
-	b := h.Resource.Base
-	b.Vendor = resource.VENDOR_HUAWEI
+	b := r.Resource.Meta
 	b.Id = tea.StringValue(ins.Id)
-	b.Region = tea.StringValue(ins.Profile.RegionId)
 	b.CreateAt = utils.ParseDefaultSecondTime(ins.CreateTime.String())
 
-	info := h.Resource.Information
+	info := r.Resource.Spec
+	info.Vendor = resource.VENDOR_HUAWEI
+	info.Region = tea.StringValue(ins.Profile.RegionId)
+	info.Owner = tea.StringValue(ins.Profile.UserId)
 	sd, _ := ins.Status.MarshalJSON()
-	info.Status = string(sd)
+	r.Resource.Status.Phase = string(sd)
 	info.Name = tea.StringValue(ins.Alias)
 	bt, _ := ins.BandwidthShareType.MarshalJSON()
 	info.Category = string(bt)
 	info.Type = tea.StringValue(ins.Type)
-	info.PublicIp = []string{tea.StringValue(ins.PublicIpAddress)}
-	info.PrivateIp = []string{tea.StringValue(ins.PrivateIpAddress)}
-	info.Owner = tea.StringValue(ins.Profile.UserId)
 
-	desc := h.Describe
+	r.Resource.Status.PublicIp = []string{tea.StringValue(ins.PublicIpAddress)}
+	r.Resource.Status.PrivateIp = []string{tea.StringValue(ins.PrivateIpAddress)}
+
+	desc := r.Describe
 	desc.BandWidth = int64(tea.Int32Value(ins.BandwidthSize))
-	return h
+	return r
 }

@@ -11,8 +11,8 @@ import (
 )
 
 func (s *service) save(ctx context.Context, h *host.Host) error {
-	if h.Resource.Base.SyncAt != 0 {
-		h.Resource.Base.SyncAt = time.Now().UnixMicro()
+	if h.Resource.Meta.SyncAt != 0 {
+		h.Resource.Meta.SyncAt = time.Now().UnixMicro()
 	}
 
 	var (
@@ -64,7 +64,7 @@ func (s *service) save(ctx context.Context, h *host.Host) error {
 
 	desc := h.Describe
 	_, err = stmt.ExecContext(ctx,
-		h.Resource.Base.Id, desc.GpuSpec, desc.OsType, desc.OsName,
+		h.Resource.Meta.Id, desc.GpuSpec, desc.OsType, desc.OsName,
 		desc.ImageId, desc.InternetMaxBandwidthOut,
 		desc.InternetMaxBandwidthIn, desc.KeyPairNameToString(), desc.SecurityGroupsToString(),
 	)
@@ -94,35 +94,27 @@ func (s *service) update(ctx context.Context, ins *host.Host) error {
 	}()
 
 	// 更新资源基本信息
-	if ins.Resource.Base.ResourceHashChanged {
-		if err := impl.UpdateResource(ctx, tx, ins.Resource.Base, ins.Resource.Information, ins.Resource.Tags); err != nil {
-			return err
-		}
-	} else {
-		s.log.Debug("resource data hash not changed, needn't update")
+	if err := impl.UpdateResource(ctx, tx, ins.Resource.Meta, ins.Resource.Spec, ins.Resource.Tags); err != nil {
+		return err
 	}
 
 	// 更新实例信息
-	if ins.Resource.Base.DescribeHashChanged {
-		stmt, err = tx.PrepareContext(ctx, updateHostSQL)
-		if err != nil {
-			return fmt.Errorf("prepare update host sql error, %s", err)
-		}
-		defer stmt.Close()
+	stmt, err = tx.PrepareContext(ctx, updateHostSQL)
+	if err != nil {
+		return fmt.Errorf("prepare update host sql error, %s", err)
+	}
+	defer stmt.Close()
 
-		base := ins.Resource.Base
-		desc := ins.Describe
-		_, err = stmt.ExecContext(ctx,
-			desc.GpuSpec, desc.OsType, desc.OsName,
-			desc.ImageId, desc.InternetMaxBandwidthOut,
-			desc.InternetMaxBandwidthIn, desc.KeyPairNameToString(), desc.SecurityGroupsToString(),
-			base.Id,
-		)
-		if err != nil {
-			return err
-		}
-	} else {
-		s.log.Debug("describe data hash not changed, needn't update")
+	base := ins.Resource.Meta
+	desc := ins.Describe
+	_, err = stmt.ExecContext(ctx,
+		desc.GpuSpec, desc.OsType, desc.OsName,
+		desc.ImageId, desc.InternetMaxBandwidthOut,
+		desc.InternetMaxBandwidthIn, desc.KeyPairNameToString(), desc.SecurityGroupsToString(),
+		base.Id,
+	)
+	if err != nil {
+		return err
 	}
 
 	return tx.Commit()

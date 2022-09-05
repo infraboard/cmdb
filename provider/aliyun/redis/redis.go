@@ -65,23 +65,24 @@ func (o *RedisOperator) transferSet(items *redis.DescribeInstancesResponseBodyIn
 func (o *RedisOperator) transferOne(ins *redis.DescribeInstancesResponseBodyInstancesKVStoreInstance) *cmdbRedis.Redis {
 	r := cmdbRedis.NewDefaultRedis()
 
-	b := r.Resource.Base
-	b.Vendor = resource.VENDOR_ALIYUN
-	b.Region = tea.StringValue(ins.RegionId)
-	b.Zone = tea.StringValue(ins.ZoneId)
+	b := r.Resource.Meta
 	b.CreateAt = o.parseTime(tea.StringValue(ins.CreateTime))
 	b.Id = tea.StringValue(ins.InstanceId)
 
-	info := r.Resource.Information
+	info := r.Resource.Spec
+	info.Vendor = resource.VENDOR_ALIYUN
+	info.Region = tea.StringValue(ins.RegionId)
+	info.Zone = tea.StringValue(ins.ZoneId)
 	info.ExpireAt = o.parseTime(tea.StringValue(ins.EndTime))
 	info.Name = tea.StringValue(ins.InstanceName)
 	info.Type = tea.StringValue(ins.EditionType)
 	info.Category = tea.StringValue(ins.ArchitectureType)
-	info.Status = praseStatus(ins.InstanceStatus)
-	info.PayMode = mapping.PrasePayMode(ins.ChargeType)
-	info.PrivateIp = []string{tea.StringValue(ins.PrivateIp)}
 	info.Memory = int32(tea.Int64Value(ins.Capacity))
 	info.BandWidth = int32(tea.Int64Value(ins.Bandwidth))
+
+	r.Resource.Status.PrivateIp = []string{tea.StringValue(ins.PrivateIp)}
+	r.Resource.Status.Phase = praseStatus(ins.InstanceStatus)
+	r.Resource.Cost.PayMode = mapping.PrasePayMode(ins.ChargeType)
 
 	desc := r.Describe
 	desc.ConnectAddr = tea.StringValue(ins.ConnectionDomain)

@@ -31,7 +31,7 @@ func (s *EIPSet) Add(items ...any) {
 
 func (s *EIPSet) ResourceIds() (ids []string) {
 	for i := range s.Items {
-		ids = append(ids, s.Items[i].Resource.Base.Id)
+		ids = append(ids, s.Items[i].Resource.Meta.Id)
 	}
 	return
 }

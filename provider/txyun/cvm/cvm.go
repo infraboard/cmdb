@@ -57,41 +57,43 @@ func (o *CVMOperator) transferSet(items []*cvm.Instance) *host.HostSet {
 }
 
 func (o *CVMOperator) transferOne(ins *cvm.Instance) *host.Host {
-	h := host.NewDefaultHost()
-	b := h.Resource.Base
-	b.Vendor = resource.VENDOR_TENCENT
-	b.Region = o.client.GetRegion()
-	b.Zone = utils.PtrStrV(ins.Placement.Zone)
+	r := host.NewDefaultHost()
+	b := r.Resource.Meta
 	b.CreateAt = utils.ParseDefaultSecondTime(utils.PtrStrV(ins.CreatedTime))
 	b.Id = utils.PtrStrV(ins.InstanceId)
+	b.SerialNumber = utils.PtrStrV(ins.Uuid)
 
-	i := h.Resource.Information
+	i := r.Resource.Spec
+	i.Vendor = resource.VENDOR_TENCENT
+	i.Region = o.client.GetRegion()
+	i.Zone = utils.PtrStrV(ins.Placement.Zone)
+	i.Owner = o.GetAccountId()
 	i.ExpireAt = utils.ParseDefaultSecondTime(utils.PtrStrV(ins.ExpiredTime))
 	i.Type = utils.PtrStrV(ins.InstanceType)
 	i.Name = utils.PtrStrV(ins.InstanceName)
-	i.Status = praseCvmStatus(ins.InstanceState)
-	i.PublicIp = utils.SlicePtrStrv(ins.PublicIpAddresses)
+
 	if ins.InternetAccessible != nil {
 		i.BandWidth = int32(tea.Int64Value(ins.InternetAccessible.InternetMaxBandwidthOut))
 	}
-	i.PrivateIp = utils.SlicePtrStrv(ins.PrivateIpAddresses)
-	i.PayMode = mapping.PrasePayMode(tea.StringValue(ins.InstanceChargeType))
-	i.Owner = o.GetAccountId()
 	i.Cpu = int32(utils.PtrInt64(ins.CPU))
 	i.Memory = int32(utils.PtrInt64(ins.Memory))
-	i.SerialNumber = utils.PtrStrV(ins.Uuid)
 
-	h.Resource.Tags = transferTags(ins.Tags)
+	r.Resource.Cost.PayMode = mapping.PrasePayMode(tea.StringValue(ins.InstanceChargeType))
+	r.Resource.Status.PublicIp = utils.SlicePtrStrv(ins.PublicIpAddresses)
+	r.Resource.Status.PrivateIp = utils.SlicePtrStrv(ins.PrivateIpAddresses)
+	r.Resource.Status.Phase = praseCvmStatus(ins.InstanceState)
 
-	h.Describe.OsName = utils.PtrStrV(ins.OsName)
+	r.Resource.Tags = transferTags(ins.Tags)
 
-	h.Describe.ImageId = utils.PtrStrV(ins.ImageId)
+	r.Describe.OsName = utils.PtrStrV(ins.OsName)
+
+	r.Describe.ImageId = utils.PtrStrV(ins.ImageId)
 	if ins.InternetAccessible != nil {
-		h.Describe.InternetMaxBandwidthOut = utils.PtrInt64(ins.InternetAccessible.InternetMaxBandwidthOut)
+		r.Describe.InternetMaxBandwidthOut = utils.PtrInt64(ins.InternetAccessible.InternetMaxBandwidthOut)
 	}
-	h.Describe.KeyPairName = utils.SlicePtrStrv(ins.LoginSettings.KeyIds)
-	h.Describe.SecurityGroups = utils.SlicePtrStrv(ins.SecurityGroupIds)
-	return h
+	r.Describe.KeyPairName = utils.SlicePtrStrv(ins.LoginSettings.KeyIds)
+	r.Describe.SecurityGroups = utils.SlicePtrStrv(ins.SecurityGroupIds)
+	return r
 }
 
 func transferTags(tags []*cvm.Tag) (ret []*resource.Tag) {

@@ -84,11 +84,12 @@ func (req *SearchRequest) AddTag(t ...*TagSelector) {
 
 func NewDefaultResource(rt TYPE) *Resource {
 	return &Resource{
-		Base: &Base{
+		Meta: &Meta{},
+		Spec: &Spec{
 			ResourceType: rt,
 		},
-		Information: &Information{},
-		Tags:        []*Tag{},
+		Status: &Status{},
+		Tags:   []*Tag{},
 	}
 }
 
@@ -96,21 +97,21 @@ func (r *Resource) AddTag(t *Tag) {
 	r.Tags = append(r.Tags, t)
 }
 
-func (i *Information) PrivateIPToString() string {
+func (i *Status) PrivateIPToString() string {
 	return strings.Join(i.PrivateIp, ",")
 }
 
-func (i *Information) PublicIPToString() string {
+func (i *Status) PublicIPToString() string {
 	return strings.Join(i.PublicIp, ",")
 }
 
-func (i *Information) LoadPrivateIPString(s string) {
+func (i *Status) LoadPrivateIPString(s string) {
 	if s != "" {
 		i.PrivateIp = strings.Split(s, ",")
 	}
 }
 
-func (i *Information) LoadPublicIPString(s string) {
+func (i *Status) LoadPublicIPString(s string) {
 	if s != "" {
 		i.PublicIp = strings.Split(s, ",")
 	}
@@ -122,7 +123,7 @@ func (i *Resource) SortTag() {
 	})
 }
 
-func (i *Information) Hash() string {
+func (i *Spec) Hash() string {
 	return utils.Hash(i)
 }
 
@@ -149,7 +150,7 @@ func (s *ResourceSet) Add(item *Resource) {
 
 func (s *ResourceSet) ResourceIds() (ids []string) {
 	for i := range s.Items {
-		ids = append(ids, s.Items[i].Base.Id)
+		ids = append(ids, s.Items[i].Meta.Id)
 	}
 
 	return
@@ -158,7 +159,7 @@ func (s *ResourceSet) ResourceIds() (ids []string) {
 func (s *ResourceSet) UpdateTag(tags []*Tag) {
 	for i := range tags {
 		for j := range s.Items {
-			if s.Items[j].Base.Id == tags[i].ResourceId {
+			if s.Items[j].Meta.Id == tags[i].ResourceId {
 				s.Items[j].AddTag(tags[i])
 			}
 		}

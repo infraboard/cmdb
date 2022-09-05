@@ -69,20 +69,20 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 
 	for rows.Next() {
 		ins := resource.NewDefaultResource(resource.TYPE_HOST)
-		base := ins.Base
-		info := ins.Information
+		base := ins.Meta
+		info := ins.Spec
 		err := rows.Scan(
-			&base.Id, &base.ResourceType, &base.Vendor, &base.Region, &base.Zone, &base.CreateAt, &info.ExpireAt,
+			&base.Id, &info.ResourceType, &info.Vendor, &info.Region, &info.Zone, &base.CreateAt, &info.ExpireAt,
 			&info.Category, &info.Type, &info.Name, &info.Description,
-			&info.Status, &info.UpdateAt, &base.SyncAt, &info.Owner,
-			&publicIPList, &privateIPList, &info.PayMode, &base.DescribeHash, &base.ResourceHash,
+			&ins.Status.Phase, &info.UpdateAt, &base.SyncAt, &info.Owner,
+			&publicIPList, &privateIPList, &ins.Cost.PayMode, &base.DescribeHash, &base.ResourceHash,
 			&base.CredentialId, &base.Domain, &base.Namespace, &base.Env, &base.UsageMode,
 		)
 		if err != nil {
 			return nil, exception.NewInternalServerError("query resource error, %s", err.Error())
 		}
-		info.LoadPrivateIPString(privateIPList)
-		info.LoadPublicIPString(publicIPList)
+		ins.Status.LoadPrivateIPString(privateIPList)
+		ins.Status.LoadPublicIPString(publicIPList)
 		set.Add(ins)
 	}
 

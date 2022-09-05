@@ -84,8 +84,8 @@ message UpdateHostRequest {
 }
 
 message UpdateHostData {
-    // @gotags: json:"information"
-    infraboard.cmdb.resource.Information information = 1;
+    // @gotags: json:"sepc"
+    resource.Spec spec = 1;
     // @gotags: json:"describe"
     Describe describe = 2;
 }

@@ -55,14 +55,15 @@ func (o *OssOperator) transferSet(items oss.ListBucketsResult) *cmdbOss.BucketSe
 func (o *OssOperator) transferBucket(ins oss.BucketProperties) *cmdbOss.Bucket {
 	r := cmdbOss.NewDefaultBucket()
 
-	b := r.Resource.Base
-	b.Vendor = resource.VENDOR_ALIYUN
-	b.Region = ins.Location
+	b := r.Resource.Meta
+
 	b.Id = fmt.Sprintf("%s.%s", ins.Location, ins.Name)
 	b.CreateAt = ins.CreationDate.UnixMilli()
 
-	info := r.Resource.Information
+	info := r.Resource.Spec
 	info.Name = ins.Name
+	info.Vendor = resource.VENDOR_ALIYUN
+	info.Region = ins.Location
 
 	desc := r.Describe
 	desc.StorageClass = ins.StorageClass

@@ -68,19 +68,20 @@ func (o *SLBOperator) transferLoadBalancerSet(items *slb.DescribeLoadBalancersRe
 
 func (o *SLBOperator) transferLoadBalancer(ins *slb.DescribeLoadBalancersResponseBodyLoadBalancersLoadBalancer) *lb.LoadBalancer {
 	r := lb.NewDefaultLoadBalancer()
-	b := r.Resource.Base
-	b.Vendor = resource.VENDOR_ALIYUN
-	b.Region = tea.StringValue(ins.RegionId)
-	b.Zone = tea.StringValue(ins.MasterZoneId)
+	b := r.Resource.Meta
 	b.CreateAt = tea.Int64Value(ins.CreateTimeStamp) / 1000
 	b.Id = tea.StringValue(ins.LoadBalancerId)
 
-	info := r.Resource.Information
+	info := r.Resource.Spec
+	info.Vendor = resource.VENDOR_ALIYUN
+	info.Region = tea.StringValue(ins.RegionId)
+	info.Zone = tea.StringValue(ins.MasterZoneId)
 	info.Name = tea.StringValue(ins.LoadBalancerName)
 	info.Type = tea.StringValue(ins.NetworkType)
-	info.Status = praseSlbStatus(ins.LoadBalancerStatus)
-	info.PayMode = mapping.PrasePayMode(ins.PayType)
-	info.PrivateIp = []string{tea.StringValue(ins.Address)}
+
+	r.Resource.Status.PrivateIp = []string{tea.StringValue(ins.Address)}
+	r.Resource.Status.Phase = praseSlbStatus(ins.LoadBalancerStatus)
+	r.Resource.Cost.PayMode = mapping.PrasePayMode(ins.PayType)
 
 	desc := r.Describe
 	desc.BandWidth = tea.Int32Value(ins.Bandwidth)

@@ -26,36 +26,25 @@ func NewDefaultHost() *Host {
 }
 
 func (h *Host) Put(req *UpdateHostData) {
-	oldRH, oldDH := h.Resource.Base.ResourceHash, h.Resource.Base.DescribeHash
-
-	h.Resource.Information = req.Information
+	h.Resource.Spec = req.Spec
 	h.Describe = req.Describe
-	h.Resource.Information.UpdateAt = ftime.Now().Timestamp()
+	h.Resource.Spec.UpdateAt = ftime.Now().Timestamp()
 	h.GenHash()
-
-	if h.Resource.Base.ResourceHash != oldRH {
-		h.Resource.Base.ResourceHashChanged = true
-	}
-	if h.Resource.Base.DescribeHash != oldDH {
-		h.Resource.Base.DescribeHashChanged = true
-	}
 }
 
 func (h *Host) ShortDesc() string {
-	return fmt.Sprintf("%s %s", h.Resource.Information.Name, h.Resource.Information.PrivateIp)
+	return fmt.Sprintf("%s %s", h.Resource.Spec.Name, h.Resource.Status.PrivateIp)
 }
 
 func NewUpdateHostDataByIns(ins *Host) *UpdateHostData {
 	return &UpdateHostData{
-		Information: ins.Resource.Information,
-		Describe:    ins.Describe,
+		Spec:     ins.Resource.Spec,
+		Describe: ins.Describe,
 	}
 }
 
 func (h *Host) Patch(req *UpdateHostData) error {
-	oldRH, oldDH := h.Resource.Base.ResourceHash, h.Resource.Base.DescribeHash
-
-	err := ObjectPatch(h.Resource.Information, req.Information)
+	err := ObjectPatch(h.Resource.Spec, req.Spec)
 	if err != nil {
 		return err
 	}
@@ -65,16 +54,8 @@ func (h *Host) Patch(req *UpdateHostData) error {
 		return err
 	}
 
-	h.Resource.Information.UpdateAt = ftime.Now().Timestamp()
+	h.Resource.Spec.UpdateAt = ftime.Now().Timestamp()
 	h.GenHash()
-
-	if h.Resource.Base.ResourceHash != oldRH {
-		h.Resource.Base.ResourceHashChanged = true
-	}
-	if h.Resource.Base.DescribeHash != oldDH {
-		h.Resource.Base.DescribeHashChanged = true
-	}
-
 	return nil
 }
 
@@ -87,8 +68,8 @@ func ObjectPatch(old, new interface{}) error {
 }
 
 func (h *Host) GenHash() error {
-	h.Resource.Base.ResourceHash = h.Resource.Information.Hash()
-	h.Resource.Base.DescribeHash = utils.Hash(h.Describe)
+	h.Resource.Meta.ResourceHash = h.Resource.Spec.Hash()
+	h.Resource.Meta.DescribeHash = utils.Hash(h.Describe)
 	return nil
 }
 
@@ -126,7 +107,7 @@ func (s *HostSet) Add(items ...any) {
 
 func (s *HostSet) ResourceIds() (ids []string) {
 	for i := range s.Items {
-		ids = append(ids, s.Items[i].Resource.Base.Id)
+		ids = append(ids, s.Items[i].Resource.Meta.Id)
 	}
 	return
 }
@@ -150,7 +131,7 @@ func (s *HostSet) ToJsonString() string {
 func (s *HostSet) UpdateTag(tags []*resource.Tag) {
 	for i := range tags {
 		for j := range s.Items {
-			if s.Items[j].Resource.Base.Id == tags[i].ResourceId {
+			if s.Items[j].Resource.Meta.Id == tags[i].ResourceId {
 				s.Items[j].Resource.AddTag(tags[i])
 			}
 		}
@@ -158,7 +139,7 @@ func (s *HostSet) UpdateTag(tags []*resource.Tag) {
 }
 
 func (h *Host) Status() STATUS {
-	s, err := ParseSTATUSFromString(h.Resource.Information.Status)
+	s, err := ParseSTATUSFromString(h.Resource.Status.Phase)
 	if err != nil {
 		return STATUS_UNKNOW
 	}

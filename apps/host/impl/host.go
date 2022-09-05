@@ -14,7 +14,7 @@ import (
 
 func (s *service) SyncHost(ctx context.Context, ins *host.Host) (
 	*host.Host, error) {
-	exist, err := s.DescribeHost(ctx, host.NewDescribeHostRequestWithID(ins.Resource.Base.Id))
+	exist, err := s.DescribeHost(ctx, host.NewDescribeHostRequestWithID(ins.Resource.Meta.Id))
 	if err != nil {
 		// 如果不是Not Found则直接返回
 		if !exception.IsNotFoundError(err) {
@@ -24,7 +24,7 @@ func (s *service) SyncHost(ctx context.Context, ins *host.Host) (
 
 	// 检查ins已经存在 我们则需要更新ins
 	if exist != nil {
-		s.log.Debugf("update host: %s", ins.Resource.Base.Id)
+		s.log.Debugf("update host: %s", ins.Resource.Meta.Id)
 		exist.Put(host.NewUpdateHostDataByIns(ins))
 		if err := s.update(ctx, exist); err != nil {
 			return nil, err
@@ -33,7 +33,7 @@ func (s *service) SyncHost(ctx context.Context, ins *host.Host) (
 	}
 
 	// 如果没有我们则直接保存
-	s.log.Debugf("insert host: %s", ins.Resource.Base.Id)
+	s.log.Debugf("insert host: %s", ins.Resource.Meta.Id)
 	if err := s.save(ctx, ins); err != nil {
 		return nil, err
 	}
@@ -97,14 +97,14 @@ func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 	)
 	for rows.Next() {
 		ins := host.NewDefaultHost()
-		base := ins.Resource.Base
-		info := ins.Resource.Information
+		base := ins.Resource.Meta
+		info := ins.Resource.Spec
 		desc := ins.Describe
 		err := rows.Scan(
-			&base.Id, &base.ResourceType, &base.Vendor, &base.Region, &base.Zone, &base.CreateAt, &info.ExpireAt,
+			&base.Id, &info.ResourceType, &info.Vendor, &info.Region, &info.Zone, &base.CreateAt, &info.ExpireAt,
 			&info.Category, &info.Type, &info.Name, &info.Description,
-			&info.Status, &info.UpdateAt, &base.SyncAt, &info.Owner,
-			&publicIPList, &privateIPList, &info.PayMode, &base.DescribeHash, &base.ResourceHash,
+			&ins.Resource.Status.Phase, &info.UpdateAt, &base.SyncAt, &info.Owner,
+			&publicIPList, &privateIPList, &ins.Resource.Cost.PayMode, &base.DescribeHash, &base.ResourceHash,
 			&base.CredentialId, &base.Domain, &base.Namespace, &base.Env, &base.UsageMode, &base.Id,
 			&desc.GpuSpec, &desc.OsType, &desc.OsName,
 			&desc.ImageId, &desc.InternetMaxBandwidthOut, &desc.InternetMaxBandwidthIn,
@@ -113,8 +113,8 @@ func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 		if err != nil {
 			return nil, exception.NewInternalServerError("query host error, %s", err.Error())
 		}
-		info.LoadPrivateIPString(privateIPList)
-		info.LoadPublicIPString(publicIPList)
+		ins.Resource.Status.LoadPrivateIPString(privateIPList)
+		ins.Resource.Status.LoadPublicIPString(publicIPList)
 
 		desc.LoadKeyPairNameString(keyPairNameList)
 		desc.LoadSecurityGroupsString(securityGroupsList)
@@ -147,14 +147,14 @@ func (s *service) DescribeHost(ctx context.Context, req *host.DescribeHostReques
 	var (
 		publicIPList, privateIPList, keyPairNameList, securityGroupsList string
 	)
-	base := ins.Resource.Base
-	info := ins.Resource.Information
+	base := ins.Resource.Meta
+	info := ins.Resource.Spec
 	desc := ins.Describe
 	err = queryStmt.QueryRowContext(ctx, args...).Scan(
-		&base.Id, &base.ResourceType, &base.Vendor, &base.Region, &base.Zone, &base.CreateAt, &info.ExpireAt,
+		&base.Id, &info.ResourceType, &info.Vendor, &info.Region, &info.Zone, &base.CreateAt, &info.ExpireAt,
 		&info.Category, &info.Type, &info.Name, &info.Description,
-		&info.Status, &info.UpdateAt, &base.SyncAt, &info.Owner,
-		&publicIPList, &privateIPList, &info.PayMode, &base.DescribeHash, &base.ResourceHash,
+		&ins.Resource.Status.Phase, &info.UpdateAt, &base.SyncAt, &info.Owner,
+		&publicIPList, &privateIPList, &ins.Resource.Cost.PayMode, &base.DescribeHash, &base.ResourceHash,
 		&base.CredentialId, &base.Domain, &base.Namespace, &base.Env, &base.UsageMode, &base.Id,
 		&desc.GpuSpec, &desc.OsType, &desc.OsName,
 		&desc.ImageId, &desc.InternetMaxBandwidthOut, &desc.InternetMaxBandwidthIn,
@@ -168,8 +168,8 @@ func (s *service) DescribeHost(ctx context.Context, req *host.DescribeHostReques
 		return nil, exception.NewInternalServerError("describe host error, %s", err.Error())
 	}
 
-	info.LoadPrivateIPString(privateIPList)
-	info.LoadPublicIPString(publicIPList)
+	ins.Resource.Status.LoadPrivateIPString(privateIPList)
+	ins.Resource.Status.LoadPublicIPString(publicIPList)
 	desc.LoadKeyPairNameString(keyPairNameList)
 	desc.LoadSecurityGroupsString(securityGroupsList)
 
