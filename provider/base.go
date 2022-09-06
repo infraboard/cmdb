@@ -20,6 +20,12 @@ func (req *DescribeRequest) Validate() error {
 	return nil
 }
 
+func NewQueryRequestWithRate(rate int32) *QueryRequest {
+	return &QueryRequest{
+		Rate: float64(rate),
+	}
+}
+
 func NewQueryRequest() *QueryRequest {
 	return &QueryRequest{
 		Rate: 5,

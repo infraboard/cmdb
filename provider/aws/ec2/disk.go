@@ -13,6 +13,6 @@ func (o *Ec2operator) DescribeDisk(ctx context.Context, req *provider.DescribeRe
 	return nil, nil
 }
 
-func (o *Ec2operator) PageQueryDisk(req *provider.QueryDiskRequest) pager.Pager {
+func (o *Ec2operator) PageQueryDisk(req *provider.QueryRequest) pager.Pager {
 	return nil
 }

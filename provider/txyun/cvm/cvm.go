@@ -14,7 +14,7 @@ import (
 	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 )
 
-func (o *CVMOperator) PageQueryHost(req *provider.QueryHostRequest) pager.Pager {
+func (o *CVMOperator) PageQueryHost(req *provider.QueryRequest) pager.Pager {
 	p := newPager(o)
 	p.SetRate(req.Rate)
 	return p
@@ -33,7 +33,7 @@ func (o *CVMOperator) QueryCVM(ctx context.Context, req *cvm.DescribeInstancesRe
 	return set, nil
 }
 
-func (o *CVMOperator) DescribeHost(ctx context.Context, req *provider.DescribeHostRequest) (*host.Host, error) {
+func (o *CVMOperator) DescribeHost(ctx context.Context, req *provider.DescribeRequest) (*host.Host, error) {
 	query := cvm.NewDescribeInstancesRequest()
 	query.InstanceIds = []*string{tea.String(req.Id)}
 	query.Limit = tea.Int64(1)

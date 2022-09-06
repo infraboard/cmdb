@@ -30,7 +30,7 @@ func (s *service) syncRds(ctx context.Context, credentialIns *credential.Secret,
 	}()
 
 	credential := credentialIns.Data
-	req := provider.NewQueryRdsRequestWithRate(credential.RequestRate)
+	req := provider.NewQueryRequestWithRate(credential.RequestRate)
 
 	switch credential.Vendor {
 	case resource.VENDOR_ALIYUN:

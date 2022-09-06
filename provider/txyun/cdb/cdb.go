@@ -39,7 +39,7 @@ func (o *CDBOperator) DescribeRds(ctx context.Context, r *provider.DescribeReque
 	return set.Items[0], nil
 }
 
-func (o *CDBOperator) PageQueryRds(req *provider.QueryRdsRequest) pager.Pager {
+func (o *CDBOperator) PageQueryRds(req *provider.QueryRequest) pager.Pager {
 	return newPager(20, o)
 }
 

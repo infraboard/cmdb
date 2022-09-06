@@ -13,7 +13,7 @@ import (
 	"github.com/infraboard/cmdb/utils"
 )
 
-func (o *EcsOperator) PageQueryEip(req *provider.QueryEipRequest) pager.Pager {
+func (o *EcsOperator) PageQueryEip(req *provider.QueryRequest) pager.Pager {
 	p := newEipPager(o)
 	p.SetRate(req.Rate)
 	return p

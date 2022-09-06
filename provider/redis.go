@@ -8,16 +8,6 @@ import (
 )
 
 type RedisOperator interface {
-	PageQueryRedis(req *QueryRedisRequest) pager.Pager
+	PageQueryRedis(req *QueryRequest) pager.Pager
 	DescribeRedis(context.Context, *DescribeRequest) (*redis.Redis, error)
-}
-
-func NewQueryRedisWithRate(rate int32) *QueryRedisRequest {
-	return &QueryRedisRequest{
-		Rate: float64(rate),
-	}
-}
-
-type QueryRedisRequest struct {
-	Rate float64 `json:"rate"`
 }

@@ -37,7 +37,7 @@ func (o *RdsOperator) DescribeRds(ctx context.Context, r *provider.DescribeReque
 	return set.Items[0], nil
 }
 
-func (o *RdsOperator) PageQueryRds(req *provider.QueryRdsRequest) pager.Pager {
+func (o *RdsOperator) PageQueryRds(req *provider.QueryRequest) pager.Pager {
 	return newPager(o)
 }
 

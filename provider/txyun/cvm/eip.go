@@ -13,7 +13,7 @@ import (
 	vpc "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/vpc/v20170312"
 )
 
-func (o *CVMOperator) PageQueryEip(req *provider.QueryEipRequest) pager.Pager {
+func (o *CVMOperator) PageQueryEip(req *provider.QueryRequest) pager.Pager {
 	p := newEipPager(o)
 	p.SetRate(req.Rate)
 	return p

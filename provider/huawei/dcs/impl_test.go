@@ -19,7 +19,7 @@ var (
 )
 
 func TestPageQueryRedis(t *testing.T) {
-	req := provider.NewQueryRedisWithRate(5)
+	req := provider.NewQueryRequestWithRate(5)
 	pager := operator.PageQueryRedis(req)
 
 	set := redis.NewSet()

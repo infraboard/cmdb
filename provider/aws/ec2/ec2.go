@@ -12,7 +12,7 @@ import (
 	"github.com/infraboard/mcube/pager"
 )
 
-func (o *Ec2operator) PageQueryHost(req *provider.QueryHostRequest) pager.Pager {
+func (o *Ec2operator) PageQueryHost(req *provider.QueryRequest) pager.Pager {
 	p := newPager(o)
 	p.SetRate(req.Rate)
 	return p
@@ -95,10 +95,10 @@ func ParseTag(items []types.Tag) []*resource.Tag {
 	return nil
 }
 
-func (o *Ec2operator) QueryDisk(req *provider.QueryDiskRequest) pager.Pager {
+func (o *Ec2operator) QueryDisk(req *provider.QueryRequest) pager.Pager {
 	panic("not imple")
 }
 
-func (o *Ec2operator) DescribeHost(ctx context.Context, req *provider.DescribeHostRequest) (*host.Host, error) {
+func (o *Ec2operator) DescribeHost(ctx context.Context, req *provider.DescribeRequest) (*host.Host, error) {
 	return nil, fmt.Errorf("not impl")
 }

@@ -20,7 +20,7 @@ var (
 )
 
 func TestPageQueryHost(t *testing.T) {
-	req := provider.NewQueryHostRequest()
+	req := provider.NewQueryRequest()
 	pager := operator.PageQueryHost(req)
 	for pager.Next() {
 		set := host.NewHostSet()
@@ -34,7 +34,7 @@ func TestPageQueryHost(t *testing.T) {
 }
 
 func TestDescribeEcs(t *testing.T) {
-	req := &provider.DescribeHostRequest{Id: "i-xxx"}
+	req := &provider.DescribeRequest{Id: "i-xxx"}
 	ins, err := operator.DescribeHost(context.Background(), req)
 	if err != nil {
 		t.Fatal(err)
@@ -43,7 +43,7 @@ func TestDescribeEcs(t *testing.T) {
 }
 
 func TestPageQueryDisk(t *testing.T) {
-	req := provider.NewQueryDiskRequest()
+	req := provider.NewQueryRequest()
 	pager := operator.PageQueryDisk(req)
 	for pager.Next() {
 		set := disk.NewDiskSet()
@@ -65,7 +65,7 @@ func TestDescribeDisk(t *testing.T) {
 }
 
 func TestPageQueryEip(t *testing.T) {
-	req := provider.NewQueryEipRequest()
+	req := provider.NewQueryRequest()
 	pager := operator.PageQueryEip(req)
 	for pager.Next() {
 		set := eip.NewEIPSet()

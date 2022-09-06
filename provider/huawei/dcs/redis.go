@@ -38,7 +38,7 @@ func (o *DcsOperator) DescribeRedis(ctx context.Context, r *provider.DescribeReq
 	return set.Items[0], nil
 }
 
-func (o *DcsOperator) PageQueryRedis(req *provider.QueryRedisRequest) pager.Pager {
+func (o *DcsOperator) PageQueryRedis(req *provider.QueryRequest) pager.Pager {
 	return newPager(o)
 }
 

@@ -11,7 +11,7 @@ import (
 	"github.com/infraboard/mcube/pager"
 )
 
-func (o *OssOperator) QueryBucket(ctx context.Context, req *provider.QueryBucketRequest) pager.Pager {
+func (o *OssOperator) QueryBucket(ctx context.Context, req *provider.QueryRequest) pager.Pager {
 	p := newBucketPager(o)
 	p.SetRate(float64(req.Rate))
 	return p

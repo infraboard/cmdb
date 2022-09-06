@@ -16,7 +16,7 @@ import (
 	"github.com/infraboard/mcube/pager"
 )
 
-func (o *EcsOperator) DescribeHost(ctx context.Context, req *provider.DescribeHostRequest) (*host.Host, error) {
+func (o *EcsOperator) DescribeHost(ctx context.Context, req *provider.DescribeRequest) (*host.Host, error) {
 	resp, err := o.client.ShowServer(&model.ShowServerRequest{
 		ServerId: req.Id,
 	})
@@ -39,7 +39,7 @@ func (o *EcsOperator) DescribeHost(ctx context.Context, req *provider.DescribeHo
 	return h, nil
 }
 
-func (o *EcsOperator) PageQueryHost(req *provider.QueryHostRequest) pager.Pager {
+func (o *EcsOperator) PageQueryHost(req *provider.QueryRequest) pager.Pager {
 	p := newPager(o)
 	p.SetRate(req.Rate)
 	return p

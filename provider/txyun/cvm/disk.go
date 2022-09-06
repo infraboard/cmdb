@@ -36,7 +36,7 @@ func (o *CVMOperator) DescribeDisk(ctx context.Context, r *provider.DescribeRequ
 	return set.Items[0], nil
 }
 
-func (o *CVMOperator) PageQueryDisk(req *provider.QueryDiskRequest) pager.Pager {
+func (o *CVMOperator) PageQueryDisk(req *provider.QueryRequest) pager.Pager {
 	p := newDiskPager(o)
 	p.SetRate(req.Rate)
 	return p

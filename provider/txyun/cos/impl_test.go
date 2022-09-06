@@ -16,7 +16,7 @@ var (
 )
 
 func TestQuery(t *testing.T) {
-	pager := operator.QueryBucket(context.Background(), provider.NewQueryBucketRate(5))
+	pager := operator.QueryBucket(context.Background(), provider.NewQueryRequestWithRate(5))
 
 	for pager.Next() {
 		set := oss.NewBucketSet()

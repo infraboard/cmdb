@@ -18,7 +18,7 @@ var (
 )
 
 func TestPageQueryRds(t *testing.T) {
-	req := provider.NewQueryRdsRequest()
+	req := provider.NewQueryRequest()
 	pager := operator.PageQueryRds(req)
 
 	for pager.Next() {
