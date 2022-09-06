@@ -20,7 +20,7 @@ var (
 
 func TestPageQueryLoadBalancer(t *testing.T) {
 	req := provider.NewQueryEventRequest()
-	req.StartTime = time.Now().Add(-24 * 10 * time.Hour)
+	req.StartTime = time.Now().Add(-24 * 30 * time.Hour)
 	pager := operator.PageQueryEvents(req)
 
 	for pager.Next() {

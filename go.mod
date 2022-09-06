@@ -37,18 +37,18 @@ require (
 	github.com/rs/xid v1.4.0
 	github.com/spf13/cobra v1.4.0
 	github.com/stretchr/testify v1.7.1
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/billing v1.0.393
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cbs v1.0.451
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cdb v1.0.393
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/clb v1.0.447
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cloudaudit v1.0.484
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.484
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm v1.0.393
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod v1.0.447
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/redis v1.0.446
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sts v1.0.393
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/vpc v1.0.466
-	github.com/tencentyun/cos-go-sdk-v5 v0.7.35
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/billing v1.0.492
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cbs v1.0.492
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cdb v1.0.492
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/clb v1.0.492
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cloudaudit v1.0.492
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.492
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm v1.0.492
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod v1.0.492
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/redis v1.0.492
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sts v1.0.492
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/vpc v1.0.492
+	github.com/tencentyun/cos-go-sdk-v5 v0.7.38
 	github.com/vmware/govmomi v0.28.0
 	google.golang.org/grpc v1.46.2
 	google.golang.org/protobuf v1.28.0
