@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/infraboard/cmdb/apps/disk"
+	"github.com/infraboard/cmdb/apps/eip"
 	"github.com/infraboard/cmdb/apps/host"
 )
 
@@ -70,6 +71,47 @@ func praseDiskStatus(s string) string {
 	s = strings.ToLower(s)
 
 	if v, ok := DISK_STATUS_MAP[s]; ok {
+		return v.String()
+	}
+
+	return s
+}
+
+var (
+
+	// FREEZED 冻结
+	// BIND_ERROR 绑定失败
+	// BINDING  绑定中
+	// PENDING_DELETE 释放中
+	// PENDING_CREATE 创建中
+	// NOTIFYING 创建中
+	// NOTIFY_DELETE 释放中
+	// PENDING_UPDATE 更新中
+	// DOWN 未绑定
+	// ACTIVE 绑定
+	// ELB 绑定ELB
+	// ERROR 失败
+	// VPN 绑定VPN
+	EIP_STATUS_MAP = map[string]eip.STATUS{
+		"BINDING":        eip.STATUS_BINDING,
+		"PENDING_CREATE": eip.STATUS_PENDING,
+		"PENDING_DELETE": eip.STATUS_OFFLINING,
+		"NOTIFYING":      eip.STATUS_PENDING,
+		"NOTIFY_DELETE":  eip.STATUS_OFFLINING,
+		"PENDING_UPDATE": eip.STATUS_PENDING,
+		"DOWN":           eip.STATUS_UNBIND,
+		"ACTIVE":         eip.STATUS_BIND,
+		"ELB":            eip.STATUS_BIND,
+		"VPN":            eip.STATUS_BIND,
+		"BIND_ERROR":     eip.STATUS_ERROR,
+		"ERROR":          eip.STATUS_ERROR,
+	}
+)
+
+func praseEIPStatus(s string) string {
+	s = strings.ToLower(s)
+
+	if v, ok := EIP_STATUS_MAP[strings.ToUpper(s)]; ok {
 		return v.String()
 	}
 

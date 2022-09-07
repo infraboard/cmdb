@@ -53,3 +53,27 @@ message QueryEIPRequest {
     // @gotags: json:"page"
     infraboard.mcube.page.PageRequest page = 1;
 }
+
+enum STATUS {
+    // 未知状态
+    UNKNOW = 0;
+
+    // 表示创建中
+    PENDING = 5;
+    // 绑定中
+    BINDING = 6;
+    // 解绑中
+    UNBINDING = 7;
+    // 已绑定
+    BIND = 11;
+    // 已解绑
+    UNBIND = 12;
+
+    // 状态异常
+	ERROR  = 50;
+
+    // 释放中
+    OFFLINING = 80;
+    // 已归档
+    ARCHIVED = 90;
+}

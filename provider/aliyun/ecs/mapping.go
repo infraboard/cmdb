@@ -4,10 +4,16 @@ import (
 	"strings"
 
 	"github.com/infraboard/cmdb/apps/disk"
+	"github.com/infraboard/cmdb/apps/eip"
 	"github.com/infraboard/cmdb/apps/host"
 )
 
 var (
+	// Pending 创建中。
+	// Running 运行中。
+	// Starting 启动中。
+	// Stopping 停止中。
+	// Stopped 已停止。
 	ECS_STATUS_MAP = map[string]host.STATUS{
 		"Pending":  host.STATUS_PENDING,
 		"Running":  host.STATUS_RUNNING,
@@ -55,6 +61,34 @@ func praseDiskStatus(s *string) string {
 
 	t := strings.ToLower(*s)
 	if v, ok := DISK_STATUS_MAP[t]; ok {
+		return v.String()
+	}
+
+	return *s
+}
+
+var (
+	// Creating 创建中
+	// Associating 绑定中
+	// Unassociating 解绑中
+	// InUse 已分配。
+	// Available 可用。
+	// Releasing 释放中
+	EIP_STATUS_MAP = map[string]eip.STATUS{
+		"Creating":      eip.STATUS_PENDING,
+		"Associating":   eip.STATUS_BINDING,
+		"Unassociating": eip.STATUS_BINDING,
+		"InUse":         eip.STATUS_BIND,
+		"Available":     eip.STATUS_UNBIND,
+		"Releasing":     eip.STATUS_OFFLINING,
+	}
+)
+
+func praseEIPStatus(s *string) string {
+	if s == nil {
+		return ""
+	}
+	if v, ok := EIP_STATUS_MAP[*s]; ok {
 		return v.String()
 	}
 

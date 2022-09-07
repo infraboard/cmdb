@@ -1,7 +1,7 @@
 package ecs
 
 import (
-	"fmt"
+	"strings"
 
 	"github.com/alibabacloud-go/tea/tea"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/eip/v2/model"
@@ -28,9 +28,6 @@ func (o *EcsOperator) queryEip(req *model.ListPublicipsRequest) (*eip.EIPSet, er
 	if err != nil {
 		return nil, err
 	}
-
-	fmt.Println("####")
-	fmt.Println(resp.String())
 
 	set.Items = o.transferEipSet(resp).Items
 
@@ -73,6 +70,13 @@ func (o *EcsOperator) transferEip(ins model.PublicipShowResp) *eip.EIP {
 	bt, _ := ins.BandwidthShareType.MarshalJSON()
 	info.Category = string(bt)
 	info.Type = tea.StringValue(ins.Type)
+
+	status, err := ins.Status.MarshalJSON()
+	if err == nil {
+		r.Resource.Status.Phase = praseEIPStatus(strings.Trim(strings.TrimSpace(string(status)), `"`))
+	} else {
+		o.log.Errorf("status marshal json error, %s", err)
+	}
 
 	r.Resource.Status.PublicIp = []string{tea.StringValue(ins.PublicIpAddress)}
 	r.Resource.Status.PrivateIp = []string{tea.StringValue(ins.PrivateIpAddress)}

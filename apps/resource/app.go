@@ -88,6 +88,7 @@ func NewDefaultResource(rt TYPE) *Resource {
 		Spec: &Spec{
 			ResourceType: rt,
 		},
+		Cost:   &Cost{},
 		Status: &Status{},
 		Tags:   []*Tag{},
 	}

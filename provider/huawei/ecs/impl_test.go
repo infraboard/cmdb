@@ -66,7 +66,7 @@ func TestPageQueryEip(t *testing.T) {
 }
 
 func TestDescribeHost(t *testing.T) {
-	req := &provider.DescribeRequest{Id: "5f55a412-cd3c-4144-82ce-5001c2b2f08c"}
+	req := &provider.DescribeRequest{Id: "xxxx"}
 	ins, err := operator.DescribeHost(context.Background(), req)
 	if err != nil {
 		t.Fatal(err)

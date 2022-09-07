@@ -2,6 +2,7 @@ package cvm
 
 import (
 	"github.com/infraboard/cmdb/apps/disk"
+	"github.com/infraboard/cmdb/apps/eip"
 	"github.com/infraboard/cmdb/apps/host"
 )
 
@@ -58,6 +59,36 @@ func praseDiskStatus(s *string) string {
 		return ""
 	}
 	if v, ok := DISK_STATUS_MAP[*s]; ok {
+		return v.String()
+	}
+
+	return *s
+}
+
+var (
+	// `EIP`状态，包含:
+	// CREATING (创建中)
+	// BINDING (绑定中)
+	// BIND (已绑定)
+	// UNBINDING (解绑中)
+	// UNBIND (已解绑)
+	// OFFLINING (释放中)
+	// BIND_ENI (绑定悬空弹性网卡)
+	EIP_STATUS_MAP = map[string]eip.STATUS{
+		"CREATING":  eip.STATUS_PENDING,
+		"BINDING":   eip.STATUS_BINDING,
+		"BIND":      eip.STATUS_BIND,
+		"UNBINDING": eip.STATUS_UNBINDING,
+		"UNBIND":    eip.STATUS_UNBIND,
+		"OFFLINING": eip.STATUS_OFFLINING,
+	}
+)
+
+func praseEIPStatus(s *string) string {
+	if s == nil {
+		return ""
+	}
+	if v, ok := EIP_STATUS_MAP[*s]; ok {
 		return v.String()
 	}
 

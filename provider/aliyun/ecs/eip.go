@@ -20,7 +20,7 @@ func (o *EcsOperator) PageQueryEip(req *provider.QueryRequest) pager.Pager {
 }
 
 // 查询指定地域已创建的EIP
-// 参考文档: https://next.api.aliyun.com/api/Ecs/2014-05-26/DescribeInstances?params={}
+// 参考文档: https://next.api.aliyun.com/api/Ecs/2014-05-26/DescribeEipAddresses?params={}
 func (o *EcsOperator) queryEip(req *ecs.DescribeEipAddressesRequest) (*eip.EIPSet, error) {
 	set := eip.NewEIPSet()
 
@@ -61,11 +61,11 @@ func (o *EcsOperator) transferEip(ins *ecs.DescribeEipAddressesResponseBodyEipAd
 	info.Vendor = resource.VENDOR_ALIYUN
 	info.Region = tea.StringValue(ins.RegionId)
 	info.Owner = o.GetAccountId()
-	info.ExpireAt = utils.ParseDefaultSecondTime(tea.StringValue(ins.ExpiredTime))
+	info.ExpireAt = utils.ParseDefaultMiniteTime(tea.StringValue(ins.ExpiredTime))
 	info.Type = tea.StringValue(ins.InstanceType)
 
 	h.Resource.Status.PublicIp = []string{tea.StringValue(ins.IpAddress)}
-	h.Resource.Status.Phase = praseEcsStatus(ins.Status)
+	h.Resource.Status.Phase = praseEIPStatus(ins.Status)
 	h.Resource.Cost.PayMode = mapping.PrasePayMode(ins.ChargeType)
 
 	h.Describe.BandWidth, _ = strconv.ParseInt(tea.StringValue(ins.Bandwidth), 10, 64)
