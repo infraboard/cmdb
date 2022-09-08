@@ -78,7 +78,6 @@ func praseDiskStatus(s string) string {
 }
 
 var (
-
 	// FREEZED 冻结
 	// BIND_ERROR 绑定失败
 	// BINDING  绑定中
