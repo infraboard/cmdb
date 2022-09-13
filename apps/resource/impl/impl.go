@@ -20,7 +20,7 @@ type service struct {
 	db  *sql.DB
 	log logger.Logger
 
-	resource.UnimplementedServiceServer
+	resource.UnimplementedRPCServer
 }
 
 func (s *service) Config() error {
@@ -39,7 +39,7 @@ func (s *service) Name() string {
 }
 
 func (s *service) Registry(server *grpc.Server) {
-	resource.RegisterServiceServer(server, svr)
+	resource.RegisterRPCServer(server, svr)
 }
 
 func init() {

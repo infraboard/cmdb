@@ -17,13 +17,13 @@ var (
 )
 
 type handler struct {
-	service resource.ServiceServer
+	service resource.Service
 	log     logger.Logger
 }
 
 func (h *handler) Config() error {
 	h.log = zap.L().Named(resource.AppName)
-	h.service = app.GetGrpcApp(resource.AppName).(resource.ServiceServer)
+	h.service = app.GetGrpcApp(resource.AppName).(resource.Service)
 	return nil
 }
 

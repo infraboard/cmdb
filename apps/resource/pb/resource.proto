@@ -5,7 +5,7 @@ option go_package="github.com/infraboard/cmdb/apps/resource";
 
 import "github.com/infraboard/mcube/pb/page/page.proto";
 
-service Service {
+service RPC {
     rpc Search (SearchRequest) returns (ResourceSet);
     rpc QueryTag(QueryTagRequest) returns (TagSet);
     rpc UpdateTag (UpdateTagRequest) returns (Resource);
@@ -30,7 +30,10 @@ enum TYPE {
     DOMAIN = 6;
     EIP = 7;
     MONGODB = 8;
+
+    // 未知资源
     OTHER = 199;
+
     // 辅助资源
     BILL = 200;
     ORDER = 201;
@@ -73,12 +76,15 @@ message Resource {
     // 资源费用
     // @gotags: json:"cost"
     Cost cost = 3;
-   // 资源状态
+    // 资源状态
     // @gotags: json:"status"
     Status status = 4;
     // 资源标签
     // @gotags: json:"tags"
     repeated Tag tags = 5;
+    // 关联资源
+    // @gotags: json:"related_resources"
+    repeated Resource related_resources = 6;
 }
 
 message Meta {
@@ -213,8 +219,6 @@ enum TAG_TYPE {
     THIRD = 1;
     // 系统使用标签, 禁止用户修改, 表示被其他系统引用, 比如应用关联标签
     SYSTEM = 2;
-    // 资源关联标签, 用于关联其他资源
-    REF_RESOURCE = 3;
 }
 
 message Tag {
@@ -310,6 +314,9 @@ message SearchRequest {
     // 是否返回资源的标签
     // @gotags: json:"with_tags"
     bool with_tags = 11;
+    // 关联资源查询深度, -1表示查询所有, 默认为0,表示不查询关联资源
+    // @gotags: json:"relation_deep"
+    int32 relation_deep = 12; 
     // 关键字参数
     // @gotags: json:"keywords"
     string keywords = 14;

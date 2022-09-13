@@ -56,8 +56,8 @@ type ClientSet struct {
 }
 
 // Resource todo
-func (c *ClientSet) Resource() resource.ServiceClient {
-	return resource.NewServiceClient(c.conn)
+func (c *ClientSet) Resource() resource.RPCClient {
+	return resource.NewRPCClient(c.conn)
 }
 
 // Host todos
