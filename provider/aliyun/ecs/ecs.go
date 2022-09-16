@@ -151,7 +151,7 @@ func (o *EcsOperator) transferTags(tags *ecs.DescribeInstancesResponseBodyInstan
 	}
 
 	for i := range tags.Tag {
-		ret = append(ret, resource.NewThirdTag(
+		ret = append(ret, resource.NewGroupTag(
 			tea.StringValue(tags.Tag[i].TagKey),
 			tea.StringValue(tags.Tag[i].TagValue),
 		))

@@ -189,24 +189,24 @@ func (t *UsageMode) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// ParseTAG_TYPEFromString Parse TAG_TYPE from string
-func ParseTAG_TYPEFromString(str string) (TAG_TYPE, error) {
+// ParseTAG_PURPOSEFromString Parse TAG_PURPOSE from string
+func ParseTAG_PURPOSEFromString(str string) (TAG_PURPOSE, error) {
 	key := strings.Trim(string(str), `"`)
-	v, ok := TAG_TYPE_value[strings.ToUpper(key)]
+	v, ok := TAG_PURPOSE_value[strings.ToUpper(key)]
 	if !ok {
-		return 0, fmt.Errorf("unknown TAG_TYPE: %s", str)
+		return 0, fmt.Errorf("unknown TAG_PURPOSE: %s", str)
 	}
 
-	return TAG_TYPE(v), nil
+	return TAG_PURPOSE(v), nil
 }
 
 // Equal type compare
-func (t TAG_TYPE) Equal(target TAG_TYPE) bool {
+func (t TAG_PURPOSE) Equal(target TAG_PURPOSE) bool {
 	return t == target
 }
 
 // IsIn todo
-func (t TAG_TYPE) IsIn(targets ...TAG_TYPE) bool {
+func (t TAG_PURPOSE) IsIn(targets ...TAG_PURPOSE) bool {
 	for _, target := range targets {
 		if t.Equal(target) {
 			return true
@@ -217,7 +217,7 @@ func (t TAG_TYPE) IsIn(targets ...TAG_TYPE) bool {
 }
 
 // MarshalJSON todo
-func (t TAG_TYPE) MarshalJSON() ([]byte, error) {
+func (t TAG_PURPOSE) MarshalJSON() ([]byte, error) {
 	b := bytes.NewBufferString(`"`)
 	b.WriteString(strings.ToUpper(t.String()))
 	b.WriteString(`"`)
@@ -225,8 +225,8 @@ func (t TAG_TYPE) MarshalJSON() ([]byte, error) {
 }
 
 // UnmarshalJSON todo
-func (t *TAG_TYPE) UnmarshalJSON(b []byte) error {
-	ins, err := ParseTAG_TYPEFromString(string(b))
+func (t *TAG_PURPOSE) UnmarshalJSON(b []byte) error {
+	ins, err := ParseTAG_PURPOSEFromString(string(b))
 	if err != nil {
 		return err
 	}

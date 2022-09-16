@@ -151,9 +151,9 @@ func (o *EcsOperator) transferTags(tags []string) (ret []*resource.Tag) {
 	for _, t := range tags {
 		kv := strings.Split(t, "=")
 		if len(kv) == 2 {
-			ret = append(ret, resource.NewThirdTag(kv[0], kv[1]))
+			ret = append(ret, resource.NewGroupTag(kv[0], kv[1]))
 		} else {
-			ret = append(ret, resource.NewThirdTag("ecs", t))
+			ret = append(ret, resource.NewGroupTag("ecs", t))
 		}
 	}
 

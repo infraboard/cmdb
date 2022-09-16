@@ -104,7 +104,7 @@ func updateResourceTag(ctx context.Context, tx *sql.Tx, resourceId string, tags 
 			t.Weight = 1
 		}
 		_, err = stmt.ExecContext(ctx,
-			t.Type, t.Key, t.Value, t.Describe, resourceId, t.Weight, time.Now().UnixMilli(),
+			t.Purpose, t.Key, t.Value, t.Describe, resourceId, t.Weight, time.Now().UnixMilli(),
 			t.Describe, t.Weight,
 		)
 		if err != nil {

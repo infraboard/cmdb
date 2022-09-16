@@ -98,7 +98,7 @@ func (o *CVMOperator) transferOne(ins *cvm.Instance) *host.Host {
 
 func transferTags(tags []*cvm.Tag) (ret []*resource.Tag) {
 	for i := range tags {
-		ret = append(ret, resource.NewThirdTag(
+		ret = append(ret, resource.NewGroupTag(
 			utils.PtrStrV(tags[i].Key),
 			utils.PtrStrV(tags[i].Value)),
 		)

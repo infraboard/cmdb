@@ -212,13 +212,14 @@ message Status {
     repeated string private_ip = 5;
 }
 
-enum TAG_TYPE {
-    // 用户自定义标签, 允许用户修改
-    USER = 0;
-    // 第三方定义的标签, 比如云商同步过来的标签
-    THIRD = 1;
-    // 系统使用标签, 禁止用户修改, 表示被其他系统引用, 比如应用关联标签
-    SYSTEM = 2;
+// 标签用途
+enum TAG_PURPOSE {
+    // 用于资源分组
+    GROUP = 0;
+    // 系统使用标签, 表示被其他系统引用, 比如应用关联标签
+    SYSTEM = 1;
+    // 用于资源监控
+    MONITOR = 2;
 }
 
 message Tag {
@@ -226,8 +227,8 @@ message Tag {
     // @gotags: json:"resource_id"
     string resource_id = 1;
     // 标签的类型
-    // @gotags: json:"type"
-    TAG_TYPE type = 2;
+    // @gotags: json:"purpose"
+    TAG_PURPOSE purpose = 2;
     // 标签的Key
     // @gotags: json:"key" validate:"lte=255,required"
     string key = 3;
@@ -240,9 +241,9 @@ message Tag {
     // 标签权重, 针对同一个key, 多个value场景, 默认值1
     // @gotags: json:"weight"
     int64 weight = 6;
-    // 标签是否纳入成本统计, 比如监控标签就不需要纳入到成本统计
-    // @gotags: json:"is_cost"
-    bool is_cost = 7;
+    // 是否是只读标签
+    // @gotags: json:"read_only"
+    bool read_only = 7;
     // 标签是否隐藏, 用于控制是否在前端展示
     // @gotags: json:"hidden"
     bool hidden = 8;

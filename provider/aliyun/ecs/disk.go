@@ -106,7 +106,7 @@ func (o *EcsOperator) transferDiskTags(tags *ecs.DescribeDisksResponseBodyDisksD
 	}
 
 	for i := range tags.Tag {
-		ret = append(ret, resource.NewThirdTag(
+		ret = append(ret, resource.NewGroupTag(
 			tea.StringValue(tags.Tag[i].TagKey),
 			tea.StringValue(tags.Tag[i].TagValue),
 		))

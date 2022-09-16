@@ -203,17 +203,17 @@ func NewUpdateTagRequest(resourceId string, action UpdateAction) *UpdateTagReque
 
 func NewDefaultTag() *Tag {
 	return &Tag{
-		Type:   TAG_TYPE_USER,
-		Weight: 1,
+		Purpose: TAG_PURPOSE_GROUP,
+		Weight:  1,
 	}
 }
 
-func NewThirdTag(key, value string) *Tag {
+func NewGroupTag(key, value string) *Tag {
 	return &Tag{
-		Type:   TAG_TYPE_THIRD,
-		Key:    key,
-		Value:  value,
-		Weight: 1,
+		Purpose: TAG_PURPOSE_GROUP,
+		Key:     key,
+		Value:   value,
+		Weight:  1,
 	}
 }
 
