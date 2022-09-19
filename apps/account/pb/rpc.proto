@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package infraboard.cmdb.account;
+option go_package="github.com/infraboard/cmdb/apps/account";
+
+// import "apps/resource/pb/account.proto";
+
+// service RPC {
+// }

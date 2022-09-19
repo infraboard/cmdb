@@ -14,3 +14,18 @@ message Account {
 
 message Describe {
 }
+
+message Secret {
+    // 服务地址
+    // @gotags: json:"address"
+    string address = 1;
+    // 服务地址
+    // @gotags: json:"database"
+    string database = 2;
+    // 用户名称
+    // @gotags: json:"username"
+    string username = 3;
+    // 用户密码
+    // @gotags: json:"password"
+    string password = 4;
+}

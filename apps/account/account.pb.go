@@ -116,6 +116,85 @@ func (*Describe) Descriptor() ([]byte, []int) {
 	return file_apps_account_pb_account_proto_rawDescGZIP(), []int{1}
 }
 
+type Secret struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// 服务地址
+	// @gotags: json:"address"
+	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address"`
+	// 服务地址
+	// @gotags: json:"database"
+	Database string `protobuf:"bytes,2,opt,name=database,proto3" json:"database"`
+	// 用户名称
+	// @gotags: json:"username"
+	Username string `protobuf:"bytes,3,opt,name=username,proto3" json:"username"`
+	// 用户密码
+	// @gotags: json:"password"
+	Password string `protobuf:"bytes,4,opt,name=password,proto3" json:"password"`
+}
+
+func (x *Secret) Reset() {
+	*x = Secret{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_apps_account_pb_account_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Secret) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Secret) ProtoMessage() {}
+
+func (x *Secret) ProtoReflect() protoreflect.Message {
+	mi := &file_apps_account_pb_account_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Secret.ProtoReflect.Descriptor instead.
+func (*Secret) Descriptor() ([]byte, []int) {
+	return file_apps_account_pb_account_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *Secret) GetAddress() string {
+	if x != nil {
+		return x.Address
+	}
+	return ""
+}
+
+func (x *Secret) GetDatabase() string {
+	if x != nil {
+		return x.Database
+	}
+	return ""
+}
+
+func (x *Secret) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
+func (x *Secret) GetPassword() string {
+	if x != nil {
+		return x.Password
+	}
+	return ""
+}
+
 var File_apps_account_pb_account_proto protoreflect.FileDescriptor
 
 var file_apps_account_pb_account_proto_rawDesc = []byte{
@@ -134,10 +213,17 @@ var file_apps_account_pb_account_proto_rawDesc = []byte{
 	0x6f, 0x61, 0x72, 0x64, 0x2e, 0x63, 0x6d, 0x64, 0x62, 0x2e, 0x61, 0x63, 0x63, 0x6f, 0x75, 0x6e,
 	0x74, 0x2e, 0x44, 0x65, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65, 0x52, 0x08, 0x64, 0x65, 0x73, 0x63,
 	0x72, 0x69, 0x62, 0x65, 0x22, 0x0a, 0x0a, 0x08, 0x44, 0x65, 0x73, 0x63, 0x72, 0x69, 0x62, 0x65,
-	0x42, 0x29, 0x5a, 0x27, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x69,
-	0x6e, 0x66, 0x72, 0x61, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2f, 0x63, 0x6d, 0x64, 0x62, 0x2f, 0x61,
-	0x70, 0x70, 0x73, 0x2f, 0x61, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x62, 0x06, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x33,
+	0x22, 0x76, 0x0a, 0x06, 0x53, 0x65, 0x63, 0x72, 0x65, 0x74, 0x12, 0x18, 0x0a, 0x07, 0x61, 0x64,
+	0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x64, 0x64,
+	0x72, 0x65, 0x73, 0x73, 0x12, 0x1a, 0x0a, 0x08, 0x64, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x64, 0x61, 0x74, 0x61, 0x62, 0x61, 0x73, 0x65,
+	0x12, 0x1a, 0x0a, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x1a, 0x0a, 0x08,
+	0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08,
+	0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x42, 0x29, 0x5a, 0x27, 0x67, 0x69, 0x74, 0x68,
+	0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x69, 0x6e, 0x66, 0x72, 0x61, 0x62, 0x6f, 0x61, 0x72,
+	0x64, 0x2f, 0x63, 0x6d, 0x64, 0x62, 0x2f, 0x61, 0x70, 0x70, 0x73, 0x2f, 0x61, 0x63, 0x63, 0x6f,
+	0x75, 0x6e, 0x74, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -152,14 +238,15 @@ func file_apps_account_pb_account_proto_rawDescGZIP() []byte {
 	return file_apps_account_pb_account_proto_rawDescData
 }
 
-var file_apps_account_pb_account_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_apps_account_pb_account_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_apps_account_pb_account_proto_goTypes = []interface{}{
 	(*Account)(nil),           // 0: infraboard.cmdb.account.Account
 	(*Describe)(nil),          // 1: infraboard.cmdb.account.Describe
-	(*resource.Resource)(nil), // 2: infraboard.cmdb.resource.Resource
+	(*Secret)(nil),            // 2: infraboard.cmdb.account.Secret
+	(*resource.Resource)(nil), // 3: infraboard.cmdb.resource.Resource
 }
 var file_apps_account_pb_account_proto_depIdxs = []int32{
-	2, // 0: infraboard.cmdb.account.Account.resource:type_name -> infraboard.cmdb.resource.Resource
+	3, // 0: infraboard.cmdb.account.Account.resource:type_name -> infraboard.cmdb.resource.Resource
 	1, // 1: infraboard.cmdb.account.Account.describe:type_name -> infraboard.cmdb.account.Describe
 	2, // [2:2] is the sub-list for method output_type
 	2, // [2:2] is the sub-list for method input_type
@@ -198,6 +285,18 @@ func file_apps_account_pb_account_proto_init() {
 				return nil
 			}
 		}
+		file_apps_account_pb_account_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Secret); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -205,7 +304,7 @@ func file_apps_account_pb_account_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_apps_account_pb_account_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

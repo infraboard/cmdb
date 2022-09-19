@@ -8,6 +8,9 @@ Redis     instance  db    username   password
 Mongodb   instance  db    username   password
                     ref@xxx 
 
+// 
+Kafka     address  topic  username   password
+
 // 使用应用凭证访问
 Bucket              bucket
 
