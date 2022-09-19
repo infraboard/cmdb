@@ -5,8 +5,8 @@ import (
 	"fmt"
 
 	"github.com/infraboard/cmdb/apps/bill"
-	"github.com/infraboard/cmdb/apps/credential"
 	"github.com/infraboard/cmdb/apps/resource"
+	"github.com/infraboard/cmdb/apps/secret"
 	"github.com/infraboard/cmdb/apps/task"
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/mcube/pager"
@@ -16,7 +16,7 @@ import (
 	"github.com/infraboard/cmdb/provider/txyun"
 )
 
-func (s *service) syncBill(ctx context.Context, credentialIns *credential.Secret, t *task.Task, cb SyncTaskCallback) {
+func (s *service) syncBill(ctx context.Context, secretIns *secret.Secret, t *task.Task, cb SyncTaskCallback) {
 	var (
 		pager pager.Pager
 	)
@@ -25,14 +25,14 @@ func (s *service) syncBill(ctx context.Context, credentialIns *credential.Secret
 	t.Run()
 	defer s.syncBillDown(ctx, t, cb)
 
-	credential := credentialIns.Data
-	req := provider.NewQueryBillRequestWithRate(credential.RequestRate)
+	secret := secretIns.Data
+	req := provider.NewQueryBillRequestWithRate(secret.RequestRate)
 	req.Date = t.Data.Params["date"]
 
-	switch credential.Vendor {
+	switch secret.Vendor {
 	case resource.VENDOR_ALIYUN:
 		s.log.Debugf("sync aliyun bill ...")
-		op, err := aliyun.NewOperator(credential.ApiKey, credential.ApiSecret, t.Data.Region)
+		op, err := aliyun.NewOperator(secret.ApiKey, secret.ApiSecret, t.Data.Region)
 		if err != nil {
 			t.Failed(err.Error())
 			return
@@ -40,7 +40,7 @@ func (s *service) syncBill(ctx context.Context, credentialIns *credential.Secret
 		pager = op.BillOperator().PageQueryBill(req)
 	case resource.VENDOR_TENCENT:
 		s.log.Debugf("sync txyun bill ...")
-		op, err := txyun.NewOperator(credential.ApiKey, credential.ApiSecret, t.Data.Region)
+		op, err := txyun.NewOperator(secret.ApiKey, secret.ApiSecret, t.Data.Region)
 		if err != nil {
 			t.Failed(err.Error())
 			return
@@ -48,14 +48,14 @@ func (s *service) syncBill(ctx context.Context, credentialIns *credential.Secret
 		pager = op.BillOperator().PageQueryBill(req)
 	case resource.VENDOR_HUAWEI:
 		s.log.Debugf("sync hwyun bill ...")
-		op, err := huawei.NewOperator(credential.ApiKey, credential.ApiSecret, t.Data.Region)
+		op, err := huawei.NewOperator(secret.ApiKey, secret.ApiSecret, t.Data.Region)
 		if err != nil {
 			t.Failed(err.Error())
 			return
 		}
 		pager = op.BillOperator().PageQueryBill(req)
 	default:
-		t.Failed(fmt.Sprintf("unsuport bill syncing vendor %s", credential.Vendor))
+		t.Failed(fmt.Sprintf("unsuport bill syncing vendor %s", secret.Vendor))
 		return
 	}
 

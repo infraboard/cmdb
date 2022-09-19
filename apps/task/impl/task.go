@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/infraboard/cmdb/apps/credential"
 	"github.com/infraboard/cmdb/apps/resource"
+	"github.com/infraboard/cmdb/apps/secret"
 	"github.com/infraboard/cmdb/apps/task"
 	"github.com/infraboard/cmdb/conf"
 	"github.com/infraboard/mcube/exception"
@@ -30,39 +30,39 @@ func (s *service) CreatTask(ctx context.Context, req *task.CreateTaskRequst) (
 		return nil, err
 	}
 
-	credentialIns, err := s.credential.DescribeSecret(ctx, credential.NewDescribeSecretRequest(req.CredentialId))
+	secretIns, err := s.secret.DescribeSecret(ctx, secret.NewDescribeSecretRequest(req.CredentialId))
 	if err != nil {
 		return nil, err
 	}
 
-	credential := credentialIns.Data
-	t.UpdateSecretDesc(credential.ShortDesc())
+	secret := secretIns.Data
+	t.UpdateSecretDesc(secret.ShortDesc())
 
 	// 如果不是vsphere 需要检查region
-	if !(credential.Vendor.Equal(resource.VENDOR_VSPHERE) || req.ResourceType.IsIn(resource.TYPE_BILL)) {
+	if !(secret.Vendor.Equal(resource.VENDOR_VSPHERE) || req.ResourceType.IsIn(resource.TYPE_BILL)) {
 		if req.Region == "" {
 			return nil, exception.NewBadRequest("region required")
 		}
-		if !credential.IsAllowRegion(req.Region) {
-			return nil, exception.NewBadRequest("this credential not allow sync region %s", req.Region)
+		if !secret.IsAllowRegion(req.Region) {
+			return nil, exception.NewBadRequest("this secret not allow sync region %s", req.Region)
 		}
 	}
 
-	// 解密credential
-	err = credential.DecryptAPISecret(conf.C().App.EncryptKey)
+	// 解密secret
+	err = secret.DecryptAPISecret(conf.C().App.EncryptKey)
 	if err != nil {
-		s.log.Warnf("decrypt api credential error, %s", err)
+		s.log.Warnf("decrypt api secret error, %s", err)
 	}
 
 	// 资源同步
 	syncCtx, _ := context.WithTimeout(context.Background(), time.Minute*30)
 	switch req.ResourceType {
 	case resource.TYPE_HOST:
-		go s.syncHost(syncCtx, credentialIns, t, s.SyncTaskCallback)
+		go s.syncHost(syncCtx, secretIns, t, s.SyncTaskCallback)
 	case resource.TYPE_BILL:
-		go s.syncBill(syncCtx, credentialIns, t, s.SyncTaskCallback)
+		go s.syncBill(syncCtx, secretIns, t, s.SyncTaskCallback)
 	case resource.TYPE_RDS:
-		go s.syncRds(syncCtx, credentialIns, t, s.SyncTaskCallback)
+		go s.syncRds(syncCtx, secretIns, t, s.SyncTaskCallback)
 	}
 
 	// 记录任务

@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/infraboard/cmdb/apps/credential"
 	"github.com/infraboard/cmdb/apps/rds"
 	"github.com/infraboard/cmdb/apps/resource"
+	"github.com/infraboard/cmdb/apps/secret"
 	"github.com/infraboard/cmdb/apps/task"
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/mcube/pager"
@@ -17,7 +17,7 @@ import (
 	"github.com/infraboard/cmdb/provider/txyun"
 )
 
-func (s *service) syncRds(ctx context.Context, credentialIns *credential.Secret, t *task.Task, cb SyncTaskCallback) {
+func (s *service) syncRds(ctx context.Context, secretIns *secret.Secret, t *task.Task, cb SyncTaskCallback) {
 	var (
 		pager pager.Pager
 	)
@@ -29,13 +29,13 @@ func (s *service) syncRds(ctx context.Context, credentialIns *credential.Secret,
 		cb(t)
 	}()
 
-	credential := credentialIns.Data
-	req := provider.NewQueryRequestWithRate(credential.RequestRate)
+	secret := secretIns.Data
+	req := provider.NewQueryRequestWithRate(secret.RequestRate)
 
-	switch credential.Vendor {
+	switch secret.Vendor {
 	case resource.VENDOR_ALIYUN:
 		s.log.Debugf("sync aliyun rds ...")
-		op, err := aliyun.NewOperator(credential.ApiKey, credential.ApiSecret, t.Data.Region)
+		op, err := aliyun.NewOperator(secret.ApiKey, secret.ApiSecret, t.Data.Region)
 		if err != nil {
 			t.Failed(err.Error())
 			return
@@ -43,7 +43,7 @@ func (s *service) syncRds(ctx context.Context, credentialIns *credential.Secret,
 		pager = op.RdsOperator().PageQueryRds(req)
 	case resource.VENDOR_TENCENT:
 		s.log.Debugf("sync txyun rds ...")
-		op, err := txyun.NewOperator(credential.ApiKey, credential.ApiSecret, t.Data.Region)
+		op, err := txyun.NewOperator(secret.ApiKey, secret.ApiSecret, t.Data.Region)
 		if err != nil {
 			t.Failed(err.Error())
 			return
@@ -51,14 +51,14 @@ func (s *service) syncRds(ctx context.Context, credentialIns *credential.Secret,
 		pager = op.RdsOperator().PageQueryRds(req)
 	case resource.VENDOR_HUAWEI:
 		s.log.Debugf("sync hwyun rds ...")
-		op, err := huawei.NewOperator(credential.ApiKey, credential.ApiSecret, t.Data.Region)
+		op, err := huawei.NewOperator(secret.ApiKey, secret.ApiSecret, t.Data.Region)
 		if err != nil {
 			t.Failed(err.Error())
 			return
 		}
 		pager = op.RdsOperator().PageQueryRds(req)
 	default:
-		t.Failed(fmt.Sprintf("unsuport bill syncing vendor %s", credential.Vendor))
+		t.Failed(fmt.Sprintf("unsuport bill syncing vendor %s", secret.Vendor))
 		return
 	}
 
@@ -74,7 +74,7 @@ func (s *service) syncRds(ctx context.Context, credentialIns *credential.Secret,
 			for i := range set.Items {
 				target := set.Items[i]
 				// 补充管理信息
-				InjectBaseFromSecret(target.Resource.Meta, credentialIns)
+				InjectBaseFromSecret(target.Resource.Meta, secretIns)
 				s.SaveOrUpdateRds(ctx, target, t)
 			}
 		}

@@ -6,11 +6,11 @@ import (
 	"github.com/infraboard/mcube/http/request"
 	"github.com/infraboard/mcube/http/response"
 
-	"github.com/infraboard/cmdb/apps/credential"
+	"github.com/infraboard/cmdb/apps/secret"
 )
 
 func (h *handler) QuerySecret(r *restful.Request, w *restful.Response) {
-	req := credential.NewQuerySecretRequestFromHTTP(r.Request)
+	req := secret.NewQuerySecretRequestFromHTTP(r.Request)
 	req.WithNamespace(r.Attribute("token").(*token.Token))
 	set, err := h.service.QuerySecret(r.Request.Context(), req)
 	if err != nil {
@@ -21,7 +21,7 @@ func (h *handler) QuerySecret(r *restful.Request, w *restful.Response) {
 }
 
 func (h *handler) CreateSecret(r *restful.Request, w *restful.Response) {
-	req := credential.NewCreateSecretRequest()
+	req := secret.NewCreateSecretRequest()
 	req.SetOwner(r.Attribute("token").(*token.Token))
 	if err := request.GetDataFromRequest(r.Request, req); err != nil {
 		response.Failed(w, err)
@@ -38,7 +38,7 @@ func (h *handler) CreateSecret(r *restful.Request, w *restful.Response) {
 }
 
 func (h *handler) DescribeSecret(r *restful.Request, w *restful.Response) {
-	req := credential.NewDescribeSecretRequest(r.PathParameter("id"))
+	req := secret.NewDescribeSecretRequest(r.PathParameter("id"))
 	ins, err := h.service.DescribeSecret(r.Request.Context(), req)
 	if err != nil {
 		response.Failed(w, err)
@@ -50,7 +50,7 @@ func (h *handler) DescribeSecret(r *restful.Request, w *restful.Response) {
 }
 
 func (h *handler) DeleteSecret(r *restful.Request, w *restful.Response) {
-	req := credential.NewDeleteSecretRequestWithID(r.PathParameter("id"))
+	req := secret.NewDeleteSecretRequestWithID(r.PathParameter("id"))
 	set, err := h.service.DeleteSecret(r.Request.Context(), req)
 	if err != nil {
 		response.Failed(w, err)

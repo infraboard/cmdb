@@ -31,13 +31,16 @@ enum TYPE {
     EIP = 7;
     MONGODB = 8;
 
+    // 子资源
+    DATABASE = 100;
+    ACCOUNT = 101;
+
     // 未知资源
     OTHER = 199;
 
     // 辅助资源
     BILL = 200;
     ORDER = 201;
-
 }
 
 enum PayMode {

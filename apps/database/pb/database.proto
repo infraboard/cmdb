@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package infraboard.cmdb.database;
+option go_package="github.com/infraboard/cmdb/apps/database";
+
+import "apps/resource/pb/resource.proto";
+
+message Database {
+    // @gotags: json:"resource"
+    resource.Resource resource = 1;
+    // @gotags: json:"describe"
+    Describe describe = 2;
+}
+
+message Describe {
+}

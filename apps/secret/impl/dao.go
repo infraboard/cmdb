@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/infraboard/cmdb/apps/credential"
+	"github.com/infraboard/cmdb/apps/secret"
 )
 
-func (s *service) deleteSecret(ctx context.Context, ins *credential.Secret) error {
+func (s *service) deleteSecret(ctx context.Context, ins *secret.Secret) error {
 	if ins == nil {
-		return fmt.Errorf("credential is nil")
+		return fmt.Errorf("secret is nil")
 	}
 
 	stmt, err := s.db.PrepareContext(ctx, deleteSecretSQL)
