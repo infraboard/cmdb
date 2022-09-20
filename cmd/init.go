@@ -20,8 +20,8 @@ var (
 // initCmd represents the start command
 var initCmd = &cobra.Command{
 	Use:   "init",
-	Short: "mcube-demo 服务初始化",
-	Long:  "mcube-demo 服务初始化",
+	Short: "cmdb 服务初始化",
+	Long:  "cmdb 服务初始化",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// 初始化全局变量
 		if err := loadGlobalConfig(confType); err != nil {

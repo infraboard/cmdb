@@ -14,9 +14,9 @@ import (
 
 func newPager(operator *BssOperator, r *provider.QueryBillRequest) pager.Pager {
 	req := &bssopenapi.DescribeInstanceBillRequest{
-		BillingCycle:  tea.String(r.Month),
-		IsBillingItem: tea.Bool(false),
-		Granularity:   tea.String("DAILY"),
+		BillingCycle: tea.String(r.Month),
+		// IsBillingItem: tea.Bool(false),
+		// Granularity:   tea.String("DAILY"),
 	}
 
 	if r.ProductCode != "" {

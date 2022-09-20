@@ -25,6 +25,7 @@ func NewDefaultBill() *Bill {
 
 func NewBillSet() *BillSet {
 	return &BillSet{
+		Sum:   &Cost{},
 		Items: []*Bill{},
 	}
 }

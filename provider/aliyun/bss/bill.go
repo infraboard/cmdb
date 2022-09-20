@@ -31,10 +31,20 @@ func (o *BssOperator) doQueryBill(req *bssopenapi.DescribeInstanceBillRequest) (
 	if err != nil {
 		return nil, err
 	}
+
+	code := tea.StringValue(resp.Body.Code)
+
+	if strings.ToLower(code) != "success" {
+		return nil, fmt.Errorf("%s: %s", tea.StringValue(resp.Body.Code), tea.StringValue(resp.Body.Message))
+	}
+
 	data := resp.Body.Data
-	set.Total = int64(*data.TotalCount)
-	req.NextToken = data.NextToken
-	set.Items = o.transferSet(data).Items
+	if data != nil {
+		set.Total = int64(tea.Int32Value(data.TotalCount))
+		req.NextToken = data.NextToken
+		set.Items = o.transferSet(data).Items
+	}
+
 	return set, nil
 }
 
