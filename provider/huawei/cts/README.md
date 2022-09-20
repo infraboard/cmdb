@@ -12,6 +12,7 @@
 
 + createServer 创建云服务器
 + deleteServer 删除云服务器 
++ updateServer 更新云服务器
 
 ## RDS
 

@@ -33,7 +33,6 @@ func (o *BssOperator) doQueryBill(req *bssopenapi.DescribeInstanceBillRequest) (
 	}
 
 	code := tea.StringValue(resp.Body.Code)
-
 	if strings.ToLower(code) != "success" {
 		return nil, fmt.Errorf("%s: %s", tea.StringValue(resp.Body.Code), tea.StringValue(resp.Body.Message))
 	}

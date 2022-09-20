@@ -8,6 +8,7 @@
 + RunInstances(创建实例)
 + TerminateInstances(退还实例)
 + PurgeInstances(销毁实例)
++ ModifyInstancesAttribute(修改实例的属性)
 
 ## CDB常用事件
 
