@@ -50,8 +50,9 @@ func (o *BillOperator) transferSet(items []*billing.BillResourceSummary, month s
 func (o *BillOperator) transferOne(ins *billing.BillResourceSummary) *bill.Bill {
 	b := bill.NewDefaultBill()
 	b.OwnerId = utils.PtrStrV(ins.OwnerUin)
-	b.ProductCode = utils.PtrStrV(ins.ProductCode)
-	b.ProductType = utils.PtrStrV(ins.ProductCodeName)
+	b.ProductCode = utils.PtrStrV(ins.BusinessCode)
+	b.ProductType = utils.PtrStrV(ins.BusinessCodeName)
+	b.ProductDetail = utils.PtrStrV(ins.ProductCodeName)
 	b.PayMode = mapping.PrasePayMode(tea.StringValue(ins.PayModeName))
 	b.PayModeDetail = utils.PtrStrV(ins.ActionTypeName)
 	b.OrderId = utils.PtrStrV(ins.OrderId)

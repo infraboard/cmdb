@@ -2,6 +2,7 @@ package bss
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/bss/v2/model"
 	"github.com/infraboard/cmdb/provider"
@@ -14,7 +15,8 @@ import (
 
 func newPager(operator *BssOperator, r *provider.QueryBillRequest) pager.Pager {
 	req := &model.ListCustomerselfResourceRecordsRequest{}
-	req.Cycle = r.Month()
+	req.Cycle = r.Month
+	fmt.Print(req.Cycle)
 
 	return &bssPager{
 		BasePager: pager.NewBasePager(),

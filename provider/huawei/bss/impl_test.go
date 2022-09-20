@@ -21,7 +21,7 @@ var (
 
 func TestQueryBill(t *testing.T) {
 	req := provider.NewQueryBillRequest()
-	req.Date = "2022-04"
+	req.Month = "2022-08"
 
 	pager := operator.PageQueryBill(req)
 	for pager.Next() {
@@ -29,7 +29,9 @@ func TestQueryBill(t *testing.T) {
 		if err := pager.Scan(context.Background(), set); err != nil {
 			panic(err)
 		}
-		fmt.Println(set)
+		for i := range set.Items {
+			fmt.Println(set.Items[i])
+		}
 	}
 }
 

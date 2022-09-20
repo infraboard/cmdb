@@ -17,7 +17,7 @@ import (
 // 页面顶部查看确认您的账单统计周期类型。
 func newPager(operator *BillOperator, r *provider.QueryBillRequest) pager.Pager {
 	req := billing.NewDescribeBillResourceSummaryRequest()
-	req.Month = common.StringPtr(r.Month())
+	req.Month = common.StringPtr(r.Month)
 	req.PeriodType = common.StringPtr("byPayTime")
 
 	return &billPager{
