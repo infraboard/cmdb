@@ -1,8 +1,6 @@
 package dds
 
 import (
-	"fmt"
-
 	dds "github.com/alibabacloud-go/dds-20151201/v3/client"
 	"github.com/alibabacloud-go/tea/tea"
 
@@ -27,8 +25,6 @@ func (o *Operator) Query(req *dds.DescribeDBInstancesRequest) (*mongodb.MongoDBS
 	if err != nil {
 		return nil, err
 	}
-
-	fmt.Print(resp.String())
 
 	set := mongodb.NewMongoDBSet()
 	set.Total = int64(tea.Int32Value(resp.Body.TotalCount))
@@ -56,10 +52,35 @@ func (o *Operator) transferMongoDB(ins *dds.DescribeDBInstancesResponseBodyDBIns
 	info.Zone = tea.StringValue(ins.ZoneId)
 	info.ExpireAt = utils.ParseDefaultMiniteTime(tea.StringValue(ins.ExpireTime))
 	info.Name = tea.StringValue(ins.DBInstanceDescription)
-	info.Type = tea.StringValue(ins.DBInstanceClass)
-	info.Category = tea.StringValue(ins.KindCode)
+	info.Type = tea.StringValue(ins.DBInstanceClass) + "|" + tea.StringValue(ins.DBInstanceType) + "|" + tea.StringValue(ins.ReplicationFactor)
+	info.Category = parseKindCode(ins.KindCode)
+	info.Storage = tea.Int32Value(ins.DBInstanceStorage)
 	r.Resource.Status.Phase = tea.StringValue(ins.DBInstanceStatus)
+	r.Resource.Status.LockMode = tea.StringValue(ins.LockMode)
 	r.Resource.Cost.PayMode = mapping.PrasePayMode(ins.ChargeType)
 
+	desc := r.Describe
+	desc.Engine = tea.StringValue(ins.Engine)
+	desc.StorageType = tea.StringValue(ins.StorageType)
+	desc.EngineVersion = tea.StringValue(ins.EngineVersion)
 	return r
+}
+
+func parseKindCode(c *string) string {
+	if c == nil {
+		return ""
+	}
+
+	switch *c {
+	case "0":
+		return "物理机"
+	case "1":
+		return "ECS"
+	case "2":
+		return "DOCKER"
+	case "18":
+		return "k8s新架构实例"
+	}
+
+	return ""
 }

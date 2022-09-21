@@ -19,6 +19,15 @@ message MongoDB {
 }
 
 message Describe {
+    // 数据库引擎
+    // @gotags: json:"engine"
+    string engine = 1;
+    // 存储类型
+    // @gotags: json:"storage_type"
+    string storage_type =2;
+    // 数据库版本号
+    // @gotags: json:"engine_version"
+    string engine_version = 3;
 }
 
 message MongoDBSet {
