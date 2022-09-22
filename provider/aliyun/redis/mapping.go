@@ -8,7 +8,7 @@ var (
 		"Creating":              redis.STATUS_PENDING,
 		"Error":                 redis.STATUS_ERROR,
 		"Flushing":              redis.STATUS_FLUSHING,
-		"Released":              redis.STATUS_ARCHIVED,
+		"Released":              redis.STATUS_DESTROYED,
 		"BackupRecovering":      redis.STATUS_RESTORING,
 		"MinorVersionUpgrading": redis.STATUS_UPGRADING,
 		"MajorVersionUpgrading": redis.STATUS_UPGRADING,

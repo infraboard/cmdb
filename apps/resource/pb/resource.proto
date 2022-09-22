@@ -173,6 +173,9 @@ message Spec {
     // 更新时间
     // @gotags: json:"update_at"
     int64 update_at = 11;
+    // 是否开启实例释放保护
+    // @gotags: json:"release_protection"
+    optional bool release_protection = 12;
 
     // 资源占用Cpu数量
     // @gotags: json:"cpu"

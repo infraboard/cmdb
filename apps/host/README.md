@@ -21,7 +21,7 @@
 + STOPPING：表示关机中
 + REBOOTING：表示重启中
 + SHUTDOWN：表示停止待销毁
-+ TERMINATING：表示销毁中。
++ DELETING：表示销毁中。
 
 华为云: [云服务器状态](https://support.huaweicloud.com/api-ecs/ecs_08_0002.html)
 
@@ -63,5 +63,5 @@ Vmware:
 + STOPPING：表示关机中
 + REBOOTING：表示重启中
 + SHUTDOWN：表示停止待销毁
-+ TERMINATING：表示销毁中。
-+ ARCHIVED: 已销毁, 
++ DELETING：表示销毁中。
++ DESTROYED: 已销毁, 

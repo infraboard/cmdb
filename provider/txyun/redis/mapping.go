@@ -19,7 +19,7 @@ var (
 		1:  redis.STATUS_PENDING,
 		2:  redis.STATUS_RUNNING,
 		-2: redis.STATUS_ISOLATIONED,
-		-3: redis.STATUS_ARCHIVED,
+		-3: redis.STATUS_DESTROYED,
 	}
 )
 

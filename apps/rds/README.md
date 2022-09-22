@@ -78,8 +78,8 @@
 + RUNNING：表示运行中
 + ERROR: 运行异常
 + REBOOTING：表示重启中
-+ TERMINATING：表示销毁中。
-+ ARCHIVED: 已销毁
++ DELETING：表示销毁中。
++ DESTROYED: 已销毁
 + ISOLATIONING: 隔离中
 + ISOLATIONED: 已隔中
 + RESTORING: 备份恢复中

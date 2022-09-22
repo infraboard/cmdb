@@ -6,8 +6,8 @@ var (
 	STATUS_MAP = map[string]rds.STATUS{
 		"Creating":                  rds.STATUS_PENDING,
 		"Running":                   rds.STATUS_RUNNING,
-		"Deleting":                  rds.STATUS_TERMINATING,
-		"Released":                  rds.STATUS_ARCHIVED,
+		"Deleting":                  rds.STATUS_DELETING,
+		"Released":                  rds.STATUS_DESTROYED,
 		"Rebooting":                 rds.STATUS_REBOOTING,
 		"Restoring":                 rds.STATUS_RESTORING,
 		"TRANSING":                  rds.STATUS_TRANSING,

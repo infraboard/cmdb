@@ -64,6 +64,6 @@ enum STATUS {
 
     // 表示停止
     STOPPED = 80;
-    // 已归档
-    ARCHIVED = 90;
+    // 已销毁
+    DESTROYED = 90;
 }

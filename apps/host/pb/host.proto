@@ -140,7 +140,7 @@ enum STATUS {
     // 表示停止待销毁
     SHUTDOWN = 80;
     // 表示销毁中
-    TERMINATING = 81;
-    // 已归档
-    ARCHIVED = 90;
+    DELETING = 81;
+    // 已销毁
+    DESTROYED = 90;
 }

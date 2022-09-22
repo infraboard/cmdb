@@ -50,7 +50,7 @@ var (
 		"reiniting": disk.STATUS_PENDING,
 		"detaching": disk.STATUS_DETACHING,
 		"deleting*": disk.STATUS_RECYCLE,
-		"deleted*":  disk.STATUS_ARCHIVED,
+		"deleted*":  disk.STATUS_DESTROYED,
 	}
 )
 

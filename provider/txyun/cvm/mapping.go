@@ -16,7 +16,7 @@ var (
 		"SHUTDOWN":              host.STATUS_SHUTDOWN,
 		"STOPPING":              host.STATUS_STOPPING,
 		"REBOOTING":             host.STATUS_REBOOTING,
-		"TERMINATING":           host.STATUS_TERMINATING,
+		"DELETING":              host.STATUS_DELETING,
 		"EXPIRED":               host.STATUS_SHUTDOWN,
 		"PROTECTIVELY_ISOLATED": host.STATUS_ERROR,
 	}

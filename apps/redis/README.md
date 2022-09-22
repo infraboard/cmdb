@@ -51,7 +51,7 @@
 + ISOLATIONED: 已隔中
 + FLUSHING: 缓存实例数据清空中的状态。
 + RESTORING: 缓存实例数据恢复中的状态。
-+ ARCHIVED: 已销毁
++ DESTROYED: 已销毁
 + RESTORING: 备份恢复中
 + UPGRADING: 迁移版本中
 + NET_CHANGING: 内外网切换中

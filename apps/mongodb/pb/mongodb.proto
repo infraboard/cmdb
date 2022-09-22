@@ -28,6 +28,12 @@ message Describe {
     // 数据库版本号
     // @gotags: json:"engine_version"
     string engine_version = 3;
+    // Mongos节点的最大连接数
+    // @gotags: json:"max_connections"
+    int32 max_connections = 4;
+    // 实例最大IOPS
+    // @gotags: json:"max_iops"
+    int32 max_iops = 5; 
 }
 
 message MongoDBSet {
@@ -43,4 +49,61 @@ message QueryMongoDBRequest {
     // 分页参数
     // @gotags: json:"page"
     infraboard.mcube.page.PageRequest page = 1;
+}
+
+
+enum STATUS {
+        // 未知状态
+        UNKNOW = 0;
+        // 表示创建中
+        PENDING = 5;
+        // 表示创建失败
+        CREATE_FAILED = 6;
+    
+        // 表示运行中
+        RUNNING = 11;
+    
+        // 实例配置变更生效中
+        MODIFYING = 20;
+    
+        // 表示重启中
+        REBOOTING = 30;
+        // 备份恢复中
+        RESTORING = 31;
+        // 迁移中
+        TRANSING = 32;
+        // 数据导入中
+        IMPORTING = 33;
+        // 实例克隆中
+        CLONING = 34;
+        // 迁移版本中
+        UPGRADING = 35;
+        // 表示实例正在进行备份
+        BACKING_UP = 36;
+        // 内外网切换中
+        NET_CHANGING = 37;
+    
+        // 表示实例正在主备切换
+        SWITCHOVER = 40;
+        // 灾备实例创建同步中
+        GUARD_CREATING = 41;
+    
+        // 状态异常
+        ERROR  = 50;
+        // 表示实例磁盘空间满
+        STORAGE_FULL = 51;
+    
+        // 表示实例已经锁定
+        LOCKED = 70;
+        // 隔离中
+        ISOLATIONING = 71;
+        // 已隔中
+        ISOLATIONED = 72;
+    
+        // 表示停止待销毁
+        SHUTDOWN = 80;
+        // 表示销毁中
+        DELETING = 81;
+        // 已销毁
+        DESTROYED = 90;
 }

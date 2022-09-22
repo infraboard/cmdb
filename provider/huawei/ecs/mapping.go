@@ -21,8 +21,8 @@ var (
 		"REBUILD":       host.STATUS_PENDING,
 		"REBOOT":        host.STATUS_REBOOTING,
 		"HARD_REBOOT":   host.STATUS_REBOOTING,
-		"TERMINATING":   host.STATUS_TERMINATING,
-		"DELETED":       host.STATUS_ARCHIVED,
+		"DELETING":      host.STATUS_DELETING,
+		"DELETED":       host.STATUS_DESTROYED,
 	}
 )
 
