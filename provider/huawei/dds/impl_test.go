@@ -27,7 +27,9 @@ func TestPageQueryRedis(t *testing.T) {
 		if err := pager.Scan(context.Background(), set); err != nil {
 			panic(err)
 		}
-		fmt.Println(set)
+		for i := range set.Items {
+			fmt.Println(set.Items[i])
+		}
 	}
 }
 

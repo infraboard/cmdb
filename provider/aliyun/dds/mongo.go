@@ -65,7 +65,7 @@ func (o *Operator) transferMongoDB(ins *dds.DescribeDBInstanceAttributeResponseB
 	info.Zone = tea.StringValue(ins.ZoneId)
 	info.ExpireAt = utils.ParseDefaultMiniteTime(tea.StringValue(ins.ExpireTime))
 	info.Name = tea.StringValue(ins.DBInstanceDescription)
-	info.Type = tea.StringValue(ins.DBInstanceClass) + "|" + tea.StringValue(ins.DBInstanceType) + "|" + tea.StringValue(ins.ReplicationFactor)
+	info.Type = tea.StringValue(ins.DBInstanceType) + "|" + tea.StringValue(ins.DBInstanceClass) + "|" + tea.StringValue(ins.ReplicationFactor)
 	info.Category = parseKindCode(ins.KindCode)
 	info.Storage = tea.Int32Value(ins.DBInstanceStorage)
 

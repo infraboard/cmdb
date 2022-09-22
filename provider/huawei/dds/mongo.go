@@ -1,11 +1,16 @@
 package dds
 
 import (
+	"fmt"
+	"strconv"
+	"strings"
+
 	"github.com/alibabacloud-go/tea/tea"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/services/dds/v3/model"
 	"github.com/infraboard/cmdb/apps/mongodb"
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
+	"github.com/infraboard/cmdb/provider/huawei/mapping"
 	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/pager"
 )
@@ -50,6 +55,31 @@ func (o *DdsOperator) transferMongoDBOne(ins model.QueryInstanceResponse) *mongo
 	info.Vendor = resource.VENDOR_HUAWEI
 	info.Region = ins.Region
 	info.Name = ins.Name
+
+	r.Resource.Status.Phase = praseStatus(ins.Status)
+
+	desc := r.Describe
+	desc.Engine = ins.Datastore.Type
+	desc.EngineVersion = ins.Datastore.Version
+
+	for _, g := range ins.Groups {
+		if g.Type == strings.ToLower(ins.Mode) {
+			size, _ := strconv.ParseInt(g.Volume.Size, 10, 32)
+			info.Storage = int32(size)
+		}
+
+		info.Type = fmt.Sprintf("%s|%s|%d", ins.Mode, g.Nodes[0].SpecCode, len(g.Nodes))
+
+		for _, node := range g.Nodes {
+			if strings.ToLower(node.Role) != "hidden" {
+				r.Resource.Status.PrivateIp = append(r.Resource.Status.PrivateIp, fmt.Sprintf("%s:%s", node.PrivateIp, ins.Port))
+			}
+		}
+	}
+
+	pm, _ := strconv.ParseInt(tea.StringValue(ins.PayMode), 10, 32)
+	m := int32(pm)
+	r.Resource.Cost.PayMode = mapping.PrasePayMode(&m)
 
 	return r
 }
