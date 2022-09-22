@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/infraboard/cmdb/apps/order"
+	"github.com/infraboard/cmdb/apps/resource"
 )
 
 // 1:开通
@@ -64,4 +65,43 @@ func praseOrderStatus(s *int32) string {
 	}
 
 	return fmt.Sprintf("%d", s)
+}
+
+// hws.service.type.rds
+// hws.service.type.ec2
+// hws.service.type.dcs
+// hws.service.type.cce
+// hws.service.type.sfs
+// hws.service.type.dds
+// hws.service.type.cfw
+// hws.service.type.ebs
+// hws.service.type.natgateway
+// hws.service.type.ec2,hws.service.type.vpc
+// hws.service.type.cbr
+// hws.service.type.ec2,hws.service.type.ebs
+// hws.service.type.vpc
+// hws.service.type.dcaas
+// hws.service.type.vpn
+// hws.service.type.taurus
+var (
+	RESOURCE_TYPE_MAP = map[string]resource.TYPE{
+		"hws.service.type.ec2": resource.TYPE_HOST,
+		"hws.service.type.rds": resource.TYPE_RDS,
+		"hws.service.type.dcs": resource.TYPE_REDIS,
+		"hws.service.type.dds": resource.TYPE_MONGODB,
+		"hws.service.type.ebs": resource.TYPE_DISK,
+		"hws.service.type.cce": resource.TYPE_HOST,
+		"hws.service.type.vpc": resource.TYPE_EIP,
+	}
+)
+
+func praseResourceType(s *string) resource.TYPE {
+	if s == nil {
+		return resource.TYPE_OTHER
+	}
+	if v, ok := RESOURCE_TYPE_MAP[*s]; ok {
+		return v
+	}
+
+	return resource.TYPE_OTHER
 }

@@ -28,8 +28,8 @@ message Bill {
     // @gotags: json:"vendor"
     resource.VENDOR vendor = 3;
     // 资源类型
-    // @gotags: json:"type"
-    resource.TYPE type = 4;
+    // @gotags: json:"resource_type"
+    resource.TYPE resource_type = 4;
     // 账单的年份
     // @gotags: json:"year"
     string year = 20;

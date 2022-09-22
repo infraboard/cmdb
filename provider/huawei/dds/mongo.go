@@ -80,6 +80,5 @@ func (o *DdsOperator) transferMongoDBOne(ins model.QueryInstanceResponse) *mongo
 	pm, _ := strconv.ParseInt(tea.StringValue(ins.PayMode), 10, 32)
 	m := int32(pm)
 	r.Resource.Cost.PayMode = mapping.PrasePayMode(&m)
-
 	return r
 }

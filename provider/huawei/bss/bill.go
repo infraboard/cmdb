@@ -59,6 +59,7 @@ func (o *BssOperator) transferBill(ins model.ResFeeRecordV2) *bill.Bill {
 	b.InstanceConfig = utils.PtrStrV(ins.ProductSpecDesc)
 	b.RegionCode = utils.PtrStrV(ins.Region)
 	b.RegionName = utils.PtrStrV(ins.RegionName)
+	b.ResourceType = praseResourceType(ins.CloudServiceType)
 
 	// 获取实例日账单日期
 	bd := tea.StringValue(ins.BillDate)

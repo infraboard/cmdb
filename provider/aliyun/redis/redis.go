@@ -96,7 +96,6 @@ func (o *RedisOperator) transferOne(ins *redis.DescribeInstancesResponseBodyInst
 	desc.EngineType = tea.StringValue(ins.InstanceType)
 	desc.EngineVersion = tea.StringValue(ins.EngineVersion)
 	desc.ReplicaId = tea.StringValue(ins.ReplacateId)
-
 	return r
 }
 

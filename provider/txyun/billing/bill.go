@@ -61,6 +61,7 @@ func (o *BillOperator) transferOne(ins *billing.BillResourceSummary) *bill.Bill 
 	b.InstanceConfig = utils.PtrStrV(ins.ConfigDesc)
 	b.RegionCode = fmt.Sprintf("%d", utils.PtrInt64(ins.RegionId))
 	b.RegionName = utils.PtrStrV(ins.RegionName)
+	b.ResourceType = praseResourceType(ins.BusinessCode)
 
 	cost := b.Cost
 	cost.SalePrice, _ = strconv.ParseFloat(utils.PtrStrV(ins.TotalCost), 64)

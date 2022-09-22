@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/infraboard/cmdb/apps/order"
+	"github.com/infraboard/cmdb/apps/resource"
 )
 
 // modifyNetworkMode 调整带宽模式
@@ -84,4 +85,43 @@ func praseOrderStatus(s *int64) string {
 	}
 
 	return fmt.Sprintf("%d", s)
+}
+
+var (
+	// p_cvm
+	// p_cbs
+	// p_cdb
+	// p_sms
+	// p_vpn
+	// p_redis
+	// p_nat
+	// p_eip
+	// p_sqlserver
+	// p_mongodb
+	// p_yunjing
+	// p_domain
+	// p_ssl
+	// p_dem
+	// p_clb
+	RESOURCE_TYPE_MAP = map[string]resource.TYPE{
+		"p_cvm":       resource.TYPE_HOST,
+		"p_eip":       resource.TYPE_EIP,
+		"p_cbs":       resource.TYPE_DISK,
+		"p_cdb":       resource.TYPE_RDS,
+		"p_redis":     resource.TYPE_REDIS,
+		"p_sqlserver": resource.TYPE_RDS,
+		"p_mongodb":   resource.TYPE_MONGODB,
+		"p_clb":       resource.TYPE_LB,
+	}
+)
+
+func praseResourceType(s *string) resource.TYPE {
+	if s == nil {
+		return resource.TYPE_OTHER
+	}
+	if v, ok := RESOURCE_TYPE_MAP[*s]; ok {
+		return v
+	}
+
+	return resource.TYPE_OTHER
 }

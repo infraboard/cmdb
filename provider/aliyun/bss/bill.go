@@ -73,7 +73,7 @@ func (o *BssOperator) transferBill(ins *bssopenapi.DescribeInstanceBillResponseB
 	b.RegionName = tea.StringValue(ins.Region)
 	b.Day = tea.StringValue(ins.BillingDate)
 	b.Id = utils.Hash(fmt.Sprintf("%s_%s_%s_%s", b.OwnerId, b.ProductCode, b.InstanceId, b.Day))
-	b.Type = parseResourceType(ins.ProductCode)
+	b.ResourceType = parseResourceType(ins.ProductCode)
 
 	// 获取实例日账单日期
 	if b.Day != "" {
