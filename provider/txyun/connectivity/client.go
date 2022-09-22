@@ -15,6 +15,7 @@ import (
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
 	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 	dnspod "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod/v20210323"
+	mongodb "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/mongodb/v20190725"
 	redis "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/redis/v20180412"
 	sts "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sts/v20180813"
 	vpc "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/vpc/v20170312"
@@ -63,6 +64,7 @@ type TencentCloudClient struct {
 	cosConn   *cos.Client
 	cbsConn   *cbs.Client
 	clbConn   *clb.Client
+	mongoConn *mongodb.Client
 	dnsConn   *dnspod.Client
 	billConn  *billing.Client
 	auditConn *cloudaudit.Client
@@ -255,6 +257,27 @@ func (me *TencentCloudClient) RedisClient() *redis.Client {
 	conn, _ := redis.NewClient(credential, me.Region, cpf)
 	me.redisConn = conn
 	return me.redisConn
+}
+
+// RedisClient cdb
+func (me *TencentCloudClient) MongoClient() *mongodb.Client {
+	if me.mongoConn != nil {
+		return me.mongoConn
+	}
+
+	credential := common.NewCredential(
+		me.SecretID,
+		me.SecretKey,
+	)
+
+	cpf := profile.NewClientProfile()
+	cpf.HttpProfile.ReqMethod = "POST"
+	cpf.HttpProfile.ReqTimeout = 300
+	cpf.Language = "en-US"
+
+	conn, _ := mongodb.NewClient(credential, me.Region, cpf)
+	me.mongoConn = conn
+	return me.mongoConn
 }
 
 // CDBClient cdb

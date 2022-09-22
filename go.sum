@@ -595,13 +595,16 @@ github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cloudaudit v1.0.492 h1:
 github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cloudaudit v1.0.492/go.mod h1:iUyk06FBZbUny82cqGgyGDRYwjONgcreoxAWQmLi5P0=
 github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.194/go.mod h1:7sCQWVkxcsR38nffDW057DRGk8mUjK1Ing/EFOK8s8Y=
 github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.272/go.mod h1:7sCQWVkxcsR38nffDW057DRGk8mUjK1Ing/EFOK8s8Y=
-github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.492 h1:jEQ73fWlZVQBsHgwNawDanFDtC1gpQRTjQkvist7wIc=
 github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.492/go.mod h1:7sCQWVkxcsR38nffDW057DRGk8mUjK1Ing/EFOK8s8Y=
+github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.502 h1:awe87su6drqKMO6ZAK/6zuZXyPRbMm7LUkXJAVXYpdM=
+github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.502/go.mod h1:7sCQWVkxcsR38nffDW057DRGk8mUjK1Ing/EFOK8s8Y=
 github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm v1.0.492 h1:+rKNnp3I7Vy2Ie9ZjgmyRk6BGgysMYyk/pneRV/dP8k=
 github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm v1.0.492/go.mod h1:rzuFoWqfxkELepfHL2V5XW2jv6IFyCkN71GZa6Aoe48=
 github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod v1.0.492 h1:48C4FpVGookKdhLKosn+BUpcO6xUVlJSc8Eok5I5Q3E=
 github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod v1.0.492/go.mod h1:62kg/S88CHKYOF0ggLxy4yGw3kflpFVg1d7UACozC/0=
 github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/kms v1.0.194/go.mod h1:yrBKWhChnDqNz1xuXdSbWXG56XawEq0G5j1lg4VwBD4=
+github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/mongodb v1.0.502 h1:eiskmgKjCwiXB2bhgB0J9LhVaQgjdo2z5J18ZVpqgdg=
+github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/mongodb v1.0.502/go.mod h1:skwyqUES6srFIXLv39/pNeKbP4vm0/+HRuuSywTfqlY=
 github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/redis v1.0.492 h1:dSeRkv04qbdHaoY1+SDEYCoQuR7qpcVznf9PgWxAhCo=
 github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/redis v1.0.492/go.mod h1:K1Nh12ORtKN8c8oo8a5eN9b0xg8vjb1snYAaL0yUUJE=
 github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms v1.0.272/go.mod h1:zW5ecXUX55GaUA558VrM+iP7uagfDDHhXWlymeCyj48=

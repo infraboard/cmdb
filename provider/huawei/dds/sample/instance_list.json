@@ -1,0 +1,56 @@
+{
+    "id": "xxx",
+    "name": "dds-xxx",
+    "remark": "",
+    "status": "normal",
+    "port": "8635",
+    "mode": "Single",
+    "region": "cn-north-4",
+    "datastore": {
+        "type": "DDS-Community",
+        "version": "4.0"
+    },
+    "engine": "wiredTiger",
+    "created": "2022-03-16T06:15:07",
+    "updated": "2022-09-21T13:24:46",
+    "db_user_name": "rwuser",
+    "ssl": 0,
+    "vpc_id": "xxx",
+    "subnet_id": "1102xxxx",
+    "security_group_id": "f166xxxx",
+    "backup_strategy": {
+        "start_time": "19:00-20:00",
+        "keep_days": 7
+    },
+    "pay_mode": "1",
+    "maintenance_window": "14:00-18:00",
+    "groups": [
+        {
+            "type": "single",
+            "id": "",
+            "name": "",
+            "status": "",
+            "volume": {
+                "size": "10",
+                "used": "0.5257720947265625"
+            },
+            "nodes": [
+                {
+                    "id": "xxx",
+                    "name": "dds-xxxx",
+                    "status": "normal",
+                    "role": "Primary",
+                    "private_ip": "172.1.1.1",
+                    "public_ip": "",
+                    "spec_code": "dds.mongodb.s6.medium.4.single",
+                    "availability_zone": "cn-north-4a"
+                }
+            ]
+        }
+    ],
+    "disk_encryption_id": "",
+    "enterprise_project_id": "61xxxxx",
+    "time_zone": "",
+    "actions": [],
+    "tags": []
+}

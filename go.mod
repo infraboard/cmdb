@@ -42,9 +42,10 @@ require (
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cdb v1.0.492
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/clb v1.0.492
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cloudaudit v1.0.492
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.492
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.502
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm v1.0.492
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod v1.0.492
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/mongodb v1.0.502
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/redis v1.0.492
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sts v1.0.492
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/vpc v1.0.492
