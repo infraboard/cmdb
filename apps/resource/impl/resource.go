@@ -23,6 +23,10 @@ func (s *service) PutResource(db *gorm.DB, set *resource.ResourceSet) error {
 	return nil
 }
 
+func (s *service) DeleteResource(db *gorm.DB, set *resource.ResourceSet) error {
+	return nil
+}
+
 func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 	*resource.ResourceSet, error) {
 	// 为了提升效率, 当有Tag查询时, 采用右关联查询

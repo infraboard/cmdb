@@ -3,6 +3,7 @@ package impl
 import (
 	"context"
 	"database/sql"
+	"fmt"
 
 	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/pb/request"
@@ -125,7 +126,8 @@ func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 	if err != nil {
 		return nil, err
 	}
-	set.UpdateTag(tags)
+	fmt.Println(tags)
+	// set.UpdateTag(tags)
 
 	return set, nil
 }
