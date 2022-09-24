@@ -45,7 +45,7 @@ func QueryTag(ctx context.Context, db *sql.DB, resourceIds []string) (
 	for rows.Next() {
 		ins := resource.NewDefaultTag()
 		err := rows.Scan(
-			&ins.Key, &ins.Value, &ins.Describe, &ins.ResourceId, &ins.Weight, &ins.Purpose,
+			&ins.Key, &ins.Value, &ins.Describe, "", &ins.Weight, &ins.Purpose,
 		)
 		if err != nil {
 			return nil, exception.NewInternalServerError("query resource tag error, %s", err.Error())

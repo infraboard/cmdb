@@ -128,15 +128,15 @@ func (s *HostSet) ToJsonString() string {
 	return string(b)
 }
 
-func (s *HostSet) UpdateTag(tags []*resource.Tag) {
-	for i := range tags {
-		for j := range s.Items {
-			if s.Items[j].Resource.Meta.Id == tags[i].ResourceId {
-				s.Items[j].Resource.AddTag(tags[i])
-			}
-		}
-	}
-}
+// func (s *HostSet) UpdateTag(tags []*resource.Tag) {
+// 	for i := range tags {
+// 		for j := range s.Items {
+// 			if s.Items[j].Resource.Meta.Id == tags[i].ResourceId {
+// 				s.Items[j].Resource.AddTag(tags[i])
+// 			}
+// 		}
+// 	}
+// }
 
 func (h *Host) Status() STATUS {
 	s, err := ParseSTATUSFromString(h.Resource.Status.Phase)

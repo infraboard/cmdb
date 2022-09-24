@@ -145,6 +145,13 @@ func NewResourceSet() *ResourceSet {
 	}
 }
 
+func (s *ResourceSet) Metas() (metas []*Meta) {
+	for i := range s.Items {
+		metas = append(metas, s.Items[i].Meta)
+	}
+	return
+}
+
 func (s *ResourceSet) Add(item *Resource) {
 	s.Items = append(s.Items, item)
 }
@@ -157,15 +164,15 @@ func (s *ResourceSet) ResourceIds() (ids []string) {
 	return
 }
 
-func (s *ResourceSet) UpdateTag(tags []*Tag) {
-	for i := range tags {
-		for j := range s.Items {
-			if s.Items[j].Meta.Id == tags[i].ResourceId {
-				s.Items[j].AddTag(tags[i])
-			}
-		}
-	}
-}
+// func (s *ResourceSet) UpdateTag(tags []*Tag) {
+// 	for i := range tags {
+// 		for j := range s.Items {
+// 			if s.Items[j].Meta.Id == tags[i].ResourceId {
+// 				s.Items[j].AddTag(tags[i])
+// 			}
+// 		}
+// 	}
+// }
 
 func (s *ResourceSet) PrometheusFormat() (targets []*PrometheusTarget) {
 	for i := range s.Items {

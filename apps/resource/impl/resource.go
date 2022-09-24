@@ -8,7 +8,20 @@ import (
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/sqlbuilder"
+	"gorm.io/gorm"
 )
+
+func (s *service) PutResource(db *gorm.DB, set *resource.ResourceSet) error {
+	records := BuildResourceBatch(set).Records()
+
+	for i := range records {
+		if err := db.Create(records[i]).Error; err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
 
 func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 	*resource.ResourceSet, error) {
@@ -92,7 +105,8 @@ func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 		if err != nil {
 			return nil, err
 		}
-		set.UpdateTag(tags)
+		fmt.Println(tags)
+		// set.UpdateTag(tags)
 	}
 
 	return set, nil

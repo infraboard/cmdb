@@ -8,6 +8,8 @@ import (
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
+	orm_mysql "gorm.io/driver/mysql"
+	"gorm.io/gorm"
 
 	"github.com/infraboard/mcenter/client/rpc"
 	"github.com/infraboard/mcube/logger/zap"
@@ -29,7 +31,7 @@ func newConfig() *Config {
 type Config struct {
 	App     *app        `toml:"app"`
 	Log     *log        `toml:"log"`
-	MySQL   *mySQL      `toml:"mysql"`
+	MySQL   *mysql      `toml:"mysql"`
 	Mcenter *rpc.Config `toml:"mcenter"`
 }
 
@@ -91,7 +93,7 @@ func newDefaultLog() *log {
 }
 
 // MySQL todo
-type mySQL struct {
+type mysql struct {
 	Host        string `toml:"host" env:"MYSQL_HOST"`
 	Port        string `toml:"port" env:"MYSQL_PORT"`
 	UserName    string `toml:"username" env:"MYSQL_USERNAME"`
@@ -109,7 +111,26 @@ var (
 	db *sql.DB
 )
 
-func (m *mySQL) GetDB() (*sql.DB, error) {
+func (m *mysql) ORM() (*gorm.DB, error) {
+	conn, err := m.GetDB()
+	if err != nil {
+		return nil, err
+	}
+
+	return gorm.Open(orm_mysql.New(orm_mysql.Config{
+		Conn: conn,
+	}), &gorm.Config{
+		// 执行任何 SQL 时都创建并缓存预编译语句，可以提高后续的调用速度
+		PrepareStmt: true,
+		// 对于写操作（创建、更新、删除），为了确保数据的完整性，GORM 会将它们封装在事务内运行。
+		// 但这会降低性能，如果没有这方面的要求，您可以在初始化时禁用它，这将获得大约 30%+ 性能提升
+		SkipDefaultTransaction: true,
+		// 要有效地插入大量记录，请将一个 slice 传递给 Create 方法
+		CreateBatchSize: 200,
+	})
+}
+
+func (m *mysql) GetDB() (*sql.DB, error) {
 	// 加载全局数据量单例
 	m.lock.Lock()
 	defer m.lock.Unlock()
@@ -123,7 +144,7 @@ func (m *mySQL) GetDB() (*sql.DB, error) {
 	return db, nil
 }
 
-func (m *mySQL) getDBConn() (*sql.DB, error) {
+func (m *mysql) getDBConn() (*sql.DB, error) {
 	zap.L().Infof("connect to mysql: %s:%s", m.Host, m.Port)
 	var err error
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&multiStatements=true", m.UserName, m.Password, m.Host, m.Port, m.Database)
@@ -144,8 +165,8 @@ func (m *mySQL) getDBConn() (*sql.DB, error) {
 }
 
 // newDefaultMySQL todo
-func newDefaultMySQL() *mySQL {
-	return &mySQL{
+func newDefaultMySQL() *mysql {
+	return &mysql{
 		Database:    "cmdb",
 		Host:        "127.0.0.1",
 		Port:        "3306",
