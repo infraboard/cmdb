@@ -14,8 +14,9 @@ const (
 		credential_id=?,namespace=?,env=?,usage_mode=?
 	WHERE id = ?`
 	sqlDeleteResource = `DELETE FROM resource WHERE id = ?;`
-	sqlQueryResource  = `SELECT r.* FROM resource r %s JOIN resource_tag t ON r.id = t.resource_id`
-	sqlCountResource  = `SELECT COUNT(DISTINCT r.id) FROM resource r %s JOIN resource_tag t ON r.id = t.resource_id`
+
+	sqlQueryResource = `SELECT r.* FROM resource r %s JOIN resource_tag t ON r.id = t.resource_id`
+	sqlCountResource = `SELECT COUNT(DISTINCT r.id) FROM resource r %s JOIN resource_tag t ON r.id = t.resource_id`
 
 	sqlQueryResourceTag  = `SELECT t_key,t_value,description,resource_id,weight,type FROM resource_tag`
 	sqlDeleteResourceTag = `

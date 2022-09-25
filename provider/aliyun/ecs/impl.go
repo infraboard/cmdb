@@ -11,7 +11,7 @@ import (
 func NewEcsOperator(client *ecs.Client) *EcsOperator {
 	return &EcsOperator{
 		client:        client,
-		log:           zap.L().Named("ALI ECS"),
+		log:           zap.L().Named("ali.ecs"),
 		AccountGetter: &resource.AccountGetter{},
 	}
 }

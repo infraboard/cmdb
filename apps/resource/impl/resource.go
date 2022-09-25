@@ -11,6 +11,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// 更新资源包含创建
 func (s *service) PutResource(db *gorm.DB, set *resource.ResourceSet) error {
 	records := BuildResourceBatch(set).Records()
 
@@ -23,8 +24,23 @@ func (s *service) PutResource(db *gorm.DB, set *resource.ResourceSet) error {
 	return nil
 }
 
+// 删除资源
 func (s *service) DeleteResource(db *gorm.DB, set *resource.ResourceSet) error {
+	records := BuildResourceBatch(set).Records()
+
+	for i := range records {
+		if err := db.Delete(records[i]).Error; err != nil {
+			return err
+		}
+	}
 	return nil
+}
+
+func (s *service) SearchResource(ctx context.Context, req *resource.SearchRequest) (
+	*resource.ResourceSet, error) {
+	//
+
+	return nil, nil
 }
 
 func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
