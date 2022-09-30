@@ -8,32 +8,33 @@ import (
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/sqlbuilder"
-	"gorm.io/gorm"
 )
 
 // 更新资源包含创建
-func (s *service) PutResource(db *gorm.DB, set *resource.ResourceSet) error {
+func (s *service) PutResource(ctx context.Context, set *resource.ResourceSet) (
+	*resource.ResourceSet, error) {
 	records := BuildResourceBatch(set).Records()
 
 	for i := range records {
-		if err := db.Create(records[i]).Error; err != nil {
-			return err
+		if err := s.orm.Create(records[i]).Error; err != nil {
+			return nil, err
 		}
 	}
 
-	return nil
+	return set, nil
 }
 
 // 删除资源
-func (s *service) DeleteResource(db *gorm.DB, set *resource.ResourceSet) error {
+func (s *service) DeleteResource(ctx context.Context, set *resource.ResourceSet) (
+	*resource.ResourceSet, error) {
 	records := BuildResourceBatch(set).Records()
 
 	for i := range records {
-		if err := db.Delete(records[i]).Error; err != nil {
-			return err
+		if err := s.orm.Delete(records[i]).Error; err != nil {
+			return nil, err
 		}
 	}
-	return nil
+	return set, nil
 }
 
 func (s *service) SearchResource(ctx context.Context, req *resource.SearchRequest) (

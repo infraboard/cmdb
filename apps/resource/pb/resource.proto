@@ -6,6 +6,8 @@ option go_package="github.com/infraboard/cmdb/apps/resource";
 import "github.com/infraboard/mcube/pb/page/page.proto";
 
 service RPC {
+	rpc PutResource(ResourceSet) returns(ResourceSet);
+	rpc DeleteResource(ResourceSet) returns(ResourceSet);
     rpc Search (SearchRequest) returns (ResourceSet);
     rpc QueryTag(QueryTagRequest) returns (TagSet);
     rpc UpdateTag (UpdateTagRequest) returns (Resource);
