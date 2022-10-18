@@ -86,7 +86,14 @@ func (s *HTTPService) Start() error {
 	config := restfulspec.Config{
 		WebServices:                   restful.RegisteredWebServices(), // you control what services are visible
 		APIPath:                       "/apidocs.json",
-		PostBuildSwaggerObjectHandler: swagger.Docs}
+		PostBuildSwaggerObjectHandler: swagger.Docs,
+		DefinitionNameHandler: func(name string) string {
+			if name == "state" || name == "sizeCache" || name == "unknownFields" {
+				return ""
+			}
+			return name
+		},
+	}
 	s.r.Add(restfulspec.NewOpenAPIService(config))
 	s.l.Infof("Get the API using http://%s%s", s.c.App.HTTPAddr(), config.APIPath)
 	// 注册路由条目

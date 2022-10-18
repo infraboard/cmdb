@@ -26,10 +26,4 @@ func Docs(swo *spec.Swagger) {
 			Version: version.Short(),
 		},
 	}
-	swo.Tags = []spec.Tag{
-		{TagProps: spec.TagProps{
-			Name:        "books",
-			Description: "Managing books"},
-		},
-	}
 }
