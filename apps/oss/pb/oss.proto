@@ -4,12 +4,6 @@ package infraboard.cmdb.oss;
 option go_package="github.com/infraboard/cmdb/apps/oss";
 
 import "apps/resource/pb/resource.proto";
-import "github.com/infraboard/mcube/pb/page/page.proto";
-
-service Service {
-    rpc SyncBucket(Bucket) returns(Bucket) {}
-    rpc QueryBucket(QueryBucketRequest) returns(BucketSet) {}
-}
 
 message Bucket {
     // @gotags: json:"resource"
@@ -31,10 +25,4 @@ message BucketSet {
     // 列表项
     // @gotags: json:"items"
     repeated Bucket items = 2;
-}
-
-message QueryBucketRequest {
-    // 分页参数
-    // @gotags: json:"page"
-    infraboard.mcube.page.PageRequest page = 1;
 }

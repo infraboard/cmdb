@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package infraboard.cmdb.rds;
+option go_package="github.com/infraboard/cmdb/apps/rds";
+
+import "github.com/infraboard/mcube/pb/page/page.proto";
+import "apps/rds/pb/rds.proto";
+
+service Service {
+    rpc SyncRDS(Rds) returns(Rds) {}
+    rpc QueryRDS(QueryRDSRequest) returns(Set) {}
+}
+
+message QueryRDSRequest {
+    // 分页参数
+    // @gotags: json:"page"
+    infraboard.mcube.page.PageRequest page = 1;
+}

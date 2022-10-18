@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+package infraboard.cmdb.resource;
+option go_package="github.com/infraboard/cmdb/apps/resource";
+
+import "github.com/infraboard/mcube/pb/page/page.proto";
+import "apps/resource/pb/resource.proto";
+
+service RPC {
+	rpc PutResource(ResourceSet) returns(ResourceSet);
+	rpc DeleteResource(ResourceSet) returns(ResourceSet);
+    rpc Search (SearchRequest) returns (ResourceSet);
+    rpc QueryTag(QueryTagRequest) returns (TagSet);
+    rpc UpdateTag (UpdateTagRequest) returns (Resource);
+}
+
+message SearchRequest {
+    // 分页参数
+    // @gotags: json:"page"
+    infraboard.mcube.page.PageRequest page = 1;
+    // 资源所属域
+    // @gotags: json:"domain"
+    string domain = 2;
+    // 资源所属空间
+    // @gotags: json:"namespace"
+    string namespace = 3;
+    // 资源所属环境
+    // @gotags: json:"env"
+    string env = 4;
+    // 使用方式
+    // @gotags: json:"usage_mode"
+    optional UsageMode usage_mode = 5;
+    // 厂商
+    // @gotags: json:"vendor"
+    optional VENDOR vendor = 6;
+    // 资源所属账号
+    // @gotags: json:"owner"
+    string owner = 7;
+    // 资源类型
+    // @gotags: json:"type"
+    optional TYPE type = 8;
+    // 服务商中的状态
+    // @gotags: json:"status"
+    string status = 9;
+    // 资源标签
+    // @gotags: json:"tags"
+    repeated TagSelector tags = 10;
+    // 是否返回资源的标签
+    // @gotags: json:"with_tags"
+    bool with_tags = 11;
+    // 关联资源查询深度, -1表示查询所有, 默认为0,表示不查询关联资源
+    // @gotags: json:"relation_deep"
+    int32 relation_deep = 12; 
+    // 关键字参数
+    // @gotags: json:"keywords"
+    string keywords = 14;
+    // 是否精确匹配
+    // @gotags: json:"exact_match"
+    bool exact_match = 15;
+}
+
+message QueryTagRequest {
+    // 资源id
+    // @gotags: json:"resource_ids" 
+    repeated string resource_ids = 1;
+}
+
+message UpdateTagRequest {
+    // 资源id
+    // @gotags: json:"id" validate:"required"
+    string id = 1;
+    // 资源id
+    // @gotags: json:"action"
+    UpdateAction action = 2;
+    // 需要添加的资源标签
+    // @gotags: json:"tags" validate:"required"
+    repeated Tag tags = 3;
+}

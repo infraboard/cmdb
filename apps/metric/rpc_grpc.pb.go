@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.21.6
-// source: apps/metric/pb/metric.proto
+// source: apps/metric/pb/rpc.proto
 
 package metric
 
@@ -101,5 +101,5 @@ var RPC_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "apps/metric/pb/metric.proto",
+	Metadata: "apps/metric/pb/rpc.proto",
 }

@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.21.6
-// source: apps/dns/pb/domain.proto
+// source: apps/disk/pb/rpc.proto
 
-package dns
+package disk
 
 import (
 	context "context"
@@ -22,8 +22,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ServiceClient interface {
-	SyncDomain(ctx context.Context, in *Domain, opts ...grpc.CallOption) (*Domain, error)
-	QueryDomain(ctx context.Context, in *QueryDomainRequest, opts ...grpc.CallOption) (*DomainSet, error)
+	SyncDisk(ctx context.Context, in *Disk, opts ...grpc.CallOption) (*Disk, error)
+	QueryDisk(ctx context.Context, in *QueryDiskRequest, opts ...grpc.CallOption) (*DiskSet, error)
 }
 
 type serviceClient struct {
@@ -34,18 +34,18 @@ func NewServiceClient(cc grpc.ClientConnInterface) ServiceClient {
 	return &serviceClient{cc}
 }
 
-func (c *serviceClient) SyncDomain(ctx context.Context, in *Domain, opts ...grpc.CallOption) (*Domain, error) {
-	out := new(Domain)
-	err := c.cc.Invoke(ctx, "/infraboard.cmdb.domain.Service/SyncDomain", in, out, opts...)
+func (c *serviceClient) SyncDisk(ctx context.Context, in *Disk, opts ...grpc.CallOption) (*Disk, error) {
+	out := new(Disk)
+	err := c.cc.Invoke(ctx, "/infraboard.cmdb.disk.Service/SyncDisk", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *serviceClient) QueryDomain(ctx context.Context, in *QueryDomainRequest, opts ...grpc.CallOption) (*DomainSet, error) {
-	out := new(DomainSet)
-	err := c.cc.Invoke(ctx, "/infraboard.cmdb.domain.Service/QueryDomain", in, out, opts...)
+func (c *serviceClient) QueryDisk(ctx context.Context, in *QueryDiskRequest, opts ...grpc.CallOption) (*DiskSet, error) {
+	out := new(DiskSet)
+	err := c.cc.Invoke(ctx, "/infraboard.cmdb.disk.Service/QueryDisk", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -56,8 +56,8 @@ func (c *serviceClient) QueryDomain(ctx context.Context, in *QueryDomainRequest,
 // All implementations must embed UnimplementedServiceServer
 // for forward compatibility
 type ServiceServer interface {
-	SyncDomain(context.Context, *Domain) (*Domain, error)
-	QueryDomain(context.Context, *QueryDomainRequest) (*DomainSet, error)
+	SyncDisk(context.Context, *Disk) (*Disk, error)
+	QueryDisk(context.Context, *QueryDiskRequest) (*DiskSet, error)
 	mustEmbedUnimplementedServiceServer()
 }
 
@@ -65,11 +65,11 @@ type ServiceServer interface {
 type UnimplementedServiceServer struct {
 }
 
-func (UnimplementedServiceServer) SyncDomain(context.Context, *Domain) (*Domain, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SyncDomain not implemented")
+func (UnimplementedServiceServer) SyncDisk(context.Context, *Disk) (*Disk, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SyncDisk not implemented")
 }
-func (UnimplementedServiceServer) QueryDomain(context.Context, *QueryDomainRequest) (*DomainSet, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method QueryDomain not implemented")
+func (UnimplementedServiceServer) QueryDisk(context.Context, *QueryDiskRequest) (*DiskSet, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method QueryDisk not implemented")
 }
 func (UnimplementedServiceServer) mustEmbedUnimplementedServiceServer() {}
 
@@ -84,38 +84,38 @@ func RegisterServiceServer(s grpc.ServiceRegistrar, srv ServiceServer) {
 	s.RegisterService(&Service_ServiceDesc, srv)
 }
 
-func _Service_SyncDomain_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Domain)
+func _Service_SyncDisk_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Disk)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ServiceServer).SyncDomain(ctx, in)
+		return srv.(ServiceServer).SyncDisk(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/infraboard.cmdb.domain.Service/SyncDomain",
+		FullMethod: "/infraboard.cmdb.disk.Service/SyncDisk",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).SyncDomain(ctx, req.(*Domain))
+		return srv.(ServiceServer).SyncDisk(ctx, req.(*Disk))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Service_QueryDomain_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryDomainRequest)
+func _Service_QueryDisk_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryDiskRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ServiceServer).QueryDomain(ctx, in)
+		return srv.(ServiceServer).QueryDisk(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/infraboard.cmdb.domain.Service/QueryDomain",
+		FullMethod: "/infraboard.cmdb.disk.Service/QueryDisk",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).QueryDomain(ctx, req.(*QueryDomainRequest))
+		return srv.(ServiceServer).QueryDisk(ctx, req.(*QueryDiskRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -124,18 +124,18 @@ func _Service_QueryDomain_Handler(srv interface{}, ctx context.Context, dec func
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Service_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "infraboard.cmdb.domain.Service",
+	ServiceName: "infraboard.cmdb.disk.Service",
 	HandlerType: (*ServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SyncDomain",
-			Handler:    _Service_SyncDomain_Handler,
+			MethodName: "SyncDisk",
+			Handler:    _Service_SyncDisk_Handler,
 		},
 		{
-			MethodName: "QueryDomain",
-			Handler:    _Service_QueryDomain_Handler,
+			MethodName: "QueryDisk",
+			Handler:    _Service_QueryDisk_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "apps/dns/pb/domain.proto",
+	Metadata: "apps/disk/pb/rpc.proto",
 }

@@ -12,24 +12,26 @@ import (
 	"github.com/infraboard/mcube/pager"
 )
 
-func newResourceBillPager(operator *BssOperator, r *provider.QueryBillRequest) pager.Pager {
+func newBillDetailPager(operator *BssOperator, r *provider.QueryBillRequest) pager.Pager {
 	req := &bssopenapi.DescribeInstanceBillRequest{
-		BillingCycle: tea.String(r.Month),
+		BillingCycle:  tea.String(r.Month),
+		IsBillingItem: tea.Bool(false),
+		Granularity:   tea.String("DAILY"),
 	}
 
 	if r.ProductCode != "" {
 		req.ProductCode = tea.String(r.ProductCode)
 	}
 
-	return &resourceBillPager{
+	return &billDetailPager{
 		BasePager: pager.NewBasePager(),
 		operator:  operator,
 		req:       req,
-		log:       zap.L().Named("ali.resource.bill"),
+		log:       zap.L().Named("ali.bill.detail"),
 	}
 }
 
-type resourceBillPager struct {
+type billDetailPager struct {
 	*pager.BasePager
 	operator  *BssOperator
 	req       *bssopenapi.DescribeInstanceBillRequest
@@ -37,7 +39,7 @@ type resourceBillPager struct {
 	nextToken string
 }
 
-func (p *resourceBillPager) Scan(ctx context.Context, set pager.Set) error {
+func (p *billDetailPager) Scan(ctx context.Context, set pager.Set) error {
 	resp, err := p.operator.doQueryBill(p.nextReq())
 	if err != nil {
 		return err
@@ -48,11 +50,11 @@ func (p *resourceBillPager) Scan(ctx context.Context, set pager.Set) error {
 	return nil
 }
 
-func (p *resourceBillPager) WithLogger(log logger.Logger) {
+func (p *billDetailPager) WithLogger(log logger.Logger) {
 	p.log = log
 }
 
-func (p *resourceBillPager) nextReq() *bssopenapi.DescribeInstanceBillRequest {
+func (p *billDetailPager) nextReq() *bssopenapi.DescribeInstanceBillRequest {
 	p.log.Debugf("请求第%d页数据", p.PageNumber())
 	p.req.MaxResults = tea.Int32(int32(p.PageSize()))
 	return p.req

@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package infraboard.cmdb.domain;
+option go_package="github.com/infraboard/cmdb/apps/dns";
+
+import "github.com/infraboard/mcube/pb/page/page.proto";
+import "apps/dns/pb/domain.proto";
+
+service Service {
+    rpc SyncDomain(Domain) returns(Domain) {}
+    rpc QueryDomain(QueryDomainRequest) returns(DomainSet) {}
+}
+
+message QueryDomainRequest {
+    // 分页参数
+    // @gotags: json:"page"
+    infraboard.mcube.page.PageRequest page = 1;
+}

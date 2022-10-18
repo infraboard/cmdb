@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.21.6
-// source: apps/oss/pb/oss.proto
+// source: apps/oss/pb/rpc.proto
 
 package oss
 
@@ -137,5 +137,5 @@ var Service_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "apps/oss/pb/oss.proto",
+	Metadata: "apps/oss/pb/rpc.proto",
 }

@@ -4,12 +4,6 @@ package infraboard.cmdb.domain;
 option go_package="github.com/infraboard/cmdb/apps/dns";
 
 import "apps/resource/pb/resource.proto";
-import "github.com/infraboard/mcube/pb/page/page.proto";
-
-service Service {
-    rpc SyncDomain(Domain) returns(Domain) {}
-    rpc QueryDomain(QueryDomainRequest) returns(DomainSet) {}
-}
 
 message Domain {
     // @gotags: json:"resource"
@@ -49,12 +43,6 @@ message DomainSet {
     // 列表项
     // @gotags: json:"items"
     repeated Domain items = 2;
-}
-
-message QueryDomainRequest {
-    // 分页参数
-    // @gotags: json:"page"
-    infraboard.mcube.page.PageRequest page = 1;
 }
 
 message Record {

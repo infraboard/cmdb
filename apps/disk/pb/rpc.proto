@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package infraboard.cmdb.disk;
+option go_package="github.com/infraboard/cmdb/apps/disk";
+
+
+import "github.com/infraboard/mcube/pb/page/page.proto";
+import "apps/disk/pb/disk.proto";
+
+service Service {
+    rpc SyncDisk(Disk) returns(Disk) {}
+    rpc QueryDisk(QueryDiskRequest) returns(DiskSet) {}
+}
+
+message QueryDiskRequest {
+    // 分页参数
+    // @gotags: json:"page"
+    infraboard.mcube.page.PageRequest page = 1;
+}

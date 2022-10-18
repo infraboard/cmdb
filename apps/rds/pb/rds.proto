@@ -4,12 +4,6 @@ package infraboard.cmdb.rds;
 option go_package="github.com/infraboard/cmdb/apps/rds";
 
 import "apps/resource/pb/resource.proto";
-import "github.com/infraboard/mcube/pb/page/page.proto";
-
-service Service {
-    rpc SyncRDS(Rds) returns(Rds) {}
-    rpc QueryRDS(QueryRDSRequest) returns(Set) {}
-}
 
 message Rds {
     // @gotags: json:"resource"
@@ -98,12 +92,6 @@ message Set {
    // 列表项
     // @gotags: json:"items"
     repeated Rds items = 2;
-}
-
-message QueryRDSRequest {
-    // 分页参数
-    // @gotags: json:"page"
-    infraboard.mcube.page.PageRequest page = 1;
 }
 
 message Database {

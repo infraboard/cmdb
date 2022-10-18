@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package infraboard.cmdb.mongodb;
+option go_package="github.com/infraboard/cmdb/apps/mongodb";
+
+import "apps/mongodb/pb/mongodb.proto";
+import "github.com/infraboard/mcube/pb/page/page.proto";
+
+service Service {
+    rpc SyncMongoDB(MongoDB) returns(MongoDB) {}
+    rpc QueryMongoDB(QueryMongoDBRequest) returns(MongoDBSet) {}
+}
+
+message QueryMongoDBRequest {
+    // 分页参数
+    // @gotags: json:"page"
+    infraboard.mcube.page.PageRequest page = 1;
+}

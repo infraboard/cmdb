@@ -3,15 +3,7 @@ syntax = "proto3";
 package infraboard.cmdb.task;
 option go_package="github.com/infraboard/cmdb/apps/task";
 
-import "github.com/infraboard/mcube/pb/page/page.proto";
 import "apps/resource/pb/resource.proto";
-
-service Service {
-    rpc CreatTask (CreateTaskRequst) returns (Task);
-    rpc QueryTask (QueryTaskRequest) returns (TaskSet);
-    rpc DescribeTask(DescribeTaskRequest) returns(Task);
-    rpc QueryTaskRecord(QueryTaskRecordRequest) returns(RecordSet);
-}
 
 enum Stage {
     PENDDING = 0;
@@ -102,16 +94,6 @@ message TaskSet {
     repeated Task items = 2;
 }
 
-message QueryTaskRequest {
-    // 分页参数
-    // @gotags: json:"page"
-    infraboard.mcube.page.PageRequest page = 1;
-    // @gotags: json:"resource_type"
-    infraboard.cmdb.resource.TYPE resource_type = 3;
-    // @gotags: json:"keywords"
-    string keywords = 4;
-}
-
 message CreateTaskRequst {
     // 任务类型
     // @gotags: json:"type"
@@ -140,16 +122,4 @@ message CreateTaskRequst {
     // 任务所属空间
     // @gotags: json:"namespace"
     string namespace = 9;
-}
-
-message DescribeTaskRequest {
-    // Task id
-    // @gotags: json:"id" validate:"required"
-    string id = 1; 
-}
-
-message QueryTaskRecordRequest {
-    // Task id
-    // @gotags: json:"task_id" validate:"required"
-    string task_id = 1;
 }

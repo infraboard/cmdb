@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.21.6
-// source: apps/eip/pb/eip.proto
+// source: apps/redis/pb/rpc.proto
 
-package eip
+package redis
 
 import (
 	context "context"
@@ -22,8 +22,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ServiceClient interface {
-	SyncEIP(ctx context.Context, in *EIP, opts ...grpc.CallOption) (*EIP, error)
-	QueryEIP(ctx context.Context, in *QueryEIPRequest, opts ...grpc.CallOption) (*EIPSet, error)
+	SyncRedis(ctx context.Context, in *Redis, opts ...grpc.CallOption) (*Redis, error)
+	QueryRedis(ctx context.Context, in *QueryRedisRequest, opts ...grpc.CallOption) (*Set, error)
 }
 
 type serviceClient struct {
@@ -34,18 +34,18 @@ func NewServiceClient(cc grpc.ClientConnInterface) ServiceClient {
 	return &serviceClient{cc}
 }
 
-func (c *serviceClient) SyncEIP(ctx context.Context, in *EIP, opts ...grpc.CallOption) (*EIP, error) {
-	out := new(EIP)
-	err := c.cc.Invoke(ctx, "/infraboard.cmdb.eip.Service/SyncEIP", in, out, opts...)
+func (c *serviceClient) SyncRedis(ctx context.Context, in *Redis, opts ...grpc.CallOption) (*Redis, error) {
+	out := new(Redis)
+	err := c.cc.Invoke(ctx, "/infraboard.cmdb.redis.Service/SyncRedis", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *serviceClient) QueryEIP(ctx context.Context, in *QueryEIPRequest, opts ...grpc.CallOption) (*EIPSet, error) {
-	out := new(EIPSet)
-	err := c.cc.Invoke(ctx, "/infraboard.cmdb.eip.Service/QueryEIP", in, out, opts...)
+func (c *serviceClient) QueryRedis(ctx context.Context, in *QueryRedisRequest, opts ...grpc.CallOption) (*Set, error) {
+	out := new(Set)
+	err := c.cc.Invoke(ctx, "/infraboard.cmdb.redis.Service/QueryRedis", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -56,8 +56,8 @@ func (c *serviceClient) QueryEIP(ctx context.Context, in *QueryEIPRequest, opts 
 // All implementations must embed UnimplementedServiceServer
 // for forward compatibility
 type ServiceServer interface {
-	SyncEIP(context.Context, *EIP) (*EIP, error)
-	QueryEIP(context.Context, *QueryEIPRequest) (*EIPSet, error)
+	SyncRedis(context.Context, *Redis) (*Redis, error)
+	QueryRedis(context.Context, *QueryRedisRequest) (*Set, error)
 	mustEmbedUnimplementedServiceServer()
 }
 
@@ -65,11 +65,11 @@ type ServiceServer interface {
 type UnimplementedServiceServer struct {
 }
 
-func (UnimplementedServiceServer) SyncEIP(context.Context, *EIP) (*EIP, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SyncEIP not implemented")
+func (UnimplementedServiceServer) SyncRedis(context.Context, *Redis) (*Redis, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SyncRedis not implemented")
 }
-func (UnimplementedServiceServer) QueryEIP(context.Context, *QueryEIPRequest) (*EIPSet, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method QueryEIP not implemented")
+func (UnimplementedServiceServer) QueryRedis(context.Context, *QueryRedisRequest) (*Set, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method QueryRedis not implemented")
 }
 func (UnimplementedServiceServer) mustEmbedUnimplementedServiceServer() {}
 
@@ -84,38 +84,38 @@ func RegisterServiceServer(s grpc.ServiceRegistrar, srv ServiceServer) {
 	s.RegisterService(&Service_ServiceDesc, srv)
 }
 
-func _Service_SyncEIP_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(EIP)
+func _Service_SyncRedis_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Redis)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ServiceServer).SyncEIP(ctx, in)
+		return srv.(ServiceServer).SyncRedis(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/infraboard.cmdb.eip.Service/SyncEIP",
+		FullMethod: "/infraboard.cmdb.redis.Service/SyncRedis",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).SyncEIP(ctx, req.(*EIP))
+		return srv.(ServiceServer).SyncRedis(ctx, req.(*Redis))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Service_QueryEIP_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryEIPRequest)
+func _Service_QueryRedis_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryRedisRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ServiceServer).QueryEIP(ctx, in)
+		return srv.(ServiceServer).QueryRedis(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/infraboard.cmdb.eip.Service/QueryEIP",
+		FullMethod: "/infraboard.cmdb.redis.Service/QueryRedis",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).QueryEIP(ctx, req.(*QueryEIPRequest))
+		return srv.(ServiceServer).QueryRedis(ctx, req.(*QueryRedisRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -124,18 +124,18 @@ func _Service_QueryEIP_Handler(srv interface{}, ctx context.Context, dec func(in
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Service_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "infraboard.cmdb.eip.Service",
+	ServiceName: "infraboard.cmdb.redis.Service",
 	HandlerType: (*ServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SyncEIP",
-			Handler:    _Service_SyncEIP_Handler,
+			MethodName: "SyncRedis",
+			Handler:    _Service_SyncRedis_Handler,
 		},
 		{
-			MethodName: "QueryEIP",
-			Handler:    _Service_QueryEIP_Handler,
+			MethodName: "QueryRedis",
+			Handler:    _Service_QueryRedis_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "apps/eip/pb/eip.proto",
+	Metadata: "apps/redis/pb/rpc.proto",
 }

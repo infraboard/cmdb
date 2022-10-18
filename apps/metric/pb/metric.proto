@@ -5,10 +5,6 @@ option go_package="github.com/infraboard/cmdb/apps/metric";
 
 import "apps/resource/pb/resource.proto";
 
-service RPC {
-    rpc QueryMetric(QueryMetricRequest) returns(MetricSet);
-}
-
 // 统一多个云商的指标名称
 message Metric {
     // 资源类型

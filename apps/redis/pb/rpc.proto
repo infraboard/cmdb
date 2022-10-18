@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package infraboard.cmdb.redis;
+option go_package="github.com/infraboard/cmdb/apps/redis";
+
+import "apps/redis/pb/redis.proto";
+import "github.com/infraboard/mcube/pb/page/page.proto";
+
+service Service {
+    rpc SyncRedis(Redis) returns(Redis) {}
+    rpc QueryRedis(QueryRedisRequest) returns(Set) {}
+}
+
+message QueryRedisRequest {
+    // 分页参数
+    // @gotags: json:"page"
+    infraboard.mcube.page.PageRequest page = 1;
+}

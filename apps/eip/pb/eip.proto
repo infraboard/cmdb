@@ -4,12 +4,6 @@ package infraboard.cmdb.eip;
 option go_package="github.com/infraboard/cmdb/apps/eip";
 
 import "apps/resource/pb/resource.proto";
-import "github.com/infraboard/mcube/pb/page/page.proto";
-
-service Service {
-    rpc SyncEIP(EIP) returns(EIP) {}
-    rpc QueryEIP(QueryEIPRequest) returns(EIPSet) {}
-}
 
 message EIP {
     // @gotags: json:"resource"
@@ -46,12 +40,6 @@ message EIPSet {
     // 列表项
     // @gotags: json:"items"
     repeated EIP items = 2;
-}
-
-message QueryEIPRequest {
-    // 分页参数
-    // @gotags: json:"page"
-    infraboard.mcube.page.PageRequest page = 1;
 }
 
 enum STATUS {

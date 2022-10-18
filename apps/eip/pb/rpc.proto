@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package infraboard.cmdb.eip;
+option go_package="github.com/infraboard/cmdb/apps/eip";
+
+import "github.com/infraboard/mcube/pb/page/page.proto";
+import "apps/eip/pb/eip.proto";
+
+service Service {
+    rpc SyncEIP(EIP) returns(EIP) {}
+    rpc QueryEIP(QueryEIPRequest) returns(EIPSet) {}
+}
+
+message QueryEIPRequest {
+    // 分页参数
+    // @gotags: json:"page"
+    infraboard.mcube.page.PageRequest page = 1;
+}

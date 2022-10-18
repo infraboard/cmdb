@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package infraboard.cmdb.metric;
+option go_package="github.com/infraboard/cmdb/apps/metric";
+
+import "apps/metric/pb/metric.proto";
+
+service RPC {
+    rpc QueryMetric(QueryMetricRequest) returns(MetricSet);
+}

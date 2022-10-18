@@ -4,12 +4,6 @@ package infraboard.cmdb.slb;
 option go_package="github.com/infraboard/cmdb/apps/lb";
 
 import "apps/resource/pb/resource.proto";
-import "github.com/infraboard/mcube/pb/page/page.proto";
-
-service Service {
-    rpc SyncSLB(LoadBalancer) returns(LoadBalancer) {}
-    rpc QuerySLB(QuerySLBRequest) returns(LoadBalancer) {}
-}
 
 message LoadBalancer {
     // @gotags: json:"resource"
@@ -42,13 +36,6 @@ message LoadBalancerSet {
     // 总数量
     int64 total = 2;
 }
-
-message QuerySLBRequest {
-    // 分页参数
-    // @gotags: json:"page"
-    infraboard.mcube.page.PageRequest page = 1;
-}
-
 
 enum STATUS {
     // 未知状态

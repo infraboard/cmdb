@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package infraboard.cmdb.bill;
+option go_package="github.com/infraboard/cmdb/apps/bill";
+
+import "github.com/infraboard/mcube/pb/page/page.proto";
+import "apps/bill/pb/bill.proto";
+import "apps/resource/pb/resource.proto";
+
+service Service {
+    rpc SyncBill(Bill) returns(Bill);
+    rpc QueryBill(QueryBillRequest) returns(BillSet);
+    rpc ConfirmBill(ConfirmBillRequest) returns(BillSet);
+    rpc DeleteBill(DeleteBillRequest) returns(BillSet);
+}
+
+message QueryBillRequest {
+    // 分页
+    // @gotags: json:"page"
+    infraboard.mcube.page.PageRequest page = 1;
+    // 实例所属域
+    // @gotags: json:"domain"
+    string domain = 2;
+    // 实例所属空间
+    // @gotags: json:"namespace"
+    string namespace = 3;
+    // 资源所属环境
+    // @gotags: json:"env"
+    string env = 4;
+    // 厂商
+    // @gotags: json:"vendor"
+    infraboard.cmdb.resource.VENDOR vendor = 5;
+    // 账单的月份
+    // @gotags: json:"month"
+    string month = 6;
+    // 账号Id
+    // @gotags: json:"account_id"
+    string account_id = 7;
+    // 地域Id
+    // @gotags: json:"region_code"
+    string region_code = 8;
+    // 产品编码
+    // @gotags: json:"product_code"
+    string product_code = 9;
+    // 账单月当时标签
+    // @gotags: json:"tags"
+    repeated infraboard.cmdb.resource.Tag tags = 10;
+    // 实例ID
+    // @gotags: json:"instance_id"
+    string instance_id = 11;
+}
+
+message ConfirmBillRequest {
+    // 账单的月份
+    // @gotags: json:"task_id" validate:"required"
+    string task_id = 1;
+}
+
+message DeleteBillRequest {
+    // 账单的月份
+    // @gotags: json:"task_id" validate:"required"
+    string task_id = 1;
+}

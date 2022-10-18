@@ -4,12 +4,6 @@ package infraboard.cmdb.disk;
 option go_package="github.com/infraboard/cmdb/apps/disk";
 
 import "apps/resource/pb/resource.proto";
-import "github.com/infraboard/mcube/pb/page/page.proto";
-
-service Service {
-    rpc SyncDisk(Disk) returns(Disk) {}
-    rpc QueryDisk(QueryDiskRequest) returns(DiskSet) {}
-}
 
 message Disk {
     // @gotags: json:"resource"
@@ -64,12 +58,6 @@ message DiskSet {
     // 列表项
     // @gotags: json:"items"
     repeated Disk items = 2;
-}
-
-message QueryDiskRequest {
-    // 分页参数
-    // @gotags: json:"page"
-    infraboard.mcube.page.PageRequest page = 1;
 }
 
 enum STATUS {

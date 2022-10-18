@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.21.6
-// source: apps/rds/pb/rds.proto
+// source: apps/rds/pb/rpc.proto
 
 package rds
 
@@ -137,5 +137,5 @@ var Service_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "apps/rds/pb/rds.proto",
+	Metadata: "apps/rds/pb/rpc.proto",
 }

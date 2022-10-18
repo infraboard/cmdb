@@ -18,7 +18,7 @@ import (
 )
 
 func (o *BssOperator) PageQueryBill(req *provider.QueryBillRequest) pager.Pager {
-	p := newPager(o, req)
+	p := newResourceBillPager(o, req)
 	p.SetRate(req.Rate)
 	return p
 }

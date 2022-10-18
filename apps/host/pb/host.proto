@@ -4,21 +4,6 @@ package infraboard.cmdb.host;
 option go_package="github.com/infraboard/cmdb/apps/host";
 
 import "apps/resource/pb/resource.proto";
-import "github.com/infraboard/mcube/pb/page/page.proto";
-import "github.com/infraboard/mcube/pb/request/request.proto";
-
-service Service {
-    // 同步云商的主机资源
-    rpc SyncHost(Host) returns(Host);
-    // 查询本地同步后的主机资源列表
-    rpc QueryHost(QueryHostRequest) returns(HostSet);
-    // 查询主机详情信息
-    rpc DescribeHost(DescribeHostRequest) returns(Host);
-    // 更新主机信息, 同步更新云商资源信息
-    rpc UpdateHost(UpdateHostRequest) returns(Host);
-    // 释放主机, 按计划释放后, 信息会保留一段时间
-    rpc ReleaseHost(ReleaseHostRequest) returns(Host);
-}
 
 message Host {
     // @gotags: json:"resource"
@@ -57,30 +42,11 @@ message Describe {
     map<string, string> extra = 9;
 }
 
-message QueryHostRequest {
-    // 分页参数
-    // @gotags: json:"page"
-    infraboard.mcube.page.PageRequest page = 1;
-    // 关键字参数
-    // @gotags: json:"keywords"
-    string keywords = 2;
-}
-
 message HostSet {
     // @gotags: json:"total"
     int64 total = 1;
     // @gotags: json:"items"
     repeated Host items = 2;
-}
-
-message UpdateHostRequest {
-    // @gotags: json:"id" validate:"required"
-    string id = 1;
-    // 更新模式
-    // @gotags: json:"update_mode"
-    infraboard.mcube.request.UpdateMode update_mode = 2;
-    // @gotags: json:"data" validate:"required"
-    UpdateHostData update_host_data = 3;
 }
 
 message UpdateHostData {
@@ -92,20 +58,6 @@ message UpdateHostData {
 
 enum DescribeBy {
     HOST_ID = 0;
-}
-
-message DescribeHostRequest {
-    // @gotags: json:"describe_by"
-    DescribeBy describe_by = 1;
-    // @gotags: json:"value" validate:"required"
-    string value = 2;
-
-}
-
-message ReleaseHostRequest {
-    // 主机Id
-    // @gotags: json:"id" validate:"required"
-    string id = 1;
 }
 
 enum STATUS {
