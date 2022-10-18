@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	// 注册所有服务
-	_ "github.com/infraboard/cmdb/apps/all"
+	_ "github.com/infraboard/cmdb/apps"
 	"github.com/infraboard/cmdb/conf"
 )
 

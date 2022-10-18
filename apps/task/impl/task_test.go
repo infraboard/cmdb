@@ -12,7 +12,7 @@ import (
 	"github.com/infraboard/mcube/logger/zap"
 	"github.com/stretchr/testify/assert"
 
-	_ "github.com/infraboard/cmdb/apps/all"
+	_ "github.com/infraboard/cmdb/apps"
 )
 
 var (

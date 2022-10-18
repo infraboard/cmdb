@@ -1,4 +1,4 @@
-package all
+package apps
 
 import (
 	_ "github.com/infraboard/cmdb/apps/bill/impl"

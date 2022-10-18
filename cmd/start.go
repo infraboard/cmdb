@@ -18,7 +18,7 @@ import (
 	"github.com/infraboard/cmdb/protocol"
 
 	// 注册所有服务
-	_ "github.com/infraboard/cmdb/apps/all"
+	_ "github.com/infraboard/cmdb/apps"
 )
 
 // startCmd represents the start command
