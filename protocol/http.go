@@ -8,17 +8,16 @@ import (
 
 	restfulspec "github.com/emicklei/go-restful-openapi/v2"
 	"github.com/emicklei/go-restful/v3"
-	"github.com/infraboard/keyauth/client/rest/auth"
-	"github.com/infraboard/keyauth/client/rpc"
-	"github.com/infraboard/mcube/http/label"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
-	httpb "github.com/infraboard/mcube/pb/http"
+
+	"github.com/infraboard/mcenter/apps/endpoint"
+	"github.com/infraboard/mcenter/client/rpc"
+	"github.com/infraboard/mcenter/client/rpc/middleware"
 
 	"github.com/infraboard/cmdb/conf"
 	"github.com/infraboard/cmdb/swagger"
-	"github.com/infraboard/keyauth/apps/endpoint"
-	"github.com/infraboard/keyauth/version"
+	"github.com/infraboard/cmdb/version"
 	"github.com/infraboard/mcube/app"
 )
 
@@ -42,7 +41,7 @@ func NewHTTPService() *HTTPService {
 		CookiesAllowed: false,
 		Container:      r}
 	r.Filter(cors.Filter)
-	r.Filter(auth.NewAutherFromGRPC(c).RestfulAuthHandlerFunc)
+	r.Filter(middleware.RestfulServerInterceptor())
 
 	server := &http.Server{
 		ReadHeaderTimeout: 60 * time.Second,
@@ -70,7 +69,7 @@ type HTTPService struct {
 	c      *conf.Config
 	server *http.Server
 
-	endpoint endpoint.ServiceClient
+	endpoint endpoint.RPCClient
 }
 
 func (s *HTTPService) PathPrefix() string {
@@ -126,25 +125,11 @@ func (s *HTTPService) RegistryEndpoint() {
 	// 注册服务权限条目
 	s.l.Info("start registry endpoints ...")
 
-	entries := []*httpb.Entry{}
+	entries := []*endpoint.Entry{}
 	wss := s.r.RegisteredWebServices()
 	for i := range wss {
-		for _, r := range wss[i].Routes() {
-			m := label.Meta(r.Metadata)
-			entries = append(entries, &httpb.Entry{
-				FunctionName:     r.Operation,
-				Path:             fmt.Sprintf("%s.%s", r.Method, r.Path),
-				Method:           r.Method,
-				Resource:         m.Resource(),
-				AuthEnable:       m.AuthEnable(),
-				PermissionEnable: m.PermissionEnable(),
-				Allow:            m.Allow(),
-				AuditLog:         m.AuditEnable(),
-				Labels: map[string]string{
-					label.Action: m.Action(),
-				},
-			})
-		}
+		es := endpoint.TransferRoutesToEntry(wss[i].Routes())
+		entries = append(entries, es...)
 	}
 
 	req := endpoint.NewRegistryRequest(version.Short(), entries)
