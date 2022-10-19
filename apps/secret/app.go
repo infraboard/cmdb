@@ -9,7 +9,7 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/infraboard/cmdb/conf"
-	"github.com/infraboard/keyauth/apps/token"
+	"github.com/infraboard/mcenter/apps/token"
 	"github.com/infraboard/mcube/crypto/cbc"
 	"github.com/infraboard/mcube/http/request"
 	"github.com/rs/xid"
@@ -144,7 +144,7 @@ func NewCreateSecretRequest() *CreateSecretRequest {
 
 func (req *CreateSecretRequest) SetOwner(tk *token.Token) {
 	req.Domain = tk.Domain
-	req.Namespace = tk.NamespaceName
+	req.Namespace = tk.Namespace
 }
 
 func (req *CreateSecretRequest) Validate() error {
@@ -172,7 +172,7 @@ func NewQuerySecretRequest() *QuerySecretRequest {
 
 func (req *QuerySecretRequest) WithNamespace(tk *token.Token) {
 	req.Domain = tk.Domain
-	req.Namespace = tk.NamespaceName
+	req.Namespace = tk.Namespace
 }
 
 func NewDescribeSecretRequest(id string) *DescribeSecretRequest {
