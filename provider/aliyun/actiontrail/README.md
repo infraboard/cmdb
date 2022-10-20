@@ -2,6 +2,8 @@
 
 [事件查询控制台](https://actiontrail.console.aliyun.com/cn-hangzhou/event-list)
 
+[支持的云服务审计事件](https://help.aliyun.com/document_detail/452799.html)
+
 ## ECS常用事件
 
 + Release: 实例释放
