@@ -26,7 +26,7 @@ func NewGRPCService() *GRPCService {
 		middleware.GrpcAuthUnaryServerInterceptor(),
 	))
 
-	// 控制Grpc启动其他服务, 比如注册中心，或许心态
+	// 控制Grpc启动其他服务, 比如注册中心
 	ctx, cancel := context.WithCancel(context.Background())
 
 	return &GRPCService{
@@ -87,13 +87,11 @@ func (s *GRPCService) registry() {
 	}
 	s.ins = ins
 
-	s.l.Infof("registry to mcenter success")
+	s.l.Infof("registry instance to mcenter success")
 }
 
 // Stop 启动GRPC服务
 func (s *GRPCService) Stop() error {
-	s.cancel()
-
 	// 提前 剔除注册中心的地址
 	if s.ins != nil {
 		req := instance.NewUnregistryRequest(s.ins.Id)
@@ -105,5 +103,7 @@ func (s *GRPCService) Stop() error {
 	}
 
 	s.svr.GracefulStop()
+
+	s.cancel()
 	return nil
 }
