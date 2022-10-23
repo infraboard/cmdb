@@ -20,8 +20,6 @@ import (
 
 // NewGRPCService todo
 func NewGRPCService() *GRPCService {
-	log := zap.L().Named("GRPC Service")
-
 	rc := recovery.NewInterceptor(recovery.NewZapRecoveryHandler())
 	grpcServer := grpc.NewServer(grpc.ChainUnaryInterceptor(
 		rc.UnaryServerInterceptor(),
@@ -33,7 +31,7 @@ func NewGRPCService() *GRPCService {
 
 	return &GRPCService{
 		svr: grpcServer,
-		l:   log,
+		l:   zap.L().Named("server.grpc"),
 		c:   conf.C(),
 
 		ctx:    ctx,
