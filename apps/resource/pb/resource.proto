@@ -35,19 +35,21 @@ enum TYPE {
     ORDER = 201;
 }
 
-enum PayMode {
+enum PAY_MODE {
     // 预付费, 包年包月
     PRE_PAY = 0;
     // 按需
     POST_PAY = 1;
     // 预定
     RESERVED_PAY = 2;
+    // 竞价付费
+    SPOT_PAY = 3;
     // 没有标识
     NULL = 9;
 }
 
 // 使用方式
-enum UsageMode {
+enum USAGE_MODE {
     // 共享使用
     SHARED = 0;
     // 独占使用
@@ -80,6 +82,9 @@ message Resource {
     // 关联资源
     // @gotags: json:"related_resources"
     repeated Resource related_resources = 6;
+    // 资源内容的hash,用来控制那些需要更新
+    // @gotags: json:"content_hash,omitempty"
+    ContentHash content_hash = 10;
 }
 
 message Meta {
@@ -106,20 +111,36 @@ message Meta {
     int64  create_at = 7;
     // 序列号
     // @gotags: json:"serial_number"
-    string serial_number = 9;
-    // 基础数据Hash
-    // @gotags: json:"resource_hash"
-    string resource_hash = 10;
-    // 描述数据Hash
-    // @gotags: json:"describe_hash"
-    string describe_hash = 11;
+    string serial_number = 8;
     // 使用方式
     // @gotags: json:"usage_mode"
-    UsageMode usage_mode = 12;
+    USAGE_MODE usage_mode = 9;
     // 共享策略, 当一个资源被多个应用共享时, 可以指定允许的应用
     // @gotags: json:"shared_policy"
-    SharedPolicy shared_policy = 13;
+    SharedPolicy shared_policy = 10;
 }
+
+message ContentHash {
+    // 规格数据Hash
+    // @gotags: json:"spec_hash"
+    string spec_hash = 1;
+    // 费用数据Hash
+    // @gotags: json:"cost_hash"
+    string cost_hash = 2;
+    // 状态数据Hash
+    // @gotags: json:"status_hash"
+    string status_hash = 3;
+    // 标签数据Hash
+    // @gotags: json:"tag_hash"
+    string tag_hash = 4;
+    // 关系数据Hash
+    // @gotags: json:"relation_hash"
+    string relation_hash = 5;
+    // 资源自定义属性Hash
+    // @gotags: json:"custom_hash"
+    string custom_hash = 6;
+}
+
 
 // 共享策略
 message SharedPolicy {
@@ -127,7 +148,7 @@ message SharedPolicy {
     // @gotags: json:"tag_key"
     string tag_key = 1;
     // 分享给哪些值
-    // @gotags: json:"tag_values"
+    // @gotags: json:"tag_values" gorm:"serializer:json"
     repeated string tag_values = 2;
 }
 
@@ -186,7 +207,7 @@ message Spec {
     int32 band_width =19;
 
     // 额外的通用属性
-    // @gotags: json:"extra"
+    // @gotags: json:"extra" gorm:"serializer:json"
     map<string, string> extra = 26;
 }
 
@@ -203,10 +224,10 @@ message Status {
     string lock_reason = 3;
     // 资源访问地址
     // 公网IP, 或者域名
-    // @gotags: json:"public_ip"
+    // @gotags: json:"public_ip" gorm:"serializer:json"
     repeated string public_ip = 4;
     // 内网IP, 或者域名
-    // @gotags: json:"private_ip"
+    // @gotags: json:"private_ip" gorm:"serializer:json"
     repeated string private_ip = 5;
 }
 
@@ -243,7 +264,7 @@ message Tag {
     // @gotags: json:"hidden"
     bool hidden = 7;
     // 标签meta信息, 比如前端需要设置标签的颜色
-    // @gotags: json:"meta"
+    // @gotags: json:"meta" gorm:"serializer:json"
     map<string,string> meta = 15;
 }
 
@@ -258,7 +279,7 @@ message TagSet {
 message Cost {
     // 实例付费方式
     // @gotags: json:"pay_mode"
-    PayMode pay_mode = 1;
+    PAY_MODE pay_mode = 1;
     // 付费方式详情
     // @gotags: json:"pay_mode_detail"
     string pay_mode_detail = 2;
@@ -274,18 +295,6 @@ message Cost {
     // 单价（分）
     // @gotags: json:"unit_price"
     double unit_price = 6;
-}
-
-message TagSelector {
-    // 匹配的key, 支持LIKE匹配
-    // @gotags: json:"key"
-    string key = 1;
-    // 匹配符
-    // @gotags: json:"opertor"
-    string opertor = 2;
-    // 匹配的值
-    // @gotags: json:"values"
-    repeated string values = 3;
 }
 
 enum UpdateAction {

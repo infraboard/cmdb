@@ -6,7 +6,6 @@ import (
 	"fmt"
 
 	"github.com/infraboard/cmdb/apps/rds"
-	"github.com/infraboard/cmdb/apps/resource/impl"
 )
 
 func (s *service) save(ctx context.Context, h *rds.Rds) error {
@@ -37,10 +36,10 @@ func (s *service) save(ctx context.Context, h *rds.Rds) error {
 		return err
 	}
 
-	err = impl.SaveResource(ctx, tx, h.Resource)
-	if err != nil {
-		return err
-	}
+	// err = impl.SaveResource(ctx, tx, h.Resource)
+	// if err != nil {
+	// 	return err
+	// }
 
 	// 避免SQL注入, 请使用Prepare
 	stmt, err = tx.Prepare(insertRdsSQL)

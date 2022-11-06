@@ -21,24 +21,24 @@ var (
 	// 注意：此字段可能返回 null，表示取不到有效值。
 
 	// 订单付费模式：prePay 预付费 postPay后付费 riPay预留实例
-	PAY_TYPE_STATUS_MAP = map[string]resource.PayMode{
-		"包年包月":             resource.PayMode_PRE_PAY,
-		"0":                resource.PayMode_PRE_PAY,
-		"PREPAID":          resource.PayMode_PRE_PAY,
-		"prePay":           resource.PayMode_PRE_PAY,
-		"1":                resource.PayMode_POST_PAY,
-		"POSTPAID_BY_HOUR": resource.PayMode_POST_PAY,
-		"postPay":          resource.PayMode_POST_PAY,
-		"SPOTPAID":         resource.PayMode_POST_PAY,
-		"按量计费":             resource.PayMode_POST_PAY,
-		"riPay":            resource.PayMode_RESERVED_PAY,
+	PAY_TYPE_STATUS_MAP = map[string]resource.PAY_MODE{
+		"包年包月":             resource.PAY_MODE_PRE_PAY,
+		"0":                resource.PAY_MODE_PRE_PAY,
+		"PREPAID":          resource.PAY_MODE_PRE_PAY,
+		"prePay":           resource.PAY_MODE_PRE_PAY,
+		"1":                resource.PAY_MODE_POST_PAY,
+		"POSTPAID_BY_HOUR": resource.PAY_MODE_POST_PAY,
+		"postPay":          resource.PAY_MODE_POST_PAY,
+		"SPOTPAID":         resource.PAY_MODE_POST_PAY,
+		"按量计费":             resource.PAY_MODE_POST_PAY,
+		"riPay":            resource.PAY_MODE_RESERVED_PAY,
 	}
 )
 
-func PrasePayMode(s string) resource.PayMode {
+func PrasePAY_MODE(s string) resource.PAY_MODE {
 	if v, ok := PAY_TYPE_STATUS_MAP[s]; ok {
 		return v
 	}
 
-	return resource.PayMode_NULL
+	return resource.PAY_MODE_NULL
 }

@@ -48,7 +48,7 @@ message Bill {
     string product_detail = 10;
     // 计费方式，比如：月95，日均峰值
     // @gotags: json:"pay_mode"
-    resource.PayMode pay_mode = 11;
+    resource.PAY_MODE pay_mode = 11;
     // 计费方式详情  云服务器ECS-按量付费
     // @gotags: json:"pay_mode_detail"
     string pay_mode_detail = 12;

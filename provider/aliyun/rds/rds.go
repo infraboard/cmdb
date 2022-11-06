@@ -102,7 +102,7 @@ func (o *RdsOperator) transferOne(ins *rds.DescribeDBInstanceAttributeResponseBo
 
 	info.Storage = tea.Int32Value(ins.DBInstanceStorage)
 
-	r.Resource.Cost.PayMode = mapping.PrasePayMode(ins.PayType)
+	r.Resource.Cost.PayMode = mapping.PrasePAY_MODE(ins.PayType)
 
 	r.Resource.Status.Phase = tea.StringValue(ins.DBInstanceStatus)
 	r.Resource.Status.LockMode = tea.StringValue(ins.LockMode)

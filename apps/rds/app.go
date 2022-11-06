@@ -53,8 +53,8 @@ func (r *Rds) ShortDesc() string {
 }
 
 func (r *Rds) GenHash() error {
-	r.Resource.Meta.ResourceHash = r.Resource.Spec.Hash()
-	r.Resource.Meta.DescribeHash = utils.Hash(r.Describe)
+	r.Resource.ContentHash.SpecHash = r.Resource.Spec.Hash()
+	r.Resource.ContentHash.CustomHash = utils.Hash(r.Describe)
 	return nil
 }
 

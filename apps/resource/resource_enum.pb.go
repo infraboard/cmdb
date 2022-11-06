@@ -99,24 +99,24 @@ func (t *TYPE) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// ParsePayModeFromString Parse PayMode from string
-func ParsePayModeFromString(str string) (PayMode, error) {
+// ParsePAY_MODEFromString Parse PAY_MODE from string
+func ParsePAY_MODEFromString(str string) (PAY_MODE, error) {
 	key := strings.Trim(string(str), `"`)
-	v, ok := PayMode_value[strings.ToUpper(key)]
+	v, ok := PAY_MODE_value[strings.ToUpper(key)]
 	if !ok {
-		return 0, fmt.Errorf("unknown PayMode: %s", str)
+		return 0, fmt.Errorf("unknown PAY_MODE: %s", str)
 	}
 
-	return PayMode(v), nil
+	return PAY_MODE(v), nil
 }
 
 // Equal type compare
-func (t PayMode) Equal(target PayMode) bool {
+func (t PAY_MODE) Equal(target PAY_MODE) bool {
 	return t == target
 }
 
 // IsIn todo
-func (t PayMode) IsIn(targets ...PayMode) bool {
+func (t PAY_MODE) IsIn(targets ...PAY_MODE) bool {
 	for _, target := range targets {
 		if t.Equal(target) {
 			return true
@@ -127,7 +127,7 @@ func (t PayMode) IsIn(targets ...PayMode) bool {
 }
 
 // MarshalJSON todo
-func (t PayMode) MarshalJSON() ([]byte, error) {
+func (t PAY_MODE) MarshalJSON() ([]byte, error) {
 	b := bytes.NewBufferString(`"`)
 	b.WriteString(strings.ToUpper(t.String()))
 	b.WriteString(`"`)
@@ -135,8 +135,8 @@ func (t PayMode) MarshalJSON() ([]byte, error) {
 }
 
 // UnmarshalJSON todo
-func (t *PayMode) UnmarshalJSON(b []byte) error {
-	ins, err := ParsePayModeFromString(string(b))
+func (t *PAY_MODE) UnmarshalJSON(b []byte) error {
+	ins, err := ParsePAY_MODEFromString(string(b))
 	if err != nil {
 		return err
 	}
@@ -144,24 +144,24 @@ func (t *PayMode) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// ParseUsageModeFromString Parse UsageMode from string
-func ParseUsageModeFromString(str string) (UsageMode, error) {
+// ParseUSAGE_MODEFromString Parse USAGE_MODE from string
+func ParseUSAGE_MODEFromString(str string) (USAGE_MODE, error) {
 	key := strings.Trim(string(str), `"`)
-	v, ok := UsageMode_value[strings.ToUpper(key)]
+	v, ok := USAGE_MODE_value[strings.ToUpper(key)]
 	if !ok {
-		return 0, fmt.Errorf("unknown UsageMode: %s", str)
+		return 0, fmt.Errorf("unknown USAGE_MODE: %s", str)
 	}
 
-	return UsageMode(v), nil
+	return USAGE_MODE(v), nil
 }
 
 // Equal type compare
-func (t UsageMode) Equal(target UsageMode) bool {
+func (t USAGE_MODE) Equal(target USAGE_MODE) bool {
 	return t == target
 }
 
 // IsIn todo
-func (t UsageMode) IsIn(targets ...UsageMode) bool {
+func (t USAGE_MODE) IsIn(targets ...USAGE_MODE) bool {
 	for _, target := range targets {
 		if t.Equal(target) {
 			return true
@@ -172,7 +172,7 @@ func (t UsageMode) IsIn(targets ...UsageMode) bool {
 }
 
 // MarshalJSON todo
-func (t UsageMode) MarshalJSON() ([]byte, error) {
+func (t USAGE_MODE) MarshalJSON() ([]byte, error) {
 	b := bytes.NewBufferString(`"`)
 	b.WriteString(strings.ToUpper(t.String()))
 	b.WriteString(`"`)
@@ -180,8 +180,8 @@ func (t UsageMode) MarshalJSON() ([]byte, error) {
 }
 
 // UnmarshalJSON todo
-func (t *UsageMode) UnmarshalJSON(b []byte) error {
-	ins, err := ParseUsageModeFromString(string(b))
+func (t *USAGE_MODE) UnmarshalJSON(b []byte) error {
+	ins, err := ParseUSAGE_MODEFromString(string(b))
 	if err != nil {
 		return err
 	}

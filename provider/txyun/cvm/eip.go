@@ -54,7 +54,7 @@ func (o *CVMOperator) transferEip(ins *vpc.Address) *eip.EIP {
 	info.Type = utils.PtrStrV(ins.AddressType)
 	info.Name = utils.PtrStrV(ins.AddressName)
 
-	r.Resource.Cost.PayMode = mapping.PrasePayMode(utils.PtrStrV(ins.InternetChargeType))
+	r.Resource.Cost.PayMode = mapping.PrasePAY_MODE(utils.PtrStrV(ins.InternetChargeType))
 	r.Resource.Cost.PayModeDetail = tea.StringValue(ins.InternetChargeType)
 
 	r.Resource.Status.Phase = praseDiskStatus(ins.AddressStatus)

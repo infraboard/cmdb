@@ -76,7 +76,7 @@ func (o *CLBOperator) transferLB(ins *clb.LoadBalancer) *lb.LoadBalancer {
 	info.Name = tea.StringValue(ins.LoadBalancerName)
 	info.Type = tea.StringValue(ins.LoadBalancerType)
 	info.ExpireAt = utils.ParseTime("2006-01-02 15:04:05", utils.PtrStrV(ins.ExpireTime))
-	r.Resource.Cost.PayMode = mapping.PrasePayMode(tea.StringValue(ins.ChargeType))
+	r.Resource.Cost.PayMode = mapping.PrasePAY_MODE(tea.StringValue(ins.ChargeType))
 
 	r.Resource.Status.PrivateIp = tea.StringSliceValue(ins.LoadBalancerVips)
 	r.Resource.Status.Phase = praseClbStatus(ins.Status)

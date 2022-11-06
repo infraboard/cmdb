@@ -64,7 +64,7 @@
                 "BigDealId": "xxxxxxx",
                 "Formula": "",
                 "RefReturnDeals": "",
-                "PayMode": "prePay",
+                "PAY_MODE": "prePay",
                 "Action": "renew",
                 "ProductName": "云数据库Redis",
                 "SubProductName": "云数据库Redis-社区版",

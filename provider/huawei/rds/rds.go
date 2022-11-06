@@ -96,9 +96,9 @@ func (o *RdsOperator) transferOne(ins model.InstanceResponse) *rds.Rds {
 	cmEnums := model.GetChargeInfoResponseChargeModeEnum()
 	switch ins.ChargeInfo.ChargeMode {
 	case cmEnums.PRE_PAID:
-		r.Resource.Cost.PayMode = resource.PayMode_PRE_PAY
+		r.Resource.Cost.PayMode = resource.PAY_MODE_PRE_PAY
 	case cmEnums.POST_PAID:
-		r.Resource.Cost.PayMode = resource.PayMode_POST_PAY
+		r.Resource.Cost.PayMode = resource.PAY_MODE_POST_PAY
 	}
 
 	d := r.Describe

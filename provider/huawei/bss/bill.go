@@ -51,7 +51,7 @@ func (o *BssOperator) transferBill(ins model.ResFeeRecordV2) *bill.Bill {
 	b.ProductType = utils.PtrStrV(ins.CloudServiceType)
 	b.ProductCode = utils.PtrStrV(ins.ProductId)
 	b.ProductDetail = utils.PtrStrV(ins.ProductName)
-	b.PayMode = o.ParsePayMode(ins.ChargeMode)
+	b.PayMode = o.ParsePAY_MODE(ins.ChargeMode)
 	b.PayModeDetail = fmt.Sprintf("%d", utils.PtrInt32(ins.BillType))
 	b.OrderId = utils.PtrStrV(ins.TradeId)
 	b.InstanceId = utils.PtrStrV(ins.ResourceId)
@@ -85,21 +85,21 @@ func (o *BssOperator) transferBill(ins model.ResFeeRecordV2) *bill.Bill {
 	return b
 }
 
-// 	计费模式。 1：包年/包月3：按需10：预留实例
-func (o *BssOperator) ParsePayMode(m *string) resource.PayMode {
+// 计费模式。 1：包年/包月3：按需10：预留实例
+func (o *BssOperator) ParsePAY_MODE(m *string) resource.PAY_MODE {
 	if m != nil {
 		switch *m {
 		case "1":
-			return resource.PayMode_PRE_PAY
+			return resource.PAY_MODE_PRE_PAY
 		case "3":
-			return resource.PayMode_POST_PAY
+			return resource.PAY_MODE_POST_PAY
 		case "10":
-			return resource.PayMode_RESERVED_PAY
+			return resource.PAY_MODE_RESERVED_PAY
 		}
-		return resource.PayMode_NULL
+		return resource.PAY_MODE_NULL
 	}
 
-	return resource.PayMode_NULL
+	return resource.PAY_MODE_NULL
 }
 
 func (o *BssOperator) QuerySummary(ctx context.Context, req *provider.QueryBillSummaryRequeset) (

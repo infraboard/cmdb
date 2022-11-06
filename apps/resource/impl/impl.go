@@ -1,16 +1,15 @@
 package impl
 
 import (
-	"database/sql"
-
-	"github.com/infraboard/cmdb/apps/resource"
-	"github.com/infraboard/cmdb/conf"
 	"github.com/infraboard/mcube/app"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 	"google.golang.org/grpc"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
+
+	"github.com/infraboard/cmdb/apps/resource"
+	"github.com/infraboard/cmdb/conf"
 )
 
 var (
@@ -19,8 +18,7 @@ var (
 )
 
 type service struct {
-	db  *sql.DB
-	orm *gorm.DB
+	db  *gorm.DB
 	log logger.Logger
 
 	resource.UnimplementedRPCServer
@@ -35,15 +33,13 @@ func (s *service) Config() error {
 	orm = orm.Clauses(clause.OnConflict{
 		UpdateAll: true,
 	})
-
-	db, err := orm.DB()
-	if err != nil {
-		return err
+	// 是否开启debug
+	if conf.C().Log.Level == "debug" {
+		orm.Debug()
 	}
 
 	s.log = zap.L().Named(s.Name())
-	s.orm = orm
-	s.db = db
+	s.db = orm
 	return nil
 }
 
@@ -57,4 +53,5 @@ func (s *service) Registry(server *grpc.Server) {
 
 func init() {
 	app.RegistryGrpcApp(svr)
+	app.RegistryInternalApp(svr)
 }

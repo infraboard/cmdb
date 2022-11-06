@@ -7,11 +7,40 @@ import "github.com/infraboard/mcube/pb/page/page.proto";
 import "apps/resource/pb/resource.proto";
 
 service RPC {
-	rpc PutResource(ResourceSet) returns(ResourceSet);
-	rpc DeleteResource(ResourceSet) returns(ResourceSet);
-    rpc Search (SearchRequest) returns (ResourceSet);
-    rpc QueryTag(QueryTagRequest) returns (TagSet);
-    rpc UpdateTag (UpdateTagRequest) returns (Resource);
+    rpc Search(SearchRequest) returns (ResourceSet);
+}
+
+message DeleteRequest {
+    // 资源Id列表
+    // @gotags: json:"resource_ids"
+    repeated string resource_ids = 1;
+}
+
+message DeleteResponse {
+    // 删除记录
+    // @gotags: json:"delete_records"
+    repeated DeleteRecord delete_records = 1;
+    // 删除失败统计
+    // @gotags: json:"failed_count"
+    int64 failed_count = 2;
+    // 删除成功统计
+    // @gotags: json:"success_count"
+    int64 success_count = 3;
+}
+
+message DeleteRecord {
+    // 资源Id
+    // @gotags: json:"id"
+    string id = 1;
+    // 资源描述
+    // @gotags: json:"describe"
+    string describe = 2;
+    // 资源是否删除成功
+    // @gotags: json:"success"
+    bool success = 3;
+    // 删除失败的原因
+    // @gotags: json:"reason"
+    string reason = 4;
 }
 
 message SearchRequest {
@@ -29,7 +58,7 @@ message SearchRequest {
     string env = 4;
     // 使用方式
     // @gotags: json:"usage_mode"
-    optional UsageMode usage_mode = 5;
+    optional USAGE_MODE usage_mode = 5;
     // 厂商
     // @gotags: json:"vendor"
     optional VENDOR vendor = 6;
@@ -54,9 +83,18 @@ message SearchRequest {
     // 关键字参数
     // @gotags: json:"keywords"
     string keywords = 14;
-    // 是否精确匹配
-    // @gotags: json:"exact_match"
-    bool exact_match = 15;
+}
+
+message TagSelector {
+    // 匹配的key, 支持LIKE匹配
+    // @gotags: json:"key" validate:"required"
+    string key = 1;
+    // 匹配符
+    // @gotags: json:"opertor"
+    string opertor = 2;
+    // 匹配的值
+    // @gotags: json:"values"
+    repeated string values = 3;
 }
 
 message QueryTagRequest {

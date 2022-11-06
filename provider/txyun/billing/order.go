@@ -81,7 +81,7 @@ func (o *BillOperator) transferOrder(ins *billing.Deal) *order.Order {
 	b.Payer = tea.StringValue(ins.Payer)
 	b.CreateAt = utils.ParseSecondMod1Time(tea.StringValue(ins.CreateTime))
 	b.CreateBy = tea.StringValue(ins.Creator)
-	b.PayMode = mapping.PrasePayMode(ins.PayMode)
+	b.PayMode = mapping.PrasePAY_MODE(ins.PayMode)
 	b.ProductCode = tea.StringValue(ins.ProductCode)
 	b.ProductName = tea.StringValue(ins.ProductName)
 	b.SubProductCode = tea.StringValue(ins.SubProductCode)

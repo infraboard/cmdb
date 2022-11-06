@@ -18,25 +18,25 @@ var (
 	// MongoDB:
 	//	 PrePaid：预付费，包年包月。
 	// 	 PostPaid：按量付费。
-	PAY_TYPE_STATUS_MAP = map[string]resource.PayMode{
-		"SubscriptionOrder": resource.PayMode_PRE_PAY,
-		"Subscription":      resource.PayMode_PRE_PAY,
-		"PrePaid":           resource.PayMode_PRE_PAY,
-		"PrePay":            resource.PayMode_PRE_PAY,
-		"PayAsYouGo":        resource.PayMode_POST_PAY,
-		"PayAsYouGoBill":    resource.PayMode_POST_PAY,
-		"PostPaid":          resource.PayMode_POST_PAY,
-		"PostPay":           resource.PayMode_POST_PAY,
+	PAY_TYPE_STATUS_MAP = map[string]resource.PAY_MODE{
+		"SubscriptionOrder": resource.PAY_MODE_PRE_PAY,
+		"Subscription":      resource.PAY_MODE_PRE_PAY,
+		"PrePaid":           resource.PAY_MODE_PRE_PAY,
+		"PrePay":            resource.PAY_MODE_PRE_PAY,
+		"PayAsYouGo":        resource.PAY_MODE_POST_PAY,
+		"PayAsYouGoBill":    resource.PAY_MODE_POST_PAY,
+		"PostPaid":          resource.PAY_MODE_POST_PAY,
+		"PostPay":           resource.PAY_MODE_POST_PAY,
 	}
 )
 
-func PrasePayMode(s *string) resource.PayMode {
+func PrasePAY_MODE(s *string) resource.PAY_MODE {
 	if s == nil {
-		return resource.PayMode_NULL
+		return resource.PAY_MODE_NULL
 	}
 	if v, ok := PAY_TYPE_STATUS_MAP[*s]; ok {
 		return v
 	}
 
-	return resource.PayMode_NULL
+	return resource.PAY_MODE_NULL
 }

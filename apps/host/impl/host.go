@@ -3,14 +3,12 @@ package impl
 import (
 	"context"
 	"database/sql"
-	"fmt"
 
 	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/pb/request"
 	"github.com/infraboard/mcube/sqlbuilder"
 
 	"github.com/infraboard/cmdb/apps/host"
-	"github.com/infraboard/cmdb/apps/resource/impl"
 )
 
 func (s *service) SyncHost(ctx context.Context, ins *host.Host) (
@@ -105,7 +103,7 @@ func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 			&base.Id, &info.ResourceType, &info.Vendor, &info.Region, &info.Zone, &base.CreateAt, &info.ExpireAt,
 			&info.Category, &info.Type, &info.Name, &info.Description,
 			&ins.Resource.Status.Phase, &info.UpdateAt, &base.SyncAt, &info.Owner,
-			&publicIPList, &privateIPList, &ins.Resource.Cost.PayMode, &base.DescribeHash, &base.ResourceHash,
+			&publicIPList, &privateIPList, &ins.Resource.Cost.PayMode, &base, &base,
 			&base.CredentialId, &base.Domain, &base.Namespace, &base.Env, &base.UsageMode, &base.Id,
 			&desc.GpuSpec, &desc.OsType, &desc.OsName,
 			&desc.ImageId, &desc.InternetMaxBandwidthOut, &desc.InternetMaxBandwidthIn,
@@ -122,11 +120,11 @@ func (s *service) QueryHost(ctx context.Context, req *host.QueryHostRequest) (
 		set.Add(ins)
 	}
 
-	tags, err := impl.QueryTag(ctx, s.db, set.ResourceIds())
-	if err != nil {
-		return nil, err
-	}
-	fmt.Println(tags)
+	// tags, err := impl.QueryTag(ctx, s.db, set.ResourceIds())
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// fmt.Println(tags)
 	// set.UpdateTag(tags)
 
 	return set, nil
@@ -156,7 +154,7 @@ func (s *service) DescribeHost(ctx context.Context, req *host.DescribeHostReques
 		&base.Id, &info.ResourceType, &info.Vendor, &info.Region, &info.Zone, &base.CreateAt, &info.ExpireAt,
 		&info.Category, &info.Type, &info.Name, &info.Description,
 		&ins.Resource.Status.Phase, &info.UpdateAt, &base.SyncAt, &info.Owner,
-		&publicIPList, &privateIPList, &ins.Resource.Cost.PayMode, &base.DescribeHash, &base.ResourceHash,
+		&publicIPList, &privateIPList, &ins.Resource.Cost.PayMode, &base, &base,
 		&base.CredentialId, &base.Domain, &base.Namespace, &base.Env, &base.UsageMode, &base.Id,
 		&desc.GpuSpec, &desc.OsType, &desc.OsName,
 		&desc.ImageId, &desc.InternetMaxBandwidthOut, &desc.InternetMaxBandwidthIn,

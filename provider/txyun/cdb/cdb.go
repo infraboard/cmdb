@@ -78,7 +78,7 @@ func (o *CDBOperator) transferOne(ins *cdb.InstanceInfo) *rds.Rds {
 	info.Name = utils.PtrStrV(ins.InstanceName)
 	info.Category = utils.PtrStrV(ins.DeviceType)
 	r.Resource.Status.Phase = praseStatus(ins.Status)
-	r.Resource.Cost.PayMode = mapping.PrasePayMode(fmt.Sprintf("%d", tea.Int64Value(ins.PayType)))
+	r.Resource.Cost.PayMode = mapping.PrasePAY_MODE(fmt.Sprintf("%d", tea.Int64Value(ins.PayType)))
 	info.Cpu = int32(utils.PtrInt64(ins.Cpu))
 	info.Memory = int32(utils.PtrInt64(ins.Memory))
 	info.Storage = int32(utils.PtrInt64(ins.Volume))
@@ -125,7 +125,7 @@ func (o *CDBOperator) ParseType(id *int64) string {
 }
 
 // 付费类型，可能的返回值：0-包年包月；1-包年包月
-func (o *CDBOperator) ParsePayMode(id *int64) string {
+func (o *CDBOperator) ParsePAY_MODE(id *int64) string {
 	if id == nil {
 		return ""
 	}

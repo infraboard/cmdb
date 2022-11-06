@@ -65,7 +65,7 @@ func (o *BssOperator) transferBill(ins *bssopenapi.DescribeInstanceBillResponseB
 	b.ProductType = tea.StringValue(ins.ProductType)
 	b.ProductCode = tea.StringValue(ins.ProductCode)
 	b.ProductDetail = tea.StringValue(ins.ProductDetail)
-	b.PayMode = mapping.PrasePayMode(ins.Item)
+	b.PayMode = mapping.PrasePAY_MODE(ins.Item)
 	b.PayModeDetail = tea.StringValue(ins.Item) + "_" + tea.StringValue(ins.BillingType)
 	b.InstanceId = tea.StringValue(ins.InstanceID)
 	b.InstanceName = tea.StringValue(ins.NickName)

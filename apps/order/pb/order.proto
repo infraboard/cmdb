@@ -77,7 +77,7 @@ message Order {
     string create_by = 10;
     // 计费方式，比如：月95，日均峰值
     // @gotags: json:"pay_mode"
-    resource.PayMode pay_mode = 11;
+    resource.PAY_MODE pay_mode = 11;
     // 定义费用
     // @gotags: json:"cost"
     Cost cost = 12;

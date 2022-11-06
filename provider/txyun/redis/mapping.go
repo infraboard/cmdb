@@ -56,21 +56,21 @@ func (o *RedisOperator) ParseType(t *int64) string {
 	return typeMap[*t]
 }
 
-func (o *RedisOperator) parsePayMode(t *int64) resource.PayMode {
+func (o *RedisOperator) parsePAY_MODE(t *int64) resource.PAY_MODE {
 	if t == nil {
-		return resource.PayMode_NULL
+		return resource.PAY_MODE_NULL
 	}
 
 	switch *t {
 	case 0:
-		return resource.PayMode_POST_PAY
+		return resource.PAY_MODE_POST_PAY
 	case 1:
-		return resource.PayMode_PRE_PAY
+		return resource.PAY_MODE_PRE_PAY
 	default:
 
 	}
 
-	return resource.PayMode_NULL
+	return resource.PAY_MODE_NULL
 }
 
 func (o *RedisOperator) parseTime(t string) int64 {

@@ -83,7 +83,7 @@ func (o *EcsOperator) transferDisk(ins *ecs.DescribeDisksResponseBodyDisksDisk) 
 	h.Resource.Spec.Name = tea.StringValue(ins.DiskName)
 	h.Resource.Spec.Description = tea.StringValue(ins.Description)
 	h.Resource.Status.Phase = praseDiskStatus(ins.Status)
-	h.Resource.Cost.PayMode = mapping.PrasePayMode(ins.DiskChargeType)
+	h.Resource.Cost.PayMode = mapping.PrasePAY_MODE(ins.DiskChargeType)
 
 	h.Resource.Tags = o.transferDiskTags(ins.Tags)
 

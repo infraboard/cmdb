@@ -119,18 +119,18 @@ func (o *EcsOperator) parseTime(t string) int64 {
 	return ts.UnixNano() / 1000000
 }
 
-//  1. charging_mode 云服务器的计费类型。  - “0”：按需计费（即postPaid-后付费方式）。 - “1”：按包年包月计费（即prePaid-预付费方式）。\"2\"：
-func (o *EcsOperator) ParseChangeMode(mode string) resource.PayMode {
+// 1. charging_mode 云服务器的计费类型。  - “0”：按需计费（即postPaid-后付费方式）。 - “1”：按包年包月计费（即prePaid-预付费方式）。\"2\"：
+func (o *EcsOperator) ParseChangeMode(mode string) resource.PAY_MODE {
 	switch mode {
 	case "0":
-		return resource.PayMode_POST_PAY
+		return resource.PAY_MODE_POST_PAY
 	case "1":
-		return resource.PayMode_PRE_PAY
+		return resource.PAY_MODE_PRE_PAY
 	case "2":
-		return resource.PayMode_POST_PAY
+		return resource.PAY_MODE_POST_PAY
 	}
 
-	return resource.PayMode_NULL
+	return resource.PAY_MODE_NULL
 }
 
 func (o *EcsOperator) parseIp(address map[string][]model.ServerAddress) (privateIps []string, publicIps []string) {

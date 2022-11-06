@@ -104,7 +104,7 @@ func (o *BssOperator) transferOrder(ins *bssopenapi.GetOrderDetailResponseBodyDa
 	b.Status = praseOrderStatus(ins.PaymentStatus)
 	b.CreateAt = utils.ParseDefaultSecondTime(tea.StringValue(ins.CreateTime))
 	b.PayAt = utils.ParseDefaultSecondTime(tea.StringValue(ins.PaymentTime))
-	b.PayMode = mapping.PrasePayMode(ins.SubscriptionType)
+	b.PayMode = mapping.PrasePAY_MODE(ins.SubscriptionType)
 	b.ProductCode = tea.StringValue(ins.ProductCode)
 	b.ProductInfo = tea.StringValue(ins.OriginalConfig)
 

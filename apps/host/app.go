@@ -68,8 +68,8 @@ func ObjectPatch(old, new interface{}) error {
 }
 
 func (h *Host) GenHash() error {
-	h.Resource.Meta.ResourceHash = h.Resource.Spec.Hash()
-	h.Resource.Meta.DescribeHash = utils.Hash(h.Describe)
+	h.Resource.ContentHash.SpecHash = h.Resource.Spec.Hash()
+	h.Resource.ContentHash.CustomHash = utils.Hash(h.Describe)
 	return nil
 }
 

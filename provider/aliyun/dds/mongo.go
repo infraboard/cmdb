@@ -71,7 +71,7 @@ func (o *Operator) transferMongoDB(ins *dds.DescribeDBInstanceAttributeResponseB
 
 	r.Resource.Status.Phase = praseStatus(tea.StringValue(ins.DBInstanceStatus))
 	r.Resource.Status.LockMode = tea.StringValue(ins.LockMode)
-	r.Resource.Cost.PayMode = mapping.PrasePayMode(ins.ChargeType)
+	r.Resource.Cost.PayMode = mapping.PrasePAY_MODE(ins.ChargeType)
 
 	connections := []string{}
 	for i := range ins.MongosList.MongosAttribute {

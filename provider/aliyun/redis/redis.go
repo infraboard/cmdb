@@ -82,7 +82,7 @@ func (o *RedisOperator) transferOne(ins *redis.DescribeInstancesResponseBodyInst
 
 	r.Resource.Status.PrivateIp = []string{tea.StringValue(ins.PrivateIp)}
 	r.Resource.Status.Phase = praseStatus(ins.InstanceStatus)
-	r.Resource.Cost.PayMode = mapping.PrasePayMode(ins.ChargeType)
+	r.Resource.Cost.PayMode = mapping.PrasePAY_MODE(ins.ChargeType)
 
 	desc := r.Describe
 	desc.ConnectAddr = tea.StringValue(ins.ConnectionDomain)

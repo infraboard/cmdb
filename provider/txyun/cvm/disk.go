@@ -77,7 +77,7 @@ func (o *CVMOperator) transferDisk(ins *cbs.Disk) *disk.Disk {
 	h.Resource.Spec.Type = utils.PtrStrV(ins.DiskType)
 	h.Resource.Spec.Name = utils.PtrStrV(ins.DiskName)
 	h.Resource.Status.Phase = praseDiskStatus(ins.DiskState)
-	h.Resource.Cost.PayMode = mapping.PrasePayMode(tea.StringValue(ins.DiskChargeType))
+	h.Resource.Cost.PayMode = mapping.PrasePAY_MODE(tea.StringValue(ins.DiskChargeType))
 
 	desc := h.Describe
 	desc.Type = tea.StringValue(ins.DiskUsage)

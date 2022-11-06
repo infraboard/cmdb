@@ -1,6 +1,7 @@
 package resource
 
 import (
+	context "context"
 	"fmt"
 	"net/http"
 	"sort"
@@ -20,6 +21,12 @@ const (
 	AppName = "resource"
 )
 
+type Service interface {
+	Put(context.Context, *Resource) (*Resource, error)
+	Delete(context.Context, *DeleteRequest) (*DeleteResponse, error)
+	RPCServer
+}
+
 func NewSearchRequest() *SearchRequest {
 	return &SearchRequest{
 		Page: request.NewDefaultPageRequest(),
@@ -29,21 +36,20 @@ func NewSearchRequest() *SearchRequest {
 func NewSearchRequestFromHTTP(r *http.Request) (*SearchRequest, error) {
 	qs := r.URL.Query()
 	req := &SearchRequest{
-		Page:       request.NewPageRequestFromHTTP(r),
-		Keywords:   qs.Get("keywords"),
-		ExactMatch: qs.Get("exact_match") == "true",
-		Domain:     qs.Get("domain"),
-		Namespace:  qs.Get("namespace"),
-		Env:        qs.Get("env"),
-		Status:     qs.Get("status"),
-		Owner:      qs.Get("owner"),
-		WithTags:   qs.Get("with_tags") == "true",
-		Tags:       []*TagSelector{},
+		Page:      request.NewPageRequestFromHTTP(r),
+		Keywords:  qs.Get("keywords"),
+		Domain:    qs.Get("domain"),
+		Namespace: qs.Get("namespace"),
+		Env:       qs.Get("env"),
+		Status:    qs.Get("status"),
+		Owner:     qs.Get("owner"),
+		WithTags:  qs.Get("with_tags") == "true",
+		Tags:      []*TagSelector{},
 	}
 
 	umStr := qs.Get("usage_mode")
 	if umStr != "" {
-		mode, err := ParseUsageModeFromString(umStr)
+		mode, err := ParseUSAGE_MODEFromString(umStr)
 		if err != nil {
 			return nil, err
 		}
@@ -163,16 +169,6 @@ func (s *ResourceSet) ResourceIds() (ids []string) {
 
 	return
 }
-
-// func (s *ResourceSet) UpdateTag(tags []*Tag) {
-// 	for i := range tags {
-// 		for j := range s.Items {
-// 			if s.Items[j].Meta.Id == tags[i].ResourceId {
-// 				s.Items[j].AddTag(tags[i])
-// 			}
-// 		}
-// 	}
-// }
 
 func (s *ResourceSet) PrometheusFormat() (targets []*PrometheusTarget) {
 	for i := range s.Items {
@@ -314,4 +310,8 @@ func NewTagSet() *TagSet {
 	return &TagSet{
 		Items: []*Tag{},
 	}
+}
+
+func (r *Resource) Validate() error {
+	return validate.Struct(r)
 }

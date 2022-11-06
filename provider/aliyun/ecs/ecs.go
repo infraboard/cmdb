@@ -92,7 +92,7 @@ func (o *EcsOperator) transferInstance(ins *ecs.DescribeInstancesResponseBodyIns
 	h.Resource.Status.PrivateIp = o.parsePrivateIp(ins)
 
 	h.Resource.Status.Phase = praseEcsStatus(ins.Status)
-	h.Resource.Cost.PayMode = mapping.PrasePayMode(ins.InstanceChargeType)
+	h.Resource.Cost.PayMode = mapping.PrasePAY_MODE(ins.InstanceChargeType)
 
 	i.Cpu = tea.Int32Value(ins.Cpu)
 	i.Memory = tea.Int32Value(ins.Memory)

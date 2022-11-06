@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/infraboard/cmdb/apps/host"
-	"github.com/infraboard/cmdb/apps/resource/impl"
 )
 
 func (s *service) save(ctx context.Context, h *host.Host) error {
@@ -50,10 +49,10 @@ func (s *service) save(ctx context.Context, h *host.Host) error {
 	}
 
 	// 保存资源基础信息
-	err = impl.SaveResource(ctx, tx, h.Resource)
-	if err != nil {
-		return err
-	}
+	// err = impl.SaveResource(ctx, tx, h.Resource)
+	// if err != nil {
+	// 	return err
+	// }
 
 	// 避免SQL注入, 请使用Prepare
 	stmt, err = tx.PrepareContext(ctx, insertHostSQL)
@@ -94,9 +93,9 @@ func (s *service) update(ctx context.Context, ins *host.Host) error {
 	}()
 
 	// 更新资源基本信息
-	if err := impl.UpdateResource(ctx, tx, ins.Resource.Meta, ins.Resource.Spec, ins.Resource.Tags); err != nil {
-		return err
-	}
+	// if err := impl.UpdateResource(ctx, tx, ins.Resource.Meta, ins.Resource.Spec, ins.Resource.Tags); err != nil {
+	// 	return err
+	// }
 
 	// 更新实例信息
 	stmt, err = tx.PrepareContext(ctx, updateHostSQL)
@@ -155,9 +154,9 @@ func (s *service) delete(ctx context.Context, req *host.ReleaseHostRequest) erro
 		return err
 	}
 
-	if err := impl.DeleteResource(ctx, tx, req.Id); err != nil {
-		return err
-	}
+	// if err := impl.DeleteResource(ctx, tx, req.Id); err != nil {
+	// 	return err
+	// }
 
 	return tx.Commit()
 }

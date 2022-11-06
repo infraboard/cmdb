@@ -79,7 +79,7 @@ func (o *DcsOperator) transferOne(ins model.InstanceListInfo) *redis.Redis {
 	info.Vendor = resource.VENDOR_HUAWEI
 	info.Name = tea.StringValue(ins.Name)
 	info.Category = tea.StringValue(ins.SpecCode)
-	r.Resource.Cost.PayMode = mapping.PrasePayMode(ins.ChargingMode)
+	r.Resource.Cost.PayMode = mapping.PrasePAY_MODE(ins.ChargingMode)
 	r.Resource.Status.Phase = praseStatus(ins.Status)
 	info.Memory = tea.Int32Value(ins.Capacity)
 

@@ -23,7 +23,7 @@ func (o *BillOperator) PageQueryBill(req *provider.QueryBillRequest) pager.Pager
 }
 
 // 查询账单资源汇总数据
-//参考文档: https://console.cloud.tencent.com/api/explorer?Product=billing&Version=2018-07-09&Action=DescribeBillResourceSummary&SignVersion=
+// 参考文档: https://console.cloud.tencent.com/api/explorer?Product=billing&Version=2018-07-09&Action=DescribeBillResourceSummary&SignVersion=
 func (o *BillOperator) doQueryBill(ctx context.Context, req *billing.DescribeBillResourceSummaryRequest) (*bill.BillSet, error) {
 	resp, err := o.client.DescribeBillResourceSummaryWithContext(ctx, req)
 	if err != nil {
@@ -53,7 +53,7 @@ func (o *BillOperator) transferOne(ins *billing.BillResourceSummary) *bill.Bill 
 	b.ProductCode = utils.PtrStrV(ins.BusinessCodeName)
 	b.ProductType = utils.PtrStrV(ins.BusinessCode)
 	b.ProductDetail = utils.PtrStrV(ins.ProductCodeName)
-	b.PayMode = mapping.PrasePayMode(tea.StringValue(ins.PayModeName))
+	b.PayMode = mapping.PrasePAY_MODE(tea.StringValue(ins.PayModeName))
 	b.PayModeDetail = utils.PtrStrV(ins.ActionTypeName)
 	b.OrderId = utils.PtrStrV(ins.OrderId)
 	b.InstanceId = utils.PtrStrV(ins.ResourceId)
