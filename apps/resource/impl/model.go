@@ -122,6 +122,8 @@ func (s *ResourceStatus) TableName() string {
 type ResourceTag struct {
 	*ResourceId
 	*resource.Tag
+
+	UpdateAt int64 `json:"update_at"`
 }
 
 func (s *ResourceTag) TableName() string {
