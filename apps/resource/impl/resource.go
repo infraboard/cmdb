@@ -78,30 +78,6 @@ func (s *service) Delete(ctx context.Context, req *resource.DeleteRequest) (
 		return nil, err
 	}
 
-	// 删除Spec
-	err = tx.Where("resource_id IN (?)", req.ResourceIds).Delete(ResourceSpec{}).Error
-	if err != nil {
-		return nil, err
-	}
-
-	// 删除Status
-	err = tx.Where("resource_id IN (?)", req.ResourceIds).Delete(ResourceStatus{}).Error
-	if err != nil {
-		return nil, err
-	}
-
-	// 删除Status
-	err = tx.Where("resource_id IN (?)", req.ResourceIds).Delete(ResourceCost{}).Error
-	if err != nil {
-		return nil, err
-	}
-
-	// 删除标签
-	err = tx.Where("resource_id IN (?)", req.ResourceIds).Delete(ResourceTag{}).Error
-	if err != nil {
-		return nil, err
-	}
-
 	return nil, nil
 }
 

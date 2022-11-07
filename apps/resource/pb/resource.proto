@@ -103,24 +103,33 @@ message Meta {
     // 创建时间
     // @gotags: json:"create_at"
     int64  create_at = 5;
-    // 删除时间 支持软删除
-    // @gotags: json:"delete_at"
-    int64  delete_at = 6;
-   // 同步时间
+    // 删除时间
+    // @gotags: json:"detete_at"
+    int64  detete_at = 6;
+    // 删除人
+    // @gotags: json:"detete_by"
+    string  detete_by = 7;
+    // 同步时间
     // @gotags: json:"sync_at" validate:"required"
-    int64 sync_at = 7; 
-    // 序列号
-    // @gotags: json:"serial_number"
-    string serial_number = 8;
+    int64 sync_at = 8; 
+    // 同步人
+    // @gotags: json:"sync_by"
+    string sync_by = 9; 
     // 用于同步的凭证ID
     // @gotags: json:"credential_id"
-    string credential_id = 9; 
+    string credential_id = 10; 
+    // 序列号
+    // @gotags: json:"serial_number"
+    string serial_number = 11;
     // 使用方式
     // @gotags: json:"usage_mode"
-    USAGE_MODE usage_mode = 10;
+    USAGE_MODE usage_mode = 12;
     // 共享策略, 当一个资源被多个应用共享时, 可以指定允许的应用
     // @gotags: json:"shared_policy" gorm:"serializer:json"
-    SharedPolicy shared_policy = 11;
+    SharedPolicy shared_policy = 13;
+    // 扩展字段
+    // @gotags: json:"extra" gorm:"serializer:json"
+    map<string, string> extra = 15;
 }
 
 message ContentHash {
@@ -219,19 +228,22 @@ message Status {
     // 资源当前状态
     // @gotags: json:"phase"
     string phase = 1;
+    // 资源当前状态描述
+    // @gotags: json:"describe"
+    string describe = 2;
     // 实例锁定模式; Unlock：正常；ManualLock：手动触发锁定；LockByExpiration：实例过期自动锁定；LockByRestoration：实例回滚前的自动锁定；LockByDiskQuota：实例空间满自动锁定
     // @gotags: json:"lock_mode"
-    string lock_mode = 2;
+    string lock_mode = 3;
     // 锁定原因
     // @gotags: json:"lock_reason"
-    string lock_reason = 3;
+    string lock_reason = 4;
     // 资源访问地址
     // 公网地址, 或者域名
     // @gotags: json:"public_address" gorm:"serializer:json"
-    repeated string public_address = 4;
+    repeated string public_address = 5;
     // 内网地址, 或者域名
     // @gotags: json:"private_address" gorm:"serializer:json"
-    repeated string private_address = 5;
+    repeated string private_address = 6;
 }
 
 // 标签用途
@@ -242,6 +254,8 @@ enum TAG_PURPOSE {
     SYSTEM = 1;
     // 用于资源监控
     MONITOR = 2;
+    // 来自第三方的标签, 比如同步时的第三方提供的标签
+    THIRDPARTY = 3;
 }
 
 message Tag {
@@ -266,6 +280,18 @@ message Tag {
     // 标签是否隐藏, 用于控制是否在前端展示
     // @gotags: json:"hidden"
     bool hidden = 7;
+    // 标签删除时间
+    // @gotags: json:"delete_at"
+    int64 delete_at = 8;
+    // 标签删除人
+    // @gotags: json:"delete_by"
+    bool delete_by = 9;
+    // 标签更新时间
+    // @gotags: json:"update_at"
+    int64 update_at = 10;
+    // 标签更新人
+    // @gotags: json:"update_by"
+    bool update_by = 11;
     // 标签meta信息, 比如前端需要设置标签的颜色
     // @gotags: json:"meta" gorm:"serializer:json"
     map<string,string> meta = 15;
