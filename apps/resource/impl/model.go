@@ -80,8 +80,12 @@ type ResourceMeta struct {
 	*resource.ContentHash
 }
 
+const (
+	RESOURCE_META_TABLE_NAME = "resource_meta"
+)
+
 func (s *ResourceMeta) TableName() string {
-	return "resource_meta"
+	return RESOURCE_META_TABLE_NAME
 }
 
 type ResourceId struct {

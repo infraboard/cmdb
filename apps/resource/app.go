@@ -300,3 +300,7 @@ func NewTagSet() *TagSet {
 func (r *Resource) Validate() error {
 	return validate.Struct(r)
 }
+
+func (r *DeleteRequest) Validate() error {
+	return nil
+}

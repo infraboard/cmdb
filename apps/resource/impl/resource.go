@@ -53,14 +53,55 @@ func (s *service) Put(ctx context.Context, res *resource.Resource) (
 }
 
 // 删除资源
-func (s *service) Delete(ctx context.Context, set *resource.DeleteRequest) (
+func (s *service) Delete(ctx context.Context, req *resource.DeleteRequest) (
 	*resource.DeleteResponse, error) {
 
-	// for i := range records {
-	// 	if err := s.db.Delete(records[i]).Error; err != nil {
-	// 		return nil, err
-	// 	}
-	// }
+	// 参数校验
+	if err := req.Validate(); err != nil {
+		return nil, err
+	}
+
+	// 开启事务
+	var err error
+	tx := s.db.WithContext(ctx).Begin()
+	defer func() {
+		if err == nil {
+			tx.Commit()
+		} else {
+			tx.Rollback()
+		}
+	}()
+
+	// 删除meta
+	err = tx.Where("id IN (?)", req.ResourceIds).Delete(ResourceMeta{}).Error
+	if err != nil {
+		return nil, err
+	}
+
+	// 删除Spec
+	err = tx.Where("resource_id IN (?)", req.ResourceIds).Delete(ResourceSpec{}).Error
+	if err != nil {
+		return nil, err
+	}
+
+	// 删除Status
+	err = tx.Where("resource_id IN (?)", req.ResourceIds).Delete(ResourceStatus{}).Error
+	if err != nil {
+		return nil, err
+	}
+
+	// 删除Status
+	err = tx.Where("resource_id IN (?)", req.ResourceIds).Delete(ResourceCost{}).Error
+	if err != nil {
+		return nil, err
+	}
+
+	// 删除标签
+	err = tx.Where("resource_id IN (?)", req.ResourceIds).Delete(ResourceTag{}).Error
+	if err != nil {
+		return nil, err
+	}
+
 	return nil, nil
 }
 

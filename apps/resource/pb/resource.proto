@@ -100,24 +100,27 @@ message Meta {
     // 资源所属环境
     // @gotags: json:"env"
     string env = 4;
-    // 同步时间
-    // @gotags: json:"sync_at" validate:"required"
-    int64 sync_at = 5;  
-    // 用于同步的凭证ID
-    // @gotags: json:"credential_id"
-    string credential_id = 6; 
     // 创建时间
     // @gotags: json:"create_at"
-    int64  create_at = 7;
+    int64  create_at = 5;
+    // 删除时间 支持软删除
+    // @gotags: json:"delete_at"
+    int64  delete_at = 6;
+   // 同步时间
+    // @gotags: json:"sync_at" validate:"required"
+    int64 sync_at = 7; 
     // 序列号
     // @gotags: json:"serial_number"
     string serial_number = 8;
+    // 用于同步的凭证ID
+    // @gotags: json:"credential_id"
+    string credential_id = 9; 
     // 使用方式
     // @gotags: json:"usage_mode"
-    USAGE_MODE usage_mode = 9;
+    USAGE_MODE usage_mode = 10;
     // 共享策略, 当一个资源被多个应用共享时, 可以指定允许的应用
     // @gotags: json:"shared_policy" gorm:"serializer:json"
-    SharedPolicy shared_policy = 10;
+    SharedPolicy shared_policy = 11;
 }
 
 message ContentHash {
