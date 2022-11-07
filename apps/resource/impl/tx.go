@@ -13,8 +13,8 @@ package impl
 // 	// 保存资源数据
 // 	_, err = stmt.ExecContext(ctx,
 // 		base.Id, info.ResourceType, info.Vendor, info.Region, info.Zone, base.CreateAt, info.ExpireAt, info.Category, info.Type,
-// 		info.Name, info.Description, ins.Status.Phase, info.UpdateAt, base.SyncAt, info.Owner, ins.Status.PublicIPToString(),
-// 		ins.Status.PrivateIPToString(), ins.Cost.PAY_MODE, base.DescribeHash, base.ResourceHash, base.CredentialId,
+// 		info.Name, info.Description, ins.Status.Phase, info.UpdateAt, base.SyncAt, info.Owner, ins.Status.PublicAddressToString(),
+// 		ins.Status.PrivateAddressToString(), ins.Cost.PAY_MODE, base.DescribeHash, base.ResourceHash, base.CredentialId,
 // 		base.Domain, base.Namespace, base.Env, base.UsageMode,
 // 	)
 // 	if err != nil {

@@ -64,7 +64,7 @@ func (o *EcsOperator) transferEip(ins *ecs.DescribeEipAddressesResponseBodyEipAd
 	info.ExpireAt = utils.ParseDefaultMiniteTime(tea.StringValue(ins.ExpiredTime))
 	info.Type = tea.StringValue(ins.InstanceType)
 
-	h.Resource.Status.PublicIp = []string{tea.StringValue(ins.IpAddress)}
+	h.Resource.Status.PublicAddress = []string{tea.StringValue(ins.IpAddress)}
 	h.Resource.Status.Phase = praseEIPStatus(ins.Status)
 	h.Resource.Cost.PayMode = mapping.PrasePAY_MODE(ins.ChargeType)
 

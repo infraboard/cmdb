@@ -58,8 +58,8 @@ func (o *CVMOperator) transferEip(ins *vpc.Address) *eip.EIP {
 	r.Resource.Cost.PayModeDetail = tea.StringValue(ins.InternetChargeType)
 
 	r.Resource.Status.Phase = praseDiskStatus(ins.AddressStatus)
-	r.Resource.Status.PublicIp = []string{tea.StringValue(ins.AddressIp)}
-	r.Resource.Status.PrivateIp = []string{tea.StringValue(ins.PrivateAddressIp)}
+	r.Resource.Status.PublicAddress = []string{tea.StringValue(ins.AddressIp)}
+	r.Resource.Status.PrivateAddress = []string{tea.StringValue(ins.PrivateAddressIp)}
 
 	desc := r.Describe
 	desc.BandWidth = int64(tea.Uint64Value(ins.Bandwidth))

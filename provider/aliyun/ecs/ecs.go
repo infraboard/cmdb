@@ -88,8 +88,8 @@ func (o *EcsOperator) transferInstance(ins *ecs.DescribeInstancesResponseBodyIns
 	i.Zone = tea.StringValue(ins.ZoneId)
 	i.Owner = o.GetAccountId()
 
-	h.Resource.Status.PublicIp = tea.StringSliceValue(ins.PublicIpAddress.IpAddress)
-	h.Resource.Status.PrivateIp = o.parsePrivateIp(ins)
+	h.Resource.Status.PublicAddress = tea.StringSliceValue(ins.PublicIpAddress.IpAddress)
+	h.Resource.Status.PrivateAddress = o.parsePrivateIp(ins)
 
 	h.Resource.Status.Phase = praseEcsStatus(ins.Status)
 	h.Resource.Cost.PayMode = mapping.PrasePAY_MODE(ins.InstanceChargeType)
@@ -99,7 +99,7 @@ func (o *EcsOperator) transferInstance(ins *ecs.DescribeInstancesResponseBodyIns
 	i.Gpu = tea.Int32Value(ins.GPUAmount)
 
 	if ins.EipAddress != nil {
-		h.Resource.Status.PublicIp = []string{tea.StringValue(ins.EipAddress.IpAddress)}
+		h.Resource.Status.PublicAddress = []string{tea.StringValue(ins.EipAddress.IpAddress)}
 		i.BandWidth = tea.Int32Value(ins.EipAddress.Bandwidth)
 	}
 

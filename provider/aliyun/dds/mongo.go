@@ -82,7 +82,7 @@ func (o *Operator) transferMongoDB(ins *dds.DescribeDBInstanceAttributeResponseB
 		item := ins.ReplicaSets.ReplicaSet[i]
 		connections = append(connections, fmt.Sprintf("%s:%s", tea.StringValue(item.ConnectionDomain), tea.StringValue(item.ConnectionPort)))
 	}
-	r.Resource.Status.PrivateIp = connections
+	r.Resource.Status.PrivateAddress = connections
 
 	desc := r.Describe
 	desc.Engine = tea.StringValue(ins.Engine)

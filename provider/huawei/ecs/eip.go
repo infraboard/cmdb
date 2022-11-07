@@ -78,8 +78,8 @@ func (o *EcsOperator) transferEip(ins model.PublicipShowResp) *eip.EIP {
 		o.log.Errorf("status marshal json error, %s", err)
 	}
 
-	r.Resource.Status.PublicIp = []string{tea.StringValue(ins.PublicIpAddress)}
-	r.Resource.Status.PrivateIp = []string{tea.StringValue(ins.PrivateIpAddress)}
+	r.Resource.Status.PublicAddress = []string{tea.StringValue(ins.PublicIpAddress)}
+	r.Resource.Status.PrivateAddress = []string{tea.StringValue(ins.PrivateIpAddress)}
 
 	desc := r.Describe
 	desc.BandWidth = int64(tea.Int32Value(ins.BandwidthSize))

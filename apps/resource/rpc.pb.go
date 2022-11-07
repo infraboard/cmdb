@@ -456,124 +456,6 @@ func (x *TagSelector) GetValues() []string {
 	return nil
 }
 
-type QueryTagRequest struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	// 资源id
-	// @gotags: json:"resource_ids"
-	ResourceIds []string `protobuf:"bytes,1,rep,name=resource_ids,json=resourceIds,proto3" json:"resource_ids"`
-}
-
-func (x *QueryTagRequest) Reset() {
-	*x = QueryTagRequest{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_apps_resource_pb_rpc_proto_msgTypes[5]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *QueryTagRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*QueryTagRequest) ProtoMessage() {}
-
-func (x *QueryTagRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_apps_resource_pb_rpc_proto_msgTypes[5]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use QueryTagRequest.ProtoReflect.Descriptor instead.
-func (*QueryTagRequest) Descriptor() ([]byte, []int) {
-	return file_apps_resource_pb_rpc_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *QueryTagRequest) GetResourceIds() []string {
-	if x != nil {
-		return x.ResourceIds
-	}
-	return nil
-}
-
-type UpdateTagRequest struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	// 资源id
-	// @gotags: json:"id" validate:"required"
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id" validate:"required"`
-	// 资源id
-	// @gotags: json:"action"
-	Action UpdateAction `protobuf:"varint,2,opt,name=action,proto3,enum=infraboard.cmdb.resource.UpdateAction" json:"action"`
-	// 需要添加的资源标签
-	// @gotags: json:"tags" validate:"required"
-	Tags []*Tag `protobuf:"bytes,3,rep,name=tags,proto3" json:"tags" validate:"required"`
-}
-
-func (x *UpdateTagRequest) Reset() {
-	*x = UpdateTagRequest{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_apps_resource_pb_rpc_proto_msgTypes[6]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *UpdateTagRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*UpdateTagRequest) ProtoMessage() {}
-
-func (x *UpdateTagRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_apps_resource_pb_rpc_proto_msgTypes[6]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use UpdateTagRequest.ProtoReflect.Descriptor instead.
-func (*UpdateTagRequest) Descriptor() ([]byte, []int) {
-	return file_apps_resource_pb_rpc_proto_rawDescGZIP(), []int{6}
-}
-
-func (x *UpdateTagRequest) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
-}
-
-func (x *UpdateTagRequest) GetAction() UpdateAction {
-	if x != nil {
-		return x.Action
-	}
-	return UpdateAction_ADD
-}
-
-func (x *UpdateTagRequest) GetTags() []*Tag {
-	if x != nil {
-		return x.Tags
-	}
-	return nil
-}
-
 var File_apps_resource_pb_rpc_proto protoreflect.FileDescriptor
 
 var file_apps_resource_pb_rpc_proto_rawDesc = []byte{
@@ -647,29 +529,16 @@ var file_apps_resource_pb_rpc_proto_rawDesc = []byte{
 	0x65, 0x79, 0x12, 0x18, 0x0a, 0x07, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x6f, 0x72, 0x18, 0x02, 0x20,
 	0x01, 0x28, 0x09, 0x52, 0x07, 0x6f, 0x70, 0x65, 0x72, 0x74, 0x6f, 0x72, 0x12, 0x16, 0x0a, 0x06,
 	0x76, 0x61, 0x6c, 0x75, 0x65, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x09, 0x52, 0x06, 0x76, 0x61,
-	0x6c, 0x75, 0x65, 0x73, 0x22, 0x34, 0x0a, 0x0f, 0x51, 0x75, 0x65, 0x72, 0x79, 0x54, 0x61, 0x67,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x21, 0x0a, 0x0c, 0x72, 0x65, 0x73, 0x6f, 0x75,
-	0x72, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x09, 0x52, 0x0b, 0x72,
-	0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x49, 0x64, 0x73, 0x22, 0x95, 0x01, 0x0a, 0x10, 0x55,
-	0x70, 0x64, 0x61, 0x74, 0x65, 0x54, 0x61, 0x67, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12,
-	0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12,
-	0x3e, 0x0a, 0x06, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0e, 0x32,
-	0x26, 0x2e, 0x69, 0x6e, 0x66, 0x72, 0x61, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x63, 0x6d, 0x64,
-	0x62, 0x2e, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74,
-	0x65, 0x41, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x06, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12,
-	0x31, 0x0a, 0x04, 0x74, 0x61, 0x67, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1d, 0x2e,
-	0x69, 0x6e, 0x66, 0x72, 0x61, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x63, 0x6d, 0x64, 0x62, 0x2e,
-	0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x2e, 0x54, 0x61, 0x67, 0x52, 0x04, 0x74, 0x61,
-	0x67, 0x73, 0x32, 0x5f, 0x0a, 0x03, 0x52, 0x50, 0x43, 0x12, 0x58, 0x0a, 0x06, 0x53, 0x65, 0x61,
-	0x72, 0x63, 0x68, 0x12, 0x27, 0x2e, 0x69, 0x6e, 0x66, 0x72, 0x61, 0x62, 0x6f, 0x61, 0x72, 0x64,
-	0x2e, 0x63, 0x6d, 0x64, 0x62, 0x2e, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x2e, 0x53,
-	0x65, 0x61, 0x72, 0x63, 0x68, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x25, 0x2e, 0x69,
-	0x6e, 0x66, 0x72, 0x61, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x63, 0x6d, 0x64, 0x62, 0x2e, 0x72,
-	0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65,
-	0x53, 0x65, 0x74, 0x42, 0x2a, 0x5a, 0x28, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f,
-	0x6d, 0x2f, 0x69, 0x6e, 0x66, 0x72, 0x61, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2f, 0x63, 0x6d, 0x64,
-	0x62, 0x2f, 0x61, 0x70, 0x70, 0x73, 0x2f, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x62,
-	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x6c, 0x75, 0x65, 0x73, 0x32, 0x5f, 0x0a, 0x03, 0x52, 0x50, 0x43, 0x12, 0x58, 0x0a, 0x06, 0x53,
+	0x65, 0x61, 0x72, 0x63, 0x68, 0x12, 0x27, 0x2e, 0x69, 0x6e, 0x66, 0x72, 0x61, 0x62, 0x6f, 0x61,
+	0x72, 0x64, 0x2e, 0x63, 0x6d, 0x64, 0x62, 0x2e, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65,
+	0x2e, 0x53, 0x65, 0x61, 0x72, 0x63, 0x68, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x25,
+	0x2e, 0x69, 0x6e, 0x66, 0x72, 0x61, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x63, 0x6d, 0x64, 0x62,
+	0x2e, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x2e, 0x52, 0x65, 0x73, 0x6f, 0x75, 0x72,
+	0x63, 0x65, 0x53, 0x65, 0x74, 0x42, 0x2a, 0x5a, 0x28, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e,
+	0x63, 0x6f, 0x6d, 0x2f, 0x69, 0x6e, 0x66, 0x72, 0x61, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2f, 0x63,
+	0x6d, 0x64, 0x62, 0x2f, 0x61, 0x70, 0x70, 0x73, 0x2f, 0x72, 0x65, 0x73, 0x6f, 0x75, 0x72, 0x63,
+	0x65, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -684,39 +553,33 @@ func file_apps_resource_pb_rpc_proto_rawDescGZIP() []byte {
 	return file_apps_resource_pb_rpc_proto_rawDescData
 }
 
-var file_apps_resource_pb_rpc_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
+var file_apps_resource_pb_rpc_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_apps_resource_pb_rpc_proto_goTypes = []interface{}{
 	(*DeleteRequest)(nil),       // 0: infraboard.cmdb.resource.DeleteRequest
 	(*DeleteResponse)(nil),      // 1: infraboard.cmdb.resource.DeleteResponse
 	(*DeleteRecord)(nil),        // 2: infraboard.cmdb.resource.DeleteRecord
 	(*SearchRequest)(nil),       // 3: infraboard.cmdb.resource.SearchRequest
 	(*TagSelector)(nil),         // 4: infraboard.cmdb.resource.TagSelector
-	(*QueryTagRequest)(nil),     // 5: infraboard.cmdb.resource.QueryTagRequest
-	(*UpdateTagRequest)(nil),    // 6: infraboard.cmdb.resource.UpdateTagRequest
-	(*request.PageRequest)(nil), // 7: infraboard.mcube.page.PageRequest
-	(USAGE_MODE)(0),             // 8: infraboard.cmdb.resource.USAGE_MODE
-	(VENDOR)(0),                 // 9: infraboard.cmdb.resource.VENDOR
-	(TYPE)(0),                   // 10: infraboard.cmdb.resource.TYPE
-	(UpdateAction)(0),           // 11: infraboard.cmdb.resource.UpdateAction
-	(*Tag)(nil),                 // 12: infraboard.cmdb.resource.Tag
-	(*ResourceSet)(nil),         // 13: infraboard.cmdb.resource.ResourceSet
+	(*request.PageRequest)(nil), // 5: infraboard.mcube.page.PageRequest
+	(USAGE_MODE)(0),             // 6: infraboard.cmdb.resource.USAGE_MODE
+	(VENDOR)(0),                 // 7: infraboard.cmdb.resource.VENDOR
+	(TYPE)(0),                   // 8: infraboard.cmdb.resource.TYPE
+	(*ResourceSet)(nil),         // 9: infraboard.cmdb.resource.ResourceSet
 }
 var file_apps_resource_pb_rpc_proto_depIdxs = []int32{
-	2,  // 0: infraboard.cmdb.resource.DeleteResponse.delete_records:type_name -> infraboard.cmdb.resource.DeleteRecord
-	7,  // 1: infraboard.cmdb.resource.SearchRequest.page:type_name -> infraboard.mcube.page.PageRequest
-	8,  // 2: infraboard.cmdb.resource.SearchRequest.usage_mode:type_name -> infraboard.cmdb.resource.USAGE_MODE
-	9,  // 3: infraboard.cmdb.resource.SearchRequest.vendor:type_name -> infraboard.cmdb.resource.VENDOR
-	10, // 4: infraboard.cmdb.resource.SearchRequest.type:type_name -> infraboard.cmdb.resource.TYPE
-	4,  // 5: infraboard.cmdb.resource.SearchRequest.tags:type_name -> infraboard.cmdb.resource.TagSelector
-	11, // 6: infraboard.cmdb.resource.UpdateTagRequest.action:type_name -> infraboard.cmdb.resource.UpdateAction
-	12, // 7: infraboard.cmdb.resource.UpdateTagRequest.tags:type_name -> infraboard.cmdb.resource.Tag
-	3,  // 8: infraboard.cmdb.resource.RPC.Search:input_type -> infraboard.cmdb.resource.SearchRequest
-	13, // 9: infraboard.cmdb.resource.RPC.Search:output_type -> infraboard.cmdb.resource.ResourceSet
-	9,  // [9:10] is the sub-list for method output_type
-	8,  // [8:9] is the sub-list for method input_type
-	8,  // [8:8] is the sub-list for extension type_name
-	8,  // [8:8] is the sub-list for extension extendee
-	0,  // [0:8] is the sub-list for field type_name
+	2, // 0: infraboard.cmdb.resource.DeleteResponse.delete_records:type_name -> infraboard.cmdb.resource.DeleteRecord
+	5, // 1: infraboard.cmdb.resource.SearchRequest.page:type_name -> infraboard.mcube.page.PageRequest
+	6, // 2: infraboard.cmdb.resource.SearchRequest.usage_mode:type_name -> infraboard.cmdb.resource.USAGE_MODE
+	7, // 3: infraboard.cmdb.resource.SearchRequest.vendor:type_name -> infraboard.cmdb.resource.VENDOR
+	8, // 4: infraboard.cmdb.resource.SearchRequest.type:type_name -> infraboard.cmdb.resource.TYPE
+	4, // 5: infraboard.cmdb.resource.SearchRequest.tags:type_name -> infraboard.cmdb.resource.TagSelector
+	3, // 6: infraboard.cmdb.resource.RPC.Search:input_type -> infraboard.cmdb.resource.SearchRequest
+	9, // 7: infraboard.cmdb.resource.RPC.Search:output_type -> infraboard.cmdb.resource.ResourceSet
+	7, // [7:8] is the sub-list for method output_type
+	6, // [6:7] is the sub-list for method input_type
+	6, // [6:6] is the sub-list for extension type_name
+	6, // [6:6] is the sub-list for extension extendee
+	0, // [0:6] is the sub-list for field type_name
 }
 
 func init() { file_apps_resource_pb_rpc_proto_init() }
@@ -786,30 +649,6 @@ func file_apps_resource_pb_rpc_proto_init() {
 				return nil
 			}
 		}
-		file_apps_resource_pb_rpc_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryTagRequest); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_apps_resource_pb_rpc_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateTagRequest); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
 	}
 	file_apps_resource_pb_rpc_proto_msgTypes[3].OneofWrappers = []interface{}{}
 	type x struct{}
@@ -818,7 +657,7 @@ func file_apps_resource_pb_rpc_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_apps_resource_pb_rpc_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   7,
+			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

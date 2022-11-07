@@ -60,7 +60,7 @@ func (o *VMOperator) transferOne(ins *mo.VirtualMachine, dcName string) *host.Ho
 	if privateIP == "" {
 		privateIP = ins.Guest.IpAddress
 	}
-	r.Resource.Status.PrivateIp = []string{privateIP}
+	r.Resource.Status.PrivateAddress = []string{privateIP}
 	return r
 }
 

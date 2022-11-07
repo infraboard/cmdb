@@ -116,7 +116,7 @@ message Meta {
     // @gotags: json:"usage_mode"
     USAGE_MODE usage_mode = 9;
     // 共享策略, 当一个资源被多个应用共享时, 可以指定允许的应用
-    // @gotags: json:"shared_policy"
+    // @gotags: json:"shared_policy" gorm:"serializer:json"
     SharedPolicy shared_policy = 10;
 }
 
@@ -148,7 +148,7 @@ message SharedPolicy {
     // @gotags: json:"tag_key"
     string tag_key = 1;
     // 分享给哪些值
-    // @gotags: json:"tag_values" gorm:"serializer:json"
+    // @gotags: json:"tag_values"
     repeated string tag_values = 2;
 }
 
@@ -223,12 +223,12 @@ message Status {
     // @gotags: json:"lock_reason"
     string lock_reason = 3;
     // 资源访问地址
-    // 公网IP, 或者域名
-    // @gotags: json:"public_ip" gorm:"serializer:json"
-    repeated string public_ip = 4;
-    // 内网IP, 或者域名
-    // @gotags: json:"private_ip" gorm:"serializer:json"
-    repeated string private_ip = 5;
+    // 公网地址, 或者域名
+    // @gotags: json:"public_address" gorm:"serializer:json"
+    repeated string public_address = 4;
+    // 内网地址, 或者域名
+    // @gotags: json:"private_address" gorm:"serializer:json"
+    repeated string private_address = 5;
 }
 
 // 标签用途

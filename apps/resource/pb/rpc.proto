@@ -96,21 +96,3 @@ message TagSelector {
     // @gotags: json:"values"
     repeated string values = 3;
 }
-
-message QueryTagRequest {
-    // 资源id
-    // @gotags: json:"resource_ids" 
-    repeated string resource_ids = 1;
-}
-
-message UpdateTagRequest {
-    // 资源id
-    // @gotags: json:"id" validate:"required"
-    string id = 1;
-    // 资源id
-    // @gotags: json:"action"
-    UpdateAction action = 2;
-    // 需要添加的资源标签
-    // @gotags: json:"tags" validate:"required"
-    repeated Tag tags = 3;
-}

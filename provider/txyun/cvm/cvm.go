@@ -79,8 +79,8 @@ func (o *CVMOperator) transferOne(ins *cvm.Instance) *host.Host {
 	i.Memory = int32(utils.PtrInt64(ins.Memory))
 
 	r.Resource.Cost.PayMode = mapping.PrasePAY_MODE(tea.StringValue(ins.InstanceChargeType))
-	r.Resource.Status.PublicIp = utils.SlicePtrStrv(ins.PublicIpAddresses)
-	r.Resource.Status.PrivateIp = utils.SlicePtrStrv(ins.PrivateIpAddresses)
+	r.Resource.Status.PublicAddress = utils.SlicePtrStrv(ins.PublicIpAddresses)
+	r.Resource.Status.PrivateAddress = utils.SlicePtrStrv(ins.PrivateIpAddresses)
 	r.Resource.Status.Phase = praseCvmStatus(ins.InstanceState)
 
 	r.Resource.Tags = transferTags(ins.Tags)

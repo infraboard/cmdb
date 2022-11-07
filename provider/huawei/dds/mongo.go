@@ -72,7 +72,7 @@ func (o *DdsOperator) transferMongoDBOne(ins model.QueryInstanceResponse) *mongo
 
 		for _, node := range g.Nodes {
 			if strings.ToLower(node.Role) != "hidden" {
-				r.Resource.Status.PrivateIp = append(r.Resource.Status.PrivateIp, fmt.Sprintf("%s:%s", node.PrivateIp, ins.Port))
+				r.Resource.Status.PrivateAddress = append(r.Resource.Status.PrivateAddress, fmt.Sprintf("%s:%s", node.PrivateIp, ins.Port))
 			}
 		}
 	}

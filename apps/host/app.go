@@ -33,7 +33,7 @@ func (h *Host) Put(req *UpdateHostData) {
 }
 
 func (h *Host) ShortDesc() string {
-	return fmt.Sprintf("%s %s", h.Resource.Spec.Name, h.Resource.Status.PrivateIp)
+	return fmt.Sprintf("%s %s", h.Resource.Spec.Name, h.Resource.Status.PrivateAddress)
 }
 
 func NewUpdateHostDataByIns(ins *Host) *UpdateHostData {

@@ -2,8 +2,6 @@ package impl
 
 import (
 	"context"
-	"fmt"
-	"strings"
 
 	"github.com/infraboard/cmdb/apps/resource"
 )
@@ -20,15 +18,34 @@ func (s *service) Put(ctx context.Context, res *resource.Resource) (
 	var err error
 	tx := s.db.WithContext(ctx).Begin()
 	defer func() {
-		if err != nil {
+		if err == nil {
 			tx.Commit()
 		} else {
 			tx.Rollback()
 		}
 	}()
 
+	temp := NewResource(res)
+
 	// 保存meta
-	if err := tx.Save(res.Meta).Error; err != nil {
+	if err := tx.Save(temp.ResourceMeta).Error; err != nil {
+		return nil, err
+	}
+
+	// 保存spec
+	if err := tx.Save(temp.ResourceSpec).Error; err != nil {
+		return nil, err
+	}
+
+	// 资源价格
+	if res.Cost != nil {
+		if err := tx.Save(temp.ResourceCost).Error; err != nil {
+			return nil, err
+		}
+	}
+
+	// 保存状态
+	if err := tx.Save(temp.ResourceStatus).Error; err != nil {
 		return nil, err
 	}
 
@@ -36,84 +53,41 @@ func (s *service) Put(ctx context.Context, res *resource.Resource) (
 }
 
 // 删除资源
-func (s *service) Delete(ctx context.Context, set *resource.ResourceSet) (
-	*resource.ResourceSet, error) {
-	// records := BuildResourceBatch(set).Records()
+func (s *service) Delete(ctx context.Context, set *resource.DeleteRequest) (
+	*resource.DeleteResponse, error) {
 
 	// for i := range records {
 	// 	if err := s.db.Delete(records[i]).Error; err != nil {
 	// 		return nil, err
 	// 	}
 	// }
-	return set, nil
+	return nil, nil
 }
 
 func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (
 	*resource.ResourceSet, error) {
-	query := s.db.WithContext(ctx).
-		Table("resource_meta m").
-		Joins("LEFT JOIN resource_spec spsc ON spec.resource_id=m.id").
-		Joins("LEFT JOIN resource_cost cost ON cost.resource_id=m.id").
-		Joins("LEFT JOIN resource_status status ON status.resource_id=m.id")
-
-	if req.Domain != "" {
-		query = query.Where("m.domain = ?", req.Domain)
-	}
-	if req.Namespace != "" {
-		query = query.Where("m.namespace = ?", req.Namespace)
-	}
-	if req.Env != "" {
-		query = query.Where("m.env = ?", req.Env)
-	}
-	if req.UsageMode != nil {
-		query = query.Where("m.usage_mode = ?", *req.UsageMode)
-	}
-	if req.Vendor != nil {
-		query = query.Where("spec.vendor = ?", req.Vendor)
-	}
-	if req.Owner != "" {
-		query = query.Where("spec.owner = ?", req.Owner)
-	}
-	if req.Type != nil {
-		query = query.Where("spec.type = ?", req.Type)
-	}
-	if req.Status != "" {
-		query = query.Where("status.phase = ?", req.Status)
-	}
-	if req.HasTag() {
-		query = query.Joins("RIGHT JOIN resource_tag tag ON tag.resource_id = m.id")
-		for i := range req.Tags {
-			selector := req.Tags[i]
-			if selector.Key == "" {
-				continue
-			}
-
-			// 添加key过滤条件
-			query = query.Where("tag.t_key LIKE ?", strings.ReplaceAll(selector.Key, ".*", "%"))
-
-			// 添加Value过滤条件
-			condtions := []string{}
-			args := []interface{}{}
-			for _, v := range selector.Values {
-				condtions = append(condtions, fmt.Sprintf("t.t_value %s ?", selector.Opertor))
-				args = append(args, strings.ReplaceAll(v, ".*", "%"))
-			}
-			if len(condtions) > 0 {
-				vwhere := fmt.Sprintf("( %s )", strings.Join(condtions, selector.RelationShip()))
-				query = query.Where(vwhere, args...)
-			}
-		}
-	}
-	if req.Keywords != "" {
-		query = query.Where("r.name LIKE ? OR r.id = ? OR r.private_ip LIKE ? OR r.public_ip LIKE ?",
-			"%"+req.Keywords+"%",
-			req.Keywords,
-			req.Keywords+"%",
-			req.Keywords+"%",
-		)
+	query, err := s.BuildQuery(ctx, req)
+	if err != nil {
+		return nil, err
 	}
 
-	return nil, nil
+	temp := NewResourceSet()
+	err = query.
+		Order("m.create_at DESC").
+		Offset(int(req.Page.ComputeOffset())).
+		Limit(int(req.Page.PageSize)).
+		Scan(&temp.Items).
+		Error
+	if err != nil {
+		return nil, err
+	}
+
+	err = query.Count(&temp.Total).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return temp.ResourceSet(), nil
 }
 
 // func (s *service) Search(ctx context.Context, req *resource.SearchRequest) (

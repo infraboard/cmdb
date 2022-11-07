@@ -79,7 +79,7 @@ func (o *SLBOperator) transferLoadBalancer(ins *slb.DescribeLoadBalancersRespons
 	info.Name = tea.StringValue(ins.LoadBalancerName)
 	info.Type = tea.StringValue(ins.NetworkType)
 
-	r.Resource.Status.PrivateIp = []string{tea.StringValue(ins.Address)}
+	r.Resource.Status.PrivateAddress = []string{tea.StringValue(ins.Address)}
 	r.Resource.Status.Phase = praseSlbStatus(ins.LoadBalancerStatus)
 	r.Resource.Cost.PayMode = mapping.PrasePAY_MODE(ins.PayType)
 

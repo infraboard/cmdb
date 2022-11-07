@@ -86,7 +86,7 @@ func (o *EcsOperator) transferInstance(ins model.ServerDetail) *host.Host {
 	i.Description = utils.PtrStrV(ins.Description)
 	r.Resource.Cost.PayMode = o.ParseChangeMode(ins.Metadata["charging_mode"])
 
-	r.Resource.Status.PrivateIp, r.Resource.Status.PublicIp = o.parseIp(ins.Addresses)
+	r.Resource.Status.PrivateAddress, r.Resource.Status.PublicAddress = o.parseIp(ins.Addresses)
 	r.Resource.Status.Phase = praseEcsStatus(ins.Status)
 
 	cpu, _ := strconv.ParseInt(ins.Flavor.Vcpus, 10, 64)

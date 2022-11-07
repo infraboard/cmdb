@@ -62,8 +62,8 @@ func (o *Ec2operator) transferOne(ins types.Instance) *host.Host {
 	}
 
 	h.Resource.Status.Phase = string(ins.State.Name)
-	h.Resource.Status.PublicIp = []string{*ins.PublicIpAddress}
-	h.Resource.Status.PrivateIp = []string{*ins.PrivateIpAddress}
+	h.Resource.Status.PublicAddress = []string{*ins.PublicIpAddress}
+	h.Resource.Status.PrivateAddress = []string{*ins.PrivateIpAddress}
 
 	h.Describe.OsName = *ins.PlatformDetails
 	h.Describe.ImageId = *ins.ImageId

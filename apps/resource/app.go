@@ -105,22 +105,22 @@ func (r *Resource) AddTag(t *Tag) {
 }
 
 func (i *Status) PrivateIPToString() string {
-	return strings.Join(i.PrivateIp, ",")
+	return strings.Join(i.PrivateAddress, ",")
 }
 
 func (i *Status) PublicIPToString() string {
-	return strings.Join(i.PublicIp, ",")
+	return strings.Join(i.PublicAddress, ",")
 }
 
 func (i *Status) LoadPrivateIPString(s string) {
 	if s != "" {
-		i.PrivateIp = strings.Split(s, ",")
+		i.PrivateAddress = strings.Split(s, ",")
 	}
 }
 
 func (i *Status) LoadPublicIPString(s string) {
 	if s != "" {
-		i.PublicIp = strings.Split(s, ",")
+		i.PublicAddress = strings.Split(s, ",")
 	}
 }
 
@@ -197,13 +197,6 @@ func (ag *AccountGetter) GetAccountId() string {
 	return ag.accountId
 }
 
-func NewUpdateTagRequest(resourceId string, action UpdateAction) *UpdateTagRequest {
-	return &UpdateTagRequest{
-		Id:     resourceId,
-		Action: action,
-	}
-}
-
 func NewDefaultTag() *Tag {
 	return &Tag{
 		Purpose: TAG_PURPOSE_GROUP,
@@ -218,14 +211,6 @@ func NewGroupTag(key, value string) *Tag {
 		Value:   value,
 		Weight:  1,
 	}
-}
-
-func (req *UpdateTagRequest) Validate() error {
-	if len(req.Tags) == 0 {
-		return fmt.Errorf("no tags")
-	}
-
-	return validate.Struct(req)
 }
 
 type Operator string

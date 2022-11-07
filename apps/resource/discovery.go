@@ -16,11 +16,11 @@ func NewPrometheusScrapeTag() *TagSelector {
 }
 
 func (r *Resource) PrometheusEndpont() (string, error) {
-	if len(r.Status.PrivateIp) == 0 {
+	if len(r.Status.PrivateAddress) == 0 {
 		return "", fmt.Errorf("instance no private ip")
 	}
 
-	ip := r.Status.PrivateIp[0]
+	ip := r.Status.PrivateAddress[0]
 	port := r.GetTagValueOne(PROMETHEUS_PORT)
 	if port == "" {
 		switch r.Spec.ResourceType {

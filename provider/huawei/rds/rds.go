@@ -88,7 +88,7 @@ func (o *RdsOperator) transferOne(ins model.InstanceResponse) *rds.Rds {
 	i.Memory = int32(mem * 1024)
 	i.Storage = ins.Volume.Size
 
-	r.Resource.Status.PrivateIp, r.Resource.Status.PublicIp = ins.PrivateIps, ins.PublicIps
+	r.Resource.Status.PrivateAddress, r.Resource.Status.PublicAddress = ins.PrivateIps, ins.PublicIps
 	r.Resource.Status.Phase = praseStatus(ins.Status)
 
 	r.Resource.Tags = o.transferTags(ins.Tags)
