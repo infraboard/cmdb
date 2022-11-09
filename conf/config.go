@@ -77,10 +77,10 @@ func newDefaultAPP() *app {
 }
 
 type log struct {
-	Level   string    `toml:"level" env:"LOG_LEVEL"`
-	PathDir string    `toml:"path_dir" env:"LOG_PATH_DIR"`
-	Format  LogFormat `toml:"format" env:"LOG_FORMAT"`
-	To      LogTo     `toml:"to" env:"LOG_TO"`
+	Level  string    `toml:"level" env:"LOG_LEVEL"`
+	Dir    string    `toml:"dir" env:"LOG_PATH_DIR"`
+	Format LogFormat `toml:"format" env:"LOG_FORMAT"`
+	To     LogTo     `toml:"to" env:"LOG_TO"`
 }
 
 // newDefaultLog todo

@@ -20,6 +20,5 @@ client_credential = "xxx"
 
 [log]
 level = "debug"
-path = "logs"
 format = "text"
 to = "stdout"

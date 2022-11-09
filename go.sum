@@ -219,6 +219,8 @@ github.com/infraboard/mcenter v0.0.7-0.20221019024440-d047c4e90dfb h1:g94aAsYksq
 github.com/infraboard/mcenter v0.0.7-0.20221019024440-d047c4e90dfb/go.mod h1:ROnpZHbNDxdEXNCT8v4wpBe4vZQIEyByjM9e71HydZs=
 github.com/infraboard/mcube v1.9.0 h1:a2qtMHP68sEwHRf6Emq3FC679WGlb/od+68AeDbjyZ8=
 github.com/infraboard/mcube v1.9.0/go.mod h1:2z/ARQRRgITOZGAO7FFRcQCOOZTJBJixRb6vINzGE6Y=
+github.com/infraboard/mcube v1.9.1-0.20221109095922-8055d92a121c h1:rxbFIUtspYEDSxkmdUftKmk8zkeUm6pvBcaccuj0+9E=
+github.com/infraboard/mcube v1.9.1-0.20221109095922-8055d92a121c/go.mod h1:aoGx5T/MK0Pm96MhTJRbhlmoU9bFbVRgR++kA241V24=
 github.com/jinzhu/inflection v1.0.0 h1:K317FqzuhWc8YvSVlFMCCUb36O/S9MCKRDI7QkRKD/E=
 github.com/jinzhu/inflection v1.0.0/go.mod h1:h+uFLlag+Qp1Va5pdKtLDYj+kHp5pxUVkryuEj+Srlc=
 github.com/jinzhu/now v1.1.4/go.mod h1:d3SSVoowX0Lcu0IBviAWJpolVfI5UJVZZ7cO71lE/z8=

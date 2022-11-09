@@ -136,7 +136,7 @@ func loadGlobalLogger() error {
 		zapConfig.ToFiles = false
 	case conf.ToFile:
 		zapConfig.Files.Name = "api.log"
-		zapConfig.Files.Path = lc.PathDir
+		zapConfig.Files.Path = lc.Dir
 	}
 	switch lc.Format {
 	case conf.JSONFormat:
