@@ -86,6 +86,7 @@ type log struct {
 // newDefaultLog todo
 func newDefaultLog() *log {
 	return &log{
+		Dir:    "logs",
 		Level:  "debug",
 		Format: "text",
 		To:     "stdout",
@@ -145,7 +146,7 @@ func (m *mysql) GetDB() (*sql.DB, error) {
 }
 
 func (m *mysql) getDBConn() (*sql.DB, error) {
-	zap.L().Infof("connect to mysql: %s:%s", m.Host, m.Port)
+	zap.L().Named("config").Infof("connect to mysql: %s:%s", m.Host, m.Port)
 	var err error
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&multiStatements=true", m.UserName, m.Password, m.Host, m.Port, m.Database)
 	db, err := sql.Open("mysql", dsn)

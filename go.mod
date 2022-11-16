@@ -31,11 +31,11 @@ require (
 	github.com/go-playground/validator/v10 v10.11.0
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.0.87
-	github.com/infraboard/mcenter v0.0.7-0.20221019024440-d047c4e90dfb
-	github.com/infraboard/mcube v1.9.1-0.20221109095922-8055d92a121c
+	github.com/infraboard/mcenter v0.0.7-0.20221116050416-5c127dd8cd23
+	github.com/infraboard/mcube v1.9.1-0.20221116042658-6666a9ee4f42
 	github.com/rs/xid v1.4.0
 	github.com/spf13/cobra v1.4.0
-	github.com/stretchr/testify v1.7.1
+	github.com/stretchr/testify v1.8.0
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/billing v1.0.492
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cbs v1.0.492
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cdb v1.0.492
@@ -50,7 +50,7 @@ require (
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/vpc v1.0.492
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.38
 	github.com/vmware/govmomi v0.28.0
-	google.golang.org/grpc v1.46.2
+	google.golang.org/grpc v1.50.1
 	google.golang.org/protobuf v1.28.0
 	gorm.io/driver/mysql v1.3.6
 	gorm.io/gorm v1.23.10

@@ -69,7 +69,7 @@ func newService(cnf *conf.Config) (*service, error) {
 	svr := &service{
 		http: http,
 		grpc: grpc,
-		log:  zap.L().Named("CLI"),
+		log:  zap.L().Named("cli"),
 	}
 
 	return svr, nil
@@ -129,15 +129,19 @@ func loadGlobalLogger() error {
 	}
 	zapConfig := zap.DefaultConfig()
 	zapConfig.Level = level
-	zapConfig.Files.RotateOnStartup = false
+
 	switch lc.To {
 	case conf.ToStdout:
 		zapConfig.ToStderr = true
 		zapConfig.ToFiles = false
 	case conf.ToFile:
+		zapConfig.ToFiles = true
+		zapConfig.ToStderr = false
+		zapConfig.Files.RotateOnStartup = true
 		zapConfig.Files.Name = "api.log"
 		zapConfig.Files.Path = lc.Dir
 	}
+
 	switch lc.Format {
 	case conf.JSONFormat:
 		zapConfig.JSON = true
@@ -145,7 +149,8 @@ func loadGlobalLogger() error {
 	if err := zap.Configure(zapConfig); err != nil {
 		return err
 	}
-	zap.L().Named("INIT").Info(logInitMsg)
+
+	zap.L().Named("init").Info(logInitMsg)
 	return nil
 }
 
