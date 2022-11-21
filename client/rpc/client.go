@@ -21,15 +21,13 @@ import (
 
 // NewClient todo
 func NewClientSet(conf *rpc.Config) (*ClientSet, error) {
-	zap.DevelopmentSetup()
-
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 
 	// 连接到服务
 	conn, err := grpc.DialContext(
 		ctx,
-		fmt.Sprintf("%s://%s", resolver.Scheme, "cmdb"), // Dial to "mcenter://cmdb"
+		fmt.Sprintf("%s://%s", resolver.Scheme, "cmdb"),
 		grpc.WithPerRPCCredentials(rpc.NewAuthentication(conf.ClientID, conf.ClientSecret)),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy":"round_robin"}`),
@@ -43,7 +41,7 @@ func NewClientSet(conf *rpc.Config) (*ClientSet, error) {
 	return &ClientSet{
 		conf: conf,
 		conn: conn,
-		log:  zap.L().Named("CMDB SDK"),
+		log:  zap.L().Named("sdk.cmdb"),
 	}, nil
 }
 

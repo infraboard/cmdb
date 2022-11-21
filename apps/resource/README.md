@@ -46,13 +46,8 @@
 ### 监控标签
 
 我们使用2个标签:
-+ prometheus.io/node/enabled = "true"
-+ prometheus.io/node/endpoint = "9100:/metrics"
-+ prometheus.io/node/endpoint = "9200:/metrics"
-
-+ prometheus.io/appv1/enabled = "true"
-+ prometheus.io/appv1/endpoint = "9100:/metrics"
-+ prometheus.io/appv1/endpoint = "9200:/metrics"
++ prometheus.io/node/enabled = "true"   meta:{"point": "9100:/metrics"}
++ prometheus.io/appv1/enabled = "true" meta:{"point": "9100:/metrics"}
 
 比如搜索 prometheus.io/%/enabled = "true"
 
