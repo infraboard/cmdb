@@ -14,7 +14,6 @@ import (
 
 var (
 	operator *op.MongoOperator
-	ctx      = context.Background()
 )
 
 func TestPageQueryMongoDB(t *testing.T) {

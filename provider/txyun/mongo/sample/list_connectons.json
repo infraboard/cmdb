@@ -1,0 +1,23 @@
+{
+    "Response": {
+      "Clients": [
+        {
+          "Count": 6,
+          "IP": "xxxx",
+          "InternalService": true
+        },
+        {
+          "Count": 3,
+          "IP": "xxxx",
+          "InternalService": true
+        },
+        {
+          "Count": 1,
+          "IP": "xxx",
+          "InternalService": true
+        }
+      ],
+      "RequestId": "xxxx",
+      "TotalCount": 3
+    }
+  }

@@ -1,0 +1,57 @@
+{
+    "Response": {
+        "TotalCount": 1,
+        "InstanceDetails": [
+            {
+                "InstanceId": "cmgo-xxxx",
+                "InstanceName": "xxx",
+                "PayMode": 1,
+                "ProjectId": 0,
+                "ClusterType": 0,
+                "Region": "ap-beijing",
+                "Zone": "ap-beijing-1",
+                "NetType": 1,
+                "VpcId": "vpc-xxxx",
+                "SubnetId": "subnet-xxxx",
+                "Status": 2,
+                "Vip": "172.xxxx",
+                "Vport": 27017,
+                "CreateTime": "2000-06-28 10:31:22",
+                "DeadLine": "2000-11-30 10:31:22",
+                "MongoVersion": "MONGO_3_WT",
+                "Memory": 8192,
+                "Volume": 102400,
+                "CpuNum": 4,
+                "MachineType": "HIO10G",
+                "SecondaryNum": 2,
+                "ReplicationSetNum": 1,
+                "AutoRenewFlag": 1,
+                "UsedVolume": 742,
+                "MaintenanceStart": "04:00:00",
+                "MaintenanceEnd": "05:00:00",
+                "ReplicaSets": [
+                    {
+                        "UsedVolume": 742,
+                        "ReplicaSetId": "cmgo-xxxx",
+                        "ReplicaSetName": "cmgo-xxxxx",
+                        "Memory": 8192,
+                        "Volume": 102400,
+                        "OplogSize": 10240,
+                        "SecondaryNum": 2,
+                        "RealReplicaSetId": "cmgo-xxxx"
+                    }
+                ],
+                "RelatedInstance": {
+                    "InstanceId": "",
+                    "Region": ""
+                },
+                "InstanceVer": 1,
+                "ClusterVer": 1,
+                "Protocol": 0,
+                "InstanceType": 1,
+                "InstanceStatusDesc": "运行中",
+                "RealInstanceId": "cmgo-xxxx"
+            }
+        ],
+        "RequestId":"cd8c1d55-xxx"}
+}
