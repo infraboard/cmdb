@@ -14,30 +14,30 @@ const (
 	AppName = "rds"
 )
 
-func NewSet() *Set {
-	return &Set{
+func NewSet() *RdsSet {
+	return &RdsSet{
 		Items: []*Rds{},
 	}
 }
 
-func (s *Set) ToAny() (items []any) {
+func (s *RdsSet) ToAny() (items []any) {
 	for i := range s.Items {
 		items = append(items, s.Items[i])
 	}
 	return
 }
 
-func (s *Set) Add(items ...any) {
+func (s *RdsSet) Add(items ...any) {
 	for i := range items {
 		s.Items = append(s.Items, items[i].(*Rds))
 	}
 }
 
-func (s *Set) AddSet(set *Set) {
+func (s *RdsSet) AddSet(set *RdsSet) {
 	s.Items = append(s.Items, set.Items...)
 }
 
-func (s *Set) Length() int64 {
+func (s *RdsSet) Length() int64 {
 	return int64(len(s.Items))
 }
 

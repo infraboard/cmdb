@@ -8,7 +8,7 @@ import "apps/rds/pb/rds.proto";
 
 service Service {
     rpc SyncRDS(Rds) returns(Rds) {}
-    rpc QueryRDS(QueryRDSRequest) returns(Set) {}
+    rpc QueryRDS(QueryRDSRequest) returns(RdsSet) {}
 }
 
 message QueryRDSRequest {

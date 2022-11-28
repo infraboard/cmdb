@@ -45,7 +45,7 @@ func (o *CDBOperator) PageQueryRds(req *provider.QueryRequest) pager.Pager {
 
 // 查询实例列表 (CDB)
 // 参考: https://console.cloud.tencent.com/api/explorer?Product=cdb&Version=2017-03-20&Action=DescribeDBInstances&SignVersion=
-func (o *CDBOperator) Query(ctx context.Context, req *cdb.DescribeDBInstancesRequest) (*rds.Set, error) {
+func (o *CDBOperator) Query(ctx context.Context, req *cdb.DescribeDBInstancesRequest) (*rds.RdsSet, error) {
 	resp, err := o.client.DescribeDBInstancesWithContext(ctx, req)
 	if err != nil {
 		return nil, err
@@ -54,7 +54,7 @@ func (o *CDBOperator) Query(ctx context.Context, req *cdb.DescribeDBInstancesReq
 	return o.transferSet(resp.Response.Items), nil
 }
 
-func (o *CDBOperator) transferSet(items []*cdb.InstanceInfo) *rds.Set {
+func (o *CDBOperator) transferSet(items []*cdb.InstanceInfo) *rds.RdsSet {
 	set := rds.NewSet()
 	for i := range items {
 		set.Add(o.transferOne(items[i]))

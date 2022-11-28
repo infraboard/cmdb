@@ -21,7 +21,7 @@ func (o *SQLServerOperator) PageQueryRds(req *provider.QueryRequest) pager.Pager
 
 // 查询实例列表 (SQLServer)
 // 参考: https://console.cloud.tencent.com/api/explorer?Product=sqlserver&Version=2018-03-28&Action=DescribeDBInstances
-func (o *SQLServerOperator) Query(ctx context.Context, req *sqlserver.DescribeDBInstancesRequest) (*rds.Set, error) {
+func (o *SQLServerOperator) Query(ctx context.Context, req *sqlserver.DescribeDBInstancesRequest) (*rds.RdsSet, error) {
 	resp, err := o.client.DescribeDBInstancesWithContext(ctx, req)
 	if err != nil {
 		return nil, err
@@ -30,7 +30,7 @@ func (o *SQLServerOperator) Query(ctx context.Context, req *sqlserver.DescribeDB
 	return o.transferSet(resp.Response.DBInstances), nil
 }
 
-func (o *SQLServerOperator) transferSet(items []*sqlserver.DBInstance) *rds.Set {
+func (o *SQLServerOperator) transferSet(items []*sqlserver.DBInstance) *rds.RdsSet {
 	set := rds.NewSet()
 	for i := range items {
 		set.Add(o.transferOne(items[i]))

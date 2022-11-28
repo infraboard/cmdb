@@ -23,7 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ServiceClient interface {
 	SyncRDS(ctx context.Context, in *Rds, opts ...grpc.CallOption) (*Rds, error)
-	QueryRDS(ctx context.Context, in *QueryRDSRequest, opts ...grpc.CallOption) (*Set, error)
+	QueryRDS(ctx context.Context, in *QueryRDSRequest, opts ...grpc.CallOption) (*RdsSet, error)
 }
 
 type serviceClient struct {
@@ -43,8 +43,8 @@ func (c *serviceClient) SyncRDS(ctx context.Context, in *Rds, opts ...grpc.CallO
 	return out, nil
 }
 
-func (c *serviceClient) QueryRDS(ctx context.Context, in *QueryRDSRequest, opts ...grpc.CallOption) (*Set, error) {
-	out := new(Set)
+func (c *serviceClient) QueryRDS(ctx context.Context, in *QueryRDSRequest, opts ...grpc.CallOption) (*RdsSet, error) {
+	out := new(RdsSet)
 	err := c.cc.Invoke(ctx, "/infraboard.cmdb.rds.Service/QueryRDS", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -57,7 +57,7 @@ func (c *serviceClient) QueryRDS(ctx context.Context, in *QueryRDSRequest, opts 
 // for forward compatibility
 type ServiceServer interface {
 	SyncRDS(context.Context, *Rds) (*Rds, error)
-	QueryRDS(context.Context, *QueryRDSRequest) (*Set, error)
+	QueryRDS(context.Context, *QueryRDSRequest) (*RdsSet, error)
 	mustEmbedUnimplementedServiceServer()
 }
 
@@ -68,7 +68,7 @@ type UnimplementedServiceServer struct {
 func (UnimplementedServiceServer) SyncRDS(context.Context, *Rds) (*Rds, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SyncRDS not implemented")
 }
-func (UnimplementedServiceServer) QueryRDS(context.Context, *QueryRDSRequest) (*Set, error) {
+func (UnimplementedServiceServer) QueryRDS(context.Context, *QueryRDSRequest) (*RdsSet, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryRDS not implemented")
 }
 func (UnimplementedServiceServer) mustEmbedUnimplementedServiceServer() {}

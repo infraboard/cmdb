@@ -43,7 +43,7 @@ func (o *RdsOperator) PageQueryRds(req *provider.QueryRequest) pager.Pager {
 
 // 查询数据库实例列表
 // 参考: https://apiexplorer.developer.huaweicloud.com/apiexplorer/sdk?product=RDS&api=ListInstances
-func (o *RdsOperator) Query(req *model.ListInstancesRequest) (*rds.Set, error) {
+func (o *RdsOperator) Query(req *model.ListInstancesRequest) (*rds.RdsSet, error) {
 	set := rds.NewSet()
 
 	resp, err := o.client.ListInstances(req)
@@ -58,7 +58,7 @@ func (o *RdsOperator) Query(req *model.ListInstancesRequest) (*rds.Set, error) {
 	return set, nil
 }
 
-func (o *RdsOperator) transferSet(list *[]model.InstanceResponse) *rds.Set {
+func (o *RdsOperator) transferSet(list *[]model.InstanceResponse) *rds.RdsSet {
 	set := rds.NewSet()
 	items := *list
 	for i := range items {

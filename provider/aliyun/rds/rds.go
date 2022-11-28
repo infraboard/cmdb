@@ -48,7 +48,7 @@ func (o *RdsOperator) PageQueryRds(req *provider.QueryRequest) pager.Pager {
 
 // 查询RDS实例列表
 // 参考文档: https://next.api.aliyun.com/api/Rds/2014-08-15/DescribeDBInstances?params={}&lang=GO
-func (o *RdsOperator) Query(req *rds.DescribeDBInstancesRequest) (*cmdbRds.Set, error) {
+func (o *RdsOperator) Query(req *rds.DescribeDBInstancesRequest) (*cmdbRds.RdsSet, error) {
 	resp, err := o.client.DescribeDBInstances(req)
 	if err != nil {
 		return nil, err
@@ -71,7 +71,7 @@ func (o *RdsOperator) Query(req *rds.DescribeDBInstancesRequest) (*cmdbRds.Set, 
 	return set, nil
 }
 
-func (o *RdsOperator) transferSet(items *rds.DescribeDBInstanceAttributeResponseBodyItems) *cmdbRds.Set {
+func (o *RdsOperator) transferSet(items *rds.DescribeDBInstanceAttributeResponseBodyItems) *cmdbRds.RdsSet {
 	set := cmdbRds.NewSet()
 	for i := range items.DBInstanceAttribute {
 		set.Add(o.transferOne(items.DBInstanceAttribute[i]))

@@ -85,7 +85,7 @@ message Describe {
     repeated Database databases = 29;
 }
 
-message Set {
+message RdsSet {
     // 总数量
     // @gotags: json:"total"
     int64 total = 1;

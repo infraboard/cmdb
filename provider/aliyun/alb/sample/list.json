@@ -1,0 +1,30 @@
+{
+    "TotalCount": 4,
+    "RequestId": "xxxx-xxxx",
+    "MaxResults": 20,
+    "LoadBalancers": [
+      {
+        "LoadBalancerEdition": "Standard",
+        "ResourceGroupId": "rg-xxxx",
+        "LoadBalancerBillingConfig": {
+          "InternetBandwidth": 400,
+          "PayType": "PostPay",
+          "InternetChargeType": "PayByTraffic"
+        },
+        "CreateTime": "2022-08-23T10:17:25Z",
+        "LoadBalancerId": "alb-xxxxx",
+        "DNSName": "alb-xxx.cn-xxx.alb.aliyuncs.com",
+        "ModificationProtectionConfig": {},
+        "LoadBalancerName": "xxx-xxxx",
+        "AccessLogConfig": {},
+        "LoadBalancerBussinessStatus": "Normal",
+        "VpcId": "vpc-xxx",
+        "DeletionProtectionConfig": {
+          "Enabled": false
+        },
+        "AddressAllocatedMode": "Dynamic",
+        "AddressType": "Internet",
+        "LoadBalancerStatus": "Active"
+      }
+    ]
+  }

@@ -7,10 +7,12 @@ import (
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 
 	actiontrail "github.com/alibabacloud-go/actiontrail-20200706/v2/client"
+	alb "github.com/alibabacloud-go/alb-20200616/v2/client"
 	dns "github.com/alibabacloud-go/alidns-20150109/v2/client"
 	bssopenapi "github.com/alibabacloud-go/bssopenapi-20171214/v2/client"
 	cms "github.com/alibabacloud-go/cms-20190101/v7/client"
 	openapi "github.com/alibabacloud-go/darabonba-openapi/client"
+	openapiv2 "github.com/alibabacloud-go/darabonba-openapi/v2/client"
 	dds "github.com/alibabacloud-go/dds-20151201/v3/client"
 	domain "github.com/alibabacloud-go/domain-20180129/v3/client"
 	ecs "github.com/alibabacloud-go/ecs-20140526/v2/client"
@@ -42,6 +44,7 @@ type AliCloudClient struct {
 	domConn   *domain.Client
 	dnsConn   *dns.Client
 	slbConn   *slb.Client
+	albConn   *alb.Client
 	atConn    *actiontrail.Client
 	bssConn   *bssopenapi.Client
 }
@@ -238,6 +241,25 @@ func (c *AliCloudClient) SLBClient() (*slb.Client, error) {
 	}
 
 	c.slbConn = client
+	return client, nil
+}
+
+func (c *AliCloudClient) ALBClient() (*alb.Client, error) {
+	if c.albConn != nil {
+		return c.albConn, nil
+	}
+
+	client, err := alb.NewClient(&openapiv2.Config{
+		AccessKeyId:     tea.String(c.AccessKey),
+		AccessKeySecret: tea.String(c.AccessSecret),
+		Endpoint:        tea.String(fmt.Sprintf("alb.%s.aliyuncs.com", c.Region)),
+		RegionId:        tea.String(c.Region),
+	})
+	if err != nil {
+		return nil, fmt.Errorf("new slb client error, %s", err)
+	}
+
+	c.albConn = client
 	return client, nil
 }
 
