@@ -10,7 +10,7 @@ import (
 func NewCDBOperator(client *cdb.Client) *CDBOperator {
 	return &CDBOperator{
 		client: client,
-		log:    zap.L().Named("Tx CDB"),
+		log:    zap.L().Named("tx.cdb"),
 	}
 }
 

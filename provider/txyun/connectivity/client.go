@@ -17,6 +17,7 @@ import (
 	dnspod "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/dnspod/v20210323"
 	mongodb "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/mongodb/v20190725"
 	redis "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/redis/v20180412"
+	sqlserver "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sqlserver/v20180328"
 	sts "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sts/v20180813"
 	vpc "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/vpc/v20170312"
 	"github.com/tencentyun/cos-go-sdk-v5"
@@ -57,17 +58,18 @@ type TencentCloudClient struct {
 	SecretID  string `env:"TX_CLOUD_SECRET_ID"`
 	SecretKey string `env:"TX_CLOUD_SECRET_KEY"`
 
-	cvmConn   *cvm.Client
-	cdbConn   *cdb.Client
-	vpcConn   *vpc.Client
-	redisConn *redis.Client
-	cosConn   *cos.Client
-	cbsConn   *cbs.Client
-	clbConn   *clb.Client
-	mongoConn *mongodb.Client
-	dnsConn   *dnspod.Client
-	billConn  *billing.Client
-	auditConn *cloudaudit.Client
+	cvmConn       *cvm.Client
+	cdbConn       *cdb.Client
+	sqlserverConn *sqlserver.Client
+	vpcConn       *vpc.Client
+	redisConn     *redis.Client
+	cosConn       *cos.Client
+	cbsConn       *cbs.Client
+	clbConn       *clb.Client
+	mongoConn     *mongodb.Client
+	dnsConn       *dnspod.Client
+	billConn      *billing.Client
+	auditConn     *cloudaudit.Client
 }
 
 // UseCvmClient cvm
@@ -236,6 +238,27 @@ func (me *TencentCloudClient) CDBClient() *cdb.Client {
 	cdbConn, _ := cdb.NewClient(credential, me.Region, cpf)
 	me.cdbConn = cdbConn
 	return me.cdbConn
+}
+
+// CDBClient cdb
+func (me *TencentCloudClient) SQLServerClient() *sqlserver.Client {
+	if me.sqlserverConn != nil {
+		return me.sqlserverConn
+	}
+
+	credential := common.NewCredential(
+		me.SecretID,
+		me.SecretKey,
+	)
+
+	cpf := profile.NewClientProfile()
+	cpf.HttpProfile.ReqMethod = "POST"
+	cpf.HttpProfile.ReqTimeout = 300
+	cpf.Language = "en-US"
+
+	sqlserverConn, _ := sqlserver.NewClient(credential, me.Region, cpf)
+	me.sqlserverConn = sqlserverConn
+	return me.sqlserverConn
 }
 
 // RedisClient cdb

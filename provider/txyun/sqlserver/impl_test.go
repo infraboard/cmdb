@@ -1,4 +1,4 @@
-package cdb_test
+package sqlserver_test
 
 import (
 	"context"
@@ -7,13 +7,13 @@ import (
 
 	"github.com/infraboard/cmdb/apps/rds"
 	"github.com/infraboard/cmdb/provider"
-	op "github.com/infraboard/cmdb/provider/txyun/cdb"
 	"github.com/infraboard/cmdb/provider/txyun/connectivity"
+	op "github.com/infraboard/cmdb/provider/txyun/sqlserver"
 	"github.com/infraboard/mcube/logger/zap"
 )
 
 var (
-	operator *op.CDBOperator
+	operator *op.SQLServerOperator
 	ctx      = context.Background()
 )
 
@@ -23,22 +23,13 @@ func TestPageQueryRds(t *testing.T) {
 
 	for pager.Next() {
 		set := rds.NewSet()
-		if err := pager.Scan(context.Background(), set); err != nil {
+		if err := pager.Scan(ctx, set); err != nil {
 			panic(err)
 		}
 		for i := range set.Items {
 			fmt.Println(set.Items[i])
 		}
 	}
-}
-
-func TestDescribeRds(t *testing.T) {
-	req := provider.NewDescribeRequest("mssql-9ljodgmg")
-	ins, err := operator.DescribeRds(ctx, req)
-	if err != nil {
-		t.Fatal(err)
-	}
-	t.Log(ins)
 }
 
 func init() {
@@ -49,5 +40,5 @@ func init() {
 	}
 
 	client := connectivity.C()
-	operator = op.NewCDBOperator(client.CDBClient())
+	operator = op.NewSQLServerOperator(client.SQLServerClient())
 }

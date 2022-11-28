@@ -1,0 +1,62 @@
+{
+    "Response": {
+        "DBInstances": [
+            {
+                "BackupCycle": [
+                    1
+                ],
+                "BackupCycleType": "daily",
+                "BackupModel": "master_pkg",
+                "BackupSaveDays": 7,
+                "BackupTime": "00:39:15",
+                "Collation": "Chinese_PRC_CI_AS",
+                "Cpu": 3,
+                "CreateTime": "2016-07-29 17:38:47",
+                "CrossBackupEnabled": "disable",
+                "CrossBackupSaveDays": 0,
+                "CrossRegions": [],
+                "DnsPodDomain": "",
+                "EndTime": "2022-12-28 17:38:50",
+                "HAFlag": "MIRROR",
+                "InstanceId": "mssql-xxxxxx",
+                "InstanceNote": "",
+                "InstanceType": "HA",
+                "IsolateOperator": "",
+                "IsolateTime": "0000-00-00 00:00:00",
+                "Memory": 6,
+                "Model": 1,
+                "Name": "xxxxxx",
+                "PayMode": 1,
+                "Pid": 10908,
+                "ProjectId": 0,
+                "ROFlag": "",
+                "Region": "ap-beijing",
+                "RegionId": 8,
+                "RenewFlag": 1,
+                "ResourceTags": null,
+                "StartTime": "2000-00-00 00:00:50",
+                "Status": 2,
+                "Storage": 500,
+                "SubFlag": "",
+                "SubnetId": 0,
+                "TgwWanVPort": 0,
+                "TimeZone": "China Standard Time",
+                "Type": "Z3",
+                "Uid": "gamedb.xxx.xxx.xx",
+                "UniqSubnetId": "subnet-xxxx",
+                "UniqVpcId": "vpc-xxxx",
+                "UpdateTime": "2022-02-06 01:13:19",
+                "UsedStorage": 0,
+                "Version": "2008R2",
+                "VersionName": "SQL Server 2008 R2 Enterprise",
+                "Vip": "172.0.0.0",
+                "VpcId": 0,
+                "Vport": 1433,
+                "Zone": "ap-beijing-1",
+                "ZoneId": 800001
+            }
+        ],
+        "RequestId": "a456exxxx",
+        "TotalCount": 1
+    }
+}
