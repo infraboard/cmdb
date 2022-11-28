@@ -69,7 +69,7 @@ func TestPageQueryEip(t *testing.T) {
 	pager := operator.PageQueryEip(req)
 	for pager.Next() {
 		set := eip.NewEIPSet()
-		if err := pager.Scan(context.Background(), set); err != nil {
+		if err := pager.Scan(ctx, set); err != nil {
 			panic(err)
 		}
 
