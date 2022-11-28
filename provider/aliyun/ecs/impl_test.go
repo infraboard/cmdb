@@ -24,7 +24,7 @@ func TestPageQueryHost(t *testing.T) {
 	pager := operator.PageQueryHost(req)
 	for pager.Next() {
 		set := host.NewHostSet()
-		if err := pager.Scan(context.Background(), set); err != nil {
+		if err := pager.Scan(ctx, set); err != nil {
 			panic(err)
 		}
 		for i := range set.Items {
@@ -35,7 +35,7 @@ func TestPageQueryHost(t *testing.T) {
 
 func TestDescribeEcs(t *testing.T) {
 	req := &provider.DescribeRequest{Id: "i-xxx"}
-	ins, err := operator.DescribeHost(context.Background(), req)
+	ins, err := operator.DescribeHost(ctx, req)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -47,7 +47,7 @@ func TestPageQueryDisk(t *testing.T) {
 	pager := operator.PageQueryDisk(req)
 	for pager.Next() {
 		set := disk.NewDiskSet()
-		if err := pager.Scan(context.Background(), set); err != nil {
+		if err := pager.Scan(ctx, set); err != nil {
 			panic(err)
 		}
 

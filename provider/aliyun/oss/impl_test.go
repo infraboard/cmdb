@@ -14,15 +14,16 @@ import (
 
 var (
 	operator provider.OssOperator
+	ctx      = context.Background()
 )
 
 func TestQuery(t *testing.T) {
 	req := provider.NewQueryRequestWithRate(5)
-	pager := operator.QueryBucket(context.Background(), req)
+	pager := operator.QueryBucket(ctx, req)
 
 	set := oss.NewBucketSet()
 	for pager.Next() {
-		if err := pager.Scan(context.Background(), set); err != nil {
+		if err := pager.Scan(ctx, set); err != nil {
 			panic(err)
 		}
 		fmt.Println(set)

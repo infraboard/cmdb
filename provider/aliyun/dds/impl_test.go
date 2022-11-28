@@ -13,6 +13,7 @@ import (
 
 var (
 	operator provider.MongoOperator
+	ctx      = context.Background()
 )
 
 func TestQuery(t *testing.T) {
@@ -21,7 +22,7 @@ func TestQuery(t *testing.T) {
 
 	for pager.Next() {
 		set := mongodb.NewMongoDBSet()
-		if err := pager.Scan(context.Background(), set); err != nil {
+		if err := pager.Scan(ctx, set); err != nil {
 			panic(err)
 		}
 		for i := range set.Items {

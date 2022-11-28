@@ -17,6 +17,7 @@ import (
 
 var (
 	operator provider.BillOperator
+	ctx      = context.Background()
 )
 
 func TestQueryBill(t *testing.T) {
@@ -26,7 +27,7 @@ func TestQueryBill(t *testing.T) {
 	pager := operator.PageQueryBill(req)
 	for pager.Next() {
 		set := bill.NewBillSet()
-		if err := pager.Scan(context.Background(), set); err != nil {
+		if err := pager.Scan(ctx, set); err != nil {
 			panic(err)
 		}
 		for i := range set.Items {
@@ -41,7 +42,7 @@ func TestQueryOrder(t *testing.T) {
 	pager := operator.PageQueryOrder(req)
 	for pager.Next() {
 		set := order.NewOrderSet()
-		if err := pager.Scan(context.Background(), set); err != nil {
+		if err := pager.Scan(ctx, set); err != nil {
 			panic(err)
 		}
 		fmt.Println(set)

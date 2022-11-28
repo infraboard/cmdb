@@ -15,6 +15,7 @@ import (
 
 var (
 	operator provider.DnsOperator
+	ctx      = context.Background()
 )
 
 func TestQueryDomain(t *testing.T) {
@@ -22,7 +23,7 @@ func TestQueryDomain(t *testing.T) {
 	pager := operator.QueryDomain(req)
 	for pager.Next() {
 		set := dns.NewDomainSet()
-		if err := pager.Scan(context.Background(), set); err != nil {
+		if err := pager.Scan(ctx, set); err != nil {
 			panic(err)
 		}
 		fmt.Println(set)
@@ -34,7 +35,7 @@ func TestQueryRecord(t *testing.T) {
 	pager := operator.QueryRecord(req)
 	for pager.Next() {
 		set := dns.NewRecordSet()
-		if err := pager.Scan(context.Background(), set); err != nil {
+		if err := pager.Scan(ctx, set); err != nil {
 			panic(err)
 		}
 		fmt.Println(set)

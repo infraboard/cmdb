@@ -13,6 +13,7 @@ import (
 
 var (
 	operator provider.RdsOperator
+	ctx      = context.Background()
 )
 
 func TestQuery(t *testing.T) {
@@ -21,7 +22,7 @@ func TestQuery(t *testing.T) {
 
 	for pager.Next() {
 		set := rds.NewSet()
-		if err := pager.Scan(context.Background(), set); err != nil {
+		if err := pager.Scan(ctx, set); err != nil {
 			panic(err)
 		}
 		fmt.Println(set)
@@ -30,7 +31,7 @@ func TestQuery(t *testing.T) {
 
 func TestDescribe(t *testing.T) {
 	req := provider.NewDescribeRequest("xxx")
-	ins, err := operator.DescribeRds(context.TODO(), req)
+	ins, err := operator.DescribeRds(ctx, req)
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -12,7 +12,7 @@ import (
 
 var (
 	impl resource.Service
-	ctx  context.Context
+	ctx  = context.Background()
 )
 
 func TestPut(t *testing.T) {

@@ -24,7 +24,7 @@ func TestPageQueryRedis(t *testing.T) {
 
 	set := mongodb.NewMongoDBSet()
 	for pager.Next() {
-		if err := pager.Scan(context.Background(), set); err != nil {
+		if err := pager.Scan(ctx, set); err != nil {
 			panic(err)
 		}
 		for i := range set.Items {

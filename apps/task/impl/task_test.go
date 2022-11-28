@@ -17,6 +17,7 @@ import (
 
 var (
 	svc task.ServiceServer
+	ctx = context.Background()
 )
 
 func TestSyncHost(t *testing.T) {
@@ -28,7 +29,7 @@ func TestSyncHost(t *testing.T) {
 	req.CredentialId = "c5pcffua0bro7e7a05j0"
 	req.Region = "ap-shanghai"
 
-	ins, err := svc.CreatTask(context.Background(), req)
+	ins, err := svc.CreatTask(ctx, req)
 	if should.NoError(err) {
 		t.Log(ins.Status)
 		time.Sleep(10 * time.Second)
@@ -43,7 +44,7 @@ func TestSyncBill(t *testing.T) {
 	req.ResourceType = resource.TYPE_BILL
 	req.CredentialId = "c5pcffua0bro7e7a05j0"
 	req.Params["month"] = "2022-04"
-	ins, err := svc.CreatTask(context.Background(), req)
+	ins, err := svc.CreatTask(ctx, req)
 	if should.NoError(err) {
 		t.Log(ins.Status)
 		time.Sleep(10 * time.Second)
@@ -59,7 +60,7 @@ func TestSyncRds(t *testing.T) {
 	req.CredentialId = "c9rse891eqlk2nabpb10"
 	req.Region = "ap-shanghai"
 
-	ins, err := svc.CreatTask(context.Background(), req)
+	ins, err := svc.CreatTask(ctx, req)
 	if should.NoError(err) {
 		t.Log(ins.Status)
 		time.Sleep(10 * time.Second)
