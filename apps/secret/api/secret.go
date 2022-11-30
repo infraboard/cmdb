@@ -4,7 +4,7 @@ import (
 	"github.com/emicklei/go-restful/v3"
 	"github.com/infraboard/mcenter/apps/token"
 	"github.com/infraboard/mcube/http/request"
-	"github.com/infraboard/mcube/http/response"
+	"github.com/infraboard/mcube/http/restful/response"
 
 	"github.com/infraboard/cmdb/apps/secret"
 )

@@ -10,6 +10,7 @@ require (
 	github.com/alibabacloud-go/bssopenapi-20171214/v2 v2.0.6
 	github.com/alibabacloud-go/cms-20190101/v7 v7.0.45
 	github.com/alibabacloud-go/darabonba-openapi v0.1.18
+	github.com/alibabacloud-go/darabonba-openapi/v2 v2.0.2
 	github.com/alibabacloud-go/dds-20151201/v3 v3.6.8
 	github.com/alibabacloud-go/domain-20180129/v3 v3.14.8
 	github.com/alibabacloud-go/dysmsapi-20170525/v2 v2.0.16
@@ -33,7 +34,7 @@ require (
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.0.87
 	github.com/infraboard/mcenter v0.0.7-0.20221116050416-5c127dd8cd23
-	github.com/infraboard/mcube v1.9.1-0.20221116042658-6666a9ee4f42
+	github.com/infraboard/mcube v1.9.3-0.20221130091016-310fcb7bb618
 	github.com/rs/xid v1.4.0
 	github.com/spf13/cobra v1.4.0
 	github.com/stretchr/testify v1.8.0
@@ -60,7 +61,6 @@ require (
 
 require (
 	github.com/alibabacloud-go/alibabacloud-gateway-spi v0.0.4 // indirect
-	github.com/alibabacloud-go/darabonba-openapi/v2 v2.0.2 // indirect
 	github.com/alibabacloud-go/debug v0.0.0-20190504072949-9472017b5c68 // indirect
 	github.com/alibabacloud-go/endpoint-util v1.1.0 // indirect
 	github.com/alibabacloud-go/openapi-util v0.1.0 // indirect
@@ -125,4 +125,5 @@ require (
 	gopkg.in/ini.v1 v1.66.2 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
+	sigs.k8s.io/yaml v1.3.0 // indirect
 )

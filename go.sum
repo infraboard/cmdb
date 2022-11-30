@@ -219,8 +219,8 @@ github.com/inconshreveable/mousetrap v1.0.0 h1:Z8tu5sraLXCXIcARxBp/8cbvlwVa7Z1NH
 github.com/inconshreveable/mousetrap v1.0.0/go.mod h1:PxqpIevigyE2G7u3NXJIT2ANytuPF1OarO4DADm73n8=
 github.com/infraboard/mcenter v0.0.7-0.20221116050416-5c127dd8cd23 h1:2F/gR2uQQsM+eWt5f2Y+nAHp7M+cvLlxFt8EnYTTBpc=
 github.com/infraboard/mcenter v0.0.7-0.20221116050416-5c127dd8cd23/go.mod h1:BBVhZR6buhKK+/TfceNghJL04pLJj0MoFnwqcxMcwZ4=
-github.com/infraboard/mcube v1.9.1-0.20221116042658-6666a9ee4f42 h1:NjziM8vW0LMBmfAyaQ7891JNPu5glxuRuYprsHEKF5g=
-github.com/infraboard/mcube v1.9.1-0.20221116042658-6666a9ee4f42/go.mod h1:aoGx5T/MK0Pm96MhTJRbhlmoU9bFbVRgR++kA241V24=
+github.com/infraboard/mcube v1.9.3-0.20221130091016-310fcb7bb618 h1:y04dO2A2NTZ6lplUn/80qvXG80F3cyd24d0rJeb7wj8=
+github.com/infraboard/mcube v1.9.3-0.20221130091016-310fcb7bb618/go.mod h1:PHcYixPXYExwY8A70FcSsPPYDFbtmE0cd3EVGjnUl6g=
 github.com/jinzhu/inflection v1.0.0 h1:K317FqzuhWc8YvSVlFMCCUb36O/S9MCKRDI7QkRKD/E=
 github.com/jinzhu/inflection v1.0.0/go.mod h1:h+uFLlag+Qp1Va5pdKtLDYj+kHp5pxUVkryuEj+Srlc=
 github.com/jinzhu/now v1.1.4/go.mod h1:d3SSVoowX0Lcu0IBviAWJpolVfI5UJVZZ7cO71lE/z8=
@@ -513,3 +513,5 @@ gorm.io/gorm v1.23.10 h1:4Ne9ZbzID9GUxRkllxN4WjJKpsHx8YbKvekVdgyWh24=
 gorm.io/gorm v1.23.10/go.mod h1:DVrVomtaYTbqs7gB/x2uVvqnXzv0nqjB396B8cG4dBA=
 honnef.co/go/tools v0.0.0-20190102054323-c2f93a96b099/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=
 honnef.co/go/tools v0.0.0-20190523083050-ea95bdfd59fc/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=
+sigs.k8s.io/yaml v1.3.0 h1:a2VclLzOGrwOHDiV8EfBGhvjHvP46CtW5j6POvhYGGo=
+sigs.k8s.io/yaml v1.3.0/go.mod h1:GeOyir5tyXNByN85N/dRIT9es5UQNerPYEKK56eTBm8=

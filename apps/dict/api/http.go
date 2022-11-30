@@ -5,7 +5,6 @@ import (
 	"github.com/emicklei/go-restful/v3"
 	"github.com/infraboard/cmdb/apps/dict"
 	"github.com/infraboard/mcube/http/label"
-	"github.com/infraboard/mcube/http/response"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 
@@ -41,14 +40,15 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.Resource, "crendential_types").
 		Metadata(label.Action, label.List.Value()).
-		Writes(response.NewData(dict.CrendentialTypes)).
+		Writes(dict.CrendentialTypes).
 		Returns(200, "OK", dict.CrendentialTypes))
+
 	ws.Route(ws.GET("/vendors").To(h.Vendor).
 		Doc("get all vendors").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.Resource, "vendord").
 		Metadata(label.Action, label.List.Value()).
-		Writes(response.NewData(dict.Vendors)).
+		Writes(dict.Vendors).
 		Returns(200, "OK", dict.Vendors))
 
 	ws.Route(ws.GET("/regions").To(h.VendorRegion).
@@ -56,7 +56,7 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.Resource, "regions").
 		Metadata(label.Action, label.List.Value()).
-		Writes(response.NewData(dict.Regions)).
+		Writes(dict.Regions).
 		Returns(200, "OK", dict.Regions))
 
 	ws.Route(ws.GET("/resource_types").To(h.ResourceType).
@@ -64,7 +64,7 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.Resource, "types").
 		Metadata(label.Action, label.List.Value()).
-		Writes(response.NewData(dict.ResourceTypes)).
+		Writes(dict.ResourceTypes).
 		Returns(200, "OK", dict.ResourceTypes))
 }
 

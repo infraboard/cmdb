@@ -4,7 +4,6 @@ import (
 	restfulspec "github.com/emicklei/go-restful-openapi"
 	"github.com/emicklei/go-restful/v3"
 	"github.com/infraboard/mcube/http/label"
-	"github.com/infraboard/mcube/http/response"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 
@@ -45,7 +44,7 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Metadata(label.Action, label.List.Value()).
 		Metadata(label.Auth, label.Enable).
 		Reads(resource.SearchRequest{}).
-		Writes(response.NewData(resource.ResourceSet{})).
+		Writes(resource.ResourceSet{}).
 		Returns(200, "OK", resource.ResourceSet{}))
 
 	// 资源发现
@@ -55,7 +54,7 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Metadata(label.Resource, "prometheus_resource").
 		Metadata(label.Action, label.List.Value()).
 		Reads(resource.SearchRequest{}).
-		Writes(response.NewData(resource.ResourceSet{})).
+		Writes(resource.ResourceSet{}).
 		Returns(200, "OK", resource.ResourceSet{}))
 }
 

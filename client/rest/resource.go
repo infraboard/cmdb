@@ -5,7 +5,6 @@ import (
 
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/mcube/client/rest"
-	"github.com/infraboard/mcube/http/response"
 )
 
 type ResourceService interface {
@@ -19,17 +18,12 @@ type resourceImpl struct {
 func (i *resourceImpl) Search(ctx context.Context, req *resource.SearchRequest) (
 	*resource.ResourceSet, error) {
 	set := resource.NewResourceSet()
-	resp := response.NewData(set)
 
 	err := i.client.
 		Get("resource/search").
 		Do(ctx).
-		Into(resp)
+		Into(set)
 	if err != nil {
-		return nil, err
-	}
-
-	if resp.Error() != nil {
 		return nil, err
 	}
 

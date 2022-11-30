@@ -3,7 +3,7 @@ package api
 import (
 	"github.com/emicklei/go-restful/v3"
 	"github.com/infraboard/mcube/http/request"
-	"github.com/infraboard/mcube/http/response"
+	"github.com/infraboard/mcube/http/restful/response"
 	pb_request "github.com/infraboard/mcube/pb/request"
 
 	"github.com/infraboard/cmdb/apps/host"

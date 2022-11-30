@@ -4,7 +4,6 @@ import (
 	restfulspec "github.com/emicklei/go-restful-openapi"
 	"github.com/emicklei/go-restful/v3"
 	"github.com/infraboard/mcube/http/label"
-	"github.com/infraboard/mcube/http/response"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 
@@ -44,7 +43,7 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Metadata(label.Resource, h.Name()).
 		Metadata(label.Action, label.Create.Value()).
 		Reads(host.Host{}).
-		Writes(response.NewData(host.Host{})))
+		Writes(host.Host{}))
 
 	ws.Route(ws.GET("/").To(h.QueryHost).
 		Doc("get all hosts").
@@ -52,7 +51,7 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Metadata(label.Resource, h.Name()).
 		Metadata(label.Action, label.List.Value()).
 		Reads(host.QueryHostRequest{}).
-		Writes(response.NewData(host.HostSet{})).
+		Writes(host.HostSet{}).
 		Returns(200, "OK", host.HostSet{}))
 
 	ws.Route(ws.GET("/{id}").To(h.DescribeHost).
@@ -61,8 +60,8 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.Resource, h.Name()).
 		Metadata(label.Action, label.Get.Value()).
-		Writes(response.NewData(host.Host{})).
-		Returns(200, "OK", response.NewData(host.Host{})).
+		Writes(host.Host{}).
+		Returns(200, "OK", host.Host{}).
 		Returns(404, "Not Found", nil))
 
 	ws.Route(ws.PUT("/{id}").To(h.UpdateHost).

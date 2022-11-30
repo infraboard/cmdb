@@ -4,7 +4,6 @@ import (
 	restfulspec "github.com/emicklei/go-restful-openapi"
 	"github.com/emicklei/go-restful/v3"
 	"github.com/infraboard/mcube/http/label"
-	"github.com/infraboard/mcube/http/response"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 
@@ -46,7 +45,7 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Metadata(label.Auth, label.Enable).
 		Metadata(label.Permission, label.Enable).
 		Reads(secret.CreateSecretRequest{}).
-		Writes(response.NewData(secret.Secret{})))
+		Writes(secret.Secret{}))
 
 	ws.Route(ws.GET("/").To(h.QuerySecret).
 		Doc("get all secret").
@@ -56,7 +55,7 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Metadata(label.Auth, label.Enable).
 		Metadata(label.Permission, label.Enable).
 		Reads(secret.QuerySecretRequest{}).
-		Writes(response.NewData(secret.SecretSet{})).
+		Writes(secret.SecretSet{}).
 		Returns(200, "OK", secret.SecretSet{}))
 
 	ws.Route(ws.GET("/{id}").To(h.DescribeSecret).
@@ -67,8 +66,8 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Metadata(label.Action, label.Get.Value()).
 		Metadata(label.Auth, label.Enable).
 		Metadata(label.Permission, label.Enable).
-		Writes(response.NewData(secret.Secret{})).
-		Returns(200, "OK", response.NewData(secret.Secret{})).
+		Writes(secret.Secret{}).
+		Returns(200, "OK", secret.Secret{}).
 		Returns(404, "Not Found", nil))
 
 	ws.Route(ws.DELETE("/{id}").To(h.DeleteSecret).

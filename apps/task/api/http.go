@@ -4,7 +4,6 @@ import (
 	restfulspec "github.com/emicklei/go-restful-openapi"
 	"github.com/emicklei/go-restful/v3"
 	"github.com/infraboard/mcube/http/label"
-	"github.com/infraboard/mcube/http/response"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 
@@ -46,7 +45,7 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Metadata(label.Auth, label.Enable).
 		Metadata(label.Permission, label.Enable).
 		Reads(task.CreateTaskRequst{}).
-		Writes(response.NewData(task.Task{})))
+		Writes(task.Task{}))
 
 	ws.Route(ws.GET("/").To(h.QueryTask).
 		Doc("get all task").
@@ -56,7 +55,7 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Metadata(label.Auth, label.Enable).
 		Metadata(label.Permission, label.Enable).
 		Reads(task.QueryTaskRecordRequest{}).
-		Writes(response.NewData(task.TaskSet{})).
+		Writes(task.TaskSet{}).
 		Returns(200, "OK", task.TaskSet{}))
 
 	ws.Route(ws.GET("/{id}").To(h.DescribeTask).
@@ -67,8 +66,8 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Metadata(label.Action, label.Get.Value()).
 		Metadata(label.Auth, label.Enable).
 		Metadata(label.Permission, label.Enable).
-		Writes(response.NewData(task.Task{})).
-		Returns(200, "OK", response.NewData(task.Task{})).
+		Writes(task.Task{}).
+		Returns(200, "OK", task.Task{}).
 		Returns(404, "Not Found", nil))
 
 	ws.Route(ws.GET("/{id}/records").To(h.DescribeTaskRecord).
@@ -79,7 +78,7 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Metadata(label.Auth, label.Enable).
 		Metadata(label.Permission, label.Enable).
 		Reads(task.QueryTaskRecordRequest{}).
-		Writes(response.NewData(task.RecordSet{})).
+		Writes(task.RecordSet{}).
 		Returns(200, "OK", task.RecordSet{}))
 }
 
