@@ -3,7 +3,6 @@ package billing
 import (
 	"context"
 	"fmt"
-	"strconv"
 
 	"github.com/alibabacloud-go/tea/tea"
 	billing "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/billing/v20180709"
@@ -64,10 +63,10 @@ func (o *BillOperator) transferOne(ins *billing.BillResourceSummary) *bill.Bill 
 	b.ResourceType = praseResourceType(ins.BusinessCode)
 
 	cost := b.Cost
-	cost.SalePrice, _ = strconv.ParseFloat(utils.PtrStrV(ins.TotalCost), 64)
-	cost.RealCost, _ = strconv.ParseFloat(utils.PtrStrV(ins.RealTotalCost), 64)
-	cost.VoucherPay, _ = strconv.ParseFloat(utils.PtrStrV(ins.VoucherPayAmount), 64)
-	cost.CashPay, _ = strconv.ParseFloat(utils.PtrStrV(ins.CashPayAmount), 64)
+	cost.SalePrice = utils.StringToFloat64(ins.TotalCost)
+	cost.RealCost = utils.StringToFloat64(ins.RealTotalCost)
+	cost.VoucherPay = utils.StringToFloat64(ins.VoucherPayAmount)
+	cost.CashPay = utils.StringToFloat64(ins.CashPayAmount)
 	return b
 }
 

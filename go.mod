@@ -36,6 +36,7 @@ require (
 	github.com/infraboard/mcenter v0.0.7-0.20221116050416-5c127dd8cd23
 	github.com/infraboard/mcube v1.9.3-0.20221130091016-310fcb7bb618
 	github.com/rs/xid v1.4.0
+	github.com/shopspring/decimal v1.2.0
 	github.com/spf13/cobra v1.4.0
 	github.com/stretchr/testify v1.8.0
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/billing v1.0.492

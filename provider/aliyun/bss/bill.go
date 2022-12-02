@@ -9,6 +9,7 @@ import (
 	bssopenapi "github.com/alibabacloud-go/bssopenapi-20171214/v2/client"
 	"github.com/alibabacloud-go/tea/tea"
 	"github.com/infraboard/mcube/pager"
+	"github.com/shopspring/decimal"
 
 	"github.com/infraboard/cmdb/apps/bill"
 	"github.com/infraboard/cmdb/apps/resource"
@@ -86,14 +87,20 @@ func (o *BssOperator) transferBill(ins *bssopenapi.DescribeInstanceBillResponseB
 	}
 
 	cost := b.Cost
-	cost.SalePrice = float64(tea.Float32Value(ins.PretaxGrossAmount))
-	cost.SaveCost = float64(tea.Float32Value(ins.InvoiceDiscount))
-	cost.RealCost = float64(tea.Float32Value(ins.PretaxAmount))
-	cost.StoredcardPay = float64(tea.Float32Value(ins.DeductedByPrepaidCard))
-	cost.VoucherPay = float64(tea.Float32Value(ins.DeductedByCashCoupons))
-	cost.CashPay = float64(tea.Float32Value(ins.PaymentAmount))
-	cost.OutstandingAmount = float64(tea.Float32Value(ins.OutstandingAmount))
+	cost.SalePrice = utils.Float32ToFloat64(ins.PretaxGrossAmount)
+	cost.SaveCost = utils.Float32ToFloat64(ins.InvoiceDiscount)
+	cost.RealCost = utils.Float32ToFloat64(ins.PretaxAmount)
+	cost.StoredcardPay = utils.Float32ToFloat64(ins.DeductedByPrepaidCard)
+	cost.VoucherPay = utils.Float32ToFloat64(ins.DeductedByCashCoupons)
+	cost.CashPay = utils.Float32ToFloat64(ins.PaymentAmount)
+	cost.OutstandingAmount = utils.Float32ToFloat64(ins.OutstandingAmount)
 	return b
+}
+
+func ToFloat64(v float32) float64 {
+	dv := decimal.NewFromFloat32(v)
+	t, _ := dv.Float64()
+	return t
 }
 
 // 查询用户某个账期内账单总览信息

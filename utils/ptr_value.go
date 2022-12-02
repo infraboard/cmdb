@@ -1,5 +1,29 @@
 package utils
 
+import "github.com/shopspring/decimal"
+
+func Float32ToFloat64(v *float32) float64 {
+	if v == nil {
+		return 0
+	}
+	dv := decimal.NewFromFloat32(*v)
+	t, _ := dv.Float64()
+	return t
+}
+
+func StringToFloat64(v *string) float64 {
+	if v == nil {
+		return 0
+	}
+
+	dv, err := decimal.NewFromString(*v)
+	if err != nil {
+		return 0
+	}
+	t, _ := dv.Float64()
+	return t
+}
+
 func PtrStrV(v *string) string {
 	if v == nil {
 		return ""
