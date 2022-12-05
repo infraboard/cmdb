@@ -1,7 +1,10 @@
 package connectivity
 
 import (
+	"fmt"
+
 	"github.com/caarlos0/env/v6"
+	"github.com/huaweicloud/huaweicloud-sdk-go-obs/obs"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/auth/basic"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/auth/global"
 	bss "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/bss/v2"
@@ -74,6 +77,7 @@ type HuaweiCloudClient struct {
 	dnsConn *dns.DnsClient
 	iamConn *iam.IamClient
 	ctsConn *cts.CtsClient
+	obsConn *obs.ObsClient
 }
 
 func (c *HuaweiCloudClient) Credentials() basic.Credentials {
@@ -170,6 +174,22 @@ func (c *HuaweiCloudClient) RdsClient() (*rds.RdsClient, error) {
 	c.rdsConn = rds.NewRdsClient(client)
 
 	return c.rdsConn, nil
+}
+
+// RdsClient 客户端
+func (c *HuaweiCloudClient) ObsClient() (*obs.ObsClient, error) {
+	if c.obsConn != nil {
+		return c.obsConn, nil
+	}
+
+	client, err := obs.New(c.AccessKey, c.AccessSecret, fmt.Sprintf("https://obs.%s.myhuaweicloud.com/", c.Region))
+	if err != nil {
+		return nil, err
+	}
+
+	c.obsConn = client
+
+	return c.obsConn, nil
 }
 
 // DcsClient 客户端

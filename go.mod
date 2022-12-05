@@ -32,6 +32,7 @@ require (
 	github.com/go-openapi/spec v0.20.6
 	github.com/go-playground/validator/v10 v10.11.0
 	github.com/go-sql-driver/mysql v1.6.0
+	github.com/huaweicloud/huaweicloud-sdk-go-obs v3.22.11+incompatible
 	github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.0.87
 	github.com/infraboard/mcenter v0.0.7-0.20221116050416-5c127dd8cd23
 	github.com/infraboard/mcube v1.9.3-0.20221130091016-310fcb7bb618

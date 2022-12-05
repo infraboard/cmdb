@@ -9,7 +9,7 @@ import (
 func NewOssOperator(client *oss.Client) *OssOperator {
 	return &OssOperator{
 		client: client,
-		log:    zap.L().Named("ALI Oss"),
+		log:    zap.L().Named("ali.oss"),
 	}
 }
 

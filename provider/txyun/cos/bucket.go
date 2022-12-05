@@ -2,10 +2,13 @@ package cos
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/infraboard/cmdb/apps/oss"
+	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/mcube/pager"
+	"github.com/tencentyun/cos-go-sdk-v5"
 )
 
 func (o *CosOperator) QueryBucket(ctx context.Context, req *provider.QueryRequest) pager.Pager {
@@ -24,4 +27,25 @@ func (o *CosOperator) queryBucket(ctx context.Context) (*oss.BucketSet, error) {
 
 	set := o.transferSet(resp.Buckets)
 	return set, nil
+}
+
+func (o *CosOperator) transferSet(items []cos.Bucket) *oss.BucketSet {
+	set := oss.NewBucketSet()
+	for _, b := range items {
+		set.Add(o.transferOne(b))
+	}
+	return set
+}
+
+func (o *CosOperator) transferOne(ins cos.Bucket) *oss.Bucket {
+	r := oss.NewDefaultBucket()
+	b := r.Resource.Meta
+	b.Id = fmt.Sprintf("%s.%s", ins.Region, ins.Name)
+
+	info := r.Resource.Spec
+	info.Name = ins.Name
+	info.ResourceType = resource.TYPE_BUCKET
+	info.Vendor = resource.VENDOR_TENCENT
+	info.Region = ins.Region
+	return r
 }

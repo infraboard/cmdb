@@ -13,7 +13,7 @@ func newBucketPager(operator *OssOperator) pager.Pager {
 		BasePager: pager.NewBasePager(),
 		operator:  operator,
 		req:       &listBucketRequest{},
-		log:       zap.L().Named("ali.redis"),
+		log:       zap.L().Named("ali.oss"),
 	}
 }
 
