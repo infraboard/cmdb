@@ -14,12 +14,11 @@ password = "123456"
 database = "cmdb"
 
 [mcenter]
-adress="127.0.0.1:18010"
-client_id="EePde6X49zWv57CGV7waI0x6"
-client_secret="PkFl6mutz53zHTzgtYh06exiHuqMxiBG"
+address = "127.0.0.1:18010"
+client_id = "xxx"
+client_credential = "xxx"
 
 [log]
 level = "debug"
-path = "logs"
 format = "text"
 to = "stdout"
