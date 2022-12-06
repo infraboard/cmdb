@@ -3,7 +3,7 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
+	"os"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -47,7 +47,7 @@ func createTables() error {
 	defer cancelfunc()
 
 	// 读取SQL文件
-	sqlFile, err := ioutil.ReadFile(createTableFilePath)
+	sqlFile, err := os.ReadFile(createTableFilePath)
 	if err != nil {
 		return err
 	}
