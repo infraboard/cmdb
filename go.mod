@@ -34,7 +34,7 @@ require (
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/huaweicloud/huaweicloud-sdk-go-obs v3.22.11+incompatible
 	github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.0.87
-	github.com/infraboard/mcenter v0.0.7-0.20221116050416-5c127dd8cd23
+	github.com/infraboard/mcenter v0.0.8-0.20221206000206-0f429ea457d3
 	github.com/infraboard/mcube v1.9.3-0.20221130091016-310fcb7bb618
 	github.com/rs/xid v1.4.0
 	github.com/shopspring/decimal v1.2.0
@@ -108,6 +108,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/mozillazg/go-httpheader v0.2.1 // indirect
+	github.com/mssola/user_agent v0.5.3 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/satori/go.uuid v1.2.0 // indirect
@@ -118,7 +119,7 @@ require (
 	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.20.0 // indirect
-	golang.org/x/crypto v0.0.0-20220331220935-ae2d96664a29 // indirect
+	golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d // indirect
 	golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd // indirect
 	golang.org/x/sys v0.0.0-20220204135822-1c1b9b1eba6a // indirect
 	golang.org/x/text v0.3.7 // indirect

@@ -37,9 +37,11 @@ func NewHTTPService() *HTTPService {
 	// Optionally, you may need to enable CORS for the UI to work.
 	cors := restful.CrossOriginResourceSharing{
 		AllowedHeaders: []string{"*"},
-		AllowedMethods: []string{"*"},
+		AllowedDomains: []string{"*"},
+		AllowedMethods: []string{"HEAD", "OPTIONS", "GET", "POST", "PUT", "PATCH", "DELETE"},
 		CookiesAllowed: false,
-		Container:      r}
+		Container:      r,
+	}
 	r.Filter(cors.Filter)
 	r.Filter(middleware.RestfulServerInterceptor())
 
