@@ -7,7 +7,6 @@
 
 # Test binary, built with `go test -c`
 *.test
-unit_test.env
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
@@ -22,6 +21,8 @@ cmdb-api
 logs/*
 
 # 本地配置文件
-cmdb.toml
-cmdb.env
+config.toml
+config.env
+unit_test.env
+
 

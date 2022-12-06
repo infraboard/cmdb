@@ -43,7 +43,7 @@ linux: dep ## Build the binary file
 	@GOOS=linux GOARCH=amd64 go build -a -o dist/${OUTPUT_NAME} -ldflags "-s -w" -ldflags "-X '${VERSION_PATH}.GIT_BRANCH=${BUILD_BRANCH}' -X '${VERSION_PATH}.GIT_COMMIT=${BUILD_COMMIT}' -X '${VERSION_PATH}.BUILD_TIME=${BUILD_TIME}' -X '${VERSION_PATH}.GO_VERSION=${BUILD_GO_VERSION}'" ${MAIN_FILE}
 
 run: # Run Develop server
-	@go run $(MAIN_FILE) start -f etc/cmdb.toml
+	@go run $(MAIN_FILE) start -f etc/config.toml
 
 clean: ## Remove previous build
 	@rm -f dist/*
