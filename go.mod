@@ -34,8 +34,8 @@ require (
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/huaweicloud/huaweicloud-sdk-go-obs v3.22.11+incompatible
 	github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.0.87
-	github.com/infraboard/mcenter v0.0.8-0.20221206000930-7f443d79e7eb
-	github.com/infraboard/mcube v1.9.3-0.20221130091016-310fcb7bb618
+	github.com/infraboard/mcenter v0.0.8-0.20221206074633-6d66c0350591
+	github.com/infraboard/mcube v1.9.4-0.20221206054051-d9ca9a414e96
 	github.com/rs/xid v1.4.0
 	github.com/shopspring/decimal v1.2.0
 	github.com/spf13/cobra v1.4.0
