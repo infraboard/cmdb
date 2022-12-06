@@ -6,7 +6,6 @@ import (
 	"github.com/huaweicloud/huaweicloud-sdk-go-obs/obs"
 
 	"github.com/infraboard/mcube/logger"
-	"github.com/infraboard/mcube/logger/zap"
 	"github.com/infraboard/mcube/pager"
 )
 
@@ -15,7 +14,7 @@ func newPager(operator *ObsOperator) pager.Pager {
 		BasePager: pager.NewBasePager(),
 		operator:  operator,
 		req:       &obs.ListBucketsInput{},
-		log:       zap.L().Named("huawei.obs"),
+		log:       operator.log,
 	}
 }
 

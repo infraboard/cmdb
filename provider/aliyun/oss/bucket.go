@@ -24,7 +24,7 @@ func (o *OssOperator) query(req *listBucketRequest) (*cmdbOss.BucketSet, error) 
 	if err != nil {
 		return nil, err
 	}
-	req.marker = resp.Marker
+	req.marker = resp.NextMarker
 
 	set := cmdbOss.NewBucketSet()
 	set.Items = o.transferSet(resp).Items

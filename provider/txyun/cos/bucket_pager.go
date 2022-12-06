@@ -7,7 +7,6 @@ import (
 
 	"github.com/infraboard/cmdb/apps/oss"
 	"github.com/infraboard/mcube/logger"
-	"github.com/infraboard/mcube/logger/zap"
 	"github.com/infraboard/mcube/pager"
 )
 
@@ -18,7 +17,7 @@ func newPager(operator *CosOperator) pager.Pager {
 		BasePager: pager.NewBasePager(),
 		operator:  operator,
 		req:       req,
-		log:       zap.L().Named("tx.cos"),
+		log:       operator.log,
 	}
 }
 
