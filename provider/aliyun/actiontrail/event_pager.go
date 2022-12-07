@@ -46,10 +46,10 @@ func (p *eventPager) Scan(ctx context.Context, set pager.Set) error {
 	if err != nil {
 		return err
 	}
-	set.Add(resp.ToAny()...)
+	p.CheckHasNext(resp)
 	p.log.Debugf("get %d event", len(resp.Items))
 
-	p.CheckHasNext(resp)
+	set.Add(resp.ToAny()...)
 	return nil
 }
 

@@ -34,10 +34,10 @@ func (p *cvmPager) Scan(ctx context.Context, set pager.Set) error {
 	if err != nil {
 		return err
 	}
-	set.Add(resp.ToAny()...)
+	p.CheckHasNext(resp)
 	p.log.Debugf("get %d hosts", len(resp.Items))
 
-	p.CheckHasNext(resp)
+	set.Add(resp.ToAny()...)
 	return nil
 }
 

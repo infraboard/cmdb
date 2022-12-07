@@ -32,10 +32,10 @@ func (p *recordPager) Scan(ctx context.Context, set pager.Set) error {
 	if err != nil {
 		return err
 	}
-	set.Add(resp.ToAny()...)
+	p.CheckHasNext(resp)
 	p.log.Debugf("get domain %s %d dns record", *p.req.Domain, len(resp.Items))
 
-	p.CheckHasNext(resp)
+	set.Add(resp.ToAny()...)
 	return nil
 }
 

@@ -38,9 +38,9 @@ func (p *bssPager) Scan(ctx context.Context, set pager.Set) error {
 	if err != nil {
 		return err
 	}
-	set.Add(resp.ToAny()...)
+	p.CheckHasNext(resp)
 
-	p.CheckHasNext(set)
+	set.Add(resp.ToAny()...)
 	return nil
 }
 

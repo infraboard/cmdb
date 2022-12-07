@@ -27,10 +27,9 @@ func newOrderPager(operator *BssOperator, r *provider.QueryOrderRequest) pager.P
 
 type orderPager struct {
 	*pager.BasePager
-	operator  *BssOperator
-	req       *bssopenapi.QueryOrdersRequest
-	log       logger.Logger
-	nextToken string
+	operator *BssOperator
+	req      *bssopenapi.QueryOrdersRequest
+	log      logger.Logger
 }
 
 func (p *orderPager) Scan(ctx context.Context, set pager.Set) error {
@@ -38,9 +37,9 @@ func (p *orderPager) Scan(ctx context.Context, set pager.Set) error {
 	if err != nil {
 		return err
 	}
-	set.Add(resp.ToAny()...)
+	p.CheckHasNext(resp)
 
-	p.CheckHasNext(set)
+	set.Add(resp.ToAny()...)
 	return nil
 }
 

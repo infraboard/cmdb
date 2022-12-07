@@ -8,7 +8,6 @@ import (
 
 	"github.com/infraboard/cmdb/provider"
 	"github.com/infraboard/mcube/logger"
-	"github.com/infraboard/mcube/logger/zap"
 	"github.com/infraboard/mcube/pager"
 )
 
@@ -24,7 +23,7 @@ func newPager(operator *BillOperator, r *provider.QueryBillRequest) pager.Pager 
 		BasePager: pager.NewBasePager(),
 		operator:  operator,
 		req:       req,
-		log:       zap.L().Named("tx.bill"),
+		log:       operator.log,
 	}
 }
 
@@ -40,11 +39,11 @@ func (p *billPager) Scan(ctx context.Context, set pager.Set) error {
 	if err != nil {
 		return err
 	}
-	set.Add(resp.ToAny()...)
+	// 由于账单接口并没有返回Total总数量, 无法通过梳理判断是否数据已经拉起完成, 改而判断是否有数据
+	p.CheckHasNext(resp)
 	p.log.Debugf("get %d hosts", resp.Length())
 
-	// 由于账单接口并没有返回Total总数量, 无法通过梳理判断是否数据已经拉起完成, 改而判断是否有数据
-	p.CheckHasNext(set)
+	set.Add(resp.ToAny()...)
 	return nil
 }
 

@@ -36,6 +36,23 @@ func TestQueryBill(t *testing.T) {
 	}
 }
 
+func TestQuerySpliteBill(t *testing.T) {
+	req := provider.NewQueryBillRequest()
+	req.Month = "2022-05"
+
+	pager := operator.PageQueryBill(req)
+	for pager.Next() {
+		set := bill.NewBillSet()
+		if err := pager.Scan(ctx, set); err != nil {
+			t.Logf(err.Error())
+			return
+		}
+		for i := range set.Items {
+			fmt.Println(set.Items[i].ToJsonString())
+		}
+	}
+}
+
 func TestQuerySummary(t *testing.T) {
 	req := provider.NewQueryBillSummaryRequeset()
 	req.Month = "2022-06"

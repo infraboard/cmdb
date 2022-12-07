@@ -33,11 +33,11 @@ func (p *cosPager) Scan(ctx context.Context, set pager.Set) error {
 	if err != nil {
 		return err
 	}
-	set.Add(resp.ToAny()...)
-	p.log.Debugf("get %d buckets", len(resp.Items))
-
 	// 无分页
 	resp.Items = []*oss.Bucket{}
 	p.CheckHasNext(resp)
+	p.log.Debugf("get %d buckets", len(resp.Items))
+
+	set.Add(resp.ToAny()...)
 	return nil
 }

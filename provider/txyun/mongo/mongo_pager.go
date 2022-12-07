@@ -32,10 +32,10 @@ func (p *mongoPager) Scan(ctx context.Context, set pager.Set) error {
 	if err != nil {
 		return err
 	}
-	set.Add(resp.ToAny()...)
+	p.CheckHasNext(resp)
 	p.log.Debugf("get %d mongodb instances", len(resp.Items))
 
-	p.CheckHasNext(resp)
+	set.Add(resp.ToAny()...)
 	return nil
 }
 

@@ -35,9 +35,9 @@ func (p *eipPager) Scan(ctx context.Context, set pager.Set) error {
 	if err != nil {
 		return err
 	}
-	set.Add(resp.ToAny()...)
-
 	p.CheckHasNext(resp)
+
+	set.Add(resp.ToAny()...)
 	return nil
 }
 
