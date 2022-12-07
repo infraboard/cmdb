@@ -35,10 +35,10 @@ func (h *handler) Version() string {
 }
 
 func (h *handler) Registry(ws *restful.WebService) {
-	tags := []string{h.Name()}
+	tags := []string{"资源凭证管理"}
 
 	ws.Route(ws.POST("/").To(h.CreateSecret).
-		Doc("create a secret").
+		Doc("录入资源凭证").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.Resource, h.Name()).
 		Metadata(label.Action, label.Create.Value()).
@@ -48,7 +48,7 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Writes(secret.Secret{}))
 
 	ws.Route(ws.GET("/").To(h.QuerySecret).
-		Doc("get all secret").
+		Doc("查询资源凭证列表").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.Resource, h.Name()).
 		Metadata(label.Action, label.List.Value()).
@@ -59,8 +59,8 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Returns(200, "OK", secret.SecretSet{}))
 
 	ws.Route(ws.GET("/{id}").To(h.DescribeSecret).
-		Doc("describe an secret").
-		Param(ws.PathParameter("id", "identifier of the secret").DataType("integer").DefaultValue("1")).
+		Doc("查询资源凭证详情").
+		Param(ws.PathParameter("id", "资源凭证Id").DataType("string")).
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.Resource, h.Name()).
 		Metadata(label.Action, label.Get.Value()).
@@ -71,14 +71,13 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Returns(404, "Not Found", nil))
 
 	ws.Route(ws.DELETE("/{id}").To(h.DeleteSecret).
-		Doc("delete a secret").
-		Metadata(restfulspec.KeyOpenAPITags, tags).
+		Doc("删除资源管理凭证").
+		Param(ws.PathParameter("id", "identifier of the secret").DataType("string")).
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.Resource, h.Name()).
 		Metadata(label.Action, label.Delete.Value()).
 		Metadata(label.Auth, label.Enable).
-		Metadata(label.Permission, label.Enable).
-		Param(ws.PathParameter("id", "identifier of the secret").DataType("string")))
+		Metadata(label.Permission, label.Enable))
 }
 
 func init() {

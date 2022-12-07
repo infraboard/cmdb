@@ -35,10 +35,10 @@ func (h *handler) Version() string {
 }
 
 func (h *handler) Registry(ws *restful.WebService) {
-	tags := []string{h.Name()}
+	tags := []string{"资源检索"}
 
 	ws.Route(ws.GET("/search").To(h.SearchResource).
-		Doc("get all resources").
+		Doc("检索资源").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.Resource, h.Name()).
 		Metadata(label.Action, label.List.Value()).
@@ -49,7 +49,7 @@ func (h *handler) Registry(ws *restful.WebService) {
 
 	// 资源发现
 	ws.Route(ws.GET("/discovery/prometheus").To(h.DiscoveryPrometheus).
-		Doc("discovery resoruce for prometheus").
+		Doc("监控发现(Prometheus)").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.Resource, "prometheus_resource").
 		Metadata(label.Action, label.List.Value()).

@@ -8,8 +8,8 @@ import (
 func Docs(swo *spec.Swagger) {
 	swo.Info = &spec.Info{
 		InfoProps: spec.InfoProps{
-			Title:       "BookService",
-			Description: "Resource for managing Books",
+			Title:       "CMDB",
+			Description: "资源管理中心",
 			Contact: &spec.ContactInfo{
 				ContactInfoProps: spec.ContactInfoProps{
 					Name:  "john",
