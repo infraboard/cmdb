@@ -33,6 +33,8 @@ type QueryBillRequest struct {
 	// 格式为YYYY-MM-DD
 	Month       string
 	ProductCode string
+	// 是否是分账账单
+	IsSplite bool
 }
 
 func NewQueryBillSummaryRequeset() *QueryBillSummaryRequeset {

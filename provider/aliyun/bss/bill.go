@@ -19,7 +19,14 @@ import (
 )
 
 func (o *BssOperator) PageQueryBill(req *provider.QueryBillRequest) pager.Pager {
-	p := newResourceBillPager(o, req)
+	var p pager.Pager
+
+	if req.IsSplite {
+		p = newSpliteBillPager(o, req)
+	} else {
+		p = newResourceBillPager(o, req)
+	}
+
 	p.SetRate(req.Rate)
 	return p
 }
@@ -128,13 +135,6 @@ func (o *BssOperator) QuerySummary(ctx context.Context, req *provider.QueryBillS
 // 参考文档: https://next.api.aliyun.com/api/BssOpenApi/2017-12-14/SubscribeBillToOSS?params={}
 
 // 查询分账账单
-func (o *BssOperator) PageQuerySpliteBill(req *provider.QueryBillRequest) pager.Pager {
-	p := newSpliteBillPager(o, req)
-	p.SetRate(req.Rate)
-	return p
-}
-
-// 查询分账账单
 // 参考文档: https://next.api.aliyun.com/api/BssOpenApi/2017-12-14/DescribeSplitItemBill
 func (o *BssOperator) doDescribeSplitItemBill(req *bssopenapi.DescribeSplitItemBillRequest) (
 	*bill.BillSet, error) {
@@ -157,7 +157,7 @@ func (o *BssOperator) doDescribeSplitItemBill(req *bssopenapi.DescribeSplitItemB
 		set.Items = o.transferSpliteSet(data).Items
 	}
 
-	return nil, nil
+	return set, nil
 }
 
 func (o *BssOperator) transferSpliteSet(list *bssopenapi.DescribeSplitItemBillResponseBodyData) *bill.BillSet {

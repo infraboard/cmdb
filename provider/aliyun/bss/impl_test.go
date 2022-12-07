@@ -37,8 +37,11 @@ func TestQueryBill(t *testing.T) {
 }
 
 func TestQuerySpliteBill(t *testing.T) {
+	// 查看oss分账账单
 	req := provider.NewQueryBillRequest()
-	req.Month = "2022-05"
+	req.Month = "2022-10"
+	req.IsSplite = true
+	req.ProductCode = "oss"
 
 	pager := operator.PageQueryBill(req)
 	for pager.Next() {
