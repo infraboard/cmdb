@@ -35,10 +35,10 @@ func (h *handler) Version() string {
 }
 
 func (h *handler) Registry(ws *restful.WebService) {
-	tags := []string{h.Name()}
+	tags := []string{"任务管理"}
 
 	ws.Route(ws.POST("/").To(h.CreatTask).
-		Doc("create a task").
+		Doc("创建任务").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.Resource, "task").
 		Metadata(label.Action, label.Create.Value()).
@@ -48,7 +48,7 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Writes(task.Task{}))
 
 	ws.Route(ws.GET("/").To(h.QueryTask).
-		Doc("get all task").
+		Doc("查询任务列表").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.Resource, "task").
 		Metadata(label.Action, label.List.Value()).
@@ -59,8 +59,8 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Returns(200, "OK", task.TaskSet{}))
 
 	ws.Route(ws.GET("/{id}").To(h.DescribeTask).
-		Doc("describe an task").
-		Param(ws.PathParameter("id", "identifier of the task").DataType("integer").DefaultValue("1")).
+		Doc("查询任务详情").
+		Param(ws.PathParameter("id", "identifier of the task").DataType("string")).
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.Resource, "task").
 		Metadata(label.Action, label.Get.Value()).
@@ -71,7 +71,7 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Returns(404, "Not Found", nil))
 
 	ws.Route(ws.GET("/{id}/records").To(h.DescribeTaskRecord).
-		Doc("get task records").
+		Doc("查询任务执行日志").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.Resource, "task_records").
 		Metadata(label.Action, label.List.Value()).

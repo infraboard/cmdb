@@ -35,10 +35,10 @@ func (h *handler) Version() string {
 }
 
 func (h *handler) Registry(ws *restful.WebService) {
-	tags := []string{h.Name()}
+	tags := []string{"主机资源"}
 
 	ws.Route(ws.POST("/").To(h.CreateHost).
-		Doc("create a host").
+		Doc("录入一台主机").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.Resource, h.Name()).
 		Metadata(label.Action, label.Create.Value()).
@@ -46,7 +46,7 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Writes(host.Host{}))
 
 	ws.Route(ws.GET("/").To(h.QueryHost).
-		Doc("get all hosts").
+		Doc("查询主机列表").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.Resource, h.Name()).
 		Metadata(label.Action, label.List.Value()).
@@ -55,7 +55,7 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Returns(200, "OK", host.HostSet{}))
 
 	ws.Route(ws.GET("/{id}").To(h.DescribeHost).
-		Doc("describe an host").
+		Doc("查询主机详情").
 		Param(ws.PathParameter("id", "identifier of the host").DataType("integer").DefaultValue("1")).
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.Resource, h.Name()).
@@ -65,7 +65,7 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Returns(404, "Not Found", nil))
 
 	ws.Route(ws.PUT("/{id}").To(h.UpdateHost).
-		Doc("update a host").
+		Doc("更新主机").
 		Param(ws.PathParameter("id", "identifier of the host").DataType("string")).
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.Resource, h.Name()).
@@ -73,7 +73,7 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Reads(host.UpdateHostData{}))
 
 	ws.Route(ws.PATCH("/{id}").To(h.PatchHost).
-		Doc("patch a host").
+		Doc("更新主机").
 		Param(ws.PathParameter("id", "identifier of the host").DataType("string")).
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.Resource, h.Name()).
@@ -81,7 +81,7 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Reads(host.UpdateHostData{}))
 
 	ws.Route(ws.DELETE("/{id}").To(h.DeleteHost).
-		Doc("delete a host").
+		Doc("删除主机").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.Resource, h.Name()).
 		Metadata(label.Action, label.Delete.Value()).

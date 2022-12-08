@@ -33,10 +33,10 @@ func (h *handler) Version() string {
 }
 
 func (h *handler) Registry(ws *restful.WebService) {
-	tags := []string{h.Name()}
+	tags := []string{"数据字典"}
 
 	ws.Route(ws.GET("/crendential_types").To(h.CrendentialType).
-		Doc("get all credential").
+		Doc("凭证类型").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.Resource, "crendential_types").
 		Metadata(label.Action, label.List.Value()).
@@ -44,7 +44,7 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Returns(200, "OK", dict.CrendentialTypes))
 
 	ws.Route(ws.GET("/vendors").To(h.Vendor).
-		Doc("get all vendors").
+		Doc("资源厂商类型").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.Resource, "vendord").
 		Metadata(label.Action, label.List.Value()).
@@ -52,7 +52,7 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Returns(200, "OK", dict.Vendors))
 
 	ws.Route(ws.GET("/regions").To(h.VendorRegion).
-		Doc("get all regions").
+		Doc("资源厂商地域(Region)").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.Resource, "regions").
 		Metadata(label.Action, label.List.Value()).
@@ -60,7 +60,7 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Returns(200, "OK", dict.Regions))
 
 	ws.Route(ws.GET("/resource_types").To(h.ResourceType).
-		Doc("get all resource types").
+		Doc("资源类型").
 		Metadata(restfulspec.KeyOpenAPITags, tags).
 		Metadata(label.Resource, "types").
 		Metadata(label.Action, label.List.Value()).

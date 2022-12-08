@@ -4,6 +4,7 @@
 *.dll
 *.so
 *.dylib
+*.log
 
 # Test binary, built with `go test -c`
 *.test
@@ -19,6 +20,7 @@ cmdb
 cmdb-api
 
 logs/*
+
 
 # 本地配置文件
 config.toml
