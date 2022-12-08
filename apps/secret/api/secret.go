@@ -45,7 +45,7 @@ func (h *handler) DescribeSecret(r *restful.Request, w *restful.Response) {
 		return
 	}
 
-	ins.Data.Desense()
+	ins.Spec.Desense()
 	response.Success(w, ins)
 }
 

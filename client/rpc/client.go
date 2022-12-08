@@ -63,8 +63,8 @@ func (c *ClientSet) Host() host.ServiceClient {
 }
 
 // Host todos
-func (c *ClientSet) Secret() secret.ServiceClient {
-	return secret.NewServiceClient(c.conn)
+func (c *ClientSet) Secret() secret.RPCClient {
+	return secret.NewRPCClient(c.conn)
 }
 
 // Bill service

@@ -36,7 +36,7 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 		cb(t)
 	}()
 
-	secret := secretIns.Data
+	secret := secretIns.Spec
 	req := provider.NewQueryRequestWithRate(secret.RequestRate)
 
 	switch secret.Vendor {
@@ -80,7 +80,7 @@ func (s *service) syncHost(ctx context.Context, secretIns *secret.Secret, t *tas
 		// 通过回调直接保存
 		err = operator.QueryHost(func(h *host.Host) {
 			// 补充管理信息
-			h.Resource.Meta.CredentialId = secretIns.Id
+			h.Resource.Meta.CredentialId = secretIns.Meta.Id
 			s.doSyncHost(ctx, h, t)
 		})
 		if err != nil {

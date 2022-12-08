@@ -18,194 +18,122 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// ServiceClient is the client API for Service service.
+// RPCClient is the client API for RPC service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type ServiceClient interface {
-	CreateSecret(ctx context.Context, in *CreateSecretRequest, opts ...grpc.CallOption) (*Secret, error)
+type RPCClient interface {
 	QuerySecret(ctx context.Context, in *QuerySecretRequest, opts ...grpc.CallOption) (*SecretSet, error)
 	DescribeSecret(ctx context.Context, in *DescribeSecretRequest, opts ...grpc.CallOption) (*Secret, error)
-	DeleteSecret(ctx context.Context, in *DeleteSecretRequest, opts ...grpc.CallOption) (*Secret, error)
 }
 
-type serviceClient struct {
+type rPCClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewServiceClient(cc grpc.ClientConnInterface) ServiceClient {
-	return &serviceClient{cc}
+func NewRPCClient(cc grpc.ClientConnInterface) RPCClient {
+	return &rPCClient{cc}
 }
 
-func (c *serviceClient) CreateSecret(ctx context.Context, in *CreateSecretRequest, opts ...grpc.CallOption) (*Secret, error) {
-	out := new(Secret)
-	err := c.cc.Invoke(ctx, "/infraboard.cmdb.secret.Service/CreateSecret", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *serviceClient) QuerySecret(ctx context.Context, in *QuerySecretRequest, opts ...grpc.CallOption) (*SecretSet, error) {
+func (c *rPCClient) QuerySecret(ctx context.Context, in *QuerySecretRequest, opts ...grpc.CallOption) (*SecretSet, error) {
 	out := new(SecretSet)
-	err := c.cc.Invoke(ctx, "/infraboard.cmdb.secret.Service/QuerySecret", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/infraboard.cmdb.secret.RPC/QuerySecret", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *serviceClient) DescribeSecret(ctx context.Context, in *DescribeSecretRequest, opts ...grpc.CallOption) (*Secret, error) {
+func (c *rPCClient) DescribeSecret(ctx context.Context, in *DescribeSecretRequest, opts ...grpc.CallOption) (*Secret, error) {
 	out := new(Secret)
-	err := c.cc.Invoke(ctx, "/infraboard.cmdb.secret.Service/DescribeSecret", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/infraboard.cmdb.secret.RPC/DescribeSecret", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *serviceClient) DeleteSecret(ctx context.Context, in *DeleteSecretRequest, opts ...grpc.CallOption) (*Secret, error) {
-	out := new(Secret)
-	err := c.cc.Invoke(ctx, "/infraboard.cmdb.secret.Service/DeleteSecret", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// ServiceServer is the server API for Service service.
-// All implementations must embed UnimplementedServiceServer
+// RPCServer is the server API for RPC service.
+// All implementations must embed UnimplementedRPCServer
 // for forward compatibility
-type ServiceServer interface {
-	CreateSecret(context.Context, *CreateSecretRequest) (*Secret, error)
+type RPCServer interface {
 	QuerySecret(context.Context, *QuerySecretRequest) (*SecretSet, error)
 	DescribeSecret(context.Context, *DescribeSecretRequest) (*Secret, error)
-	DeleteSecret(context.Context, *DeleteSecretRequest) (*Secret, error)
-	mustEmbedUnimplementedServiceServer()
+	mustEmbedUnimplementedRPCServer()
 }
 
-// UnimplementedServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedServiceServer struct {
+// UnimplementedRPCServer must be embedded to have forward compatible implementations.
+type UnimplementedRPCServer struct {
 }
 
-func (UnimplementedServiceServer) CreateSecret(context.Context, *CreateSecretRequest) (*Secret, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateSecret not implemented")
-}
-func (UnimplementedServiceServer) QuerySecret(context.Context, *QuerySecretRequest) (*SecretSet, error) {
+func (UnimplementedRPCServer) QuerySecret(context.Context, *QuerySecretRequest) (*SecretSet, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QuerySecret not implemented")
 }
-func (UnimplementedServiceServer) DescribeSecret(context.Context, *DescribeSecretRequest) (*Secret, error) {
+func (UnimplementedRPCServer) DescribeSecret(context.Context, *DescribeSecretRequest) (*Secret, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DescribeSecret not implemented")
 }
-func (UnimplementedServiceServer) DeleteSecret(context.Context, *DeleteSecretRequest) (*Secret, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteSecret not implemented")
-}
-func (UnimplementedServiceServer) mustEmbedUnimplementedServiceServer() {}
+func (UnimplementedRPCServer) mustEmbedUnimplementedRPCServer() {}
 
-// UnsafeServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to ServiceServer will
+// UnsafeRPCServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to RPCServer will
 // result in compilation errors.
-type UnsafeServiceServer interface {
-	mustEmbedUnimplementedServiceServer()
+type UnsafeRPCServer interface {
+	mustEmbedUnimplementedRPCServer()
 }
 
-func RegisterServiceServer(s grpc.ServiceRegistrar, srv ServiceServer) {
-	s.RegisterService(&Service_ServiceDesc, srv)
+func RegisterRPCServer(s grpc.ServiceRegistrar, srv RPCServer) {
+	s.RegisterService(&RPC_ServiceDesc, srv)
 }
 
-func _Service_CreateSecret_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateSecretRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ServiceServer).CreateSecret(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/infraboard.cmdb.secret.Service/CreateSecret",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).CreateSecret(ctx, req.(*CreateSecretRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Service_QuerySecret_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _RPC_QuerySecret_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(QuerySecretRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ServiceServer).QuerySecret(ctx, in)
+		return srv.(RPCServer).QuerySecret(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/infraboard.cmdb.secret.Service/QuerySecret",
+		FullMethod: "/infraboard.cmdb.secret.RPC/QuerySecret",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).QuerySecret(ctx, req.(*QuerySecretRequest))
+		return srv.(RPCServer).QuerySecret(ctx, req.(*QuerySecretRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Service_DescribeSecret_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _RPC_DescribeSecret_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DescribeSecretRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ServiceServer).DescribeSecret(ctx, in)
+		return srv.(RPCServer).DescribeSecret(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/infraboard.cmdb.secret.Service/DescribeSecret",
+		FullMethod: "/infraboard.cmdb.secret.RPC/DescribeSecret",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).DescribeSecret(ctx, req.(*DescribeSecretRequest))
+		return srv.(RPCServer).DescribeSecret(ctx, req.(*DescribeSecretRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Service_DeleteSecret_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteSecretRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ServiceServer).DeleteSecret(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/infraboard.cmdb.secret.Service/DeleteSecret",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).DeleteSecret(ctx, req.(*DeleteSecretRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-// Service_ServiceDesc is the grpc.ServiceDesc for Service service.
+// RPC_ServiceDesc is the grpc.ServiceDesc for RPC service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var Service_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "infraboard.cmdb.secret.Service",
-	HandlerType: (*ServiceServer)(nil),
+var RPC_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "infraboard.cmdb.secret.RPC",
+	HandlerType: (*RPCServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "CreateSecret",
-			Handler:    _Service_CreateSecret_Handler,
-		},
-		{
 			MethodName: "QuerySecret",
-			Handler:    _Service_QuerySecret_Handler,
+			Handler:    _RPC_QuerySecret_Handler,
 		},
 		{
 			MethodName: "DescribeSecret",
-			Handler:    _Service_DescribeSecret_Handler,
-		},
-		{
-			MethodName: "DeleteSecret",
-			Handler:    _Service_DeleteSecret_Handler,
+			Handler:    _RPC_DescribeSecret_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

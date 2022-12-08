@@ -35,7 +35,7 @@ func (s *service) CreatTask(ctx context.Context, req *task.CreateTaskRequst) (
 		return nil, err
 	}
 
-	secret := secretIns.Data
+	secret := secretIns.Spec
 	t.UpdateSecretDesc(secret.ShortDesc())
 
 	// 如果不是vsphere 需要检查region

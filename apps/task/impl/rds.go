@@ -29,7 +29,7 @@ func (s *service) syncRds(ctx context.Context, secretIns *secret.Secret, t *task
 		cb(t)
 	}()
 
-	secret := secretIns.Data
+	secret := secretIns.Spec
 	req := provider.NewQueryRequestWithRate(secret.RequestRate)
 
 	switch secret.Vendor {
