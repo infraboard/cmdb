@@ -27,7 +27,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/ec2 v1.39.0
 	github.com/caarlos0/env/v6 v6.9.2
 	github.com/emicklei/go-restful-openapi v1.4.1
-	github.com/emicklei/go-restful-openapi/v2 v2.9.0
+	github.com/emicklei/go-restful-openapi/v2 v2.9.1
 	github.com/emicklei/go-restful/v3 v3.8.0
 	github.com/go-openapi/spec v0.20.6
 	github.com/go-playground/validator/v10 v10.11.0
@@ -35,7 +35,7 @@ require (
 	github.com/huaweicloud/huaweicloud-sdk-go-obs v3.22.11+incompatible
 	github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.0.87
 	github.com/infraboard/mcenter v0.0.8-0.20221206074633-6d66c0350591
-	github.com/infraboard/mcube v1.9.4-0.20221206054051-d9ca9a414e96
+	github.com/infraboard/mcube v1.9.4
 	github.com/rs/xid v1.4.0
 	github.com/shopspring/decimal v1.2.0
 	github.com/spf13/cobra v1.4.0

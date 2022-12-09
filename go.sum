@@ -127,8 +127,8 @@ github.com/emicklei/go-restful v2.9.6+incompatible h1:tfrHha8zJ01ywiOEC1miGY8st1
 github.com/emicklei/go-restful v2.9.6+incompatible/go.mod h1:otzb+WCGbkyDHkqmQmT5YD2WR4BBwUdeQoFo8l/7tVs=
 github.com/emicklei/go-restful-openapi v1.4.1 h1:SocVTIQWnXyit4dotTrwmncBAjtRaBmfcHjo3XGcCm4=
 github.com/emicklei/go-restful-openapi v1.4.1/go.mod h1:kWQ8rQMVQ6G6lePwjDveJ00KjAUr/jq6z1X8DrDP3Gc=
-github.com/emicklei/go-restful-openapi/v2 v2.9.0 h1:djsWqjhI0EVYfkLCCX6jZxUkLmYUq2q9tt09ZbixfyE=
-github.com/emicklei/go-restful-openapi/v2 v2.9.0/go.mod h1:VKNgZyYviM1hnyrjD9RDzP2RuE94xTXxV+u6MGN4v4k=
+github.com/emicklei/go-restful-openapi/v2 v2.9.1 h1:Of8B1rXdG81il5TTiSY+9Qrh7pYOr8aLdynHIpvo7fM=
+github.com/emicklei/go-restful-openapi/v2 v2.9.1/go.mod h1:VKNgZyYviM1hnyrjD9RDzP2RuE94xTXxV+u6MGN4v4k=
 github.com/emicklei/go-restful/v3 v3.7.3/go.mod h1:6n3XBCmQQb25CM2LCACGz8ukIrRry+4bhvbpWn3mrbc=
 github.com/emicklei/go-restful/v3 v3.8.0 h1:eCZ8ulSerjdAiaNpF7GxXIE7ZCMo1moN1qX+S609eVw=
 github.com/emicklei/go-restful/v3 v3.8.0/go.mod h1:6n3XBCmQQb25CM2LCACGz8ukIrRry+4bhvbpWn3mrbc=
@@ -221,8 +221,8 @@ github.com/inconshreveable/mousetrap v1.0.0 h1:Z8tu5sraLXCXIcARxBp/8cbvlwVa7Z1NH
 github.com/inconshreveable/mousetrap v1.0.0/go.mod h1:PxqpIevigyE2G7u3NXJIT2ANytuPF1OarO4DADm73n8=
 github.com/infraboard/mcenter v0.0.8-0.20221206074633-6d66c0350591 h1:wfaYBVACajxAurLInu3FG25K4rdP/lciv8CG5drXq9k=
 github.com/infraboard/mcenter v0.0.8-0.20221206074633-6d66c0350591/go.mod h1:LaDoTNGhYDC/V8T6TI84tz9ZgTRuAJKHoT7rwT6aLhs=
-github.com/infraboard/mcube v1.9.4-0.20221206054051-d9ca9a414e96 h1:BKN+LlHvPrjQlRQMM5IVwUIbl6Fi0N53pWFOSaCRRYA=
-github.com/infraboard/mcube v1.9.4-0.20221206054051-d9ca9a414e96/go.mod h1:PHcYixPXYExwY8A70FcSsPPYDFbtmE0cd3EVGjnUl6g=
+github.com/infraboard/mcube v1.9.4 h1:Le9Aei7MffAR4z+pdsQVX4Y4fJEHt1aKQ2/ZG6niDvE=
+github.com/infraboard/mcube v1.9.4/go.mod h1:M60zTfWMp45G9ocgbUmp+9kcIr3V5E/MsJ4SfEulPqA=
 github.com/jinzhu/inflection v1.0.0 h1:K317FqzuhWc8YvSVlFMCCUb36O/S9MCKRDI7QkRKD/E=
 github.com/jinzhu/inflection v1.0.0/go.mod h1:h+uFLlag+Qp1Va5pdKtLDYj+kHp5pxUVkryuEj+Srlc=
 github.com/jinzhu/now v1.1.4/go.mod h1:d3SSVoowX0Lcu0IBviAWJpolVfI5UJVZZ7cO71lE/z8=

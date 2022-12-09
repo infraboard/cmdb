@@ -6,7 +6,7 @@ import (
 	"google.golang.org/grpc/health"
 	healthgrpc "google.golang.org/grpc/health/grpc_health_v1"
 
-	my "github.com/infraboard/mcenter/apps/health"
+	my "github.com/infraboard/mcube/app/health"
 )
 
 var (
