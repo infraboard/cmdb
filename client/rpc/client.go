@@ -9,6 +9,7 @@ import (
 	"github.com/infraboard/mcenter/client/rpc/resolver"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	healthgrpc "google.golang.org/grpc/health/grpc_health_v1"
 
 	"github.com/infraboard/cmdb/apps/bill"
 	"github.com/infraboard/cmdb/apps/host"
@@ -52,19 +53,24 @@ type ClientSet struct {
 	log  logger.Logger
 }
 
+// Instance服务的SDK
+func (c *ClientSet) Health() healthgrpc.HealthClient {
+	return healthgrpc.NewHealthClient(c.conn)
+}
+
 // Resource todo
 func (c *ClientSet) Resource() resource.RPCClient {
 	return resource.NewRPCClient(c.conn)
 }
 
 // Host todos
-func (c *ClientSet) Host() host.ServiceClient {
-	return host.NewServiceClient(c.conn)
+func (c *ClientSet) Secret() secret.RPCClient {
+	return secret.NewRPCClient(c.conn)
 }
 
 // Host todos
-func (c *ClientSet) Secret() secret.RPCClient {
-	return secret.NewRPCClient(c.conn)
+func (c *ClientSet) Host() host.ServiceClient {
+	return host.NewServiceClient(c.conn)
 }
 
 // Bill service

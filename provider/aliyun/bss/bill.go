@@ -8,6 +8,7 @@ import (
 
 	bssopenapi "github.com/alibabacloud-go/bssopenapi-20171214/v2/client"
 	"github.com/alibabacloud-go/tea/tea"
+	"github.com/infraboard/mcube/logger/zap"
 	"github.com/infraboard/mcube/pager"
 	"github.com/shopspring/decimal"
 
@@ -201,10 +202,24 @@ func (o *BssOperator) transferSpliteBill(ins *bssopenapi.DescribeSplitItemBillRe
 	cost := b.Cost
 	cost.SalePrice = utils.Float32ToFloat64(ins.PretaxGrossAmount)
 	cost.SaveCost = utils.Float32ToFloat64(ins.InvoiceDiscount)
+
 	cost.RealCost = utils.Float32ToFloat64(ins.PretaxAmount)
 	cost.StoredcardPay = utils.Float32ToFloat64(ins.DeductedByPrepaidCard)
 	cost.VoucherPay = utils.Float32ToFloat64(ins.DeductedByCashCoupons)
 	cost.CashPay = utils.Float32ToFloat64(ins.PaymentAmount)
 	cost.OutstandingAmount = utils.Float32ToFloat64(ins.OutstandingAmount)
+
+	// 处理流量包抵扣
+	if ins.DeductedByResourcePackage != nil {
+		d, err := decimal.NewFromString(*ins.DeductedByResourcePackage)
+		if err != nil {
+			zap.L().Errorf("load DeductedByResourcePackage error, %s", err)
+		} else {
+			f32 := tea.Float32Value(ins.PretaxAmount)
+			total := d.Add(decimal.NewFromFloat32(f32))
+			cost.RealCost, _ = total.Float64()
+		}
+	}
+
 	return b
 }

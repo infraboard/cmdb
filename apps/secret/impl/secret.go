@@ -76,7 +76,7 @@ func (s *service) DeleteSecret(ctx context.Context, req *secret.DeleteSecretRequ
 		return nil, err
 	}
 
-	err = s.db.WithContext(ctx).Delete(&Secret{Meta: &secret.Meta{Id: req.Id}}).Error
+	err = s.db.WithContext(ctx).Delete(ins).Error
 	if err != nil {
 		return nil, err
 	}
