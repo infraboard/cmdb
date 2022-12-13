@@ -14,6 +14,11 @@ func NewOssOperator(client *oss.Client) *OssOperator {
 }
 
 type OssOperator struct {
-	client *oss.Client
-	log    logger.Logger
+	client  *oss.Client
+	log     logger.Logger
+	account string
+}
+
+func (o *OssOperator) WithAccount(account string) {
+	o.account = account
 }

@@ -124,7 +124,9 @@ func (o *Operator) OssOperator() provider.OssOperator {
 	if err != nil {
 		panic(err)
 	}
-	return oss.NewOssOperator(c)
+	op := oss.NewOssOperator(c)
+	op.WithAccount(o.account)
+	return op
 }
 
 func (o *Operator) LbOperator() provider.LoadBalancerOperator {

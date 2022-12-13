@@ -2,7 +2,7 @@ package oss
 
 import (
 	"context"
-	"fmt"
+	"strings"
 
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	cmdbOss "github.com/infraboard/cmdb/apps/oss"
@@ -54,15 +54,17 @@ func (o *OssOperator) transferSet(items oss.ListBucketsResult) *cmdbOss.BucketSe
 
 func (o *OssOperator) transferBucket(ins oss.BucketProperties) *cmdbOss.Bucket {
 	r := cmdbOss.NewDefaultBucket()
+	region := strings.TrimPrefix(ins.Location, "oss-")
 
 	b := r.Resource.Meta
-	b.Id = fmt.Sprintf("%s.%s", ins.Location, ins.Name)
+	b.Id = resource.GenResourceHashId(resource.TYPE_BUCKET, o.account, region, ins.Name)
 	b.CreateAt = ins.CreationDate.Unix()
 
 	info := r.Resource.Spec
+	info.Owner = o.account
 	info.Name = ins.Name
 	info.Vendor = resource.VENDOR_ALIYUN
-	info.Region = ins.Location
+	info.Region = region
 	info.ResourceType = resource.TYPE_BUCKET
 
 	desc := r.Describe
