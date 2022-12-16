@@ -25,7 +25,7 @@ func (s *service) syncBill(ctx context.Context, secretIns *secret.Secret, t *tas
 	t.Run()
 	defer s.syncBillDown(ctx, t, cb)
 
-	secret := secretIns.Data
+	secret := secretIns.Spec
 	req := provider.NewQueryBillRequestWithRate(secret.RequestRate)
 	req.Month = t.Data.Params["month"]
 

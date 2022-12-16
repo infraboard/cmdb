@@ -1,15 +1,13 @@
 package impl
 
 import (
-	"database/sql"
-
-	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/cmdb/apps/secret"
 	"github.com/infraboard/cmdb/conf"
 	"github.com/infraboard/mcube/app"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 	"google.golang.org/grpc"
+	"gorm.io/gorm"
 )
 
 var (
@@ -18,21 +16,20 @@ var (
 )
 
 type service struct {
-	db   *sql.DB
-	log  logger.Logger
-	host host.ServiceServer
-	secret.UnimplementedServiceServer
+	db  *gorm.DB
+	log logger.Logger
+
+	secret.UnimplementedRPCServer
 }
 
 func (s *service) Config() error {
-	db, err := conf.C().MySQL.GetDB()
+	db, err := conf.C().MySQL.ORM()
 	if err != nil {
 		return err
 	}
 
 	s.log = zap.L().Named(s.Name())
 	s.db = db
-	s.host = app.GetGrpcApp(host.AppName).(host.ServiceServer)
 	return nil
 }
 
@@ -41,9 +38,10 @@ func (s *service) Name() string {
 }
 
 func (s *service) Registry(server *grpc.Server) {
-	secret.RegisterServiceServer(server, svr)
+	secret.RegisterRPCServer(server, svr)
 }
 
 func init() {
+	app.RegistryInternalApp(svr)
 	app.RegistryGrpcApp(svr)
 }

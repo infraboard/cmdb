@@ -1,6 +1,7 @@
 package secret
 
 import (
+	context "context"
 	"encoding/base64"
 	"fmt"
 	"net/http"
@@ -16,16 +17,23 @@ import (
 )
 
 const (
-	AppName = "secret"
+	AppName = "secrets"
 )
 
 var (
 	validate = validator.New()
 )
 
+type Service interface {
+	CreateSecret(context.Context, *CreateSecretRequest) (*Secret, error)
+	DeleteSecret(context.Context, *DeleteSecretRequest) (*Secret, error)
+	RPCServer
+}
+
 func NewDefaultSecret() *Secret {
 	return &Secret{
-		Data: &CreateSecretRequest{
+		Meta: &Meta{},
+		Spec: &CreateSecretRequest{
 			RequestRate: 5,
 		},
 	}
@@ -76,12 +84,12 @@ func (s *CreateSecretRequest) Desense() {
 }
 
 func (s *CreateSecretRequest) IsAllowRegion(region string) bool {
-	for i := range s.AllowRegions {
-		if s.AllowRegions[i] == "*" {
+	for i := range s.Regions {
+		if s.Regions[i] == "*" {
 			return true
 		}
 
-		if s.AllowRegions[i] == region {
+		if s.Regions[i] == region {
 			return true
 		}
 	}
@@ -105,12 +113,12 @@ func (s *CreateSecretRequest) DensenseKey() string {
 }
 
 func (s *CreateSecretRequest) AllowRegionString() string {
-	return strings.Join(s.AllowRegions, ",")
+	return strings.Join(s.Regions, ",")
 }
 
 func (s *CreateSecretRequest) LoadAllowRegionFromString(regions string) {
 	if regions != "" {
-		s.AllowRegions = strings.Split(regions, ",")
+		s.Regions = strings.Split(regions, ",")
 	}
 }
 
@@ -124,16 +132,28 @@ func (s *SecretSet) Add(item *Secret) {
 	s.Items = append(s.Items, item)
 }
 
+func (s *SecretSet) Desense() {
+	for i := range s.Items {
+		s.Items[i].Spec.Desense()
+	}
+}
+
 func NewSecret(req *CreateSecretRequest) (*Secret, error) {
 	if err := req.Validate(); err != nil {
 		return nil, err
 	}
 
 	return &Secret{
+		Meta: NewMeta(),
+		Spec: req,
+	}, nil
+}
+
+func NewMeta() *Meta {
+	return &Meta{
 		Id:       xid.New().String(),
 		CreateAt: time.Now().UnixMilli(),
-		Data:     req,
-	}, nil
+	}
 }
 
 func NewCreateSecretRequest() *CreateSecretRequest {
@@ -148,7 +168,7 @@ func (req *CreateSecretRequest) SetOwner(tk *token.Token) {
 }
 
 func (req *CreateSecretRequest) Validate() error {
-	if len(req.AllowRegions) == 0 {
+	if len(req.Regions) == 0 {
 		return fmt.Errorf("required less one allow_regions")
 	}
 	return validate.Struct(req)

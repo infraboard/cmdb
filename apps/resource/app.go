@@ -3,6 +3,7 @@ package resource
 import (
 	context "context"
 	"fmt"
+	"hash/fnv"
 	"net/http"
 	"sort"
 	"strings"
@@ -303,4 +304,13 @@ func (r *Resource) Validate() error {
 
 func (r *DeleteRequest) Validate() error {
 	return nil
+}
+
+// GenResourceHashId 生成资源的短hashId
+func GenResourceHashId(t TYPE, unitkeys ...string) string {
+	hash := fnv.New64a()
+	for _, key := range unitkeys {
+		hash.Write([]byte(key))
+	}
+	return fmt.Sprintf("%s-%x", strings.ToLower(t.String()), hash.Sum64())
 }
