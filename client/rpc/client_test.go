@@ -2,26 +2,31 @@ package rpc_test
 
 import (
 	"context"
-	"fmt"
 	"testing"
 
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/client/rpc"
 	"github.com/infraboard/cmdb/conf"
+	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/logger/zap"
+)
 
-	"github.com/stretchr/testify/assert"
+var (
+	client *rpc.ClientSet
+	ctx    = context.Background()
 )
 
 func TestClient(t *testing.T) {
-	should := assert.New(t)
-
-	c, err := rpc.NewClientSet(conf.C().Mcenter)
-	if should.NoError(err) {
-		rs, err := c.Resource().Search(context.Background(), resource.NewSearchRequest())
-		should.NoError(err)
-		fmt.Println(rs)
+	rs, err := client.Resource().Search(ctx, resource.NewSearchRequest())
+	if err != nil {
+		if e, ok := err.(exception.APIException); ok {
+			t.Fatal(e.ToJson())
+		} else {
+			t.Fatal(err)
+		}
 	}
+
+	t.Log(rs)
 }
 
 func init() {
@@ -31,4 +36,10 @@ func init() {
 	if err := conf.LoadConfigFromEnv(); err != nil {
 		panic(err)
 	}
+
+	c, err := rpc.NewClientSet(conf.C().Mcenter)
+	if err != nil {
+		panic(err)
+	}
+	client = c
 }

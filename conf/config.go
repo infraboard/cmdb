@@ -12,6 +12,8 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/infraboard/mcenter/client/rpc"
+	"github.com/infraboard/mcube/cache/memory"
+	"github.com/infraboard/mcube/cache/redis"
 	"github.com/infraboard/mcube/logger/zap"
 )
 
@@ -24,6 +26,7 @@ func newConfig() *Config {
 		App:     newDefaultAPP(),
 		Log:     newDefaultLog(),
 		MySQL:   newDefaultMySQL(),
+		Cache:   newDefaultCache(),
 		Mcenter: rpc.NewDefaultConfig(),
 	}
 }
@@ -33,6 +36,7 @@ type Config struct {
 	Log     *log        `toml:"log"`
 	MySQL   *mysql      `toml:"mysql"`
 	Mcenter *rpc.Config `toml:"mcenter"`
+	Cache   *_cache     `toml:"cache"`
 }
 
 // InitGloabl 注入全局变量
@@ -176,4 +180,18 @@ func newDefaultMySQL() *mysql {
 		MaxLifeTime: 1800,
 		MaxIdleTime: 600,
 	}
+}
+
+func newDefaultCache() *_cache {
+	return &_cache{
+		Type:   "memory",
+		Memory: memory.NewDefaultConfig(),
+		Redis:  redis.NewDefaultConfig(),
+	}
+}
+
+type _cache struct {
+	Type   string         `toml:"type" json:"type" yaml:"type" env:"MCENTER_CACHE_TYPE"`
+	Memory *memory.Config `toml:"memory" json:"memory" yaml:"memory"`
+	Redis  *redis.Config  `toml:"redis" json:"redis" yaml:"redis"`
 }

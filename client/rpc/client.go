@@ -15,6 +15,7 @@ import (
 	"github.com/infraboard/cmdb/apps/rds"
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/apps/secret"
+	"github.com/infraboard/cmdb/version"
 	"github.com/infraboard/mcube/logger"
 	"github.com/infraboard/mcube/logger/zap"
 )
@@ -31,6 +32,7 @@ func NewClientSet(conf *rpc.Config) (*ClientSet, error) {
 		grpc.WithPerRPCCredentials(rpc.NewAuthentication(conf.ClientID, conf.ClientSecret)),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy":"round_robin"}`),
+		grpc.WithUnaryInterceptor(rpc.NewExceptionUnaryClientInterceptor(version.ServiceName).UnaryClientInterceptor),
 		grpc.WithBlock(),
 	)
 
