@@ -7,8 +7,8 @@ import (
 	"github.com/infraboard/cmdb/apps/resource"
 	"github.com/infraboard/cmdb/client/rpc"
 	"github.com/infraboard/cmdb/conf"
-	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcenter/apps/health"
+	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/logger/zap"
 )
 
@@ -25,10 +25,6 @@ func TestClient(t *testing.T) {
 		} else {
 			t.Fatal(err)
 		}
-	}
-
-	t.Log(rs)
-		t.Fatal(err)
 	}
 
 	t.Log(rs)
