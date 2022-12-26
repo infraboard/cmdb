@@ -16,6 +16,7 @@ require (
 	github.com/alibabacloud-go/dysmsapi-20170525/v2 v2.0.16
 	github.com/alibabacloud-go/dyvmsapi-20170525/v2 v2.1.4
 	github.com/alibabacloud-go/ecs-20140526/v2 v2.1.2
+	github.com/alibabacloud-go/nlb-20220430 v1.0.9
 	github.com/alibabacloud-go/r-kvstore-20150101/v2 v2.20.5
 	github.com/alibabacloud-go/rds-20140815/v2 v2.1.0
 	github.com/alibabacloud-go/slb-20140515/v3 v3.3.16

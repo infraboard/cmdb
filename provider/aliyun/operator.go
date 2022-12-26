@@ -11,6 +11,7 @@ import (
 	"github.com/infraboard/cmdb/provider/aliyun/dds"
 	"github.com/infraboard/cmdb/provider/aliyun/dns"
 	"github.com/infraboard/cmdb/provider/aliyun/ecs"
+	"github.com/infraboard/cmdb/provider/aliyun/nlb"
 	"github.com/infraboard/cmdb/provider/aliyun/oss"
 	"github.com/infraboard/cmdb/provider/aliyun/rds"
 	"github.com/infraboard/cmdb/provider/aliyun/redis"
@@ -143,6 +144,14 @@ func (o *Operator) ALbOperator() provider.LoadBalancerOperator {
 		panic(err)
 	}
 	return alb.NewALBOperator(c)
+}
+
+func (o *Operator) NLbOperator() provider.LoadBalancerOperator {
+	c, err := o.client.NLBClient()
+	if err != nil {
+		panic(err)
+	}
+	return nlb.NewNLBOperator(c)
 }
 
 func (o *Operator) DnsOperator() provider.DnsOperator {

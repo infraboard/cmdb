@@ -16,6 +16,7 @@ import (
 	dds "github.com/alibabacloud-go/dds-20151201/v3/client"
 	domain "github.com/alibabacloud-go/domain-20180129/v3/client"
 	ecs "github.com/alibabacloud-go/ecs-20140526/v2/client"
+	nlb "github.com/alibabacloud-go/nlb-20220430/client"
 	redis "github.com/alibabacloud-go/r-kvstore-20150101/v2/client"
 	rds "github.com/alibabacloud-go/rds-20140815/v2/client"
 	slb "github.com/alibabacloud-go/slb-20140515/v3/client"
@@ -45,6 +46,7 @@ type AliCloudClient struct {
 	dnsConn   *dns.Client
 	slbConn   *slb.Client
 	albConn   *alb.Client
+	nlbConn   *nlb.Client
 	atConn    *actiontrail.Client
 	bssConn   *bssopenapi.Client
 }
@@ -260,6 +262,25 @@ func (c *AliCloudClient) ALBClient() (*alb.Client, error) {
 	}
 
 	c.albConn = client
+	return client, nil
+}
+
+func (c *AliCloudClient) NLBClient() (*nlb.Client, error) {
+	if c.nlbConn != nil {
+		return c.nlbConn, nil
+	}
+
+	client, err := nlb.NewClient(&openapiv2.Config{
+		AccessKeyId:     tea.String(c.AccessKey),
+		AccessKeySecret: tea.String(c.AccessSecret),
+		Endpoint:        tea.String(fmt.Sprintf("nlb.%s.aliyuncs.com", c.Region)),
+		RegionId:        tea.String(c.Region),
+	})
+	if err != nil {
+		return nil, fmt.Errorf("new nlb client error, %s", err)
+	}
+
+	c.nlbConn = client
 	return client, nil
 }
 

@@ -53,6 +53,8 @@ enum STATUS {
 
     // 表示停止
     STOPPED = 80;
+    // 表示销毁中
+    DELETING = 81;
     // 已销毁
     DESTROYED = 90;
 }

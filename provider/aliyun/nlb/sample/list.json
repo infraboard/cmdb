@@ -1,0 +1,68 @@
+{
+    "TotalCount": 1,
+    "RequestId": "xxxx",
+    "MaxResults": 20,
+    "HttpStatusCode": 200,
+    "LoadBalancers": [
+      {
+        "AddressIpVersion": "Ipv4",
+        "ResourceGroupId": "rg-xxxx",
+        "LoadBalancerBillingConfig": {
+          "InternetBandwidth": 400,
+          "PayType": "PostPay",
+          "InternetChargeType": "PayByTraffic"
+        },
+        "CreateTime": "2000-10-20T01:38:51Z",
+        "LoadBalancerId": "nlb-xxxx",
+        "DNSName": "nlb-xxxx.cn-hangzhou.nlb.aliyuncs.com",
+        "ZoneMappings": [
+          {
+            "ZoneId": "cn-hangzhou-j",
+            "VSwitchId": "vsw-xxxxx",
+            "EipType": "Common",
+            "LoadBalancerAddresses": [
+              {
+                "EniId": "eni-xxxx",
+                "PublicIPv4Address": "112.124.30.100",
+                "AllocationId": "eip-xxxx",
+                "PrivateIPv4Address": "172.16.146.10"
+              }
+            ]
+          },
+          {
+            "ZoneId": "cn-hangzhou-k",
+            "VSwitchId": "vsw-xxxx",
+            "EipType": "Common",
+            "LoadBalancerAddresses": [
+              {
+                "EniId": "eni-xxxx",
+                "PublicIPv4Address": "121.199.78.140",
+                "AllocationId": "eip-xxxx",
+                "PrivateIPv4Address": "172.16.145.216"
+              }
+            ]
+          }
+        ],
+        "SecurityGroupIds": [],
+        "ModificationProtectionConfig": {
+          "Status": "NonProtection"
+        },
+        "Ipv6AddressType": "Intranet",
+        "CrossZoneEnabled": true,
+        "LoadBalancerType": "Network",
+        "LoadBalancerName": "xxxxxxxxx",
+        "CapacityUnitCount": 1,
+        "VpcId": "vpc-xxxx",
+        "DeletionProtectionConfig": {
+          "Enabled": false
+        },
+        "SysSecurityGroupId": "sg-xxxxx",
+        "TrafficAffinityEnabled": false,
+        "RegionId": "cn-hangzhou",
+        "AddressType": "Internet",
+        "LoadBalancerStatus": "Active",
+        "LoadBalancerBusinessStatus": "Normal"
+      }
+    ],
+    "Success": true
+  }
