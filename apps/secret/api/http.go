@@ -77,6 +77,7 @@ func (h *handler) Registry(ws *restful.WebService) {
 		Metadata(label.Resource, h.Name()).
 		Metadata(label.Action, label.Delete.Value()).
 		Metadata(label.Auth, label.Enable).
+		Metadata(label.Code, label.Enable).
 		Metadata(label.Permission, label.Enable))
 }
 
