@@ -32,6 +32,7 @@ func NewClientSet(conf *rpc.Config) (*ClientSet, error) {
 		grpc.WithPerRPCCredentials(rpc.NewAuthentication(conf.ClientID, conf.ClientSecret)),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy":"round_robin"}`),
+		grpc.WithUnaryInterceptor(rpc.NewExceptionUnaryClientInterceptor().UnaryClientInterceptor),
 		grpc.WithBlock(),
 	)
 

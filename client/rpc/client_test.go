@@ -8,6 +8,7 @@ import (
 	"github.com/infraboard/cmdb/client/rpc"
 	"github.com/infraboard/cmdb/conf"
 	"github.com/infraboard/mcenter/apps/health"
+	"github.com/infraboard/mcube/exception"
 	"github.com/infraboard/mcube/logger/zap"
 )
 
@@ -19,7 +20,11 @@ var (
 func TestClient(t *testing.T) {
 	rs, err := client.Resource().Search(ctx, resource.NewSearchRequest())
 	if err != nil {
-		t.Fatal(err)
+		if e, ok := err.(exception.APIException); ok {
+			t.Fatal(e.ToJson())
+		} else {
+			t.Fatal(err)
+		}
 	}
 
 	t.Log(rs)
