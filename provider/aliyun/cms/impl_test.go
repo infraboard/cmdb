@@ -12,11 +12,12 @@ import (
 
 var (
 	operator provider.CmsOperator
+	ctx      = context.Background()
 )
 
 func TestDescribeMetric(t *testing.T) {
 	req := provider.NewDescribeMetricLastRequeset("acs_rds_dashboard", "CpuUsage")
-	set, err := operator.DescribeMetricLast(context.TODO(), req)
+	set, err := operator.DescribeMetricLast(ctx, req)
 	if err != nil {
 		t.Fatal(err)
 	}
