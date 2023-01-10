@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/alibabacloud-go/tea/tea"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
 	"github.com/infraboard/cmdb/apps/host"
@@ -52,22 +53,22 @@ func (o *Ec2operator) transferOne(ins types.Instance) *host.Host {
 	i.Zone = *ins.Placement.AvailabilityZone
 	i.Type = string(ins.InstanceType)
 	// h.Spec.PayType = string(ins.Placement.Tenancy)
-	i.Cpu = (*ins.CpuOptions.ThreadsPerCore) * (*ins.CpuOptions.CoreCount)
+	i.Cpu = tea.Int32Value(ins.CpuOptions.ThreadsPerCore) * tea.Int32Value(ins.CpuOptions.CoreCount)
 
 	// 判断tags中是否有NAME字段(实例名称), 不存在则取实例ID.
 	if ParseTagName(ins.Tags) == "" {
-		h.Resource.Spec.Name = *ins.InstanceId
+		h.Resource.Spec.Name = tea.StringValue(ins.InstanceId)
 	} else {
 		h.Resource.Spec.Name = ParseTagName(ins.Tags)
 	}
 
 	h.Resource.Status.Phase = string(ins.State.Name)
-	h.Resource.Status.PublicAddress = []string{*ins.PublicIpAddress}
-	h.Resource.Status.PrivateAddress = []string{*ins.PrivateIpAddress}
+	h.Resource.Status.PublicAddress = []string{tea.StringValue(ins.PublicIpAddress)}
+	h.Resource.Status.PrivateAddress = []string{tea.StringValue(ins.PrivateIpAddress)}
 
 	h.Describe.OsName = *ins.PlatformDetails
 	h.Describe.ImageId = *ins.ImageId
-	h.Describe.KeyPairName = []string{*ins.KeyName}
+	h.Describe.KeyPairName = []string{tea.StringValue(ins.KeyName)}
 	h.Describe.SecurityGroups = ParseGroup(ins.SecurityGroups)
 
 	h.Resource.Tags = ParseTag(ins.Tags)
