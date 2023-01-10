@@ -85,7 +85,7 @@ func (o *NLBOperator) transferLoadBalancer(ins *nlb.ListLoadBalancersResponseBod
 	info.Type = tea.StringValue(ins.AddressType)
 
 	r.Resource.Status.PrivateAddress = []string{tea.StringValue(ins.DNSName)}
-	r.Resource.Status.Phase = praseSlbStatus(ins.LoadBalancerStatus)
+	r.Resource.Status.Phase = praseNLBStatus(ins.LoadBalancerStatus)
 	r.Resource.Cost.PayMode = mapping.PrasePAY_MODE(ins.LoadBalancerBillingConfig.PayType)
 
 	return r

@@ -16,6 +16,6 @@ type Ec2operator struct {
 func NewEc2Operator(client *ec2.Client) *Ec2operator {
 	return &Ec2operator{
 		client: client,
-		log:    zap.L().Named("AWS EC2"),
+		log:    zap.L().Named("aws.ec2"),
 	}
 }

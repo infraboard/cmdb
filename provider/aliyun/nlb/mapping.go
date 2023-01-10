@@ -15,7 +15,7 @@ var (
 	// Configuring：变配中。
 	// Deleting：删除中。
 	// Deleted：已删除。
-	SLB_STATUS_MAP = map[string]lb.STATUS{
+	NLB_STATUS_MAP = map[string]lb.STATUS{
 		"inactive：":    lb.STATUS_STOPPED,
 		"active":       lb.STATUS_RUNNING,
 		"provisioning": lb.STATUS_PENDING,
@@ -25,12 +25,12 @@ var (
 	}
 )
 
-func praseSlbStatus(s *string) string {
+func praseNLBStatus(s *string) string {
 	if s == nil {
 		return ""
 	}
 
-	if v, ok := SLB_STATUS_MAP[strings.ToLower(*s)]; ok {
+	if v, ok := NLB_STATUS_MAP[strings.ToLower(*s)]; ok {
 		return v.String()
 	}
 

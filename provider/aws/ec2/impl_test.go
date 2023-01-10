@@ -2,18 +2,17 @@ package ec2_test
 
 import (
 	"context"
-	"fmt"
-	"os"
 	"testing"
 
 	"github.com/infraboard/cmdb/apps/host"
 	"github.com/infraboard/cmdb/provider"
-	"github.com/infraboard/cmdb/provider/aws/connectivity"
-	op "github.com/infraboard/cmdb/provider/aws/ec2"
+	"github.com/infraboard/cmdb/provider/aws"
+	"github.com/infraboard/mcube/logger/zap"
 )
 
 var (
-	operator *op.Ec2operator
+	operator provider.HostOperator
+	ctx      = context.Background()
 )
 
 func TestQuery(t *testing.T) {
@@ -21,28 +20,18 @@ func TestQuery(t *testing.T) {
 
 	for pager.Next() {
 		set := host.NewHostSet()
-		if err := pager.Scan(context.Background(), set); err != nil {
+		if err := pager.Scan(ctx, set); err != nil {
 			panic(err)
 		}
-		fmt.Println(set)
+		t.Log(set)
 	}
 }
 
 func init() {
-	var credentialID, credentialKey string
-	if credentialID = os.Getenv("AMAZON_CLOUD_ACCESS_KEY"); credentialID == "" {
-		panic("empty AMAZON_CLOUD_ACCESS_KEY")
-	}
-
-	if credentialKey = os.Getenv("AMAZON_CLOUD_ACCESS_SECRET"); credentialKey == "" {
-		panic("empty AMAZON_CLOUD_ACCESS_SECRET")
-	}
-
-	client := connectivity.NewAwsCloudClient(credentialID, credentialKey, "ap-south-1")
-
-	ec, err := client.Ec2Client()
+	zap.DevelopmentSetup()
+	err := aws.LoadOperatorFromEnv()
 	if err != nil {
 		panic(err)
 	}
-	operator = op.NewEc2Operator(ec)
+	operator = aws.O().HostOperator()
 }
