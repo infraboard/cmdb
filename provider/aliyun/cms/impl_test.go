@@ -2,7 +2,6 @@ package cms_test
 
 import (
 	"context"
-	"fmt"
 	"testing"
 
 	"github.com/infraboard/cmdb/provider"
@@ -21,9 +20,7 @@ func TestDescribeMetric(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for i := range set.Items {
-		fmt.Println(set.Items[i])
-	}
+	t.Log(set)
 }
 
 func init() {

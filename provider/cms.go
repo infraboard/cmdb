@@ -49,6 +49,10 @@ type DatapointSet struct {
 	Items []*Datapoint
 }
 
+func (d *DatapointSet) String() string {
+	return tea.Prettify(d)
+}
+
 func (s *DatapointSet) Add(item *Datapoint) {
 	s.Items = append(s.Items, item)
 }
