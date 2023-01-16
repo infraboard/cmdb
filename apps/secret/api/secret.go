@@ -11,7 +11,7 @@ import (
 
 func (h *handler) QuerySecret(r *restful.Request, w *restful.Response) {
 	req := secret.NewQuerySecretRequestFromHTTP(r.Request)
-	req.WithNamespace(r.Attribute("token").(*token.Token))
+	req.WithNamespace(r.Attribute(token.TOKEN_ATTRIBUTE_NAME).(*token.Token))
 	set, err := h.service.QuerySecret(r.Request.Context(), req)
 	if err != nil {
 		response.Failed(w, err)
@@ -22,7 +22,7 @@ func (h *handler) QuerySecret(r *restful.Request, w *restful.Response) {
 
 func (h *handler) CreateSecret(r *restful.Request, w *restful.Response) {
 	req := secret.NewCreateSecretRequest()
-	req.SetOwner(r.Attribute("token").(*token.Token))
+	req.SetOwner(r.Attribute(token.TOKEN_ATTRIBUTE_NAME).(*token.Token))
 	if err := request.GetDataFromRequest(r.Request, req); err != nil {
 		response.Failed(w, err)
 		return
