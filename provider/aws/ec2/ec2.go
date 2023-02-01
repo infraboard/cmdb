@@ -20,6 +20,7 @@ func (o *Ec2operator) PageQueryHost(req *provider.QueryRequest) pager.Pager {
 }
 
 // 参考文档: https://docs.aws.amazon.com/zh_cn/AWSEC2/latest/APIReference/API_DescribeInstances.html
+// 实例参数说明文档: https://docs.aws.amazon.com/zh_cn/AWSEC2/latest/APIReference/API_Instance.html
 func (o *Ec2operator) Query(ctx context.Context, req *ec2.DescribeInstancesInput) (*host.HostSet, error) {
 	set := host.NewHostSet()
 	result, err := o.client.DescribeInstances(ctx, req)
