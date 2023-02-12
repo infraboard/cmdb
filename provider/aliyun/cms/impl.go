@@ -9,7 +9,7 @@ import (
 func NewCmsOperator(client *cms.Client) *CmsOperator {
 	return &CmsOperator{
 		client: client,
-		log:    zap.L().Named("ALI CMS"),
+		log:    zap.L().Named("ali.cms"),
 	}
 }
 

@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"time"
+
+	"github.com/alibabacloud-go/tea/tea"
 )
 
 type CmsOperator interface {
@@ -14,6 +16,7 @@ func NewDescribeMetricLastRequeset(namespace, metricname string) *DescribeMetric
 	return &DescribeMetricLastRequeset{
 		Namespace:  namespace,
 		MetricName: metricname,
+		Period:     60,
 	}
 }
 
@@ -46,14 +49,22 @@ type DatapointSet struct {
 	Items []*Datapoint
 }
 
+func (d *DatapointSet) String() string {
+	return tea.Prettify(d)
+}
+
 func (s *DatapointSet) Add(item *Datapoint) {
 	s.Items = append(s.Items, item)
 }
 
 type Datapoint struct {
-	Timestamp  int64
-	InstanceId string
-	Minimum    float64
-	Maximum    float64
-	Average    float64
+	Timestamp  int64   `json:"timestamp"`
+	InstanceId string  `json:"instance_id"`
+	Minimum    float64 `json:"minimum"`
+	Maximum    float64 `json:"maximum"`
+	Average    float64 `json:"average"`
+}
+
+func (d *Datapoint) String() string {
+	return tea.Prettify(d)
 }

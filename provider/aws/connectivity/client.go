@@ -33,7 +33,7 @@ func LoadClientFromEnv() error {
 type AwsCloudClient struct {
 	AccessKey    string `env:"AWS_ACCESS_KEY"`
 	AccessSecret string `env:"AWS_ACCESS_SECRET"`
-	Region       string `env:"AWS_CLOUD_REGION"`
+	Region       string `env:"AWS_REGION"`
 
 	ec2Conn *ec2.Client
 }
