@@ -76,9 +76,7 @@ message Resource {
     // 资源状态
     // @gotags: json:"status"
     Status status = 4;
-    // 资源标签
-    // @gotags: json:"tags"
-    repeated Tag tags = 5;
+
     // 关联资源
     // @gotags: json:"related_resources"
     repeated Resource related_resources = 6;
@@ -218,6 +216,9 @@ message Spec {
     // @gotags: json:"band_width"
     int32 band_width =19;
 
+    // 资源标签
+    // @gotags: json:"tags"
+    repeated Tag tags = 25;
     // 额外的通用属性
     // @gotags: json:"extra" gorm:"serializer:json"
     map<string, string> extra = 26;

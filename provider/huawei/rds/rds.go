@@ -91,7 +91,7 @@ func (o *RdsOperator) transferOne(ins model.InstanceResponse) *rds.Rds {
 	r.Resource.Status.PrivateAddress, r.Resource.Status.PublicAddress = ins.PrivateIps, ins.PublicIps
 	r.Resource.Status.Phase = praseStatus(ins.Status)
 
-	r.Resource.Tags = o.transferTags(ins.Tags)
+	r.Resource.Spec.Tags = o.transferTags(ins.Tags)
 
 	cmEnums := model.GetChargeInfoResponseChargeModeEnum()
 	switch ins.ChargeInfo.ChargeMode {

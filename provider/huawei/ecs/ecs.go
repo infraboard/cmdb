@@ -95,7 +95,7 @@ func (o *EcsOperator) transferInstance(ins model.ServerDetail) *host.Host {
 	i.Memory = int32(mem)
 
 	if ins.Tags != nil {
-		r.Resource.Tags = o.transferTags(*ins.Tags)
+		r.Resource.Spec.Tags = o.transferTags(*ins.Tags)
 	}
 
 	r.Describe.OsType = ins.Metadata["os_type"]

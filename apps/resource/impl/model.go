@@ -43,10 +43,10 @@ func NewResource(res *resource.Resource) *Resource {
 		},
 		Tags: []*ResourceTag{},
 	}
-	for i := range res.Tags {
+	for i := range res.Spec.Tags {
 		temp.Tags = append(temp.Tags, &ResourceTag{
 			ResourceId: rid,
-			Tag:        res.Tags[i],
+			Tag:        res.Spec.Tags[i],
 		})
 	}
 	return temp
@@ -70,7 +70,7 @@ func (r *Resource) Resource() *resource.Resource {
 
 	for i := range r.Tags {
 		item := r.Tags[i]
-		ins.Tags = append(ins.Tags, item.Tag)
+		ins.Spec.Tags = append(ins.Spec.Tags, item.Tag)
 	}
 	return nil
 }

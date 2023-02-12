@@ -5,13 +5,10 @@ import (
 	"fmt"
 	"hash/fnv"
 	"net/http"
-	"sort"
 	"strings"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/infraboard/cmdb/utils"
 	"github.com/infraboard/mcube/http/request"
-	"github.com/infraboard/mcube/logger/zap"
 )
 
 var (
@@ -94,15 +91,15 @@ func NewDefaultResource(rt TYPE) *Resource {
 		Meta: &Meta{},
 		Spec: &Spec{
 			ResourceType: rt,
+			Tags:         []*Tag{},
 		},
 		Cost:   &Cost{},
 		Status: &Status{},
-		Tags:   []*Tag{},
 	}
 }
 
 func (r *Resource) AddTag(t *Tag) {
-	r.Tags = append(r.Tags, t)
+	r.Spec.Tags = append(r.Spec.Tags, t)
 }
 
 func (i *Status) PrivateIPToString() string {
@@ -123,67 +120,6 @@ func (i *Status) LoadPublicIPString(s string) {
 	if s != "" {
 		i.PublicAddress = strings.Split(s, ",")
 	}
-}
-
-func (i *Resource) SortTag() {
-	sort.Slice(i.Tags, func(m, n int) bool {
-		return i.Tags[m].Weight < i.Tags[n].Weight
-	})
-}
-
-func (i *Spec) Hash() string {
-	return utils.Hash(i)
-}
-
-func (r *Resource) GetTagValueOne(key string) string {
-	tags := r.Tags
-	for i := range tags {
-		if tags[i].Key == key {
-			return tags[i].Value
-		}
-	}
-
-	return ""
-}
-
-func NewResourceSet() *ResourceSet {
-	return &ResourceSet{
-		Items: []*Resource{},
-	}
-}
-
-func (s *ResourceSet) Metas() (metas []*Meta) {
-	for i := range s.Items {
-		metas = append(metas, s.Items[i].Meta)
-	}
-	return
-}
-
-func (s *ResourceSet) Add(item *Resource) {
-	s.Items = append(s.Items, item)
-}
-
-func (s *ResourceSet) ResourceIds() (ids []string) {
-	for i := range s.Items {
-		ids = append(ids, s.Items[i].Meta.Id)
-	}
-
-	return
-}
-
-func (s *ResourceSet) PrometheusFormat() (targets []*PrometheusTarget) {
-	for i := range s.Items {
-		item := s.Items[i]
-		if item.GetTagValueOne(PROMETHEUS_SCRAPE) == "true" {
-			t, err := item.PrometheusTarget()
-			if err != nil {
-				zap.L().Errorf("new Prometheus Target errror, %s", err)
-				continue
-			}
-			targets = append(targets, t)
-		}
-	}
-	return
 }
 
 type AccountGetter struct {

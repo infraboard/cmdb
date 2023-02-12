@@ -73,7 +73,7 @@ func (o *Ec2operator) transferOne(ins types.Instance) *host.Host {
 	h.Describe.KeyPairName = []string{tea.StringValue(ins.KeyName)}
 	h.Describe.SecurityGroups = ParseGroup(ins.SecurityGroups)
 
-	h.Resource.Tags = ParseTag(ins.Tags)
+	h.Resource.Spec.Tags = ParseTag(ins.Tags)
 	return h
 }
 

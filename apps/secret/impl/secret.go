@@ -20,7 +20,7 @@ func (s *service) CreateSecret(ctx context.Context, req *secret.CreateSecretRequ
 		s.log.Warnf("encrypt api key error, %s", err)
 	}
 
-	if err := s.db.WithContext(ctx).Create(NewSecret(ins)).Error; err != nil {
+	if err := s.db.WithContext(ctx).Create(ins).Error; err != nil {
 		return nil, err
 	}
 
@@ -37,7 +37,7 @@ func (s *service) QuerySecret(ctx context.Context, req *secret.QuerySecretReques
 		)
 	}
 
-	set := NewSecretSet()
+	set := secret.NewSecretSet()
 	offset := req.Page.ComputeOffset()
 	err := query.
 		Order("create_at DESC").
@@ -54,19 +54,19 @@ func (s *service) QuerySecret(ctx context.Context, req *secret.QuerySecretReques
 		return nil, err
 	}
 
-	return set.SecretSet(), nil
+	return set, nil
 }
 
 func (s *service) DescribeSecret(ctx context.Context, req *secret.DescribeSecretRequest) (
 	*secret.Secret, error) {
 	query := s.db.WithContext(ctx).Where("id = ?", req.Id)
 
-	ins := NewSecret(secret.NewDefaultSecret())
+	ins := secret.NewDefaultSecret()
 	if err := query.First(ins).Error; err != nil {
 		return nil, err
 	}
 
-	return ins.Secret(), nil
+	return ins, nil
 }
 
 func (s *service) DeleteSecret(ctx context.Context, req *secret.DeleteSecretRequest) (

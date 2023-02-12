@@ -103,7 +103,7 @@ func (o *EcsOperator) transferInstance(ins *ecs.DescribeInstancesResponseBodyIns
 		i.BandWidth = tea.Int32Value(ins.EipAddress.Bandwidth)
 	}
 
-	h.Resource.Tags = o.transferTags(ins.Tags)
+	h.Resource.Spec.Tags = o.transferTags(ins.Tags)
 
 	h.Describe.GpuSpec = tea.StringValue(ins.GPUSpec)
 	h.Describe.OsType = tea.StringValue(ins.OSType)

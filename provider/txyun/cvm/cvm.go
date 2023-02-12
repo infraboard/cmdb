@@ -83,7 +83,7 @@ func (o *CVMOperator) transferOne(ins *cvm.Instance) *host.Host {
 	r.Resource.Status.PrivateAddress = utils.SlicePtrStrv(ins.PrivateIpAddresses)
 	r.Resource.Status.Phase = praseCvmStatus(ins.InstanceState)
 
-	r.Resource.Tags = transferTags(ins.Tags)
+	r.Resource.Spec.Tags = transferTags(ins.Tags)
 
 	r.Describe.OsName = utils.PtrStrV(ins.OsName)
 

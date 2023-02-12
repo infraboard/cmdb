@@ -273,11 +273,11 @@ type Secret struct {
 	unknownFields protoimpl.UnknownFields
 
 	// 额外信息
-	// @gotags: json:"meta"
-	Meta *Meta `protobuf:"bytes,1,opt,name=meta,proto3" json:"meta"`
+	// @gotags: json:"meta" gorm:"embedded"
+	Meta *Meta `protobuf:"bytes,1,opt,name=meta,proto3" json:"meta" gorm:"embedded"`
 	// 创建信息
-	// @gotags: json:"spec"
-	Spec *CreateSecretRequest `protobuf:"bytes,2,opt,name=spec,proto3" json:"spec"`
+	// @gotags: json:"spec" gorm:"embedded"
+	Spec *CreateSecretRequest `protobuf:"bytes,2,opt,name=spec,proto3" json:"spec" gorm:"embedded"`
 }
 
 func (x *Secret) Reset() {
